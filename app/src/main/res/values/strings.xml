@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">rcvc</string>
+
+    <string name="button_bluetooth_disconnected">Mit Bluetooth verbinden</string>
+    <string name="button_bluetooth_connected">Verbindung trennen</string>
+    <string name="button_open_room">Jitsi Raum öffnen</string>
+    <string name="button_share_link">Link teilen</string>
+    <string name="button_switch_to_room">Zu Raum wechseln</string>
+
+    <string name="app_title">Titel Platzhalter was geht</string>
+</resources>
