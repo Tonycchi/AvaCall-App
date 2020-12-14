@@ -13,12 +13,12 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean btIsClicked = false;
     private boolean jitsiIsClicked = false;
-    Button bluetooth;
-    Button openRoom;
-    Button shareLink;
-    Button switchToRoom;
-    TextView connectionStatus;
-    String deviceName = "RALLLE";
+    private Button bluetooth;
+    private Button openRoom;
+    private Button shareLink;
+    private Button switchToRoom;
+    private TextView connectionStatus;
+    private String deviceName = "RALLLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
