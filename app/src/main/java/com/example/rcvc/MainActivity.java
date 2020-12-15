@@ -51,27 +51,9 @@ public class MainActivity extends AppCompatActivity {
             btIsClicked = true;
             bluetooth.setText(getString(R.string.button_bluetooth_connected));
 
-            if (!btAdapter.isEnabled()) {
-                showToast("Turning On Bluetooth");
-                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(intent, REQUEST_ENABLE_BT);
-            } else {
-                showToast("Bluetooth already On");
-            }
-
-
+            checkIfBTEnabled();
             Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-
-            if (pairedDevices.size() > 0) {
-                // There are paired devices. Get the name and address of each paired device.
-                for (BluetoothDevice device : pairedDevices) {
-                    String deviceName = device.getName();
-                    String deviceHardwareAddress = device.getAddress(); // MAC address
-                    showToast(deviceName + deviceHardwareAddress);
-                }
-            } else {
-                showToast("No paired devices");
-            }
+            checkForPairedDevices(pairedDevices);
 
             openRoom.setEnabled(true);
             connectionStatus.setText(getResources().getString(R.string.connection_status_true) + deviceName);
@@ -132,5 +114,26 @@ public class MainActivity extends AppCompatActivity {
     private void setEnableLinkAndRoom(boolean enabled) {
         shareLink.setEnabled(enabled);
         switchToRoom.setEnabled(enabled);
+    }
+
+    public void checkIfBTEnabled() {
+        if (!btAdapter.isEnabled()) {
+            showToast("Turning On Bluetooth");
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, REQUEST_ENABLE_BT);
+        } else {
+            showToast("Bluetooth already On");
+        }
+    }
+    public void checkForPairedDevices(Set<BluetoothDevice> pairedDevices) {
+        if (pairedDevices.size() > 0) {
+            // There are paired devices. Get the name and address of each paired device.
+            for (BluetoothDevice device : pairedDevices) {
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+            }
+        } else {
+            showToast("No paired devices");
+        }
     }
 }
