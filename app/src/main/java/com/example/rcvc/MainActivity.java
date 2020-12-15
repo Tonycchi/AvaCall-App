@@ -2,12 +2,16 @@ package com.example.rcvc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,19 +24,22 @@ public class MainActivity extends AppCompatActivity {
     private TextView connectionStatus;
     private String deviceName = "RALLLE";
 
+    private static final int REQUEST_ENABLE_BT = 0;
+    private static final int REQUEST_DISCOVER_BT = 1;
+
+    BluetoothAdapter btAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bluetooth = findViewById(R.id.button_bluetooth);
-
         openRoom = findViewById(R.id.button_open_room);
-
         shareLink = findViewById(R.id.button_share_link);
-
         switchToRoom = findViewById(R.id.button_switch_to_room);
-
         connectionStatus = findViewById(R.id.connection_status);
+
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     /**
@@ -43,6 +50,28 @@ public class MainActivity extends AppCompatActivity {
         if (!btIsClicked) {
             btIsClicked = true;
             bluetooth.setText(getString(R.string.button_bluetooth_connected));
+
+            if (!btAdapter.isEnabled()) {
+                showToast("Turning On Bluetooth");
+                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(intent, REQUEST_ENABLE_BT);
+            } else {
+                showToast("Bluetooth already On");
+            }
+
+
+            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+
+            if (pairedDevices.size() > 0) {
+                // There are paired devices. Get the name and address of each paired device.
+                for (BluetoothDevice device : pairedDevices) {
+                    String deviceName = device.getName();
+                    String deviceHardwareAddress = device.getAddress(); // MAC address
+                    showToast(deviceName + deviceHardwareAddress);
+                }
+            } else {
+                showToast("No paired devices");
+            }
 
             openRoom.setEnabled(true);
             connectionStatus.setText(getResources().getString(R.string.connection_status_true) + deviceName);
