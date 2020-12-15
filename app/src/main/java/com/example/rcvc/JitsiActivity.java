@@ -21,6 +21,10 @@ public class JitsiActivity extends AppCompatActivity {
         endCall = findViewById(R.id.button_end_call);
     }
 
+    /**
+     * @param v
+     * Switches back to the main activity and closes the jitsi room
+     */
     public void onClickEndCall(View v) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
