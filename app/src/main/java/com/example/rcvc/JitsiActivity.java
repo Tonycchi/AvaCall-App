@@ -28,7 +28,9 @@ public class JitsiActivity extends JitsiMeetActivity  {
 
     {
         try {
-            roomID = randomLinkString(6);
+            roomID = randomLinkString(6)+"#"
+                    //+"config.disableInviteFunctions=true" //disable invite function of the app
+                    +"&config.prejoinPageEnabled=true"; //show an intermediate page before joining to allow for adjustment of devices
             options = new JitsiMeetConferenceOptions.Builder()
                         .setServerURL(new URL("https://meet.jit.si"))
                         .setRoom(roomID)
