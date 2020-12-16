@@ -47,13 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver2, filter2);
-
-        boolean test = btAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED;
-        if(test){
-            showToast("sex");
-        } else {
-            showToast("sex2");
-        }
     }
 
     @Override
