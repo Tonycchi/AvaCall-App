@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
 
-    BluetoothAdapter btAdapter;
+    private BluetoothAdapter btAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         connectionStatus = findViewById(R.id.connection_status);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
+
     }
 
     /**
@@ -48,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickBluetooth(View v) {
         if (!btIsClicked) {
+            Intent intentOpenBluetoothSettings = new Intent();
+            intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+            startActivity(intentOpenBluetoothSettings);
             btIsClicked = true;
             bluetooth.setText(getString(R.string.button_bluetooth_connected));
 
@@ -136,4 +142,6 @@ public class MainActivity extends AppCompatActivity {
             showToast("No paired devices");
         }
     }
+
+
 }
