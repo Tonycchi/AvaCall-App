@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private Button shareLink;
     private Button switchToRoom;
     private TextView connectionStatus;
-    private String deviceName = "RALLLE";
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
@@ -43,14 +46,82 @@ public class MainActivity extends AppCompatActivity {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        IntentFilter filter = new IntentFilter(btAdapter.ACTION_CONNECTION_STATE_CHANGED);
+        registerReceiver(receiver1, filter);
+
+        IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(receiver2, filter2);
+
+        boolean test = btAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED;
+        if(test){
+            showToast("sex");
+        } else {
+            showToast("sex2");
+        }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver1);
+        unregisterReceiver(receiver2);
+    }
+
+    //Create a BroadcastReceiver for ACTION_STATE_CHANGED changed.
+    private final BroadcastReceiver receiver2 = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (String.valueOf(btAdapter.ACTION_STATE_CHANGED).equals(action)) {
+                // Bluetooth Status has been changed
+                final int state = intent.getIntExtra(btAdapter.EXTRA_STATE, btAdapter.ERROR);
+                if(state == btAdapter.STATE_OFF || state == btAdapter.STATE_TURNING_OFF){
+                    btIsClicked = false;
+                    jitsiIsClicked = false;
+                    bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
+                    openRoom.setEnabled(false);
+                    setEnableLinkAndRoom(false);
+                    connectionStatus.setText(getResources().getString(R.string.connection_status_false));
+                }
+            }
+        }
+    };
+
+    // Create a BroadcastReceiver for ACTION_CONNECTION_STATE_Changed.
+    private final BroadcastReceiver receiver1 = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            final int state = intent.getIntExtra(btAdapter.EXTRA_CONNECTION_STATE, btAdapter.ERROR);
+            if (String.valueOf(btAdapter.ACTION_CONNECTION_STATE_CHANGED).equals(action)) {
+                if(state == btAdapter.STATE_CONNECTED) {
+                    // Connection Status has been changed and the device is connected with another device
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    connectionStatus.setText(getResources().getString(R.string.connection_status_true) + device.getName());
+                    bluetooth.setText(getString(R.string.button_bluetooth_connected));
+                    btIsClicked = true;
+                    openRoom.setEnabled(true);
+                }
+            }
+        }
+    };
 
     /**
      * @param v
      * If we don't have a bluetooth connection this button enables the openRoom button on click. If we do have a bluetooth connection this button disables all the other buttons.
      */
     public void onClickBluetooth(View v) {
-        if (!btIsClicked) {
+        if(btIsClicked){
+         btIsClicked = false;
+         jitsiIsClicked = false;
+         bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
+         openRoom.setEnabled(false);
+         setEnableLinkAndRoom(false);
+         connectionStatus.setText(getString(R.string.connection_status_false));
+        } else {
+            Intent intentOpenBluetoothSettings = new Intent();
+            intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+            startActivity(intentOpenBluetoothSettings);
+        }
+      /*  if (!btAdapter.isEnabled()) {
             Intent intentOpenBluetoothSettings = new Intent();
             intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
             startActivity(intentOpenBluetoothSettings);
@@ -62,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             checkForPairedDevices(pairedDevices);
 
             openRoom.setEnabled(true);
-            connectionStatus.setText(getResources().getString(R.string.connection_status_true) + deviceName);
+           // connectionStatus.setText(getResources().getString(R.string.connection_status_true) + deviceName);
         } else {
             btIsClicked = false;
             jitsiIsClicked = false;
@@ -70,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
             openRoom.setEnabled(false);
             setEnableLinkAndRoom(false);
             connectionStatus.setText(getResources().getString(R.string.connection_status_false));
-        }
+            deviceName = "";
+        }*/
     }
 
     /**
@@ -121,27 +193,4 @@ public class MainActivity extends AppCompatActivity {
         shareLink.setEnabled(enabled);
         switchToRoom.setEnabled(enabled);
     }
-
-    public void checkIfBTEnabled() {
-        if (!btAdapter.isEnabled()) {
-            showToast("Turning On Bluetooth");
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, REQUEST_ENABLE_BT);
-        } else {
-            showToast("Bluetooth already On");
-        }
-    }
-    public void checkForPairedDevices(Set<BluetoothDevice> pairedDevices) {
-        if (pairedDevices.size() > 0) {
-            // There are paired devices. Get the name and address of each paired device.
-            for (BluetoothDevice device : pairedDevices) {
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-            }
-        } else {
-            showToast("No paired devices");
-        }
-    }
-
-
 }
