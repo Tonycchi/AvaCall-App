@@ -1,27 +1,19 @@
 package com.example.rcvc;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-<<<<<<< HEAD
-=======
 import android.bluetooth.BluetoothHeadset;
->>>>>>> 400cea7ea637f2f2179ddc9e53134e64adf14cda
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Set;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,48 +24,11 @@ public class MainActivity extends AppCompatActivity {
     private Button shareLink;
     private Button switchToRoom;
     private TextView connectionStatus;
-<<<<<<< HEAD
-    private String deviceName = "RALLLE";
-    private static final String TAG = "MainActivity";
-=======
->>>>>>> 400cea7ea637f2f2179ddc9e53134e64adf14cda
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
 
     private BluetoothAdapter btAdapter;
-
-    private final BroadcastReceiver broadcastReceiver1 = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            //When discovery finds a device
-            if (action.equals(btAdapter.ACTION_STATE_CHANGED)) {
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, btAdapter.ERROR);
-
-                switch(state) {
-                    case BluetoothAdapter.STATE_OFF:
-                        Log.d(TAG, "onReceive: STATE OFF");
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        Log.d(TAG, "onReceive: STATE TURNING OFF");
-                        break;
-                    case BluetoothAdapter.STATE_ON:
-                        Log.d(TAG, "onReceive: STATE ON");
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_ON:
-                        Log.d(TAG, "onReceive: STATE TURNING ON");
-                        break;
-                }
-            }
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy: called.");
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiver1);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,48 +189,4 @@ public class MainActivity extends AppCompatActivity {
         shareLink.setEnabled(enabled);
         switchToRoom.setEnabled(enabled);
     }
-<<<<<<< HEAD
-
-    public void checkIfBTEnabled() {
-        if (!btAdapter.isEnabled()) {
-            showToast("Turning On Bluetooth");
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, REQUEST_ENABLE_BT);
-        } else {
-            showToast("Bluetooth already On");
-        }
-    }
-    public void checkForPairedDevices(Set<BluetoothDevice> pairedDevices) {
-        if (pairedDevices.size() > 0) {
-            // There are paired devices. Get the name and address of each paired device.
-            for (BluetoothDevice device : pairedDevices) {
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-            }
-        } else {
-            showToast("No paired devices");
-        }
-    }
-
-    public void onClickOnOff(View v) {
-        Log.d(TAG, "onClickOnOff: enabling/disabling bluetooth");
-        if (btAdapter == null) {
-            Log.d(TAG, "OnOffBT: Does not have BT capabilities.");
-        }
-        if (!btAdapter.isEnabled()) {
-            Intent onBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(onBTIntent);
-
-            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            registerReceiver(broadcastReceiver1, BTIntent);
-        }
-        if (btAdapter.isEnabled()) {
-            btAdapter.disable();
-
-            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            registerReceiver(broadcastReceiver1, BTIntent);
-        }
-    }
-=======
->>>>>>> 400cea7ea637f2f2179ddc9e53134e64adf14cda
 }
