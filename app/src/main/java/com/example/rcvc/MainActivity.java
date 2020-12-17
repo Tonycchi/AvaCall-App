@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Button shareLink;
     private Button switchToRoom;
     private TextView connectionStatus;
+    private ListView myListView;
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         shareLink = findViewById(R.id.button_share_link);
         switchToRoom = findViewById(R.id.button_switch_to_room);
         connectionStatus = findViewById(R.id.connection_status);
+        myListView = findViewById(R.id.list_paired_devices);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -116,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
          setEnableLinkAndRoom(false);
          connectionStatus.setText(getString(R.string.connection_status_false));
         } else {
-            Intent intentOpenBluetoothSettings = new Intent();
-            intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-            startActivity(intentOpenBluetoothSettings);
+            ArrayList<String> names = getPairedDevices();
+            ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,names);
+            myListView.setAdapter(listAdapter);
         }
     }
 
