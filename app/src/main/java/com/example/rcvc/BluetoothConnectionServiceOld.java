@@ -19,7 +19,7 @@ public class BluetoothConnectionServiceOld {
 
     private static final String TAG = "BluetoothConnectionServ";
     private static final String appName = "Platzhalter";
-    private static final UUID MY_UUID = UUID.fromString("e77cea6d-e98b-4a13-b01f-e9c22f4caffe");
+    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private Handler handler; //handler that gets info from Bluetooth service
 

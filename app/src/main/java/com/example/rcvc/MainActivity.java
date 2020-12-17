@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +27,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
+    ParcelUuid[] mDeviceUUIDs;
     private boolean btIsClicked = false;
     private boolean jitsiIsClicked = false;
     private Button bluetooth;
@@ -44,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_DISCOVER_BT = 1;
 
     private static final String TAG = "MainActivity";
-    private static final UUID MY_UUID_INSECURE =
-            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
 
     BluetoothConnectionService mBluetoothConnection;
 
@@ -93,9 +93,10 @@ public class MainActivity extends AppCompatActivity {
                 String str = (String) o;//As you are using Default String Adapter
                 Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
                 myListView.setVisibility(View.INVISIBLE);
+                myEditText.setVisibility(View.VISIBLE);
+                mDeviceUUIDs = selectedDevice.getUuids();
                 mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
                 startConnection();
-                myEditText.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -111,13 +112,13 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void startConnection(){
-        startBTConnection(selectedDevice, MY_UUID_INSECURE);
+        startBTConnection(selectedDevice, mDeviceUUIDs);
     }
 
-    public void startBTConnection(BluetoothDevice device, UUID uuid) {
+    public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
 
-        mBluetoothConnection.startClient(device,uuid);
+        mBluetoothConnection.startClient(device,mDeviceUUIDs);
 
         myEditText.setText("");
     }
@@ -195,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
      * On click of the openRoom button we open a jitsi room and enable the shareLink and switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
+        showToast(btAdapter.getRemoteDevice(btAdapter.getAddress()).getName());
         byte[] bytes = myEditText.getText().toString().getBytes(Charset.defaultCharset());
         mBluetoothConnection.write(bytes);
         myEditText.setText("");

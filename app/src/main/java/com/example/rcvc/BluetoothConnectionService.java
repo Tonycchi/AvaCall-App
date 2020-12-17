@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.os.ParcelUuid;
 import android.util.Log;
 
 import java.io.IOException;
@@ -115,11 +116,12 @@ public class BluetoothConnectionService {
      */
     private class ConnectThread extends Thread {
         private BluetoothSocket mmSocket;
+        ParcelUuid[] mDeviceUUIDs;
 
-        public ConnectThread(BluetoothDevice device, UUID uuid) {
+        public ConnectThread(BluetoothDevice device, ParcelUuid[] mDeviceUUIDs) {
             Log.d(TAG, "ConnectThread: started.");
             mmDevice = device;
-            deviceUUID = uuid;
+            this.mDeviceUUIDs = mDeviceUUIDs;
         }
 
         public void run(){
@@ -129,9 +131,11 @@ public class BluetoothConnectionService {
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                Log.d(TAG, "ConnectThread: Trying to create InsecureRfcommSocket using UUID: "
-                        +MY_UUID_INSECURE );
-                tmp = mmDevice.createRfcommSocketToServiceRecord(deviceUUID);
+                for(int i = 0; i < mDeviceUUIDs.length; i++) {
+                    Log.d(TAG, "ConnectThread: Trying to create InsecureRfcommSocket using UUID: "
+                            +MY_UUID_INSECURE );
+                    tmp = mmDevice.createInsecureRfcommSocketToServiceRecord(mDeviceUUIDs[i].getUuid());
+                }
             } catch (IOException e) {
                 Log.e(TAG, "ConnectThread: Could not create InsecureRfcommSocket " + e.getMessage());
             }
@@ -198,14 +202,14 @@ public class BluetoothConnectionService {
      Then ConnectThread starts and attempts to make a connection with the other devices AcceptThread.
      **/
 
-    public void startClient(BluetoothDevice device,UUID uuid){
+    public void startClient(BluetoothDevice device, ParcelUuid[] mDeviceUUIDs){
         Log.d(TAG, "startClient: Started.");
 
         //initprogress dialog
         mProgressDialog = ProgressDialog.show(mContext,"Connecting Bluetooth"
                 ,"Please Wait...",true);
 
-        mConnectThread = new ConnectThread(device, uuid);
+        mConnectThread = new ConnectThread(device, mDeviceUUIDs);
         mConnectThread.start();
     }
 
