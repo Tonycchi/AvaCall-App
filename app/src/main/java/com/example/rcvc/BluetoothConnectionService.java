@@ -23,7 +23,7 @@ import java.util.UUID;
 public class BluetoothConnectionService {
     private static final String TAG = "BluetoothConnectionServ";
 
-    private static final String appName = "MYAPP";
+    private static final String appName = "AppName";
 
     private static final UUID MY_UUID_INSECURE =
             UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
@@ -296,6 +296,13 @@ public class BluetoothConnectionService {
         // Start the thread to manage the connection and perform transmissions
         mConnectedThread = new ConnectedThread(mmSocket);
         mConnectedThread.start();
+    }
+
+    public void cancel() {
+        ConnectedThread r;
+
+        Log.d(TAG, "cancel: Connection cancelled.");
+        mConnectedThread.cancel();
     }
 
     /**

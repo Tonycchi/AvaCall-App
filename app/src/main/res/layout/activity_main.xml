@@ -93,24 +93,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/field_edit_text"
-        android:layout_width="400dp"
-        android:layout_height="85dp"
-        android:layout_marginBottom="8dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"></EditText>
-
-    <TextView
-        android:id="@+id/incoming_messages"
+    <Button
+        android:id="@+id/button_test_command"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:text="Incoming Message"
-        android:textColor="#000000"
-        android:textSize="36sp"
+        android:layout_marginTop="64dp"
+        android:onClick="onClickTestCommand"
+        android:text="Test Command"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_switch_to_room" />

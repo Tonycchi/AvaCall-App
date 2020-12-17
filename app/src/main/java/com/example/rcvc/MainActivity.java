@@ -13,17 +13,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,9 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private Button switchToRoom;
     private TextView connectionStatus;
     private ListView myListView;
-    private EditText myEditText;
-    private TextView incomingMessages;
-    StringBuilder messages;
+    private Button testCommand;
 
     private byte[] directCommand;
 
@@ -63,21 +58,15 @@ public class MainActivity extends AppCompatActivity {
         switchToRoom = findViewById(R.id.button_switch_to_room);
         connectionStatus = findViewById(R.id.connection_status);
         myListView = findViewById(R.id.list_paired_devices);
-
-        myEditText = findViewById(R.id.field_edit_text);
-
-        incomingMessages = findViewById(R.id.incoming_messages);
-        messages = new StringBuilder();
+        testCommand = findViewById(R.id.button_test_command);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         directCommand = hexStringToByteArray("1200xxxx800000AE000681320082840382B40001Bbbbmmmmtthhhhcccccccccccccccccccccccccc");
 
-        //IntentFilter filter = new IntentFilter(btAdapter.ACTION_CONNECTION_STATE_CHANGED);
-       // registerReceiver(receiver1, filter);
 
         IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(receiver2, filter2);
+        registerReceiver(receiver, filter2);
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,29 +76,16 @@ public class MainActivity extends AppCompatActivity {
                 bluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
                 openRoom.setEnabled(true);
-                showToast(selectedDevice.getName());
-                showToast(selectedDevice.getAddress());
                 Object o = myListView.getItemAtPosition(position);
                 String str = (String) o;//As you are using Default String Adapter
-                Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
                 myListView.setVisibility(View.INVISIBLE);
-                myEditText.setVisibility(View.VISIBLE);
                 mDeviceUUIDs = selectedDevice.getUuids();
                 mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
                 startConnection();
+                testCommand.setVisibility(View.VISIBLE);
             }
         });
     }
-
-    BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String text = intent.getStringExtra("theMessage");
-
-            messages.append(text + "\n");
-            incomingMessages.setText(messages);
-        }
-    };
 
     public void startConnection(){
         startBTConnection(selectedDevice, mDeviceUUIDs);
@@ -119,19 +95,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
 
         mBluetoothConnection.startClient(device,mDeviceUUIDs);
-
-        myEditText.setText("");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-     //   unregisterReceiver(receiver1);
-        unregisterReceiver(receiver2);
+        unregisterReceiver(receiver);
     }
 
     //Create a BroadcastReceiver for ACTION_STATE_CHANGED changed.
-    private final BroadcastReceiver receiver2 = new BroadcastReceiver() {
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (String.valueOf(btAdapter.ACTION_STATE_CHANGED).equals(action)) {
@@ -149,25 +122,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // Create a BroadcastReceiver for ACTION_CONNECTION_STATE_Changed.
-//    private final BroadcastReceiver receiver1 = new BroadcastReceiver() {
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            final int state = intent.getIntExtra(btAdapter.EXTRA_CONNECTION_STATE, btAdapter.ERROR);
-//            if (String.valueOf(btAdapter.ACTION_CONNECTION_STATE_CHANGED).equals(action)) {
-//                if(state == btAdapter.STATE_CONNECTING) {
-//                    // Connection Status has been changed and the device is connected with another device
-//                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//                    connectionStatus.setText(getResources().getString(R.string.connection_status_true) + device.getName());
-//                    bluetooth.setText(getString(R.string.button_bluetooth_connected));
-//                    btIsClicked = true;
-//                    openRoom.setEnabled(true);
-//                    showToast(device.getName());
-//                }
-//            }
-//        }
-//    };
-
     /**
      * @param v
      * If we don't have a bluetooth connection this button enables the openRoom button on click. If we do have a bluetooth connection this button disables all the other buttons.
@@ -180,12 +134,20 @@ public class MainActivity extends AppCompatActivity {
          openRoom.setEnabled(false);
          setEnableLinkAndRoom(false);
          connectionStatus.setText(getString(R.string.connection_status_false));
-         myEditText.setVisibility(View.INVISIBLE);
+         testCommand.setVisibility(View.INVISIBLE);
+         mBluetoothConnection.cancel();
         } else {
+            if (!btAdapter.isEnabled()) {
+                Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivity(enableBTIntent);
+            }
+            if (btAdapter.isEnabled()) {
+
             ArrayList<String> names = getPairedDevices();
-            ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,names);
+            ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
             myListView.setAdapter(listAdapter);
             myListView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -196,10 +158,6 @@ public class MainActivity extends AppCompatActivity {
      * On click of the openRoom button we open a jitsi room and enable the shareLink and switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
-        showToast(btAdapter.getRemoteDevice(btAdapter.getAddress()).getName());
-        byte[] bytes = myEditText.getText().toString().getBytes(Charset.defaultCharset());
-        mBluetoothConnection.write(bytes);
-        myEditText.setText("");
 //        if (!jitsiIsClicked) {
 //            jitsiIsClicked = true;
 //            setEnableLinkAndRoom(true);
@@ -228,6 +186,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void onClickTestCommand(View v) {
+        mBluetoothConnection.write(directCommand);
+    }
+
     /**
      * @param message The message to pop up at the bottom of the screen
      */
@@ -253,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
                 pairedDevices.add(device);
                 names.add(device.getName());
             }
+        } else {
+            showToast("Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen");
         }
         return names;
     }
