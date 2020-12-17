@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 btIsClicked = true;
                 openRoom.setEnabled(true);
                 showToast(selectedDevice.getName());
+                showToast(selectedDevice.getAddress());
                 Object o = myListView.getItemAtPosition(position);
                 String str = (String) o;//As you are using Default String Adapter
                 Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> getPairedDevices(){
         Set<BluetoothDevice> devices = btAdapter.getBondedDevices();
         ArrayList<String> names = new ArrayList<String>();
-        if (pairedDevices.size() > 0) {
+        if (devices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
                 pairedDevices.add(device);
