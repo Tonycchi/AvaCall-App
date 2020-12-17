@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_DISCOVER_BT = 1;
 
     private BluetoothAdapter btAdapter;
+    private BluetoothDevice selectedDevice;
+    private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +59,6 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver2, filter2);
 
-        ArrayList<String> test = getPairedDevices();
-        for(int i = 0; i < test.size(); i++){
-            showToast(test.get(i));
-        }
-
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -69,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 String str = (String) o;//As you are using Default String Adapter
                 Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
                 myListView.setVisibility(View.INVISIBLE);
+                selectedDevice = pairedDevices.get(position);
             }
         });
     }
@@ -131,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
          setEnableLinkAndRoom(false);
          connectionStatus.setText(getString(R.string.connection_status_false));
         } else {
-            ArrayList<String> names = getPairedDevices();
+            Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+            ArrayList<String> names = getPairedDevices(pairedDevices);
             ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,names);
             myListView.setAdapter(listAdapter);
             myListView.setVisibility(View.VISIBLE);
@@ -189,12 +188,12 @@ public class MainActivity extends AppCompatActivity {
         switchToRoom.setEnabled(enabled);
     }
 
-    public ArrayList<String> getPairedDevices(){
-        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+    public ArrayList<String> getPairedDevices(Set<BluetoothDevice> devices){
         ArrayList<String> names = new ArrayList<String>();
         if (pairedDevices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : pairedDevices) {
+                pairedDevices.add(device);
                 names.add(device.getName());
             }
         }
