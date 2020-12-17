@@ -2,6 +2,9 @@ package com.example.rcvc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +12,33 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
+
+    private class RoomLink {
+        private char[] chars = {48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70, 71, 72,
+                73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 97, 98, 99, 100,
+                101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117,
+                118, 119, 120, 121};
+        public String id, url;
+
+        // TODO: maybe pass url options to here
+        public RoomLink(int length) {
+            id = randomLinkString(length);
+            url = "https://meet.jit.si/" + id /*+ "#" + "&config.prejoinPageEnabled=true"*/;
+        }
+
+        private String randomLinkString(int length) {
+            Random random = new Random();
+            char[] out = new char[length];
+            for (int i = 0; i < length; i++) {
+                int rnd = random.nextInt(chars.length);
+                out[i] = chars[rnd];
+            }
+            return new String(out);
+        }
+    }
 
     private boolean btIsClicked = false;
     private boolean jitsiIsClicked = false;
@@ -19,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private Button switchToRoom;
     private TextView connectionStatus;
     private String deviceName = "RALLLE";
+
+    private RoomLink room;
+    private int roomLinkLength = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +111,14 @@ public class MainActivity extends AppCompatActivity {
      * The link for the jitsi room gets copied to the clipboard
      */
     public void onClickShareLink(View v) {
+        if (room == null) {
+            room = new RoomLink(roomLinkLength);
+        }
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Jitsi Room Link", room.url);
+        clipboard.setPrimaryClip(clip);
+
         showToast("Link kopiert");
     }
 
@@ -87,7 +127,12 @@ public class MainActivity extends AppCompatActivity {
      * Switches to the next activity with the open jitsi room.
      */
     public void onClickSwitchToRoom(View v) {
+        if (room == null) {
+            room = new RoomLink(roomLinkLength);
+        }
         Intent intent = new Intent(this, JitsiActivity.class);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra("ROOM_ID", room.id);
         startActivity(intent);
     }
 
