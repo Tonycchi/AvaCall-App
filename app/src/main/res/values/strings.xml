@@ -7,7 +7,7 @@
     <string name="button_share_link">Link teilen</string>
     <string name="button_switch_to_room">Zu Raum wechseln</string>
 
-    <string name="app_title">Titel Platzhalter was geht</string>
+    <string name="app_title">Appname</string>
 
     <string name="connection_status_false">Keine Verbindung</string>
     <string name="connection_status_true">Verbunden mit: %s</string>
