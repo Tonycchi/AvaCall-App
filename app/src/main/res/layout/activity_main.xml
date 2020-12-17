@@ -86,12 +86,34 @@
     <ListView
         android:id="@+id/list_paired_devices"
         android:layout_width="00dp"
-        android:layout_height="400dp"
-        android:layout_marginBottom="128dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="64dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/field_edit_text"
+        android:layout_width="400dp"
+        android:layout_height="85dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"></EditText>
+
+    <TextView
+        android:id="@+id/incoming_messages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:text="Incoming Message"
+        android:textColor="#000000"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_switch_to_room" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,25 +2,27 @@ package com.example.rcvc;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHeadset;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,9 +34,20 @@ public class MainActivity extends AppCompatActivity {
     private Button switchToRoom;
     private TextView connectionStatus;
     private ListView myListView;
+    private EditText myEditText;
+    private TextView incomingMessages;
+    StringBuilder messages;
+
+    private byte[] directCommand;
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
+
+    private static final String TAG = "MainActivity";
+    private static final UUID MY_UUID_INSECURE =
+            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+
+    BluetoothConnectionService mBluetoothConnection;
 
     private BluetoothAdapter btAdapter;
     private BluetoothDevice selectedDevice;
@@ -51,7 +64,14 @@ public class MainActivity extends AppCompatActivity {
         connectionStatus = findViewById(R.id.connection_status);
         myListView = findViewById(R.id.list_paired_devices);
 
+        myEditText = findViewById(R.id.field_edit_text);
+
+        incomingMessages = findViewById(R.id.incoming_messages);
+        messages = new StringBuilder();
+
         btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        directCommand = hexStringToByteArray("1200xxxx800000AE000681320082840382B40001Bbbbmmmmtthhhhcccccccccccccccccccccccccc");
 
         //IntentFilter filter = new IntentFilter(btAdapter.ACTION_CONNECTION_STATE_CHANGED);
        // registerReceiver(receiver1, filter);
@@ -73,9 +93,33 @@ public class MainActivity extends AppCompatActivity {
                 String str = (String) o;//As you are using Default String Adapter
                 Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
                 myListView.setVisibility(View.INVISIBLE);
-
+                mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
+                startConnection();
+                myEditText.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String text = intent.getStringExtra("theMessage");
+
+            messages.append(text + "\n");
+            incomingMessages.setText(messages);
+        }
+    };
+
+    public void startConnection(){
+        startBTConnection(selectedDevice, MY_UUID_INSECURE);
+    }
+
+    public void startBTConnection(BluetoothDevice device, UUID uuid) {
+        Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
+
+        mBluetoothConnection.startClient(device,uuid);
+
+        myEditText.setText("");
     }
 
     @Override
@@ -135,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
          openRoom.setEnabled(false);
          setEnableLinkAndRoom(false);
          connectionStatus.setText(getString(R.string.connection_status_false));
+         myEditText.setVisibility(View.INVISIBLE);
         } else {
             ArrayList<String> names = getPairedDevices();
             ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,names);
@@ -150,15 +195,18 @@ public class MainActivity extends AppCompatActivity {
      * On click of the openRoom button we open a jitsi room and enable the shareLink and switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
-        if (!jitsiIsClicked) {
-            jitsiIsClicked = true;
-            setEnableLinkAndRoom(true);
-            showToast("Raum geöffnet");
-        } else {
-            jitsiIsClicked = false;
-            setEnableLinkAndRoom(false);
-            showToast("Raum geschlossen");
-        }
+        byte[] bytes = myEditText.getText().toString().getBytes(Charset.defaultCharset());
+        mBluetoothConnection.write(bytes);
+        myEditText.setText("");
+//        if (!jitsiIsClicked) {
+//            jitsiIsClicked = true;
+//            setEnableLinkAndRoom(true);
+//            showToast("Raum geöffnet");
+//        } else {
+//            jitsiIsClicked = false;
+//            setEnableLinkAndRoom(false);
+//            showToast("Raum geschlossen");
+//        }
     }
 
     /**
@@ -205,5 +253,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return names;
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 }
