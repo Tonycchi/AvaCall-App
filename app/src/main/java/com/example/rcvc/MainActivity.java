@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -60,6 +61,16 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < test.size(); i++){
             showToast(test.get(i));
         }
+
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object o = myListView.getItemAtPosition(position);
+                String str = (String) o;//As you are using Default String Adapter
+                Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+                myListView.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
@@ -123,8 +134,11 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> names = getPairedDevices();
             ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,names);
             myListView.setAdapter(listAdapter);
+            myListView.setVisibility(View.VISIBLE);
         }
     }
+
+
 
     /**
      * @param v
