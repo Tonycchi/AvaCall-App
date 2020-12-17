@@ -5,13 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO: maybe pass url options to here
         public RoomLink(int length) {
             id = randomLinkString(length);
-            url = "https://meet.jit.si/" + id /*+ "#" + "&config.prejoinPageEnabled=true"*/;
+            url = "https://meet.jit.si/" + id + "/" + id + "config.prejoinPageEnabledtrue";
         }
 
         private String randomLinkString(int length) {
@@ -49,8 +53,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView connectionStatus;
     private String deviceName = "RALLLE";
 
+    private String roomID;
     private RoomLink room;
     private int roomLinkLength = 6;
+    JitsiMeetConferenceOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,15 +101,30 @@ public class MainActivity extends AppCompatActivity {
      * switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
-        if (!jitsiIsClicked) {
-            jitsiIsClicked = true;
-            setEnableLinkAndRoom(true);
-            showToast("Raum geöffnet");
-        } else {
-            jitsiIsClicked = false;
-            setEnableLinkAndRoom(false);
-            showToast("Raum geschlossen");
+        {
+            try {
+                //TODO: do something about room title
+                if (room == null) {
+                    room = new RoomLink(roomLinkLength);
+                }
+                roomID = room.id+"#"
+                        //+"config.disableInviteFunctions=true" //disable invite function of the app
+                        +"&config.prejoinPageEnabled=true"; //show an intermediate page before joining to allow for adjustment of devices
+                options = new JitsiMeetConferenceOptions.Builder()
+                        .setServerURL(new URL("https://meet.jit.si"))
+                        .setRoom(roomID)
+                        .setAudioMuted(false)
+                        .setVideoMuted(false)
+                        .setAudioOnly(false)
+                        .setWelcomePageEnabled(true)
+                        .setFeatureFlag("pipEnabled", true)
+                        .build();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
+        setEnableLinkAndRoom(true);
+        showToast("Raum geöffnet");
     }
 
     /**
@@ -127,13 +148,7 @@ public class MainActivity extends AppCompatActivity {
      * Switches to the next activity with the open jitsi room.
      */
     public void onClickSwitchToRoom(View v) {
-        if (room == null) {
-            room = new RoomLink(roomLinkLength);
-        }
-        Intent intent = new Intent(this, JitsiActivity.class);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra("ROOM_ID", room.id);
-        startActivity(intent);
+        JitsiMeetActivity.launch(this, options);
     }
 
     /**
