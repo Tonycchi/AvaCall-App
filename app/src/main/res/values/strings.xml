@@ -10,5 +10,8 @@
     <string name="app_title">Titel Platzhalter was geht</string>
 
     <string name="connection_status_false">Keine Verbindung</string>
-    <string name="connection_status_true">Verbunden mit: </string>
+    <string name="connection_status_true">Verbunden mit: %s</string>
+
+    <string name="toast_room_opened">Raum geöffnet</string>
+    <string name="toast_link_copied">Link kopiert</string>
 </resources>
