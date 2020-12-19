@@ -35,7 +35,13 @@ public class MainActivity extends AppCompatActivity {
     private ListView myListView;
     private Button testCommand;
 
-    private byte[] directCommand;
+    private boolean testBool = false;
+
+    private String directCommandTest1 = "0D002A00800000A4000F8164A6000F";
+    private String directCommandTest2 = "09002A00000000A3000F00";
+
+    private String directCommandWalk = "1200xxxx800000AE000681320082840382B40001Bbbbmmmmtthhhhcccccccccccccccccccccccccc";
+    private String directCommandSound = "0F00xxxx8000009401810282E80382E803Bbbbmmmmtthhhhcccccccccccccccccccc";
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
@@ -61,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
         testCommand = findViewById(R.id.button_test_command);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        directCommand = hexStringToByteArray("1200xxxx800000AE000681320082840382B40001Bbbbmmmmtthhhhcccccccccccccccccccccccccc");
-
 
         IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver, filter2);
@@ -187,7 +190,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickTestCommand(View v) {
-        mBluetoothConnection.write(directCommand);
+        String dirCom;
+        if (!testBool) {
+            dirCom = directCommandTest1;
+            testBool = true;
+            testCommand.setText(getString(R.string.direct_command_stop));
+        } else {
+            dirCom = directCommandTest2;
+            testBool = false;
+            testCommand.setText(getString(R.string.direct_command_go));
+        }
+        mBluetoothConnection.write(hexStringToByteArray(dirCom));
+        Log.d(TAG, dirCom);
     }
 
     /**

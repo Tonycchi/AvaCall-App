@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:onClick="onClickTestCommand"
-        android:text="Test Command"
+        android:text="@string/direct_command_go"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

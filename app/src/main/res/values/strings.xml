@@ -11,4 +11,6 @@
 
     <string name="connection_status_false">Keine Verbindung</string>
     <string name="connection_status_true">Verbunden mit: </string>
+    <string name="direct_command_go">Fahren </string>
+    <string name="direct_command_stop">Stoppen </string>
 </resources>
