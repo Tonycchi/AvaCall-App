@@ -94,16 +94,66 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button_test_command"
-        android:layout_width="wrap_content"
+        android:id="@+id/button_forward"
+        android:layout_width="@dimen/control_button_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:onClick="onClickTestCommand"
-        android:text="@string/direct_command_go"
+        android:onClick="onClickForward"
+        android:text="@string/direct_command_forward"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_switch_to_room" />
+
+    <Button
+        android:id="@+id/button_stop"
+        android:layout_width="@dimen/control_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClickStop"
+        android:text="@string/direct_command_stop"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_forward" />
+
+    <Button
+        android:id="@+id/button_backward"
+        android:layout_width="@dimen/control_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClickBackward"
+        android:text="@string/direct_command_backward"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_stop" />
+
+    <Button
+        android:id="@+id/button_right"
+        android:layout_width="@dimen/control_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="16dp"
+        android:onClick="onClickRight"
+        android:text="@string/direct_command_turn_right"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/button_stop"
+        app:layout_constraintTop_toBottomOf="@+id/button_forward" />
+
+    <Button
+        android:id="@+id/button_left"
+        android:layout_width="@dimen/control_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:onClick="onClickLeft"
+        android:text="@string/direct_command_turn_left"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/button_stop"
+        app:layout_constraintTop_toBottomOf="@+id/button_forward" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -33,14 +32,34 @@ public class MainActivity extends AppCompatActivity {
     private Button switchToRoom;
     private TextView connectionStatus;
     private ListView myListView;
-    private Button testCommand;
+    private Button forward;
+    private Button stop;
+    private Button backward;
+    private Button right;
+    private Button left;
 
     private boolean testBool = false;
 
-    private String directCommandForward = "0D002A00800000A4000F8164A6000F";
-    private String directCommandStop = "09002A00000000A3000F00";
+    private String startDirCom = "0D002A00800000A4000";
+    private String endDirCom = "A6000";
 
-    private String directCommandSound = "0F00xxxx8000009401810282E80382E803Bbbbmmmmtthhhhcccccccccccccccccccc";
+    private String plus_100 = "8164";
+    private String plus_50 = "8132";
+    private String minus_50 = "81CE";
+    private String plus_25 = "8119";
+    private String minus_25 = "81E7";
+    private String port_BC = "6";
+    private String port_B = "2";
+    private String port_C = "4";
+
+    //start + port + power + end + port
+    private String directCommandForward = startDirCom + port_BC + plus_50 + endDirCom + port_BC;
+    private String directCommandBackward = startDirCom + port_BC + minus_50 + endDirCom + port_BC;
+    private String directCommandRightPortB = startDirCom + port_B + minus_50 + endDirCom + port_B;
+    private String directCommandRightPortC = startDirCom + port_C + plus_50 + endDirCom + port_C;
+    private String directCommandLeftPortB = startDirCom + port_B + plus_50 + endDirCom + port_B;
+    private String directCommandLeftPortC = startDirCom + port_C + minus_50 + endDirCom + port_C;
+    private String directCommandStop = "09002A00000000A3000F00";
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
@@ -68,7 +87,11 @@ public class MainActivity extends AppCompatActivity {
         switchToRoom = findViewById(R.id.button_switch_to_room);
         connectionStatus = findViewById(R.id.connection_status);
         myListView = findViewById(R.id.list_paired_devices);
-        testCommand = findViewById(R.id.button_test_command);
+        forward = findViewById(R.id.button_forward);
+        stop = findViewById(R.id.button_stop);
+        backward = findViewById(R.id.button_backward);
+        right = findViewById(R.id.button_right);
+        left = findViewById(R.id.button_left);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -89,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 mDeviceUUIDs = selectedDevice.getUuids();
                 mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
                 startBTConnection(selectedDevice, mDeviceUUIDs);
-                testCommand.setVisibility(View.VISIBLE);
+                setVisibilityControlButtons(true);
             }
         });
     }
@@ -177,19 +200,26 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickTestCommand(View v) {
-        String dirCom;
-        if (!testBool) {
-            dirCom = directCommandForward;
-            testBool = true;
-            testCommand.setText(getString(R.string.direct_command_stop));
-        } else {
-            dirCom = directCommandStop;
-            testBool = false;
-            testCommand.setText(getString(R.string.direct_command_go));
-        }
-        mBluetoothConnection.write(hexStringToByteArray(dirCom));
-        Log.d(TAG, dirCom);
+    public void onClickStop(View v) {
+        mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+    }
+
+    public void onClickForward(View v) {
+        mBluetoothConnection.write(hexStringToByteArray(directCommandForward));
+    }
+
+    public void onClickBackward(View v) {
+        mBluetoothConnection.write(hexStringToByteArray(directCommandBackward));
+    }
+
+    public void onClickRight(View v) {
+        mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortB));
+        mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortC));
+    }
+
+    public void onClickLeft(View v) {
+        mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortB));
+        mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortC));
     }
 
     /**
@@ -235,15 +265,32 @@ public class MainActivity extends AppCompatActivity {
 
     // reset Connection and change Variables when we disconnect(via button or bluetooth)
     public void resetConnection(){
+        mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
         btIsClicked = false;
         jitsiIsClicked = false;
         bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
         openRoom.setEnabled(false);
         setEnableLinkAndRoom(false);
         connectionStatus.setText(getString(R.string.connection_status_false));
-        testCommand.setVisibility(View.INVISIBLE);
+        setVisibilityControlButtons(false);
         mBluetoothConnection.cancel();
         selectedDevice = null;
         pairedDevices = new ArrayList<BluetoothDevice>();
+    }
+
+    public void setVisibilityControlButtons(boolean vis){
+        if (vis) {
+            forward.setVisibility(View.VISIBLE);
+            stop.setVisibility(View.VISIBLE);
+            backward.setVisibility(View.VISIBLE);
+            right.setVisibility(View.VISIBLE);
+            left.setVisibility(View.VISIBLE);
+        } else {
+            forward.setVisibility(View.INVISIBLE);
+            stop.setVisibility(View.INVISIBLE);
+            backward.setVisibility(View.INVISIBLE);
+            right.setVisibility(View.INVISIBLE);
+            left.setVisibility(View.INVISIBLE);
+        }
     }
 }
