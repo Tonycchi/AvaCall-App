@@ -19,12 +19,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    ParcelUuid[] mDeviceUUIDs;
     private boolean btIsClicked = false;
     private boolean jitsiIsClicked = false;
     private Button bluetooth;
@@ -49,8 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
     BluetoothConnectionService mBluetoothConnection;
 
+    // Bluetoothadapter of our device
     private BluetoothAdapter btAdapter;
+    // Device we want to connect with
     private BluetoothDevice selectedDevice;
+    // The UUIDs of the device we want to connect with
+    private ParcelUuid[] mDeviceUUIDs;
+    // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>();
 
     @Override
@@ -83,19 +88,14 @@ public class MainActivity extends AppCompatActivity {
                 myListView.setVisibility(View.INVISIBLE);
                 mDeviceUUIDs = selectedDevice.getUuids();
                 mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
-                startConnection();
+                startBTConnection(selectedDevice, mDeviceUUIDs);
                 testCommand.setVisibility(View.VISIBLE);
             }
         });
     }
-
-    public void startConnection(){
-        startBTConnection(selectedDevice, mDeviceUUIDs);
-    }
-
+    // Starts a connection between our device and the device we want to connect with
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
-
         mBluetoothConnection.startClient(device,mDeviceUUIDs);
     }
 
@@ -106,19 +106,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Create a BroadcastReceiver for ACTION_STATE_CHANGED changed.
+    // Whenever Bluetooth is turned off while we are in a connection reset everything
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (String.valueOf(btAdapter.ACTION_STATE_CHANGED).equals(action)) {
-                // Bluetooth Status has been changed
+                // Bluetooth Status has been turned off
                 final int state = intent.getIntExtra(btAdapter.EXTRA_STATE, btAdapter.ERROR);
                 if(state == btAdapter.STATE_OFF || state == btAdapter.STATE_TURNING_OFF){
-                    btIsClicked = false;
-                    jitsiIsClicked = false;
-                    bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
-                    openRoom.setEnabled(false);
-                    setEnableLinkAndRoom(false);
-                    connectionStatus.setText(getResources().getString(R.string.connection_status_false));
+                    resetConnection();
                 }
             }
         }
@@ -130,14 +126,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickBluetooth(View v) {
         if(btIsClicked){
-         btIsClicked = false;
-         jitsiIsClicked = false;
-         bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
-         openRoom.setEnabled(false);
-         setEnableLinkAndRoom(false);
-         connectionStatus.setText(getString(R.string.connection_status_false));
-         testCommand.setVisibility(View.INVISIBLE);
-         mBluetoothConnection.cancel();
+         resetConnection();
         } else {
             if (!btAdapter.isEnabled()) {
                 Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -242,5 +231,19 @@ public class MainActivity extends AppCompatActivity {
                     + Character.digit(s.charAt(i+1), 16));
         }
         return data;
+    }
+
+    // reset Connection and change Variables when we disconnect(via button or bluetooth)
+    public void resetConnection(){
+        btIsClicked = false;
+        jitsiIsClicked = false;
+        bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
+        openRoom.setEnabled(false);
+        setEnableLinkAndRoom(false);
+        connectionStatus.setText(getString(R.string.connection_status_false));
+        testCommand.setVisibility(View.INVISIBLE);
+        mBluetoothConnection.cancel();
+        selectedDevice = null;
+        pairedDevices = new ArrayList<BluetoothDevice>();
     }
 }
