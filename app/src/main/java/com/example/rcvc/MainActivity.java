@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView connectionStatus;
     private ListView myListView;
     private Button forward;
-    private Button stop;
     private Button backward;
     private Button right;
     private Button left;
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         connectionStatus = findViewById(R.id.connection_status);
         myListView = findViewById(R.id.list_paired_devices);
         forward = findViewById(R.id.button_forward);
-        stop = findViewById(R.id.button_stop);
         backward = findViewById(R.id.button_backward);
         right = findViewById(R.id.button_right);
         left = findViewById(R.id.button_left);
@@ -97,6 +96,60 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiver, filter2);
+
+        forward.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandForward));
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                }
+
+                return true;
+            }
+        });
+
+        backward.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandBackward));
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                }
+
+                return true;
+            }
+        });
+
+        right.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortB));
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortC));
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                }
+
+                return true;
+            }
+        });
+
+        left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortB));
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortC));
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                }
+
+                return true;
+            }
+        });
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -200,28 +253,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickStop(View v) {
-        mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
-    }
-
-    public void onClickForward(View v) {
-        mBluetoothConnection.write(hexStringToByteArray(directCommandForward));
-    }
-
-    public void onClickBackward(View v) {
-        mBluetoothConnection.write(hexStringToByteArray(directCommandBackward));
-    }
-
-    public void onClickRight(View v) {
-        mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortB));
-        mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortC));
-    }
-
-    public void onClickLeft(View v) {
-        mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortB));
-        mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortC));
-    }
-
     /**
      * @param message The message to pop up at the bottom of the screen
      */
@@ -249,6 +280,9 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             showToast("Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen");
+            Intent intentOpenBluetoothSettings = new Intent();
+            intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+            startActivity(intentOpenBluetoothSettings);
         }
         return names;
     }
@@ -281,13 +315,11 @@ public class MainActivity extends AppCompatActivity {
     public void setVisibilityControlButtons(boolean vis){
         if (vis) {
             forward.setVisibility(View.VISIBLE);
-            stop.setVisibility(View.VISIBLE);
             backward.setVisibility(View.VISIBLE);
             right.setVisibility(View.VISIBLE);
             left.setVisibility(View.VISIBLE);
         } else {
             forward.setVisibility(View.INVISIBLE);
-            stop.setVisibility(View.INVISIBLE);
             backward.setVisibility(View.INVISIBLE);
             right.setVisibility(View.INVISIBLE);
             left.setVisibility(View.INVISIBLE);
