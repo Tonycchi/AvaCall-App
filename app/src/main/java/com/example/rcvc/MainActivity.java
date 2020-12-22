@@ -37,10 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean testBool = false;
 
-    private String directCommandTest1 = "0D002A00800000A4000F8164A6000F";
-    private String directCommandTest2 = "09002A00000000A3000F00";
+    private String directCommandForward = "0D002A00800000A4000F8164A6000F";
+    private String directCommandStop = "09002A00000000A3000F00";
 
-    private String directCommandWalk = "1200xxxx800000AE000681320082840382B40001Bbbbmmmmtthhhhcccccccccccccccccccccccccc";
     private String directCommandSound = "0F00xxxx8000009401810282E80382E803Bbbbmmmmtthhhhcccccccccccccccccccc";
 
     private static final int REQUEST_ENABLE_BT = 0;
@@ -192,11 +191,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClickTestCommand(View v) {
         String dirCom;
         if (!testBool) {
-            dirCom = directCommandTest1;
+            dirCom = directCommandForward;
             testBool = true;
             testCommand.setText(getString(R.string.direct_command_stop));
         } else {
-            dirCom = directCommandTest2;
+            dirCom = directCommandStop;
             testBool = false;
             testCommand.setText(getString(R.string.direct_command_go));
         }
