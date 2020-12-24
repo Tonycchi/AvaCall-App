@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -310,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
         mBluetoothConnection.cancel();
         selectedDevice = null;
         pairedDevices = new ArrayList<BluetoothDevice>();
+        mDeviceUUIDs = null;
     }
 
     public void setVisibilityControlButtons(boolean vis){
