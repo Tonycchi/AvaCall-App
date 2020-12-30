@@ -1,5 +1,6 @@
 package com.example.rcvc;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -11,18 +12,17 @@ import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Set;
 
+@SuppressLint("LogNotTimber")
 public class MainActivity extends AppCompatActivity {
 
     private boolean btIsClicked = false;
@@ -52,10 +52,11 @@ public class MainActivity extends AppCompatActivity {
     // The UUIDs of the device we want to connect with
     private ParcelUuid[] mDeviceUUIDs;
     // All paired devices
-    private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>();
+    private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<>();
     //
     private RobotController robotController;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,83 +77,68 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiverActionStateChanged, filter2);
 
-        forward.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct command for moving forward is send to ev3
-                    robotController.sendCommands(RobotController.FORWARD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    robotController.sendCommands(RobotController.STOP);
-                }
-
-                return true;
+        forward.setOnTouchListener((v, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct command for moving forward is send to ev3
+                robotController.sendCommands(RobotController.FORWARD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                robotController.sendCommands(RobotController.STOP);
             }
+
+            return true;
         });
 
-        backward.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct command for moving backward is send to ev3
-                    robotController.sendCommands(RobotController.BACKWARD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    robotController.sendCommands(RobotController.STOP);
-                }
-
-                return true;
+        backward.setOnTouchListener((v, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct command for moving backward is send to ev3
+                robotController.sendCommands(RobotController.BACKWARD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                robotController.sendCommands(RobotController.STOP);
             }
+
+            return true;
         });
 
-        right.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct commands for turning to the right are send to ev3
-                    robotController.sendCommands(RobotController.TURN_RIGHT);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    robotController.sendCommands(RobotController.STOP);
-                }
-
-                return true;
+        right.setOnTouchListener((v, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct commands for turning to the right are send to ev3
+                robotController.sendCommands(RobotController.TURN_RIGHT);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                robotController.sendCommands(RobotController.STOP);
             }
+
+            return true;
         });
 
-        left.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct commands for turning to the left are send to ev3
-                    robotController.sendCommands(RobotController.TURN_LEFT);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    robotController.sendCommands(RobotController.STOP);
-                }
-
-                return true;
+        left.setOnTouchListener((v, event) -> {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct commands for turning to the left are send to ev3
+                robotController.sendCommands(RobotController.TURN_LEFT);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                robotController.sendCommands(RobotController.STOP);
             }
+
+            return true;
         });
 
 
-        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedDevice = pairedDevices.get(position);
-                connectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
-                bluetooth.setText(getString(R.string.button_bluetooth_connected));
-                btIsClicked = true;
-                openRoom.setEnabled(true);
-                Object o = myListView.getItemAtPosition(position);
-                String str = (String) o; //As you are using Default String Adapter
-                myListView.setVisibility(View.INVISIBLE);
-                mDeviceUUIDs = selectedDevice.getUuids();
-                mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
-                startBTConnection(selectedDevice, mDeviceUUIDs);
-                setVisibilityControlButtons(true);
-            }
+        myListView.setOnItemClickListener((parent, view, position, id) -> {
+            selectedDevice = pairedDevices.get(position);
+            connectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+            bluetooth.setText(getString(R.string.button_bluetooth_connected));
+            btIsClicked = true;
+            openRoom.setEnabled(true);
+            Object o = myListView.getItemAtPosition(position);
+            String str = (String) o; //As you are using Default String Adapter
+            myListView.setVisibility(View.INVISIBLE);
+            mDeviceUUIDs = selectedDevice.getUuids();
+            mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
+            startBTConnection(selectedDevice, mDeviceUUIDs);
+            setVisibilityControlButtons(true);
         });
     }
 
@@ -175,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (String.valueOf(BluetoothAdapter.ACTION_STATE_CHANGED).equals(action)) {
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 // Bluetooth Status has been turned off
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 if(state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF){
@@ -201,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
             if (btAdapter.isEnabled()) {
 
             ArrayList<String> names = getPairedDevices();
-            ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
+            ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
             myListView.setAdapter(listAdapter);
             myListView.setVisibility(View.VISIBLE);
             }
@@ -257,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
     public ArrayList<String> getPairedDevices(){
         Set<BluetoothDevice> devices = btAdapter.getBondedDevices();
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         if (devices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
@@ -284,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         setVisibilityControlButtons(false);
         mBluetoothConnection.cancel();
         selectedDevice = null;
-        pairedDevices = new ArrayList<BluetoothDevice>();
+        pairedDevices = new ArrayList<>();
         mDeviceUUIDs = null;
     }
 

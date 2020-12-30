@@ -1,5 +1,6 @@
 package com.example.rcvc;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -20,6 +21,7 @@ import java.util.UUID;
  * Created by User on 12/21/2016.
  */
 
+@SuppressLint("LogNotTimber")
 public class BluetoothConnectionService {
     private static final String TAG = "BluetoothConnectionServ";
 
@@ -129,10 +131,10 @@ public class BluetoothConnectionService {
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                for(int i = 0; i < mDeviceUUIDs.length; i++) {
+                for (ParcelUuid mDeviceUUID : mDeviceUUIDs) {
                     Log.d(TAG, "ConnectThread: Trying to create RfcommSocket using UUID: "
-                            +mDeviceUUIDs[i].getUuid() );
-                    tmp = mmDevice.createRfcommSocketToServiceRecord(mDeviceUUIDs[i].getUuid());
+                            + mDeviceUUID.getUuid());
+                    tmp = mmDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
                 }
             } catch (IOException e) {
                 Log.e(TAG, "ConnectThread: Could not create RfcommSocket " + e.getMessage());
@@ -283,7 +285,7 @@ public class BluetoothConnectionService {
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException ignored) { }
         }
     }
 
