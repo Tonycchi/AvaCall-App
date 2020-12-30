@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
             url = "https://meet.jit.si/" + id + "/" + id + "config.prejoinPageEnabledtrue";
         }
 
+        /**
+         * @param length the length for the id of the roomlink
+         * @return the whole roomlink as a string which then can be copied
+         */
         private String randomLinkString(int length) {
             Random random = new Random();
             char[] out = new char[length];
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
     private Button bluetooth;
     private Button openRoom;
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // get all buttons
         bluetooth = findViewById(R.id.button_bluetooth);
 
         openRoom = findViewById(R.id.button_open_room);
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * @param v
-     * On click of the openRoom button we open a jitsi room and enable the shareLink and
+     * On click of the openRoom button we create a jitsi room with some options and enable the shareLink and
      * switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
@@ -145,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * @param v
-     * Switches to the next activity with the open jitsi room.
+     * Opens the jitsi room with the options created before and switches to a new window with the jitsi room
      */
     public void onClickSwitchToRoom(View v) {
         JitsiMeetActivity.launch(this, options);
