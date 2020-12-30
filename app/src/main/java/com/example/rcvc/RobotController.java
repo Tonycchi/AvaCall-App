@@ -30,7 +30,7 @@ public class RobotController {
     private final String directCommandLeftPortC = startDirCom + port_C + minus_50 + endDirCom + port_C;
     private final String directCommandStop = "09002A00000000A3000F00";
 
-    private BluetoothConnectionService b;
+    private final BluetoothConnectionService b;
 
     public RobotController(BluetoothConnectionService bluetoothConnectionService) {
         this.b = bluetoothConnectionService;
@@ -61,6 +61,7 @@ public class RobotController {
 
     /**
      * converts a string to a byte array
+     *
      * @param s the input string
      * @return the byte array
      */
@@ -69,7 +70,7 @@ public class RobotController {
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
             data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
+                    + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
     }

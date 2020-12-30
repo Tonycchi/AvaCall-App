@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">rcvc</string>
 
+    <string name="dialog_close">Schließen</string>
+
     <string name="button_bluetooth_disconnected">Mit Bluetooth verbinden</string>
     <string name="button_bluetooth_connected">Verbindung trennen</string>
     <string name="button_open_room">Jitsi Raum öffnen</string>
@@ -16,4 +18,5 @@
     <string name="direct_command_turn_right">Rechts </string>
     <string name="direct_command_turn_left">Links </string>
     <string name="direct_command_stop">Stoppen </string>
+    <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
 </resources>

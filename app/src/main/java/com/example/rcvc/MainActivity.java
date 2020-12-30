@@ -27,16 +27,16 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean btIsClicked = false;
     //Declare all the xml objects
-    private Button bluetooth;
-    private Button openRoom;
-    private Button shareLink;
-    private Button switchToRoom;
-    private TextView connectionStatus;
-    private ListView myListView;
-    private Button forward;
-    private Button backward;
-    private Button right;
-    private Button left;
+    private Button buttonBluetooth;
+    private Button buttonOpenRoom;
+    private Button buttonShareLink;
+    private Button buttonSwitchToRoom;
+    private Button buttonMoveForward;
+    private Button buttonMoveBackward;
+    private Button buttonTurnRight;
+    private Button buttonTurnLeft;
+    private TextView textviewConnectionStatus;
+    private ListView listviewDevices;
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     BluetoothConnectionService mBluetoothConnection;
 
-    // Bluetoothadapter of our device
+    // Bluetooth adapter of our device
     private BluetoothAdapter btAdapter;
     // Device we want to connect with
     private BluetoothDevice selectedDevice;
@@ -54,87 +54,87 @@ public class MainActivity extends AppCompatActivity {
     // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<>();
     //
-    private RobotController robotController;
+    private RobotController robot;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bluetooth = findViewById(R.id.button_bluetooth);
-        openRoom = findViewById(R.id.button_open_room);
-        shareLink = findViewById(R.id.button_share_link);
-        switchToRoom = findViewById(R.id.button_switch_to_room);
-        connectionStatus = findViewById(R.id.connection_status);
-        myListView = findViewById(R.id.list_paired_devices);
-        forward = findViewById(R.id.button_forward);
-        backward = findViewById(R.id.button_backward);
-        right = findViewById(R.id.button_right);
-        left = findViewById(R.id.button_left);
+        buttonBluetooth = findViewById(R.id.button_bluetooth);
+        buttonOpenRoom = findViewById(R.id.button_open_room);
+        buttonShareLink = findViewById(R.id.button_share_link);
+        buttonSwitchToRoom = findViewById(R.id.button_switch_to_room);
+        textviewConnectionStatus = findViewById(R.id.connection_status);
+        listviewDevices = findViewById(R.id.list_paired_devices);
+        buttonMoveForward = findViewById(R.id.button_forward);
+        buttonMoveBackward = findViewById(R.id.button_backward);
+        buttonTurnRight = findViewById(R.id.button_right);
+        buttonTurnLeft = findViewById(R.id.button_left);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiverActionStateChanged, filter2);
 
-        forward.setOnTouchListener((v, event) -> {
+        buttonMoveForward.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving forward is send to ev3
-                robotController.sendCommands(RobotController.FORWARD);
+                robot.sendCommands(RobotController.FORWARD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robotController.sendCommands(RobotController.STOP);
+                robot.sendCommands(RobotController.STOP);
             }
 
             return true;
         });
 
-        backward.setOnTouchListener((v, event) -> {
+        buttonMoveBackward.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving backward is send to ev3
-                robotController.sendCommands(RobotController.BACKWARD);
+                robot.sendCommands(RobotController.BACKWARD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robotController.sendCommands(RobotController.STOP);
+                robot.sendCommands(RobotController.STOP);
             }
 
             return true;
         });
 
-        right.setOnTouchListener((v, event) -> {
+        buttonTurnRight.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the right are send to ev3
-                robotController.sendCommands(RobotController.TURN_RIGHT);
+                robot.sendCommands(RobotController.TURN_RIGHT);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robotController.sendCommands(RobotController.STOP);
+                robot.sendCommands(RobotController.STOP);
             }
 
             return true;
         });
 
-        left.setOnTouchListener((v, event) -> {
+        buttonTurnLeft.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the left are send to ev3
-                robotController.sendCommands(RobotController.TURN_LEFT);
+                robot.sendCommands(RobotController.TURN_LEFT);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robotController.sendCommands(RobotController.STOP);
+                robot.sendCommands(RobotController.STOP);
             }
 
             return true;
         });
 
 
-        myListView.setOnItemClickListener((parent, view, position, id) -> {
+        listviewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
-            connectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
-            bluetooth.setText(getString(R.string.button_bluetooth_connected));
+            textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+            buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             btIsClicked = true;
-            openRoom.setEnabled(true);
-            Object o = myListView.getItemAtPosition(position);
+            buttonOpenRoom.setEnabled(true);
+            Object o = listviewDevices.getItemAtPosition(position);
             String str = (String) o; //As you are using Default String Adapter
-            myListView.setVisibility(View.INVISIBLE);
+            listviewDevices.setVisibility(View.INVISIBLE);
             mDeviceUUIDs = selectedDevice.getUuids();
             mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, mDeviceUUIDs);
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device,mDeviceUUIDs);
-        robotController = new RobotController(mBluetoothConnection);
+        robot = new RobotController(mBluetoothConnection);
     }
 
     //On destroy, all receivers will be unregistered
@@ -188,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
 
             ArrayList<String> names = getPairedDevices();
             ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
-            myListView.setAdapter(listAdapter);
-            myListView.setVisibility(View.VISIBLE);
+            listviewDevices.setAdapter(listAdapter);
+            listviewDevices.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -237,8 +237,8 @@ public class MainActivity extends AppCompatActivity {
      * Enables or disables the shareLink and switchToRoom button since they are only used together.
      */
     private void setEnableLinkAndRoom(boolean enabled) {
-        shareLink.setEnabled(enabled);
-        switchToRoom.setEnabled(enabled);
+        buttonShareLink.setEnabled(enabled);
+        buttonSwitchToRoom.setEnabled(enabled);
     }
 
     public ArrayList<String> getPairedDevices(){
@@ -251,7 +251,15 @@ public class MainActivity extends AppCompatActivity {
                 names.add(device.getName());
             }
         } else {
-            showToast("Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen");
+            // Dialog statt Toast, da Text lang:
+            Bundle bundle = new Bundle();
+            // first put id of error message in bundle using defined key
+            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_no_paired_devices);
+            ErrorDialogFragment error = new ErrorDialogFragment();
+            // then pass bundle to dialog and show
+            error.setArguments(bundle);
+            error.show(this.getSupportFragmentManager(), TAG);
+
             Intent intentOpenBluetoothSettings = new Intent();
             intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
             startActivity(intentOpenBluetoothSettings);
@@ -261,12 +269,12 @@ public class MainActivity extends AppCompatActivity {
 
     // reset Connection and change Variables when we disconnect(via button or bluetooth)
     public void resetConnection(){
-        robotController.sendCommands(RobotController.STOP);
+        robot.sendCommands(RobotController.STOP);
         btIsClicked = false;
-        bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
-        openRoom.setEnabled(false);
+        buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
+        buttonOpenRoom.setEnabled(false);
         setEnableLinkAndRoom(false);
-        connectionStatus.setText(getString(R.string.connection_status_false));
+        textviewConnectionStatus.setText(getString(R.string.connection_status_false));
         setVisibilityControlButtons(false);
         mBluetoothConnection.cancel();
         selectedDevice = null;
@@ -280,15 +288,15 @@ public class MainActivity extends AppCompatActivity {
      */
     public void setVisibilityControlButtons(boolean vis){
         if (vis) {
-            forward.setVisibility(View.VISIBLE);
-            backward.setVisibility(View.VISIBLE);
-            right.setVisibility(View.VISIBLE);
-            left.setVisibility(View.VISIBLE);
+            buttonMoveForward.setVisibility(View.VISIBLE);
+            buttonMoveBackward.setVisibility(View.VISIBLE);
+            buttonTurnRight.setVisibility(View.VISIBLE);
+            buttonTurnLeft.setVisibility(View.VISIBLE);
         } else {
-            forward.setVisibility(View.INVISIBLE);
-            backward.setVisibility(View.INVISIBLE);
-            right.setVisibility(View.INVISIBLE);
-            left.setVisibility(View.INVISIBLE);
+            buttonMoveForward.setVisibility(View.INVISIBLE);
+            buttonMoveBackward.setVisibility(View.INVISIBLE);
+            buttonTurnRight.setVisibility(View.INVISIBLE);
+            buttonTurnLeft.setVisibility(View.INVISIBLE);
         }
     }
 }
