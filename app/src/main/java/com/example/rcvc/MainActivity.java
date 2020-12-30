@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean btIsClicked = false;
     private boolean jitsiIsClicked = false;
+    //Declare all the xml objects
     private Button bluetooth;
     private Button openRoom;
     private Button shareLink;
@@ -39,20 +39,24 @@ public class MainActivity extends AppCompatActivity {
     private Button right;
     private Button left;
 
-    private boolean testBool = false;
-
+    //start and end part of direct commands used to control EV3
     private String startDirCom = "0D002A00800000A4000";
     private String endDirCom = "A6000";
 
+    //power that is used to control the ev3 coded in hex
     private String plus_100 = "8164";
     private String plus_50 = "8132";
     private String minus_50 = "81CE";
     private String plus_25 = "8119";
     private String minus_25 = "81E7";
+
+    //ports that are used to control the ev3 coded in hex
     private String port_BC = "6";
     private String port_B = "2";
     private String port_C = "4";
 
+
+    //complete direct commands used to control the ev3 consisting of :
     //start + port + power + end + port
     private String directCommandForward = startDirCom + port_BC + plus_50 + endDirCom + port_BC;
     private String directCommandBackward = startDirCom + port_BC + minus_50 + endDirCom + port_BC;
@@ -96,14 +100,16 @@ public class MainActivity extends AppCompatActivity {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(receiver, filter2);
+        registerReceiver(receiverActionStateChanged, filter2);
 
         forward.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //when button is being pressed down, direct command for moving forward is send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandForward));
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    //when button is being released, direct command for stopping is send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
                 }
 
@@ -115,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //when button is being pressed down, direct command for moving backward is send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandBackward));
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    //when button is being released, direct command for stopping is send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
                 }
 
@@ -128,9 +136,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //when button is being pressed down, direct commands for turning to the right are send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortB));
                     mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortC));
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    //when button is being released, direct command for stopping is send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
                 }
 
@@ -142,15 +152,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //when button is being pressed down, direct commands for turning to the left are send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortB));
                     mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortC));
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    //when button is being released, direct com for stopping is send to ev3
                     mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
                 }
 
                 return true;
             }
         });
+
 
         myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -161,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 btIsClicked = true;
                 openRoom.setEnabled(true);
                 Object o = myListView.getItemAtPosition(position);
-                String str = (String) o;//As you are using Default String Adapter
+                String str = (String) o; //As you are using Default String Adapter
                 myListView.setVisibility(View.INVISIBLE);
                 mDeviceUUIDs = selectedDevice.getUuids();
                 mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
@@ -170,21 +183,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     // Starts a connection between our device and the device we want to connect with
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device,mDeviceUUIDs);
     }
 
+    //On destroy, all receivers will be unregistered
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        unregisterReceiver(receiverActionStateChanged);
     }
 
     //Create a BroadcastReceiver for ACTION_STATE_CHANGED changed.
     // Whenever Bluetooth is turned off while we are in a connection reset everything
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (String.valueOf(btAdapter.ACTION_STATE_CHANGED).equals(action)) {
@@ -199,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * @param v
-     * If we don't have a bluetooth connection this button enables the openRoom button on click. If we do have a bluetooth connection this button disables all the other buttons.
+     * If bluetooth is disabled, this button will enable it, if bluetooth is is enabled and this button is clicked, it will show all paired devices.
+     * If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
         if(btIsClicked){
@@ -250,8 +266,6 @@ public class MainActivity extends AppCompatActivity {
      * Switches to the next activity with the open jitsi room.
      */
     public void onClickSwitchToRoom(View v) {
-        Intent intent = new Intent(this, JitsiActivity.class);
-        startActivity(intent);
     }
 
     /**
@@ -288,6 +302,11 @@ public class MainActivity extends AppCompatActivity {
         return names;
     }
 
+    /**
+     * converts a string to a byte array
+     * @param s the input string
+     * @return the byte array
+     */
     public static byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
@@ -314,6 +333,10 @@ public class MainActivity extends AppCompatActivity {
         mDeviceUUIDs = null;
     }
 
+    /**
+     * Set the visibility of the control buttons according to the given param
+     * @param vis the visibility that the control buttons will the get set to
+     */
     public void setVisibilityControlButtons(boolean vis){
         if (vis) {
             forward.setVisibility(View.VISIBLE);

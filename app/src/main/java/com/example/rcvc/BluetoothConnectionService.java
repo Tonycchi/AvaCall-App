@@ -35,7 +35,6 @@ public class BluetoothConnectionService {
 
     private ConnectThread mConnectThread;
     private BluetoothDevice mmDevice;
-    private UUID deviceUUID;
     ProgressDialog mProgressDialog;
 
     private ConnectedThread mConnectedThread;
@@ -90,7 +89,6 @@ public class BluetoothConnectionService {
                 Log.e(TAG, "AcceptThread: IOException: " + e.getMessage() );
             }
 
-            //talk about this is in the 3rd
             if(socket != null){
                 connected(socket,mmDevice);
             }
@@ -164,7 +162,6 @@ public class BluetoothConnectionService {
                 Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID );
             }
 
-            //will talk about this in the 3rd video
             connected(mmSocket,mmDevice);
         }
         public void cancel() {
@@ -299,8 +296,6 @@ public class BluetoothConnectionService {
     }
 
     public void cancel() {
-        ConnectedThread r;
-
         Log.d(TAG, "cancel: Connection cancelled.");
         mConnectedThread.cancel();
     }
@@ -312,9 +307,6 @@ public class BluetoothConnectionService {
      * @see ConnectedThread#write(byte[])
      */
     public void write(byte[] out) {
-        // Create temporary object
-        ConnectedThread r;
-
         // Synchronize a copy of the ConnectedThread
         Log.d(TAG, "write: Write Called.");
         //perform the write
