@@ -40,31 +40,28 @@ public class MainActivity extends AppCompatActivity {
     private Button left;
 
     //start and end part of direct commands used to control EV3
-    private String startDirCom = "0D002A00800000A4000";
-    private String endDirCom = "A6000";
+    private final String startDirCom = "0D002A00800000A4000";
+    private final String endDirCom = "A6000";
 
     //power that is used to control the ev3 coded in hex
-    private String plus_100 = "8164";
-    private String plus_50 = "8132";
-    private String minus_50 = "81CE";
-    private String plus_25 = "8119";
-    private String minus_25 = "81E7";
+    private final String plus_50 = "8132";
+    private final String minus_50 = "81CE";
 
     //ports that are used to control the ev3 coded in hex
-    private String port_BC = "6";
-    private String port_B = "2";
-    private String port_C = "4";
+    private final String port_BC = "6";
+    private final String port_B = "2";
+    private final String port_C = "4";
 
 
     //complete direct commands used to control the ev3 consisting of :
     //start + port + power + end + port
-    private String directCommandForward = startDirCom + port_BC + plus_50 + endDirCom + port_BC;
-    private String directCommandBackward = startDirCom + port_BC + minus_50 + endDirCom + port_BC;
-    private String directCommandRightPortB = startDirCom + port_B + minus_50 + endDirCom + port_B;
-    private String directCommandRightPortC = startDirCom + port_C + plus_50 + endDirCom + port_C;
-    private String directCommandLeftPortB = startDirCom + port_B + plus_50 + endDirCom + port_B;
-    private String directCommandLeftPortC = startDirCom + port_C + minus_50 + endDirCom + port_C;
-    private String directCommandStop = "09002A00000000A3000F00";
+    private final String directCommandForward = startDirCom + port_BC + plus_50 + endDirCom + port_BC;
+    private final String directCommandBackward = startDirCom + port_BC + minus_50 + endDirCom + port_BC;
+    private final String directCommandRightPortB = startDirCom + port_B + minus_50 + endDirCom + port_B;
+    private final String directCommandRightPortC = startDirCom + port_C + plus_50 + endDirCom + port_C;
+    private final String directCommandLeftPortB = startDirCom + port_B + plus_50 + endDirCom + port_B;
+    private final String directCommandLeftPortC = startDirCom + port_C + minus_50 + endDirCom + port_C;
+    private final String directCommandStop = "09002A00000000A3000F00";
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;

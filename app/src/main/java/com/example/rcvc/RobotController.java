@@ -7,18 +7,21 @@ public class RobotController {
     public final int TURN_RIGHT = 3;
     public final int TURN_LEFT = 4;
 
+    //start and end part of direct commands used to control EV3
     private final String startDirCom = "0D002A00800000A4000";
     private final String endDirCom = "A6000";
 
-    private final String plus_100 = "8164";
+    //power that is used to control the ev3 coded in hex
     private final String plus_50 = "8132";
     private final String minus_50 = "81CE";
-    private final String plus_25 = "8119";
-    private final String minus_25 = "81E7";
+
+    //ports that are used to control the ev3 coded in hex
     private final String port_BC = "6";
     private final String port_B = "2";
     private final String port_C = "4";
 
+
+    //complete direct commands used to control the ev3 consisting of :
     //start + port + power + end + port
     private final String directCommandForward = startDirCom + port_BC + plus_50 + endDirCom + port_BC;
     private final String directCommandBackward = startDirCom + port_BC + minus_50 + endDirCom + port_BC;
