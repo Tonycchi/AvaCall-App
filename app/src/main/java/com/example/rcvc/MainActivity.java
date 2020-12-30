@@ -26,7 +26,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     private boolean btIsClicked = false;
-    private boolean jitsiIsClicked = false;
     //Declare all the xml objects
     private Button bluetooth;
     private Button openRoom;
@@ -38,30 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private Button backward;
     private Button right;
     private Button left;
-
-    //start and end part of direct commands used to control EV3
-    private final String startDirCom = "0D002A00800000A4000";
-    private final String endDirCom = "A6000";
-
-    //power that is used to control the ev3 coded in hex
-    private final String plus_50 = "8132";
-    private final String minus_50 = "81CE";
-
-    //ports that are used to control the ev3 coded in hex
-    private final String port_BC = "6";
-    private final String port_B = "2";
-    private final String port_C = "4";
-
-
-    //complete direct commands used to control the ev3 consisting of :
-    //start + port + power + end + port
-    private final String directCommandForward = startDirCom + port_BC + plus_50 + endDirCom + port_BC;
-    private final String directCommandBackward = startDirCom + port_BC + minus_50 + endDirCom + port_BC;
-    private final String directCommandRightPortB = startDirCom + port_B + minus_50 + endDirCom + port_B;
-    private final String directCommandRightPortC = startDirCom + port_C + plus_50 + endDirCom + port_C;
-    private final String directCommandLeftPortB = startDirCom + port_B + plus_50 + endDirCom + port_B;
-    private final String directCommandLeftPortC = startDirCom + port_C + minus_50 + endDirCom + port_C;
-    private final String directCommandStop = "09002A00000000A3000F00";
 
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_DISCOVER_BT = 1;
@@ -78,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private ParcelUuid[] mDeviceUUIDs;
     // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>();
+    //
+    private RobotController robotController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        IntentFilter filter2 = new IntentFilter(btAdapter.ACTION_STATE_CHANGED);
+        IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiverActionStateChanged, filter2);
 
         forward.setOnTouchListener(new View.OnTouchListener() {
@@ -104,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     //when button is being pressed down, direct command for moving forward is send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandForward));
+                    robotController.sendCommands(RobotController.FORWARD);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     //when button is being released, direct command for stopping is send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                    robotController.sendCommands(RobotController.STOP);
                 }
 
                 return true;
@@ -119,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     //when button is being pressed down, direct command for moving backward is send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandBackward));
+                    robotController.sendCommands(RobotController.BACKWARD);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     //when button is being released, direct command for stopping is send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                    robotController.sendCommands(RobotController.STOP);
                 }
 
                 return true;
@@ -134,11 +111,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     //when button is being pressed down, direct commands for turning to the right are send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortB));
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandRightPortC));
+                    robotController.sendCommands(RobotController.TURN_RIGHT);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     //when button is being released, direct command for stopping is send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                    robotController.sendCommands(RobotController.STOP);
                 }
 
                 return true;
@@ -150,11 +126,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     //when button is being pressed down, direct commands for turning to the left are send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortB));
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandLeftPortC));
+                    robotController.sendCommands(RobotController.TURN_LEFT);
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct com for stopping is send to ev3
-                    mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+                    //when button is being released, direct command for stopping is send to ev3
+                    robotController.sendCommands(RobotController.STOP);
                 }
 
                 return true;
@@ -166,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedDevice = pairedDevices.get(position);
-                connectionStatus.setText(getResources().getString(R.string.connection_status_true) + selectedDevice.getName());
+                connectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 bluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
                 openRoom.setEnabled(true);
@@ -185,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device,mDeviceUUIDs);
+        robotController = new RobotController(mBluetoothConnection);
     }
 
     //On destroy, all receivers will be unregistered
@@ -199,10 +175,10 @@ public class MainActivity extends AppCompatActivity {
     private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (String.valueOf(btAdapter.ACTION_STATE_CHANGED).equals(action)) {
+            if (String.valueOf(BluetoothAdapter.ACTION_STATE_CHANGED).equals(action)) {
                 // Bluetooth Status has been turned off
-                final int state = intent.getIntExtra(btAdapter.EXTRA_STATE, btAdapter.ERROR);
-                if(state == btAdapter.STATE_OFF || state == btAdapter.STATE_TURNING_OFF){
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                if(state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF){
                     resetConnection();
                 }
             }
@@ -231,8 +207,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
     /**
      * @param v
@@ -299,26 +273,10 @@ public class MainActivity extends AppCompatActivity {
         return names;
     }
 
-    /**
-     * converts a string to a byte array
-     * @param s the input string
-     * @return the byte array
-     */
-    public static byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
-        }
-        return data;
-    }
-
     // reset Connection and change Variables when we disconnect(via button or bluetooth)
     public void resetConnection(){
-        mBluetoothConnection.write(hexStringToByteArray(directCommandStop));
+        robotController.sendCommands(RobotController.STOP);
         btIsClicked = false;
-        jitsiIsClicked = false;
         bluetooth.setText(getString(R.string.button_bluetooth_disconnected));
         openRoom.setEnabled(false);
         setEnableLinkAndRoom(false);

@@ -10,7 +10,7 @@
     <string name="app_title">Appname</string>
 
     <string name="connection_status_false">Keine Verbindung</string>
-    <string name="connection_status_true">Verbunden mit: </string>
+    <string name="connection_status_true">Verbunden mit: %s</string>
     <string name="direct_command_forward">Vorwärts </string>
     <string name="direct_command_backward">Rückwärts </string>
     <string name="direct_command_turn_right">Rechts </string>

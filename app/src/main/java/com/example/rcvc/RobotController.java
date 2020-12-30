@@ -1,11 +1,11 @@
 package com.example.rcvc;
 
 public class RobotController {
-    public final int STOP = 0;
-    public final int FORWARD = 1;
-    public final int BACKWARD = 2;
-    public final int TURN_RIGHT = 3;
-    public final int TURN_LEFT = 4;
+    public static final int STOP = 0;
+    public static final int FORWARD = 1;
+    public static final int BACKWARD = 2;
+    public static final int TURN_RIGHT = 3;
+    public static final int TURN_LEFT = 4;
 
     //start and end part of direct commands used to control EV3
     private final String startDirCom = "0D002A00800000A4000";
@@ -19,7 +19,6 @@ public class RobotController {
     private final String port_BC = "6";
     private final String port_B = "2";
     private final String port_C = "4";
-
 
     //complete direct commands used to control the ev3 consisting of :
     //start + port + power + end + port
@@ -37,7 +36,7 @@ public class RobotController {
         this.b = bluetoothConnectionService;
     }
 
-    public void sendCommands(int command) throws Exception {
+    public void sendCommands(int command) {
         switch (command) {
             case STOP:
                 b.write(hexStringToByteArray(directCommandStop));
@@ -57,10 +56,14 @@ public class RobotController {
                 b.write(hexStringToByteArray(directCommandLeftPortC));
                 break;
             default:
-                throw new Exception();
         }
     }
 
+    /**
+     * converts a string to a byte array
+     * @param s the input string
+     * @return the byte array
+     */
     public static byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
