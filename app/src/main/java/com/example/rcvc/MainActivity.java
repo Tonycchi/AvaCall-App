@@ -21,7 +21,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private static class RoomLink {
-        private final char[] chars = {48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69,
+        private final char[] CHARS = {48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69,
                 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
                 90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
                 113, 114, 115, 116, 117, 118, 119, 120, 121};
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
             Random random = new Random();
             char[] out = new char[length];
             for (int i = 0; i < length; i++) {
-                int rnd = random.nextInt(chars.length);
-                out[i] = chars[rnd];
+                int rnd = random.nextInt(CHARS.length);
+                out[i] = CHARS[rnd];
             }
             return new String(out);
         }
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private String deviceName = "RALLLE";
 
     private RoomLink room;
-    private final int roomLinkLength = 6;
+    private final int ROOM_LINK_LENGTH = 6;
     JitsiMeetConferenceOptions options;
 
     @Override
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 //TODO: do something about room title
                 if (room == null) {
-                    room = new RoomLink(roomLinkLength);
+                    room = new RoomLink(ROOM_LINK_LENGTH);
                 }
                 //+"config.disableInviteFunctions=true" //disable invite function of the app
                 String roomID = room.id + "#"
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickShareLink(View v) {
         if (room == null) {
-            room = new RoomLink(roomLinkLength);
+            room = new RoomLink(ROOM_LINK_LENGTH);
         }
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
