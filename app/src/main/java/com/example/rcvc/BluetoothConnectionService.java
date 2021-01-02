@@ -30,6 +30,8 @@ public class BluetoothConnectionService {
     private static final UUID MY_UUID =
             UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
 
+    private int connectionStatus = 0; //0 is not tested, 1 is connected, 2 is not connected
+
     private final BluetoothAdapter mBluetoothAdapter;
     Context mContext;
 
@@ -47,6 +49,9 @@ public class BluetoothConnectionService {
         start();
     }
 
+    public int getConnectionStatus() {
+        return connectionStatus;
+    }
 
     /**
      * This thread runs while listening for incoming connections. It behaves
@@ -245,6 +250,9 @@ public class BluetoothConnectionService {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            Log.d(TAG, "Connected Thread gestartet");
+            Intent intent = new Intent(mContext.getString(R.string.action_bluetooth_intent));
+            mContext.sendBroadcast(intent);
         }
 
         public void run() {
@@ -277,7 +285,13 @@ public class BluetoothConnectionService {
             try {
                 mmOutStream.write(bytes);
             } catch (IOException e) {
+                if (connectionStatus == 0) {
+                    connectionStatus = 2;
+                }
                 Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
+            }
+            if(connectionStatus == 0) {
+                connectionStatus = 1;
             }
         }
 

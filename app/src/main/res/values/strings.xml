@@ -19,4 +19,5 @@
     <string name="direct_command_turn_left">Links </string>
     <string name="direct_command_stop">Stoppen </string>
     <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
+    <string name="action_bluetooth_intent">com.example.rcvc.action.BLUETOOTH_INTENT</string>
 </resources>

@@ -74,8 +74,11 @@ public class MainActivity extends AppCompatActivity {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(receiverActionStateChanged, filter2);
+        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(receiverActionStateChanged, filter);
+
+        IntentFilter filter2 = new IntentFilter(getString(R.string.action_bluetooth_intent));
+        registerReceiver(receiverConnection, filter2);
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -128,17 +131,17 @@ public class MainActivity extends AppCompatActivity {
 
         listviewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
-            textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
-            buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
-            btIsClicked = true;
-            buttonOpenRoom.setEnabled(true);
-            Object o = listviewDevices.getItemAtPosition(position);
-            String str = (String) o; //As you are using Default String Adapter
-            listviewDevices.setVisibility(View.INVISIBLE);
+            //textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+            //buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
+            //btIsClicked = true;
+            //buttonOpenRoom.setEnabled(true);
+            //Object o = listviewDevices.getItemAtPosition(position);
+            //String str = (String) o; //As you are using Default String Adapter
+            //listviewDevices.setVisibility(View.INVISIBLE);
             mDeviceUUIDs = selectedDevice.getUuids();
             mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, mDeviceUUIDs);
-            setVisibilityControlButtons(true);
+            //setVisibilityControlButtons(true);
         });
     }
 
@@ -149,12 +152,38 @@ public class MainActivity extends AppCompatActivity {
         robot = new RobotController(mBluetoothConnection);
     }
 
+    public void onConnection() {
+        robot.sendCommands(RobotController.STOP);
+        if (mBluetoothConnection.getConnectionStatus() == 1) {
+            textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+            buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
+            btIsClicked = true;
+            buttonOpenRoom.setEnabled(true);
+            listviewDevices.setVisibility(View.INVISIBLE);
+            setVisibilityControlButtons(true);
+        } else if (mBluetoothConnection.getConnectionStatus() == 2) {
+            showToast("Es konnte keine Verbindung hergestellt werden");
+            resetConnection();
+            listviewDevices.setVisibility(View.INVISIBLE);
+        } else {
+            showToast("Noch nicht getested");
+        }
+    }
+
     //On destroy, all receivers will be unregistered
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiverActionStateChanged);
+        unregisterReceiver(receiverConnection);
     }
+
+    private BroadcastReceiver receiverConnection = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onConnection();
+        }
+    };
 
     //Create a BroadcastReceiver for ACTION_STATE_CHANGED changed.
     // Whenever Bluetooth is turned off while we are in a connection reset everything
