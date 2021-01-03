@@ -25,12 +25,12 @@ import java.util.UUID;
 public class BluetoothConnectionService {
     private static final String TAG = "BluetoothConnectionServ";
 
-    private static final String appName = "AppName";
+    private static final String APP_NAME = "AppName";
 
     private static final UUID MY_UUID =
             UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
 
-    private int connectionStatus = 0; //0 is not tested, 1 is connected, 2 is not connected
+    private int connectionStatus = 0;
 
     private final BluetoothAdapter mBluetoothAdapter;
     Context mContext;
@@ -49,6 +49,10 @@ public class BluetoothConnectionService {
         start();
     }
 
+    /**
+     * @return the current connection status
+     * 0 is not tested, 1 is connected, 2 is not connected
+     */
     public int getConnectionStatus() {
         return connectionStatus;
     }
@@ -68,7 +72,7 @@ public class BluetoothConnectionService {
 
             // Create a new listening server socket
             try {
-                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(appName, MY_UUID);
+                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(APP_NAME, MY_UUID);
 
                 Log.d(TAG, "AcceptThread: Setting up Server using: " + MY_UUID);
             } catch (IOException e) {
@@ -278,24 +282,33 @@ public class BluetoothConnectionService {
             }
         }
 
-        //Call this from the main activity to send data to the remote device
+        /**
+         * this method gets called from main activity to send data to the remote device
+         * this method also gets called once at the start to make sure the connection was successful
+         * @param bytes the bytes to be send
+         */
         public void write(byte[] bytes) {
             String text = new String(bytes, Charset.defaultCharset());
             Log.d(TAG, "write: Writing to outputstream: " + text);
             try {
                 mmOutStream.write(bytes);
             } catch (IOException e) {
+                // no valid connection, so connection status gets set to 2
                 if (connectionStatus == 0) {
                     connectionStatus = 2;
                 }
                 Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
             }
+            // if connection status is still 0 at this point,
+            // the connection was successful and it gets set to 1
             if(connectionStatus == 0) {
                 connectionStatus = 1;
             }
         }
 
-        /* Call this from the main activity to shutdown the connection */
+        /**
+         * This method gets called from main activity to shutdown the connection
+         */
         public void cancel() {
             try {
                 mmSocket.close();
@@ -319,7 +332,6 @@ public class BluetoothConnectionService {
 
     /**
      * Write to the ConnectedThread in an unsynchronized manner
-     *
      * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ParcelUuid[] mDeviceUUIDs;
     // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<>();
-    //
+    // Connected Robot
     private RobotController robot;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(receiverActionStateChanged, filter);
 
+        // Custom IntentFilter for catching Intent from ConnectedThread
         IntentFilter filter2 = new IntentFilter(getString(R.string.action_bluetooth_intent));
         registerReceiver(receiverConnection, filter2);
 
@@ -128,33 +129,33 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-
+        // Try to start bluetooth connection with paired device that was clicked
         listviewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
-            //textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
-            //buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
-            //btIsClicked = true;
-            //buttonOpenRoom.setEnabled(true);
-            //Object o = listviewDevices.getItemAtPosition(position);
-            //String str = (String) o; //As you are using Default String Adapter
-            //listviewDevices.setVisibility(View.INVISIBLE);
             mDeviceUUIDs = selectedDevice.getUuids();
             mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, mDeviceUUIDs);
-            //setVisibilityControlButtons(true);
         });
     }
 
-    // Starts a connection between our device and the device we want to connect with
+    /**
+     * Starts a connection between our device and the device we want to connect with
+     * @param device the device to connect with
+     * @param uuid the uuids of the device
+     */
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device,mDeviceUUIDs);
         robot = new RobotController(mBluetoothConnection);
     }
 
+    /**
+     * Checks if the connection is valid and changes variables and buttons on screen accordingly
+     */
     public void onConnection() {
         robot.sendCommands(RobotController.STOP);
         if (mBluetoothConnection.getConnectionStatus() == 1) {
+            // Connection was successful
             textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             btIsClicked = true;
@@ -162,15 +163,19 @@ public class MainActivity extends AppCompatActivity {
             listviewDevices.setVisibility(View.INVISIBLE);
             setVisibilityControlButtons(true);
         } else if (mBluetoothConnection.getConnectionStatus() == 2) {
-            showToast("Es konnte keine Verbindung hergestellt werden");
+            // Connection was not successful
+            showToast(getString(R.string.connection_status_error));
             resetConnection();
             listviewDevices.setVisibility(View.INVISIBLE);
         } else {
+            // Connection was not tested yet
             showToast("Noch nicht getested");
         }
     }
 
-    //On destroy, all receivers will be unregistered
+    /**
+     * On destroy, all receivers will be unregistered
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -178,6 +183,9 @@ public class MainActivity extends AppCompatActivity {
         unregisterReceiver(receiverConnection);
     }
 
+    /**
+     * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
+     */
     private BroadcastReceiver receiverConnection = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -185,9 +193,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    //Create a BroadcastReceiver for ACTION_STATE_CHANGED changed.
-    // Whenever Bluetooth is turned off while we are in a connection reset everything
-    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
+    /**
+     * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
+     * Whenever Bluetooth is turned off while we are in a connection, reset everything
+     */
+    private BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
@@ -280,7 +290,6 @@ public class MainActivity extends AppCompatActivity {
                 names.add(device.getName());
             }
         } else {
-            // Dialog statt Toast, da Text lang:
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key
             bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_no_paired_devices);
@@ -289,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
             error.setArguments(bundle);
             error.show(this.getSupportFragmentManager(), TAG);
 
+            // if there are no paired devices, open bluetooth settings
             Intent intentOpenBluetoothSettings = new Intent();
             intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
             startActivity(intentOpenBluetoothSettings);
@@ -296,7 +306,9 @@ public class MainActivity extends AppCompatActivity {
         return names;
     }
 
-    // reset Connection and change Variables when we disconnect(via button or bluetooth)
+    /**
+     * reset connection and change variables when we disconnect (via button or bluetooth)
+     */
     public void resetConnection(){
         robot.sendCommands(RobotController.STOP);
         btIsClicked = false;
