@@ -51,7 +51,7 @@ public class BluetoothConnectionService {
 
     /**
      * @return the current connection status
-     * 0 is not tested, 1 is connected, 2 is not connected
+     * 0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
      */
     public int getConnectionStatus() {
         return connectionStatus;
@@ -254,9 +254,9 @@ public class BluetoothConnectionService {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            // check connection with broadcast
+            sendConnectionStatusBroadcast();
             Log.d(TAG, "Connected Thread gestartet");
-            Intent intent = new Intent(mContext.getString(R.string.action_bluetooth_intent));
-            mContext.sendBroadcast(intent);
         }
 
         public void run() {
@@ -276,6 +276,8 @@ public class BluetoothConnectionService {
                     incomingMessageIntent.putExtra("theMessage", incomingMessage);
 
                 } catch (IOException e) {
+                    // in case of exception check connection with broadcast
+                    sendConnectionStatusBroadcast();
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
                     break;
                 }
@@ -293,9 +295,13 @@ public class BluetoothConnectionService {
             try {
                 mmOutStream.write(bytes);
             } catch (IOException e) {
-                // no valid connection, so connection status gets set to 2
+                // could not connect, so connection status gets set to 2
                 if (connectionStatus == 0) {
                     connectionStatus = 2;
+                }
+                // connection got lost, so status gets set to 3
+                if (connectionStatus == 1) {
+                    connectionStatus = 3;
                 }
                 Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
             }
@@ -340,6 +346,11 @@ public class BluetoothConnectionService {
         Log.d(TAG, "write: Write Called.");
         //perform the write
         mConnectedThread.write(out);
+    }
+
+    private void sendConnectionStatusBroadcast() {
+        Intent intent = new Intent(mContext.getString(R.string.action_check_connection));
+        mContext.sendBroadcast(intent);
     }
 
 }

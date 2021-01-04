@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(receiverActionStateChanged, filter);
 
         // Custom IntentFilter for catching Intent from ConnectedThread
-        IntentFilter filter2 = new IntentFilter(getString(R.string.action_bluetooth_intent));
+        IntentFilter filter2 = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, filter2);
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
@@ -154,22 +154,26 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onConnection() {
         robot.sendCommands(RobotController.STOP);
-        if (mBluetoothConnection.getConnectionStatus() == 1) {
-            // Connection was successful
-            textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
-            buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
-            btIsClicked = true;
-            buttonOpenRoom.setEnabled(true);
-            listviewDevices.setVisibility(View.INVISIBLE);
-            setVisibilityControlButtons(true);
-        } else if (mBluetoothConnection.getConnectionStatus() == 2) {
-            // Connection was not successful
-            showToast(getString(R.string.connection_status_error));
-            resetConnection();
-            listviewDevices.setVisibility(View.INVISIBLE);
-        } else {
-            // Connection was not tested yet
-            showToast("Noch nicht getested");
+        switch(mBluetoothConnection.getConnectionStatus()) {
+            case 1: // Connection was successful
+                textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+                buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
+                btIsClicked = true;
+                buttonOpenRoom.setEnabled(true);
+                listviewDevices.setVisibility(View.INVISIBLE);
+                setVisibilityControlButtons(true);
+                break;
+            case 2: // Could not connect
+                showToast(getString(R.string.connection_init_error));
+                resetConnection();
+                listviewDevices.setVisibility(View.INVISIBLE);
+                break;
+            case 3: // Connection lost
+                showToast(getString(R.string.connection_lost));
+                resetConnection();
+                break;
+            default: // connectionStatus was not set yet
+                break;
         }
     }
 
