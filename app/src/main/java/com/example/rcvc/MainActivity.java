@@ -12,41 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static class RoomLink {
-        private final char[] CHARS = {48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69,
-                70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
-                90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
-                113, 114, 115, 116, 117, 118, 119, 120, 121};
-        public String id, url;
-
-        // TODO: maybe pass url options to here
-        public RoomLink(int length) {
-            id = randomLinkString(length);
-            url = "https://meet.jit.si/" + id + "/" + id + "config.prejoinPageEnabledtrue";
-        }
-
-        /**
-         * @param length the length for the id of the roomlink
-         * @return the whole roomlink as a string which then can be copied
-         */
-        private String randomLinkString(int length) {
-            Random random = new Random();
-            char[] out = new char[length];
-            for (int i = 0; i < length; i++) {
-                int rnd = random.nextInt(CHARS.length);
-                out[i] = CHARS[rnd];
-            }
-            return new String(out);
-        }
-    }
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
@@ -57,9 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView connectionStatus;
     private String deviceName = "RALLLE";
 
-    private RoomLink room;
-    private final int ROOM_LINK_LENGTH = 6;
-    JitsiMeetConferenceOptions options;
+    private JitsiRoom room;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,29 +71,10 @@ public class MainActivity extends AppCompatActivity {
      * switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
-        {
-            try {
-                //TODO: do something about room title
-                if (room == null) {
-                    room = new RoomLink(ROOM_LINK_LENGTH);
-                }
-                //+"config.disableInviteFunctions=true" //disable invite function of the app
-                String roomID = room.id + "#"
-                        //+"config.disableInviteFunctions=true" //disable invite function of the app
-                        + "&config.prejoinPageEnabled=true"; //show an intermediate page before joining to allow for adjustment of devices
-                options = new JitsiMeetConferenceOptions.Builder()
-                        .setServerURL(new URL("https://meet.jit.si"))
-                        .setRoom(roomID)
-                        .setAudioMuted(false)
-                        .setVideoMuted(false)
-                        .setAudioOnly(false)
-                        .setWelcomePageEnabled(true)
-                        .setFeatureFlag("pipEnabled", true)
-                        .build();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+        if (room == null) {
+            room = new JitsiRoom();
         }
+
         setEnableLinkAndRoom(true);
         showToast(getString(R.string.toast_room_opened));
     }
@@ -139,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickShareLink(View v) {
         if (room == null) {
-            room = new RoomLink(ROOM_LINK_LENGTH);
+            room = new JitsiRoom();
         }
 
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -154,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
      * Opens the jitsi room with the options created before and switches to a new window with the jitsi room
      */
     public void onClickSwitchToRoom(View v) {
-        JitsiMeetActivity.launch(this, options);
+        JitsiMeetActivity.launch(this, room.options);
     }
 
     /**
