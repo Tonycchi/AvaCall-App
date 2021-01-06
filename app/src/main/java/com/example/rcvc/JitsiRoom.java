@@ -20,21 +20,22 @@ public class JitsiRoom {
 
     public JitsiRoom() {
         id = randomLinkString(ROOM_LINK_LENGTH);
-        url = ROOM_HOST + "/" + id + "/" + id + "config.prejoinPageEnabledtrue";
+        url = ROOM_HOST + "/" + id;
         try {
-            //+"config.disableInviteFunctions=true" //disable invite function of the app
-            String roomID = id + "#"
-                    //+"config.disableInviteFunctions=true" //disable invite function of the app
-                    + "&config.prejoinPageEnabled=true"; //show an intermediate page before joining to allow for adjustment of devices
             options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL(ROOM_HOST))
-                    .setRoom(roomID)
+                    .setRoom(id)
+                    .setSubject("Robot") //TODO besserer Titel
                     .setAudioMuted(false)
                     .setVideoMuted(false)
                     .setAudioOnly(false)
                     .setWelcomePageEnabled(true)
-                    .setFeatureFlag("pipEnabled", true)
+                    //.setFeatureFlag("pip.enabled", false) // (1)
                     .build();
+            /*
+            see github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js
+            for feature flags
+             */
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
