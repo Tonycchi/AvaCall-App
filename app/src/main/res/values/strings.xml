@@ -13,5 +13,6 @@
     <string name="connection_status_true">Verbunden mit: %s</string>
 
     <string name="toast_room_opened">Raum geöffnet</string>
+    <string name="toast_no_open_room">Öffne zuerst einen Raum</string>
     <string name="toast_link_copied">Link kopiert</string>
 </resources>

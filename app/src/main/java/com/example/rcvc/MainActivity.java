@@ -43,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * @param v
-     * If we don't have a bluetooth connection this button enables the openRoom button on click. If
-     * we do have a bluetooth connection this button disables all the other buttons.
+     * @param v If we don't have a bluetooth connection this button enables the openRoom button on click. If
+     *          we do have a bluetooth connection this button disables all the other buttons.
      */
     public void onClickBluetooth(View v) {
         if (!btIsClicked) {
@@ -66,9 +65,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * @param v
-     * On click of the openRoom button we create a jitsi room with some options and enable the shareLink and
-     * switchToRoom button.
+     * @param v On click of the openRoom button we create a jitsi room with some options and enable the shareLink and
+     *          switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
         if (room == null) {
@@ -80,24 +78,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * @param v
-     * The link for the jitsi room gets copied to the clipboard
+     * @param v The link for the jitsi room gets copied to the clipboard
      */
     public void onClickShareLink(View v) {
         if (room == null) {
-            room = new JitsiRoom();
+            showToast(getString(R.string.toast_no_open_room));
+        } else {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Jitsi Room Link", room.url);
+            clipboard.setPrimaryClip(clip);
+
+            showToast(getString(R.string.toast_link_copied));
         }
-
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Jitsi Room Link", room.url);
-        clipboard.setPrimaryClip(clip);
-
-        showToast(getString(R.string.toast_link_copied));
     }
 
     /**
-     * @param v
-     * Opens the jitsi room with the options created before and switches to a new window with the jitsi room
+     * @param v Opens the jitsi room with the options created before and switches to a new window with the jitsi room
      */
     public void onClickSwitchToRoom(View v) {
         JitsiMeetActivity.launch(this, room.options);
@@ -112,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * @param enabled The boolean to decide if we want to enable or disable the buttons
-     * Enables or disables the shareLink and switchToRoom button since they are only used together.
+     *                Enables or disables the shareLink and switchToRoom button since they are only used together.
      */
     private void setEnableLinkAndRoom(boolean enabled) {
         shareLink.setEnabled(enabled);
