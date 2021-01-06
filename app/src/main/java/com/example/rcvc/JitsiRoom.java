@@ -13,21 +13,21 @@ public class JitsiRoom {
             90, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
             113, 114, 115, 116, 117, 118, 119, 120, 121};
     private final int ROOM_LINK_LENGTH = 6;
-    private final String ROOM_HOST = "https://meet.mintclub.org/";
+    private final String ROOM_HOST = "https://meet.mintclub.org";
 
     public String id, url;
     public JitsiMeetConferenceOptions options;
 
     public JitsiRoom() {
         id = randomLinkString(ROOM_LINK_LENGTH);
-        url = ROOM_HOST + id + "/" + id + "config.prejoinPageEnabledtrue";
+        url = ROOM_HOST + "/" + id + "/" + id + "config.prejoinPageEnabledtrue";
         try {
             //+"config.disableInviteFunctions=true" //disable invite function of the app
             String roomID = id + "#"
                     //+"config.disableInviteFunctions=true" //disable invite function of the app
                     + "&config.prejoinPageEnabled=true"; //show an intermediate page before joining to allow for adjustment of devices
             options = new JitsiMeetConferenceOptions.Builder()
-                    .setServerURL(new URL("https://meet.jit.si"))
+                    .setServerURL(new URL(ROOM_HOST))
                     .setRoom(roomID)
                     .setAudioMuted(false)
                     .setVideoMuted(false)
