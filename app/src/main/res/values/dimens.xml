@@ -3,4 +3,5 @@
     <dimen name="activity_main_button_width">400dp</dimen>
     <dimen name="activity_main_button_height">85dp</dimen>
     <dimen name="activity_main_button_text_size">20sp</dimen>
+    <dimen name="control_button_width">150dp</dimen>
 </resources>
