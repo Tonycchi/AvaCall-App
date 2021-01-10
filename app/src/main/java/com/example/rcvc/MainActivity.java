@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     private JitsiRoom room;
 
-    private static final int REQUEST_ENABLE_BT = 0;
-    private static final int REQUEST_DISCOVER_BT = 1;
-
     private static final String TAG = "MainActivity";
 
     BluetoothConnectionService mBluetoothConnection;

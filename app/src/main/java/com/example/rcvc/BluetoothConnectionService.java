@@ -32,7 +32,7 @@ public class BluetoothConnectionService {
 
     private int connectionStatus = 0;
 
-    private final BluetoothAdapter mBluetoothAdapter;
+    private BluetoothAdapter mBluetoothAdapter;
     Context mContext;
 
     private AcceptThread mInsecureAcceptThread;
