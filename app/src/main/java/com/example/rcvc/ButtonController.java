@@ -1,6 +1,6 @@
 package com.example.rcvc;
 
-public class RobotController {
+public class Buttons2Power {
     public static final int STOP = 0;
     public static final int FORWARD = 1;
     public static final int BACKWARD = 2;
@@ -32,7 +32,7 @@ public class RobotController {
 
     private final BluetoothConnectionService b;
 
-    public RobotController(BluetoothConnectionService bluetoothConnectionService) {
+    public Buttons2Power(BluetoothConnectionService bluetoothConnectionService) {
         this.b = bluetoothConnectionService;
     }
 
