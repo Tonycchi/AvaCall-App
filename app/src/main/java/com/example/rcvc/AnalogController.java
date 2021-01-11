@@ -24,7 +24,7 @@ public class AnalogController {
      * @param x,y analog axes
      * @return speeds for four motors in byte array length 4, compatible with DirectCommander.java
      */
-    private MotorInstructions computePowers(float x, float y) {
+    private MotorInstruction computePowers(float x, float y) {
         int base = 40; // max speed
         float r = 0.0f, l = 0.0f;
         float scale = 1.0f;
@@ -42,6 +42,6 @@ public class AnalogController {
         o[2] = 0;
         o[3] = (byte) (l * base);
 
-        return new MotorInstructions(o);
+        return new MotorInstruction(o);
     }
 }

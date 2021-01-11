@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(receiverConnection, filter2);
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving forward is send to ev3
                 robot.sendCommands(ButtonController.FORWARD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonMoveBackward.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving backward is send to ev3
                 robot.sendCommands(ButtonController.BACKWARD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonTurnRight.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the right are send to ev3
                 robot.sendCommands(ButtonController.TURN_RIGHT);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buttonTurnLeft.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the left are send to ev3
                 robot.sendCommands(ButtonController.TURN_LEFT);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -145,12 +145,13 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Starts a connection between our device and the device we want to connect with
+     *
      * @param device the device to connect with
-     * @param uuid the uuids of the device
+     * @param uuid   the uuids of the device
      */
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
-        mBluetoothConnection.startClient(device,mDeviceUUIDs);
+        mBluetoothConnection.startClient(device, mDeviceUUIDs);
         robot = new ButtonController(mBluetoothConnection);
     }
 
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onConnection() {
         robot.sendCommands(ButtonController.STOP);
-        switch(mBluetoothConnection.getConnectionStatus()) {
+        switch (mBluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
                 textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 // Bluetooth Status has been turned off
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                if(state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF){
+                if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
                     resetConnection();
                 }
             }
@@ -220,12 +221,11 @@ public class MainActivity extends AppCompatActivity {
     };
 
     /**
-     * @param v
-     * If bluetooth is disabled, this button will enable it, if bluetooth is is enabled and this button is clicked, it will show all paired devices.
-     * If this button is clicked while we have a connection, it will reset the connection
+     * @param v If bluetooth is disabled, this button will enable it, if bluetooth is is enabled and this button is clicked, it will show all paired devices.
+     *          If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
-        if(btIsClicked){
+        if (btIsClicked) {
             resetConnection();
         } else {
             if (!btAdapter.isEnabled()) {
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSwitchToRoom.setEnabled(enabled);
     }
 
-    public ArrayList<String> getPairedDevices(){
+    public ArrayList<String> getPairedDevices() {
         Set<BluetoothDevice> devices = btAdapter.getBondedDevices();
         ArrayList<String> names = new ArrayList<>();
         if (devices.size() > 0) {
@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * reset connection and change variables when we disconnect (via button or bluetooth)
      */
-    public void resetConnection(){
+    public void resetConnection() {
         robot.sendCommands(ButtonController.STOP);
         btIsClicked = false;
         buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
@@ -338,9 +338,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Set the visibility of the control buttons according to the given param
+     *
      * @param vis the visibility that the control buttons will the get set to
      */
-    public void setVisibilityControlButtons(boolean vis){
+    public void setVisibilityControlButtons(boolean vis) {
         if (vis) {
             buttonMoveForward.setVisibility(View.VISIBLE);
             buttonMoveBackward.setVisibility(View.VISIBLE);
