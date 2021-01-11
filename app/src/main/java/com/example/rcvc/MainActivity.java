@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<>();
     // Connected Robot
-    private RobotController robot;
+    private ButtonController robot;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -89,10 +89,10 @@ public class MainActivity extends AppCompatActivity {
         buttonMoveForward.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving forward is send to ev3
-                robot.sendCommands(RobotController.FORWARD);
+                robot.sendCommands(ButtonController.FORWARD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                robot.sendCommands(ButtonController.STOP);
             }
 
             return true;
@@ -101,10 +101,10 @@ public class MainActivity extends AppCompatActivity {
         buttonMoveBackward.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving backward is send to ev3
-                robot.sendCommands(RobotController.BACKWARD);
+                robot.sendCommands(ButtonController.BACKWARD);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                robot.sendCommands(ButtonController.STOP);
             }
 
             return true;
@@ -113,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
         buttonTurnRight.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the right are send to ev3
-                robot.sendCommands(RobotController.TURN_RIGHT);
+                robot.sendCommands(ButtonController.TURN_RIGHT);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                robot.sendCommands(ButtonController.STOP);
             }
 
             return true;
@@ -125,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
         buttonTurnLeft.setOnTouchListener((v, event) -> {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the left are send to ev3
-                robot.sendCommands(RobotController.TURN_LEFT);
+                robot.sendCommands(ButtonController.TURN_LEFT);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                robot.sendCommands(ButtonController.STOP);
             }
 
             return true;
@@ -151,14 +151,14 @@ public class MainActivity extends AppCompatActivity {
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device,mDeviceUUIDs);
-        robot = new RobotController(mBluetoothConnection);
+        robot = new ButtonController(mBluetoothConnection);
     }
 
     /**
      * Checks if the connection is valid and changes variables and buttons on screen accordingly
      */
     public void onConnection() {
-        robot.sendCommands(RobotController.STOP);
+        robot.sendCommands(ButtonController.STOP);
         switch(mBluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
                 textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
      * reset connection and change variables when we disconnect (via button or bluetooth)
      */
     public void resetConnection(){
-        robot.sendCommands(RobotController.STOP);
+        robot.sendCommands(ButtonController.STOP);
         btIsClicked = false;
         buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
         buttonOpenRoom.setEnabled(false);

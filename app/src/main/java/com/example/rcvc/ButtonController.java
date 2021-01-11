@@ -1,6 +1,8 @@
 package com.example.rcvc;
 
-public class Buttons2Power {
+public class ButtonController {
+    //TODO use DirectCommander
+
     public static final int STOP = 0;
     public static final int FORWARD = 1;
     public static final int BACKWARD = 2;
@@ -32,7 +34,7 @@ public class Buttons2Power {
 
     private final BluetoothConnectionService b;
 
-    public Buttons2Power(BluetoothConnectionService bluetoothConnectionService) {
+    public ButtonController(BluetoothConnectionService bluetoothConnectionService) {
         this.b = bluetoothConnectionService;
     }
 
