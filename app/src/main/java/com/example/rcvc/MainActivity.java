@@ -95,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onMove(int angle, int strength) {
                 // do whatever u want
                 // angle
-                float x = (float) Math.cos(angle);
-                float y = (float) (Math.sin(angle))*(strength/100); //unsicher ob 100% richtig
+                robot.input(angle, strength);
             }
         });
 

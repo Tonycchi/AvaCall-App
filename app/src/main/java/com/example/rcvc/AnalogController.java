@@ -1,11 +1,11 @@
 package com.example.rcvc;
 
-public class AnalogController {
+public class AnalogController extends Controller{
 
-    private BluetoothConnectionService b;
+    BluetoothConnectionService b;
 
     public AnalogController(BluetoothConnectionService b) {
-        this.b = b;
+        super(b);
     }
 
     /**
@@ -14,6 +14,7 @@ public class AnalogController {
      * @param angle analog axes
      * @param strength
      */
+    @Override
     public void input(int angle, int strength) {
         float[] outputs = computePowers(angle, strength);
         //0 is r, 1 is l
@@ -22,13 +23,16 @@ public class AnalogController {
 
     /**
      * analog input to two motor speeds
-     * TODO replace base with actual max speed, dont know what it is
      *
      * @param angle, strength analog axes
      * @return speeds for four motors in byte array length 4, compatible with DirectCommander.java
      */
 
-    private float[] computePowers(int angle, int strength) {
+    @Override
+    public float[] computePowers(int angle, int strength) {
+        float x = (float) Math.cos(angle)*(strength/100);
+        float y = (float) (Math.sin(angle))*(strength/100);
+
         float r = 0.0f;
         float l = 0.0f;
 
