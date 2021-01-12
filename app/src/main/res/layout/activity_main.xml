@@ -142,24 +142,21 @@
 
     <io.github.controlwear.virtual.joystick.android.JoystickView
         android:id="@+id/joystick"
-        android:layout_width="177dp"
-        android:layout_height="179dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="64dp"
         android:visibility="invisible"
         app:JV_autoReCenterButton="true"
         app:JV_backgroundColor="#009688"
-        app:JV_backgroundSizeRatio="30%"
+        app:JV_backgroundSizeRatio="50%"
         app:JV_borderColor="#00796B"
         app:JV_borderWidth="46dp"
         app:JV_buttonColor="#FF6E40"
         app:JV_buttonSizeRatio="25%"
         app:JV_fixedCenter="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_left"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toEndOf="@+id/button_bluetooth"
+        app:layout_constraintStart_toStartOf="@+id/button_bluetooth" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

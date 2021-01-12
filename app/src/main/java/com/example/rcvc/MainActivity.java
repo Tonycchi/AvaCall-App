@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
+    private boolean toggleController = false; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
     private Button buttonOpenRoom;
@@ -181,8 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 btIsClicked = true;
                 buttonOpenRoom.setEnabled(true);
                 listviewDevices.setVisibility(View.INVISIBLE);
-                setVisibilityControlButtons(true);
-                joystick.setVisibility(View.VISIBLE);
+                setVisibilityController(true);
                 break;
             case 2: // Could not connect
                 showToast(getString(R.string.connection_init_error));
@@ -344,8 +344,7 @@ public class MainActivity extends AppCompatActivity {
         buttonOpenRoom.setEnabled(false);
         setEnableLinkAndRoom(false);
         textviewConnectionStatus.setText(getString(R.string.connection_status_false));
-        setVisibilityControlButtons(false);
-        joystick.setVisibility(View.INVISIBLE);
+        setVisibilityController(false);
         mBluetoothConnection.cancel();
         selectedDevice = null;
         pairedDevices = new ArrayList<>();
@@ -357,17 +356,26 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param vis the visibility that the control buttons will the get set to
      */
-    public void setVisibilityControlButtons(boolean vis) {
-        if (vis) {
-            buttonMoveForward.setVisibility(View.VISIBLE);
-            buttonMoveBackward.setVisibility(View.VISIBLE);
-            buttonTurnRight.setVisibility(View.VISIBLE);
-            buttonTurnLeft.setVisibility(View.VISIBLE);
+    public void setVisibilityController(boolean vis) {
+        if (!toggleController) {
+            if (vis) {
+                buttonMoveForward.setVisibility(View.VISIBLE);
+                buttonMoveBackward.setVisibility(View.VISIBLE);
+                buttonTurnRight.setVisibility(View.VISIBLE);
+                buttonTurnLeft.setVisibility(View.VISIBLE);
+            } else {
+                buttonMoveForward.setVisibility(View.INVISIBLE);
+                buttonMoveBackward.setVisibility(View.INVISIBLE);
+                buttonTurnRight.setVisibility(View.INVISIBLE);
+                buttonTurnLeft.setVisibility(View.INVISIBLE);
+            }
         } else {
-            buttonMoveForward.setVisibility(View.INVISIBLE);
-            buttonMoveBackward.setVisibility(View.INVISIBLE);
-            buttonTurnRight.setVisibility(View.INVISIBLE);
-            buttonTurnLeft.setVisibility(View.INVISIBLE);
+            if (vis) {
+                joystick.setVisibility(View.VISIBLE);
+            } else {
+                joystick.setVisibility(View.INVISIBLE);
+            }
         }
+
     }
 }
