@@ -3,6 +3,8 @@ package com.example.rcvc;
 public class ButtonController extends Controller{
     //TODO use DirectCommander
 
+    private final String TAG = "ButtonController";
+
     public static final int STOP = 0;
     public static final int FORWARD = 1;
     public static final int BACKWARD = 2;
@@ -16,8 +18,7 @@ public class ButtonController extends Controller{
         this.b = b;
     }
 
-    @Override
-    public void sendCommands(int command) {
+    public void sendPowers(int command, int dummy) {
         switch (command) {
             case STOP:
                 DirectCommander.send(0.0f, 0.0f, b);

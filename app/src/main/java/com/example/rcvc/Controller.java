@@ -8,15 +8,8 @@ public class Controller {
         this.b = b;
     }
 
-    public void sendCommands(int command) {
+    public void sendPowers(int a, int b) {
 
     }
 
-    public float[] computePowers(int angle, int strength) {
-        return null;
-    }
-
-    public void input(int angle, int strength) {
-
-    }
 }
