@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonTurnLeft;
     private TextView textviewConnectionStatus;
     private ListView listviewDevices;
+    private JoystickView joystick;
 
     private JitsiRoom room;
 
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         buttonMoveBackward = findViewById(R.id.button_backward);
         buttonTurnRight = findViewById(R.id.button_right);
         buttonTurnLeft = findViewById(R.id.button_left);
+        joystick = findViewById(R.id.joystick);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -87,6 +89,16 @@ public class MainActivity extends AppCompatActivity {
         // Custom IntentFilter for catching Intent from ConnectedThread
         IntentFilter filter2 = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, filter2);
+
+        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                // do whatever u want
+                // angle
+                float x = (float) Math.cos(angle);
+                float y = (float) (Math.sin(angle))*(strength/100); //unsicher ob 100% richtig
+            }
+        });
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -171,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 buttonOpenRoom.setEnabled(true);
                 listviewDevices.setVisibility(View.INVISIBLE);
                 setVisibilityControlButtons(true);
+                joystick.setVisibility(View.VISIBLE);
                 break;
             case 2: // Could not connect
                 showToast(getString(R.string.connection_init_error));
@@ -333,6 +346,7 @@ public class MainActivity extends AppCompatActivity {
         setEnableLinkAndRoom(false);
         textviewConnectionStatus.setText(getString(R.string.connection_status_false));
         setVisibilityControlButtons(false);
+        joystick.setVisibility(View.INVISIBLE);
         mBluetoothConnection.cancel();
         selectedDevice = null;
         pairedDevices = new ArrayList<>();
