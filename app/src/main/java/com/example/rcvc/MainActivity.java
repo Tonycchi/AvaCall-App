@@ -27,6 +27,8 @@ import org.jitsi.meet.sdk.JitsiMeetActivity;
 import java.util.ArrayList;
 import java.util.Set;
 
+import io.github.controlwear.virtual.joystick.android.JoystickView;
+
 public class MainActivity extends AppCompatActivity {
 
     // zum Testen von nicht implementierten Funktionen
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device, mDeviceUUIDs);
         robot = new ButtonController(mBluetoothConnection);
+        //DirectCommander.setMaxPow(50);
     }
 
     /**

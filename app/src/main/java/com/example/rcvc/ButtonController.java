@@ -18,44 +18,65 @@ public class ButtonController {
     private final String minus_50 = "81CE";
 
     //ports that are used to control the ev3 coded in hex
-    private final String port_BC = "6";
-    private final String port_B = "2";
-    private final String port_C = "4";
+    private final String port_AD = "9";
+    private final String port_A = "1";
+    private final String port_D = "8";
 
     //complete direct commands used to control the ev3 consisting of :
     //start + port + power + end + port
-    private final String directCommandForward = startDirCom + port_BC + plus_50 + endDirCom + port_BC;
-    private final String directCommandBackward = startDirCom + port_BC + minus_50 + endDirCom + port_BC;
-    private final String directCommandRightPortB = startDirCom + port_B + minus_50 + endDirCom + port_B;
-    private final String directCommandRightPortC = startDirCom + port_C + plus_50 + endDirCom + port_C;
-    private final String directCommandLeftPortB = startDirCom + port_B + plus_50 + endDirCom + port_B;
-    private final String directCommandLeftPortC = startDirCom + port_C + minus_50 + endDirCom + port_C;
+    private final String directCommandForward = startDirCom + port_AD + plus_50 + endDirCom + port_AD;
+    private final String directCommandBackward = startDirCom + port_AD + minus_50 + endDirCom + port_AD;
+    private final String directCommandRightPortB = startDirCom + port_A + minus_50 + endDirCom + port_A;
+    private final String directCommandRightPortC = startDirCom + port_D + plus_50 + endDirCom + port_D;
+    private final String directCommandLeftPortB = startDirCom + port_A + plus_50 + endDirCom + port_A;
+    private final String directCommandLeftPortC = startDirCom + port_D + minus_50 + endDirCom + port_D;
     private final String directCommandStop = "09002A00000000A3000F00";
 
     private final BluetoothConnectionService b;
 
-    public ButtonController(BluetoothConnectionService bluetoothConnectionService) {
-        this.b = bluetoothConnectionService;
+    public ButtonController(BluetoothConnectionService b) {
+        this.b = b;
     }
+
+//    public void sendCommands(int command) {
+//        switch (command) {
+//            case STOP:
+//                b.write(hexStringToByteArray(directCommandStop));
+//                break;
+//            case FORWARD:
+//                b.write(hexStringToByteArray(directCommandForward));
+//                break;
+//            case BACKWARD:
+//                b.write(hexStringToByteArray(directCommandBackward));
+//                break;
+//            case TURN_RIGHT:
+//                b.write(hexStringToByteArray(directCommandRightPortB));
+//                b.write(hexStringToByteArray(directCommandRightPortC));
+//                break;
+//            case TURN_LEFT:
+//                b.write(hexStringToByteArray(directCommandLeftPortB));
+//                b.write(hexStringToByteArray(directCommandLeftPortC));
+//                break;
+//            default:
+//        }
+//    }
 
     public void sendCommands(int command) {
         switch (command) {
             case STOP:
-                b.write(hexStringToByteArray(directCommandStop));
+                DirectCommander.send(0.0f, 0.0f, b);
                 break;
             case FORWARD:
-                b.write(hexStringToByteArray(directCommandForward));
+                DirectCommander.send(1.0f, 1.0f, b);
                 break;
             case BACKWARD:
-                b.write(hexStringToByteArray(directCommandBackward));
+                DirectCommander.send(-1.0f, -1.0f, b);
                 break;
             case TURN_RIGHT:
-                b.write(hexStringToByteArray(directCommandRightPortB));
-                b.write(hexStringToByteArray(directCommandRightPortC));
+                DirectCommander.send(-1.0f, 1.0f, b);
                 break;
             case TURN_LEFT:
-                b.write(hexStringToByteArray(directCommandLeftPortB));
-                b.write(hexStringToByteArray(directCommandLeftPortC));
+                DirectCommander.send(1.0f, -1.0f, b);
                 break;
             default:
         }

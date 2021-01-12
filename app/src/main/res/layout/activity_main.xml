@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/rcvs_background_color"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
     <Button
@@ -76,7 +77,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/connection_status_false"
         android:textColor="#000000"
@@ -139,6 +139,22 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/button_forward"
         app:layout_constraintTop_toBottomOf="@+id/button_forward" />
+
+   <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:JV_backgroundColor="#009688"
+        app:JV_backgroundSizeRatio="30%"
+        app:JV_borderColor="#00796B"
+        app:JV_borderWidth="4dp"
+        app:JV_buttonColor="#FF6E40"
+        app:JV_buttonSizeRatio="15%"
+        app:JV_fixedCenter="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
