@@ -1,15 +1,13 @@
 package com.example.rcvc;
 
-public class Controller {
+public abstract class Controller {
 
-    private BluetoothConnectionService b;
+    final BluetoothConnectionService B;
 
     public Controller(BluetoothConnectionService b) {
-        this.b = b;
+        this.B = b;
     }
 
-    public void sendPowers(int a, int b) {
-
-    }
+    public abstract void sendPowers(int a, int b);
 
 }
