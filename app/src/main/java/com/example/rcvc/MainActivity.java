@@ -1,6 +1,8 @@
 package com.example.rcvc;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -11,6 +13,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -30,7 +33,11 @@ import org.jitsi.meet.sdk.JitsiMeetActivity;
 import java.util.ArrayList;
 import java.util.Set;
 
+@SuppressLint("LogNotTimber")
 public class MainActivity extends AppCompatActivity {
+
+    // settings
+    SharedPreferences sharedPreferences;
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
@@ -67,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         setContentView(R.layout.activity_main);
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);
@@ -216,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
      */
-    private BroadcastReceiver receiverConnection = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onConnection();
@@ -227,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
      * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
      * Whenever Bluetooth is turned off while we are in a connection, reset everything
      */
-    private BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
@@ -269,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickOpenRoom(View v) {
         if (room == null) {
-            room = new JitsiRoom();
+            room = new JitsiRoom(sharedPreferences.getString("webapp_url", ""));
         }
 
         setEnableLinkAndRoom(true);
