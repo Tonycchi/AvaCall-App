@@ -4,6 +4,7 @@ public class ButtonController extends Controller {
     //TODO use DirectCommander
 
     private final String TAG = "ButtonController";
+    private DirectCommander directCommander;
 
     public static final int STOP = 0;
     public static final int FORWARD = 1;
@@ -13,24 +14,25 @@ public class ButtonController extends Controller {
 
     public ButtonController(BluetoothConnectionService b) {
         super(b);
+        directCommander = new DirectCommander(b, 50);
     }
 
     public void sendPowers(int command, int dummy) {
         switch (command) {
             case STOP:
-                DirectCommander.send(0.0f, 0.0f, B);
+                directCommander.send(0.0f, 0.0f);
                 break;
             case FORWARD:
-                DirectCommander.send(1.0f, 1.0f, B);
+                directCommander.send(1.0f, 1.0f);
                 break;
             case BACKWARD:
-                DirectCommander.send(-1.0f, -1.0f, B);
+                directCommander.send(-1.0f, -1.0f);
                 break;
             case TURN_RIGHT:
-                DirectCommander.send(-1.0f, 1.0f, B);
+                directCommander.send(-1.0f, 1.0f);
                 break;
             case TURN_LEFT:
-                DirectCommander.send(1.0f, -1.0f, B);
+                directCommander.send(1.0f, -1.0f);
                 break;
             default:
         }

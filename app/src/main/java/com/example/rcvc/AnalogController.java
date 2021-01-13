@@ -5,9 +5,11 @@ import android.util.Log;
 public class AnalogController extends Controller {
 
     private final String TAG = "AnalogController";
+    private DirectCommander directCommander;
 
     public AnalogController(BluetoothConnectionService b) {
         super(b);
+        directCommander = new DirectCommander(b, 75);
     }
 
     /**
@@ -19,7 +21,7 @@ public class AnalogController extends Controller {
     public void sendPowers(int angle, int strength) {
         //0 is r, 1 is l
         float[] outputs = computePowers(angle, strength);
-        DirectCommander.send(outputs[0], outputs[1], B);
+        directCommander.send(outputs[0], outputs[1]);
     }
 
     /**
@@ -29,35 +31,49 @@ public class AnalogController extends Controller {
      * @return speeds for four motors in byte array length 4, compatible with DirectCommander.java
      */
     public float[] computePowers(int angle, int strength) {
-        float x = (float) Math.cos(angle) * (strength / 100);
-        float y = (float) (Math.sin(angle)) * (strength / 100);
-        Log.d(TAG, "x and y values: " + x + " " + y);
+        float factor = (float) strength / 100.0f;
 
-        float r;
-        float l;
-        float scale = 1.0f;
         float[] o = new float[2];
-        if (angle == 0 && strength != 0) {
-            o[0] = -1.0f;
-            o[1] = 1.0f;
-            return o;
+        float r = 0.0f;
+        float l = 0.0f;
+        o[0] = 0.0f;
+        o[1] = 0.0f;
+        int delta = 5;
+        int angleDif = 0;
+        float speedDif = 0.0f;
+        float ratio = 90.0f;
+        //Ggf Reihenfolge der if-Abfragen anpassen
+        if (angle > 360 - delta || angle < 0 + delta) {
+            r = -1.0f;
+            l = 1.0f;
+        } else if (angle > 180 - delta && angle < 180 + delta) {
+            r = 1.0f;
+            l = -1.0f;
+        } else if (angle >= 0 + delta && angle <= 90) {
+            angleDif = 90 - angle;
+            speedDif = (float) angleDif / ratio;
+            r = 1.0f - speedDif;
+            l = 1.0f;
+        } else if (angle > 90 && angle <= 180 - delta) {
+            angleDif = angle - 90;
+            speedDif = (float) angleDif / ratio;
+            r =1.0f;
+            l =1.0f - speedDif;
+        } else if (angle >= 180 + delta && angle <= 270) {
+            angleDif = 270 - angle;
+            speedDif = (float) angleDif / ratio;
+            r =-1.0f;
+            l =-1.0f + speedDif;
+        } else if (angle > 270 && angle <= 360 - delta){
+            angleDif = angle - 270;
+            speedDif = (float) angleDif / ratio;
+            r =-1.0f + speedDif;
+            l =-1.0f;
+        } else {
+            // Do nothing
         }
-        if (angle == 180 && strength != 0) {
-            o[0] = 1.0f;
-            o[1] = -1.0f;
-            return o;
-        }
-
-        r = scale * (y + x);
-        l = scale * (y - x);
-
-        if (r > 1.0f) r = 1.0f;
-        if (l > 1.0f) l = 1.0f;
-        if (r < -1.0f) r = -1.0f;
-        if (l < -1.0f) l = -1.0f;
-
-        o[0] = r;
-        o[1] = l;
+        o[0] = r * factor;
+        o[1] = l * factor;
         return o;
     }
 

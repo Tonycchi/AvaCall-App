@@ -96,8 +96,12 @@ public class MainActivity extends AppCompatActivity {
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
-                analogController.sendPowers(angle, strength);
-                Log.d(TAG, "joystick values: " + angle + " " + strength);
+                int str = strength;
+                if (str > 100) {
+                    str = 100;
+                }
+                analogController.sendPowers(angle, str);
+                Log.d(TAG, "joystick values: " + angle + " " + str);
             }
         });
 
@@ -169,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
         mBluetoothConnection.startClient(device, mDeviceUUIDs);
         buttonController = new ButtonController(mBluetoothConnection);
         analogController = new AnalogController(mBluetoothConnection);
-        //DirectCommander.setMaxPow(50);
     }
 
     /**
