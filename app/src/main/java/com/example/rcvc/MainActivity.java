@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
-    private boolean toggleController = true; //false is buttons, true is joystick
+    private boolean showController = false;
+    private boolean toggleController = false; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
     private Button buttonOpenRoom;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonMoveBackward;
     private Button buttonTurnRight;
     private Button buttonTurnLeft;
+    private Button buttonShowController;
+    private Button buttonToggleController;
     private TextView textviewConnectionStatus;
     private ListView listviewDevices;
     private JoystickView joystick;
@@ -82,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         buttonMoveBackward = findViewById(R.id.button_backward);
         buttonTurnRight = findViewById(R.id.button_right);
         buttonTurnLeft = findViewById(R.id.button_left);
+        buttonShowController = findViewById(R.id.button_show_controller);
+        buttonToggleController = findViewById(R.id.button_toggle_controller);
         joystick = findViewById(R.id.joystick);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -187,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 btIsClicked = true;
                 buttonOpenRoom.setEnabled(true);
                 listviewDevices.setVisibility(View.INVISIBLE);
-                setVisibilityController(true);
+                buttonShowController.setVisibility(View.VISIBLE);
                 break;
             case 2: // Could not connect
                 showToast(getString(R.string.connection_init_error));
@@ -349,11 +354,52 @@ public class MainActivity extends AppCompatActivity {
         buttonOpenRoom.setEnabled(false);
         setEnableLinkAndRoom(false);
         textviewConnectionStatus.setText(getString(R.string.connection_status_false));
-        setVisibilityController(false);
+        showController = true;
+        showController();
+        buttonShowController.setVisibility(View.INVISIBLE);
         mBluetoothConnection.cancel();
         selectedDevice = null;
         pairedDevices = new ArrayList<>();
         mDeviceUUIDs = null;
+    }
+
+    public void onClickShowController(View v) {
+        showController();
+    }
+
+    public void showController() {
+        if (!showController) {
+            buttonToggleController.setVisibility(View.VISIBLE);
+            if (!toggleController) {
+                setVisibilityButtons(true);
+                //setVisibilityJoystick(false);
+            } else {
+                setVisibilityJoystick(true);
+                //setVisibilityButtons(false);
+            }
+            buttonShowController.setText(R.string.button_controller_disable);
+        } else {
+            setVisibilityButtons(false);
+            setVisibilityJoystick(false);
+            buttonToggleController.setVisibility(View.INVISIBLE);
+            buttonShowController.setText(R.string.button_controller_enable);
+            toggleController = false;
+            buttonToggleController.setText(R.string.button_switch_to_joystick);
+        }
+        showController = !showController;
+    }
+
+    public void onClickToggleController(View v) {
+        if (!toggleController) {
+            setVisibilityButtons(false);
+            setVisibilityJoystick(true);
+            buttonToggleController.setText(R.string.button_switch_to_buttons);
+        } else {
+            setVisibilityJoystick(false);
+            setVisibilityButtons(true);
+            buttonToggleController.setText(R.string.button_switch_to_joystick);
+        }
+        toggleController = !toggleController;
     }
 
     /**
@@ -361,26 +407,25 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param vis the visibility that the control buttons will the get set to
      */
-    public void setVisibilityController(boolean vis) {
-        if (!toggleController) {
-            if (vis) {
-                buttonMoveForward.setVisibility(View.VISIBLE);
-                buttonMoveBackward.setVisibility(View.VISIBLE);
-                buttonTurnRight.setVisibility(View.VISIBLE);
-                buttonTurnLeft.setVisibility(View.VISIBLE);
-            } else {
-                buttonMoveForward.setVisibility(View.INVISIBLE);
-                buttonMoveBackward.setVisibility(View.INVISIBLE);
-                buttonTurnRight.setVisibility(View.INVISIBLE);
-                buttonTurnLeft.setVisibility(View.INVISIBLE);
-            }
+    public void setVisibilityButtons(boolean vis) {
+        if (vis) {
+            buttonMoveForward.setVisibility(View.VISIBLE);
+            buttonMoveBackward.setVisibility(View.VISIBLE);
+            buttonTurnRight.setVisibility(View.VISIBLE);
+            buttonTurnLeft.setVisibility(View.VISIBLE);
         } else {
-            if (vis) {
-                joystick.setVisibility(View.VISIBLE);
-            } else {
-                joystick.setVisibility(View.INVISIBLE);
+            buttonMoveForward.setVisibility(View.INVISIBLE);
+            buttonMoveBackward.setVisibility(View.INVISIBLE);
+            buttonTurnRight.setVisibility(View.INVISIBLE);
+            buttonTurnLeft.setVisibility(View.INVISIBLE);
             }
-        }
+    }
 
+    public void setVisibilityJoystick(boolean vis) {
+        if (vis) {
+            joystick.setVisibility(View.VISIBLE);
+        } else {
+            joystick.setVisibility(View.INVISIBLE);
+        }
     }
 }
