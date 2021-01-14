@@ -1,21 +1,8 @@
 package com.example.rcvc;
 
-import android.annotation.SuppressLint;
-import android.util.Log;
-
-import java.util.function.Function;
-
-@SuppressLint("LogNotTimber")
 public class DirectCommander {
 
     private final BluetoothConnectionService B;
-
-    public DirectCommander(BluetoothConnectionService b, int maxPower) {
-        setMaxPow(maxPower);
-        B = b;
-    }
-
-    private static final String TAG = "DirectCommander";
 
     //definitions will probably be able to be set in settings
     //should probably make library of ev3 command parts
@@ -24,6 +11,16 @@ public class DirectCommander {
 
     private int maxPower = 50;
 
+    public DirectCommander(BluetoothConnectionService b, int maxPower) {
+        setMaxPow(maxPower);
+        B = b;
+    }
+
+    /**
+     * bounds maxPow to [-100, 100]
+     *
+     * @param maxPow maximum motor power
+     */
     public void setMaxPow(int maxPow) {
         int pow = maxPow;
         if (maxPow > 100) {
@@ -35,6 +32,11 @@ public class DirectCommander {
         maxPower = pow;
     }
 
+    /**
+     * sends created direct command to bluetooth connection
+     *
+     * @param right,left motor speed scales
+     */
     public void send(float right, float left) {
         byte[] command = createCommand(calcPower(right), calcPower(left));
         B.write(command);
@@ -81,4 +83,5 @@ public class DirectCommander {
         return (byte) (x * maxPower);
     }
 
+    private static final String TAG = "DirectCommander";
 }

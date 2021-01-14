@@ -1,23 +1,12 @@
 package com.example.rcvc;
 
-import android.util.Log;
-
 public class AnalogController extends Controller {
 
-    private final String TAG = "AnalogController";
-    private DirectCommander directCommander;
-
     public AnalogController(BluetoothConnectionService b) {
-        super(b);
-        directCommander = new DirectCommander(b, 75);
+        super(b, 75);
     }
 
-    /**
-     * self explanatory
-     *
-     * @param angle    analog axes
-     * @param strength distance from origin
-     */
+    @Override
     public void sendPowers(int angle, int strength) {
         //0 is r, 1 is l
         float[] outputs = computePowers(angle, strength);
@@ -28,7 +17,7 @@ public class AnalogController extends Controller {
      * analog input to two motor speeds
      *
      * @param angle, strength analog axes
-     * @return speeds for four motors in byte array length 4, compatible with DirectCommander.java
+     * @return speeds for right and left motor
      */
     public float[] computePowers(int angle, int strength) {
         float factor = (float) strength / 100.0f;
@@ -77,4 +66,5 @@ public class AnalogController extends Controller {
         return o;
     }
 
+    private final String TAG = "AnalogController";
 }

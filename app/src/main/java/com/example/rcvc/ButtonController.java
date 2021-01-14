@@ -3,9 +3,6 @@ package com.example.rcvc;
 public class ButtonController extends Controller {
     //TODO use DirectCommander
 
-    private final String TAG = "ButtonController";
-    private DirectCommander directCommander;
-
     public static final int STOP = 0;
     public static final int FORWARD = 1;
     public static final int BACKWARD = 2;
@@ -13,10 +10,10 @@ public class ButtonController extends Controller {
     public static final int TURN_LEFT = 4;
 
     public ButtonController(BluetoothConnectionService b) {
-        super(b);
-        directCommander = new DirectCommander(b, 50);
+        super(b, 50);
     }
 
+    @Override
     public void sendPowers(int command, int dummy) {
         switch (command) {
             case STOP:
@@ -38,4 +35,5 @@ public class ButtonController extends Controller {
         }
     }
 
+    private final String TAG = "ButtonController";
 }
