@@ -52,15 +52,15 @@ public class DirectCommander {
         //0x|14:00|2A:00|80|00:00|A4|00|01|81:RP|A4|0|08|81:LP|A6|00|09
         //   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19
         // 00: length 20
-        // 11 & 16: right and left motor speeds
+        // 11 & 16: right and left motor speeds respectively
 
-        byte LENGTH = 20;
-        byte[] y = new byte[LENGTH];
-        for (int i = 0; i < LENGTH; i++) {
+        byte length = 20;
+        byte[] y = new byte[length];
+        for (int i = 0; i < length; i++) {
             y[i] = 0;
         }
 
-        y[0] = (byte) (LENGTH - 2);
+        y[0] = (byte) (length - 2);
         y[2] = 0x2a;
         y[4] = (byte) 0x80;
         y[7] = (byte) 0xa4;
@@ -82,6 +82,4 @@ public class DirectCommander {
     public byte calcPower(float x) {
         return (byte) (x * maxPower);
     }
-
-    private static final String TAG = "DirectCommander";
 }

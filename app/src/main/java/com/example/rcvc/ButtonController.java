@@ -17,23 +17,21 @@ public class ButtonController extends Controller {
     public void sendPowers(int command, int dummy) {
         switch (command) {
             case STOP:
-                directCommander.send(0.0f, 0.0f);
+                COMMANDER.send(0.0f, 0.0f);
                 break;
             case FORWARD:
-                directCommander.send(1.0f, 1.0f);
+                COMMANDER.send(1.0f, 1.0f);
                 break;
             case BACKWARD:
-                directCommander.send(-1.0f, -1.0f);
+                COMMANDER.send(-1.0f, -1.0f);
                 break;
             case TURN_RIGHT:
-                directCommander.send(-1.0f, 1.0f);
+                COMMANDER.send(-1.0f, 1.0f);
                 break;
             case TURN_LEFT:
-                directCommander.send(1.0f, -1.0f);
+                COMMANDER.send(1.0f, -1.0f);
                 break;
             default:
         }
     }
-
-    private final String TAG = "ButtonController";
 }

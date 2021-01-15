@@ -2,10 +2,10 @@ package com.example.rcvc;
 
 public abstract class Controller {
 
-    final DirectCommander directCommander;
+    final DirectCommander COMMANDER;
 
     public Controller(BluetoothConnectionService b, int maxPower) {
-        directCommander = new DirectCommander(b, maxPower);
+        COMMANDER = new DirectCommander(b, maxPower);
     }
 
     /**

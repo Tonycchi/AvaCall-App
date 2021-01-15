@@ -10,14 +10,14 @@ public class AnalogController extends Controller {
     public void sendPowers(int angle, int strength) {
         //0 is r, 1 is l
         float[] outputs = computePowers(angle, strength);
-        directCommander.send(outputs[0], outputs[1]);
+        COMMANDER.send(outputs[0], outputs[1]);
     }
 
     /**
-     * analog input to two motor speeds
+     * converts analog input to two motor speeds
      *
      * @param angle, strength analog axes
-     * @return speeds for right and left motor
+     * @return speeds for right(o[0]) and left(o[1]) motor
      */
     public float[] computePowers(int angle, int strength) {
         float factor = (float) strength / 100.0f;
@@ -28,43 +28,38 @@ public class AnalogController extends Controller {
         o[0] = 0.0f;
         o[1] = 0.0f;
         int delta = 5;
-        int angleDif = 0;
-        float speedDif = 0.0f;
+        int angleDif;
+        float speedDif;
         float ratio = 90.0f;
-        //Ggf Reihenfolge der if-Abfragen anpassen
-        if (angle > 360 - delta || angle < 0 + delta) {
-            r = -1.0f;
-            l = 1.0f;
-        } else if (angle > 180 - delta && angle < 180 + delta) {
-            r = 1.0f;
-            l = -1.0f;
-        } else if (angle >= 0 + delta && angle <= 90) {
+        if (angle >= 0 + delta && angle <= 90) { // forwards right
             angleDif = 90 - angle;
             speedDif = (float) angleDif / ratio;
             r = 1.0f - speedDif;
             l = 1.0f;
-        } else if (angle > 90 && angle <= 180 - delta) {
+        } else if (angle > 90 && angle <= 180 - delta) { // forwards left
             angleDif = angle - 90;
             speedDif = (float) angleDif / ratio;
             r =1.0f;
             l =1.0f - speedDif;
-        } else if (angle >= 180 + delta && angle <= 270) {
+        } else if (angle > 360 - delta || angle < 0 + delta) { // rotate right
+            r = -1.0f;
+            l = 1.0f;
+        } else if (angle > 180 - delta && angle < 180 + delta) { // rotate left
+            r = 1.0f;
+            l = -1.0f;
+        } else if (angle >= 180 + delta && angle <= 270) { // backwards left
             angleDif = 270 - angle;
             speedDif = (float) angleDif / ratio;
             r =-1.0f;
             l =-1.0f + speedDif;
-        } else if (angle > 270 && angle <= 360 - delta){
+        } else if (angle > 270 && angle <= 360 - delta){ // backwards right
             angleDif = angle - 270;
             speedDif = (float) angleDif / ratio;
             r =-1.0f + speedDif;
             l =-1.0f;
-        } else {
-            // Do nothing
         }
         o[0] = r * factor;
         o[1] = l * factor;
         return o;
     }
-
-    private final String TAG = "AnalogController";
 }
