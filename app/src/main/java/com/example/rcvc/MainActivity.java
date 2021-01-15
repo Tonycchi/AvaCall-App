@@ -245,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        resetConnection();
         unregisterReceiver(receiverActionStateChanged);
         unregisterReceiver(receiverConnection);
     }
