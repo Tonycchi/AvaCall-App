@@ -1,8 +1,13 @@
 <resources>
+    <!-- General -->
     <string name="app_name">rcvc</string>
+    <string name="app_title">Appname</string>
 
+    <!-- General Menus -->
     <string name="dialog_close">Schließen</string>
 
+    <!-- Main Activity Layout -->
+    <!--    Buttons -->
     <string name="button_bluetooth_disconnected">Mit Bluetooth verbinden</string>
     <string name="button_bluetooth_connected">Verbindung trennen</string>
     <string name="button_open_room">Jitsi Raum öffnen</string>
@@ -12,29 +17,31 @@
     <string name="button_controller_disable">Steuerung verstecken</string>
     <string name="button_switch_to_joystick">Joystick</string>
     <string name="button_switch_to_buttons">Knöpfe</string>
-
-    <string name="app_title">Appname</string>
-
-    <string name="connection_status_false">Keine Verbindung</string>
-    <string name="connection_status_true">Verbunden mit: %s</string>
-    <string name="connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
-    <string name="connection_lost">Die Verbindung wurde verloren</string>
+    <!--    Directional Buttons -->
     <string name="direct_command_forward">Vorwärts </string>
     <string name="direct_command_backward">Rückwärts </string>
     <string name="direct_command_turn_right">Rechts </string>
     <string name="direct_command_turn_left">Links </string>
     <string name="direct_command_stop">Stoppen </string>
-    <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
-    <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
-
+    <!--    Toasts -->
     <string name="toast_room_opened">Raum geöffnet</string>
     <string name="toast_no_open_room">Öffne zuerst einen Raum</string>
     <string name="toast_link_copied">Link kopiert</string>
+    <!--    Connection Status -->
+    <string name="connection_status_false">Keine Verbindung</string>
+    <string name="connection_status_true">Verbunden mit: %s</string>
 
+    <!-- Settings Layout -->
     <string name="settings">Einstellungen</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="setting_url_title">Webanwendung</string>
     <string name="setting_url_summary">URL zur Webanwendung</string>
+
+    <!-- Errors -->
+    <!--    Main Activity -->
+    <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
+    <string name="connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
+    <string name="connection_lost">Die Verbindung wurde verloren</string>
+
+    <!-- Misc -->
+    <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
 </resources>
