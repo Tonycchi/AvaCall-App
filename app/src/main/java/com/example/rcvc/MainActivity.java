@@ -1,6 +1,8 @@
 package com.example.rcvc;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -11,9 +13,13 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,7 +35,11 @@ import java.util.Set;
 
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
+@SuppressLint("LogNotTimber")
 public class MainActivity extends AppCompatActivity {
+
+    // settings
+    SharedPreferences sharedPreferences;
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
@@ -73,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         setContentView(R.layout.activity_main);
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);
@@ -167,6 +180,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // replace with switch if more menu items introduced
+        if (item.getItemId() == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Starts a connection between our device and the device we want to connect with
      *
@@ -221,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
      */
-    private BroadcastReceiver receiverConnection = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onConnection();
@@ -232,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
      * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
      * Whenever Bluetooth is turned off while we are in a connection, reset everything
      */
-    private BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
@@ -273,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickOpenRoom(View v) {
         if (room == null) {
-            room = new JitsiRoom();
+            room = new JitsiRoom(sharedPreferences.getString("webapp_url", ""));
         }
 
         setEnableLinkAndRoom(true);

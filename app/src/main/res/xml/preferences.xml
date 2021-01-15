@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        android:key="webapp_url"
+        android:defaultValue="mintclub.org"
+        android:summary="@string/setting_url_summary"
+        android:title="@string/setting_url_title"/>
+</PreferenceScreen>
+
