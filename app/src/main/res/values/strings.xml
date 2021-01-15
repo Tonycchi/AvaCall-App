@@ -1,10 +1,8 @@
 <resources>
-    <!-- General -->
     <string name="app_name">rcvc</string>
-    <string name="app_title">Appname</string>
 
-    <!-- Main Activity Layout -->
-    <!--    Buttons -->
+    <string name="dialog_close">Schließen</string>
+
     <string name="button_bluetooth_disconnected">Mit Bluetooth verbinden</string>
     <string name="button_bluetooth_connected">Verbindung trennen</string>
     <string name="button_open_room">Jitsi Raum öffnen</string>
@@ -26,7 +24,9 @@
     <string name="direct_command_turn_right">Rechts </string>
     <string name="direct_command_turn_left">Links </string>
     <string name="direct_command_stop">Stoppen </string>
-    <!--    Toasts -->
+    <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
+    <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
+
     <string name="toast_room_opened">Raum geöffnet</string>
     <string name="toast_no_open_room">Öffne zuerst einen Raum</string>
     <string name="toast_link_copied">Link kopiert</string>
