@@ -7,5 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="rcvs_background_color">#8BF2FF</color>
+
+    <!-- main screen -->
+    <color name="main_background">#8BF2FF</color>
+
+    <!-- joystick -->
+    <color name="joystick_background">#009688</color>
+    <color name="joystick_border">#00796B</color>
+    <color name="joystick_button">#FF6E40</color>
 </resources>

@@ -27,10 +27,14 @@ import org.jitsi.meet.sdk.JitsiMeetActivity;
 import java.util.ArrayList;
 import java.util.Set;
 
+import io.github.controlwear.virtual.joystick.android.JoystickView;
+
 public class MainActivity extends AppCompatActivity {
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
+    private boolean showController = false;
+    private boolean toggleController = false; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
     private Button buttonOpenRoom;
@@ -40,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonMoveBackward;
     private Button buttonTurnRight;
     private Button buttonTurnLeft;
+    private Button buttonShowController;
+    private Button buttonToggleController;
     private TextView textviewConnectionStatus;
     private ListView listviewDevices;
+    private JoystickView joystick;
 
     private JitsiRoom room;
 
@@ -57,8 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private ParcelUuid[] mDeviceUUIDs;
     // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<>();
-    // Connected Robot
-    private RobotController robot;
+    // Connected Robots
+    private ButtonController buttonController;
+    private AnalogController analogController;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -76,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
         buttonMoveBackward = findViewById(R.id.button_backward);
         buttonTurnRight = findViewById(R.id.button_right);
         buttonTurnLeft = findViewById(R.id.button_left);
+        buttonShowController = findViewById(R.id.button_show_controller);
+        buttonToggleController = findViewById(R.id.button_toggle_controller);
+        joystick = findViewById(R.id.joystick);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -86,49 +98,61 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter2 = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, filter2);
 
+        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                int str = strength;
+                if (str > 100) {
+                    str = 100;
+                }
+                analogController.sendPowers(angle, str);
+                Log.d(TAG, "joystick values: " + angle + " " + str);
+            }
+        });
+
         buttonMoveForward.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving forward is send to ev3
-                robot.sendCommands(RobotController.FORWARD);
+                buttonController.sendPowers(ButtonController.FORWARD, 0);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                buttonController.sendPowers(ButtonController.STOP, 0);
             }
 
             return true;
         });
 
         buttonMoveBackward.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving backward is send to ev3
-                robot.sendCommands(RobotController.BACKWARD);
+                buttonController.sendPowers(ButtonController.BACKWARD, 0);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                buttonController.sendPowers(ButtonController.STOP, 0);
             }
 
             return true;
         });
 
         buttonTurnRight.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the right are send to ev3
-                robot.sendCommands(RobotController.TURN_RIGHT);
+                buttonController.sendPowers(ButtonController.TURN_RIGHT, 0);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                buttonController.sendPowers(ButtonController.STOP, 0);
             }
 
             return true;
         });
 
         buttonTurnLeft.setOnTouchListener((v, event) -> {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the left are send to ev3
-                robot.sendCommands(RobotController.TURN_LEFT);
+                buttonController.sendPowers(ButtonController.TURN_LEFT, 0);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                robot.sendCommands(RobotController.STOP);
+                buttonController.sendPowers(ButtonController.STOP, 0);
             }
 
             return true;
@@ -145,28 +169,30 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Starts a connection between our device and the device we want to connect with
+     *
      * @param device the device to connect with
-     * @param uuid the uuids of the device
+     * @param uuid   the uuids of the device
      */
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
-        mBluetoothConnection.startClient(device,mDeviceUUIDs);
-        robot = new RobotController(mBluetoothConnection);
+        mBluetoothConnection.startClient(device, mDeviceUUIDs);
+        buttonController = new ButtonController(mBluetoothConnection);
+        analogController = new AnalogController(mBluetoothConnection);
     }
 
     /**
      * Checks if the connection is valid and changes variables and buttons on screen accordingly
      */
     public void onConnection() {
-        robot.sendCommands(RobotController.STOP);
-        switch(mBluetoothConnection.getConnectionStatus()) {
+        buttonController.sendPowers(ButtonController.STOP, 0);
+        switch (mBluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
                 textviewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
                 buttonOpenRoom.setEnabled(true);
                 listviewDevices.setVisibility(View.INVISIBLE);
-                setVisibilityControlButtons(true);
+                buttonShowController.setVisibility(View.VISIBLE);
                 break;
             case 2: // Could not connect
                 showToast(getString(R.string.connection_init_error));
@@ -212,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 // Bluetooth Status has been turned off
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                if(state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF){
+                if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
                     resetConnection();
                 }
             }
@@ -220,12 +246,11 @@ public class MainActivity extends AppCompatActivity {
     };
 
     /**
-     * @param v
-     * If bluetooth is disabled, this button will enable it, if bluetooth is is enabled and this button is clicked, it will show all paired devices.
-     * If this button is clicked while we have a connection, it will reset the connection
+     * @param v If bluetooth is disabled, this button will enable it, if bluetooth is is enabled and this button is clicked, it will show all paired devices.
+     *          If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
-        if(btIsClicked){
+        if (btIsClicked) {
             resetConnection();
         } else {
             if (!btAdapter.isEnabled()) {
@@ -293,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSwitchToRoom.setEnabled(enabled);
     }
 
-    public ArrayList<String> getPairedDevices(){
+    public ArrayList<String> getPairedDevices() {
         Set<BluetoothDevice> devices = btAdapter.getBondedDevices();
         ArrayList<String> names = new ArrayList<>();
         if (devices.size() > 0) {
@@ -322,25 +347,67 @@ public class MainActivity extends AppCompatActivity {
     /**
      * reset connection and change variables when we disconnect (via button or bluetooth)
      */
-    public void resetConnection(){
-        robot.sendCommands(RobotController.STOP);
+    public void resetConnection() {
+        buttonController.sendPowers(ButtonController.STOP, 0);
         btIsClicked = false;
         buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
         buttonOpenRoom.setEnabled(false);
         setEnableLinkAndRoom(false);
         textviewConnectionStatus.setText(getString(R.string.connection_status_false));
-        setVisibilityControlButtons(false);
+        showController = true;
+        showController();
+        buttonShowController.setVisibility(View.INVISIBLE);
         mBluetoothConnection.cancel();
         selectedDevice = null;
         pairedDevices = new ArrayList<>();
         mDeviceUUIDs = null;
     }
 
+    public void onClickShowController(View v) {
+        showController();
+    }
+
+    public void showController() {
+        if (!showController) {
+            buttonToggleController.setVisibility(View.VISIBLE);
+            if (!toggleController) {
+                setVisibilityButtons(true);
+                //setVisibilityJoystick(false);
+            } else {
+                setVisibilityJoystick(true);
+                //setVisibilityButtons(false);
+            }
+            buttonShowController.setText(R.string.button_controller_disable);
+        } else {
+            setVisibilityButtons(false);
+            setVisibilityJoystick(false);
+            buttonToggleController.setVisibility(View.INVISIBLE);
+            buttonShowController.setText(R.string.button_controller_enable);
+            toggleController = false;
+            buttonToggleController.setText(R.string.button_switch_to_joystick);
+        }
+        showController = !showController;
+    }
+
+    public void onClickToggleController(View v) {
+        if (!toggleController) {
+            setVisibilityButtons(false);
+            setVisibilityJoystick(true);
+            buttonToggleController.setText(R.string.button_switch_to_buttons);
+        } else {
+            setVisibilityJoystick(false);
+            setVisibilityButtons(true);
+            buttonToggleController.setText(R.string.button_switch_to_joystick);
+        }
+        toggleController = !toggleController;
+    }
+
     /**
      * Set the visibility of the control buttons according to the given param
+     *
      * @param vis the visibility that the control buttons will the get set to
      */
-    public void setVisibilityControlButtons(boolean vis){
+    public void setVisibilityButtons(boolean vis) {
         if (vis) {
             buttonMoveForward.setVisibility(View.VISIBLE);
             buttonMoveBackward.setVisibility(View.VISIBLE);
@@ -351,6 +418,14 @@ public class MainActivity extends AppCompatActivity {
             buttonMoveBackward.setVisibility(View.INVISIBLE);
             buttonTurnRight.setVisibility(View.INVISIBLE);
             buttonTurnLeft.setVisibility(View.INVISIBLE);
+            }
+    }
+
+    public void setVisibilityJoystick(boolean vis) {
+        if (vis) {
+            joystick.setVisibility(View.VISIBLE);
+        } else {
+            joystick.setVisibility(View.INVISIBLE);
         }
     }
 }

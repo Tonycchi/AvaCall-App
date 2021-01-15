@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/rcvs_background_color"
+    android:background="@color/main_background"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
     <Button
@@ -52,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/app_title"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +77,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/connection_status_false"
         android:textColor="#000000"
@@ -98,47 +98,87 @@
         android:id="@+id/button_forward"
         android:layout_width="@dimen/control_button_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/direct_command_forward"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/button_left"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_switch_to_room" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_backward"
         android:layout_width="@dimen/control_button_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="48dp"
         android:text="@string/direct_command_backward"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_left" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_right"
         android:layout_width="@dimen/control_button_width"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/direct_command_turn_right"
         android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/button_forward"
-        app:layout_constraintTop_toBottomOf="@+id/button_forward" />
+        app:layout_constraintBottom_toTopOf="@+id/button_backward"
+        app:layout_constraintStart_toEndOf="@+id/button_forward" />
 
     <Button
         android:id="@+id/button_left"
         android:layout_width="@dimen/control_button_width"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/direct_command_turn_left"
         android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@+id/button_forward"
-        app:layout_constraintTop_toBottomOf="@+id/button_forward" />
+        app:layout_constraintBottom_toTopOf="@+id/button_backward"
+        app:layout_constraintEnd_toStartOf="@+id/button_forward" />
+
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/joystick"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="64dp"
+        android:visibility="invisible"
+        app:JV_autoReCenterButton="true"
+        app:JV_backgroundColor="@color/joystick_background"
+        app:JV_backgroundSizeRatio="50%"
+        app:JV_borderColor="@color/joystick_border"
+        app:JV_borderWidth="46dp"
+        app:JV_buttonColor="@color/joystick_button"
+        app:JV_buttonSizeRatio="25%"
+        app:JV_fixedCenter="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/button_bluetooth"
+        app:layout_constraintStart_toStartOf="@+id/button_bluetooth" />
+
+    <Button
+        android:id="@+id/button_show_controller"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:onClick="onClickShowController"
+        android:text="@string/button_controller_enable"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_switch_to_room" />
+
+    <Button
+        android:id="@+id/button_toggle_controller"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:onClick="onClickToggleController"
+        android:text="@string/button_switch_to_joystick"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_show_controller" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

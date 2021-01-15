@@ -287,6 +287,7 @@ public class BluetoothConnectionService {
         /**
          * this method gets called from main activity to send data to the remote device
          * this method also gets called once at the start to make sure the connection was successful
+         *
          * @param bytes the bytes to be send
          */
         public void write(byte[] bytes) {
@@ -307,7 +308,7 @@ public class BluetoothConnectionService {
             }
             // if connection status is still 0 at this point,
             // the connection was successful and it gets set to 1
-            if(connectionStatus == 0) {
+            if (connectionStatus == 0) {
                 connectionStatus = 1;
             }
         }
@@ -338,6 +339,7 @@ public class BluetoothConnectionService {
 
     /**
      * Write to the ConnectedThread in an unsynchronized manner
+     *
      * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */
