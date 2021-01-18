@@ -41,6 +41,7 @@
     <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
     <string name="connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
     <string name="connection_lost">Die Verbindung wurde verloren</string>
+    <string name="debug_tag">NetworkStatusExample </string>
 
     <!-- Misc -->
     <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>

@@ -14,6 +14,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -41,10 +44,13 @@ public class MainActivity extends AppCompatActivity {
     // settings
     SharedPreferences sharedPreferences;
 
+    //move to
+    private static final String DEBUG_TAG = "NetworkStatusExample";
+
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
-    private boolean showController = false;
-    private boolean toggleController = false; //false is buttons, true is joystick
+    private boolean showController = true;
+    private boolean toggleController = true; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
     private Button buttonOpenRoom;
@@ -56,9 +62,12 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonTurnLeft;
     private Button buttonShowController;
     private Button buttonToggleController;
+    private Button connectToServer; //temporary test button
     private TextView textviewConnectionStatus;
     private ListView listviewDevices;
     private JoystickView joystick;
+
+    private Toast mToast;
 
     private JitsiRoom room;
 
@@ -100,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         buttonTurnLeft = findViewById(R.id.button_left);
         buttonShowController = findViewById(R.id.button_show_controller);
         buttonToggleController = findViewById(R.id.button_toggle_controller);
+        connectToServer = findViewById(R.id.connectToServer);
         joystick = findViewById(R.id.joystick);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -171,6 +181,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+        connectToServer.setOnClickListener((v) -> {
+
+            showToast("tste");
+        });
+
         // Try to start bluetooth connection with paired device that was clicked
         listviewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
@@ -178,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
             mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, mDeviceUUIDs);
         });
+
+        //delete later in final version
+        this.setAllButtonsUsable();
     }
 
     @Override
@@ -198,6 +216,24 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void serverConnectionStart(){
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isWifiConn = false;
+        boolean isMobileConn = false;
+        for (Network network : connMgr.getAllNetworks()) {
+            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                isWifiConn |= networkInfo.isConnected();
+            }
+            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                isMobileConn |= networkInfo.isConnected();
+            }
+        }
+        showToast(R.string.debug_tag+"Wifi connected: "+isWifiConn);
+        showToast(R.string.debug_tag+"Mobile connected: "+isMobileConn);
+    }
+
     /**
      * Starts a connection between our device and the device we want to connect with
      *
@@ -209,6 +245,16 @@ public class MainActivity extends AppCompatActivity {
         mBluetoothConnection.startClient(device, mDeviceUUIDs);
         buttonController = new ButtonController(mBluetoothConnection);
         analogController = new AnalogController(mBluetoothConnection);
+    }
+
+    /**
+     * Method for coding and debugging
+     */
+    private void setAllButtonsUsable() {
+        buttonBluetooth.setEnabled(true);
+        buttonOpenRoom.setEnabled(true);
+        buttonShareLink.setEnabled(true);
+        buttonSwitchToRoom.setEnabled(true);
     }
 
     /**
@@ -338,7 +384,10 @@ public class MainActivity extends AppCompatActivity {
      * @param message The message to pop up at the bottom of the screen
      */
     private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        if(mToast==null)
+            mToast = Toast.makeText( this  , "" , Toast.LENGTH_SHORT );
+        mToast.setText(message);
+        mToast.show();
     }
 
     /**
