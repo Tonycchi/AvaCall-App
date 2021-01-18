@@ -1,5 +1,6 @@
 package com.example.rcvc;
 
+<<<<<<< HEAD
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -253,3 +254,7 @@ public class NetworkFragment extends Fragment {
     }
 }
 
+=======
+public class NetworkFragment {
+}
+>>>>>>> 6c6387e3c10908ee1dfb9bf045b4c7af332b95aa

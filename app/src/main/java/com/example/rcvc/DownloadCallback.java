@@ -1,5 +1,6 @@
 package com.example.rcvc;
 
+<<<<<<< HEAD
 import android.net.NetworkInfo;
 
 public interface DownloadCallback<T> {
@@ -34,4 +35,7 @@ public interface DownloadCallback<T> {
      * download hasn't completed successfully.
      */
     void finishDownloading();
+=======
+public interface DownloadCallback {
+>>>>>>> 6c6387e3c10908ee1dfb9bf045b4c7af332b95aa
 }
