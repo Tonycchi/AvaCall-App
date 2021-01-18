@@ -182,8 +182,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         connectToServer.setOnClickListener((v) -> {
+            serverConnectionStart();
 
-            showToast("tste");
         });
 
         // Try to start bluetooth connection with paired device that was clicked
@@ -230,8 +230,10 @@ public class MainActivity extends AppCompatActivity {
                 isMobileConn |= networkInfo.isConnected();
             }
         }
-        showToast(R.string.debug_tag+"Wifi connected: "+isWifiConn);
-        showToast(R.string.debug_tag+"Mobile connected: "+isMobileConn);
+        if(!isWifiConn)
+            showToast(getString(R.string.debug_tag)+"Wifi connected: "+isWifiConn);
+        if(!isMobileConn)
+            showToast(getString(R.string.debug_tag)+"Mobile connected: "+isMobileConn);
     }
 
     /**
