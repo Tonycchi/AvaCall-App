@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
     private static final String TAG = "MainActivity";
 
     BluetoothConnectionService mBluetoothConnection;
+    private boolean startedConnection;
 
     // Bluetooth adapter of our device
     private BluetoothAdapter btAdapter;
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
     // Connected Robots
     private ButtonController buttonController;
     private AnalogController analogController;
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -313,6 +315,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device, mDeviceUUIDs);
+        startedConnection = true;
         buttonController = new ButtonController(mBluetoothConnection);
         analogController = new AnalogController(mBluetoothConnection);
     }
@@ -499,19 +502,22 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
      * reset connection and change variables when we disconnect (via button or bluetooth)
      */
     public void resetConnection() {
-        buttonController.sendPowers(ButtonController.STOP, 0);
-        btIsClicked = false;
-        buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
-        buttonOpenRoom.setEnabled(false);
-        setEnableLinkAndRoom(false);
-        textviewConnectionStatus.setText(getString(R.string.connection_status_false));
-        showController = true;
-        showController();
-        buttonShowController.setVisibility(View.INVISIBLE);
-        mBluetoothConnection.cancel();
-        selectedDevice = null;
-        pairedDevices = new ArrayList<>();
-        mDeviceUUIDs = null;
+        if (startedConnection) {
+            startedConnection = false;
+            buttonController.sendPowers(ButtonController.STOP, 0);
+            btIsClicked = false;
+            buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
+            buttonOpenRoom.setEnabled(false);
+            setEnableLinkAndRoom(false);
+            textviewConnectionStatus.setText(getString(R.string.connection_status_false));
+            showController = true;
+            showController();
+            buttonShowController.setVisibility(View.INVISIBLE);
+            mBluetoothConnection.cancel();
+            selectedDevice = null;
+            pairedDevices = new ArrayList<>();
+            mDeviceUUIDs = null;
+        }
     }
 
     public void onClickShowController(View v) {
