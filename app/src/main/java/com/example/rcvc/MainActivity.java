@@ -39,18 +39,10 @@ import java.util.Set;
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 @SuppressLint("LogNotTimber")
-public class MainActivity extends AppCompatActivity implements DownloadCallback{
+public class MainActivity extends AppCompatActivity{
 
     // settings
     SharedPreferences sharedPreferences;
-
-    // Keep a reference to the NetworkFragment, which owns the AsyncTask object
-    // that is used to execute network ops.
-    private NetworkFragment networkFragment;
-
-    // Boolean telling us whether a download is in progress, so we don't trigger overlapping
-    // downloads with consecutive button clicks.
-    private boolean downloading = false;
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
@@ -93,8 +85,6 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
     private ButtonController buttonController;
     private AnalogController analogController;
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,10 +117,6 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
         // Custom IntentFilter for catching Intent from ConnectedThread
         IntentFilter filter2 = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, filter2);
-
-        //for network connection
-        networkFragment = NetworkFragment.getInstance(getSupportFragmentManager(), "https://"+sharedPreferences.getString("webapp_url", ""));
-
 
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -227,83 +213,10 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
         return super.onOptionsItemSelected(item);
     }
 
-    private void startDownload() {
-        if (!downloading && networkFragment != null) {
-            // Execute the async download.
-            networkFragment.startDownload();
-            downloading = true;
-        }
-    }
-
-    @Override
-    public void updateFromDownload(Object result) {
-        showToast("test:"+(String)result);
-    }
-
-    @Override
-    public NetworkInfo getActiveNetworkInfo() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo;
-    }
-
-    @Override
-    public void onProgressUpdate(int progressCode, int percentComplete) {
-        switch(progressCode) {
-            // You can add UI behavior for progress updates here.
-            case Progress.ERROR:
-                showToast("ERROR");
-                break;
-            case Progress.CONNECT_SUCCESS:
-                showToast("CONNECT_SUCCESS");
-                break;
-            case Progress.GET_INPUT_STREAM_SUCCESS:
-                showToast("GET_INPUT_STREAM_SUCCESS");
-                break;
-            case Progress.PROCESS_INPUT_STREAM_IN_PROGRESS:
-                showToast("PROCESS_INPUT_STREAM_IN_PROGRESS");
-                break;
-            case Progress.PROCESS_INPUT_STREAM_SUCCESS:
-                showToast("PROCESS_INPUT_STREAM_SUCCESS");
-                break;
-        }
-    }
-
-    @Override
-    public void finishDownloading() {
-        downloading = false;
-        if (networkFragment != null) {
-            networkFragment.cancelDownload();
-        }
-    }
-
-
 
     private void serverConnectionStart(){
-        showToast("Connect test pressed!");
-
-        startDownload();
-
-
-
-        /*ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isWifiConn = false;
-        boolean isMobileConn = false;
-        for (Network network : connMgr.getAllNetworks()) {
-            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                isWifiConn |= networkInfo.isConnected();
-            }
-            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                isMobileConn |= networkInfo.isConnected();
-            }
-        }
-        if(!isWifiConn)
-            showToast(getString(R.string.debug_tag)+"Wifi connected: "+isWifiConn);
-        if(!isMobileConn)
-            showToast(getString(R.string.debug_tag)+"Mobile connected: "+isMobileConn);*/
+        Client c = new Client(this);
+        c.start();
     }
 
     /**
@@ -456,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements DownloadCallback{
     /**
      * @param message The message to pop up at the bottom of the screen
      */
-    private void showToast(String message) {
+    public void showToast(String message) {
         if(mToast==null)
             mToast = Toast.makeText( this  , "" , Toast.LENGTH_SHORT );
         mToast.setText(message);
