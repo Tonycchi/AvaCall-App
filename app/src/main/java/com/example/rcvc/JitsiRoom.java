@@ -19,10 +19,10 @@ public class JitsiRoom {
 
     public JitsiRoom(String host) {
         id = randomLinkString(ROOM_LINK_LENGTH);
-        url = "meet." + host + "/" + id;
+        url = "https://meet." + host + "/" + id;
         try {
             options = new JitsiMeetConferenceOptions.Builder()
-                    .setServerURL(new URL(host))
+                    .setServerURL(new URL("https://meet." + host))
                     .setRoom(id)
                     .setSubject("Robot") //TODO besserer Titel
                     .setAudioMuted(false)
