@@ -1,10 +1,8 @@
 package com.example.rcvc;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceManager;
-
 import android.annotation.SuppressLint;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -14,9 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -33,8 +28,10 @@ import android.widget.Toast;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 
+
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -69,6 +66,8 @@ public class MainActivity extends AppCompatActivity{
     private Toast mToast;
 
     private JitsiRoom room;
+    private HostURL host;
+    private boolean hostReady;
 
     private static final String TAG = "MainActivity";
 
@@ -93,6 +92,19 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        try {
+            host = new HostURL(sharedPreferences.getString("host_url", ""));
+            hostReady = true;
+        } catch (MalformedURLException e) {
+            Bundle bundle = new Bundle();
+            // first put id of error message in bundle using defined key
+            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
+            ErrorDialogFragment error = new ErrorDialogFragment();
+            // then pass bundle to dialog and show
+            error.setArguments(bundle);
+            error.show(this.getSupportFragmentManager(), TAG);
+            hostReady = false;
+        }
 
         setContentView(R.layout.activity_main);
         // get all buttons
@@ -342,8 +354,16 @@ public class MainActivity extends AppCompatActivity{
      *          switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
-        if (room == null) {
-            room = new JitsiRoom(sharedPreferences.getString("webapp_url", ""));
+        if (room == null && hostReady) {
+            room = new JitsiRoom(host.url);
+        } else if (!hostReady) {
+            Bundle bundle = new Bundle();
+            // first put id of error message in bundle using defined key
+            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
+            ErrorDialogFragment error = new ErrorDialogFragment();
+            // then pass bundle to dialog and show
+            error.setArguments(bundle);
+            error.show(this.getSupportFragmentManager(), TAG);
         }
 
         setEnableLinkAndRoom(true);
