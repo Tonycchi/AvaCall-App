@@ -33,6 +33,8 @@ import android.widget.Toast;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -179,7 +181,11 @@ public class MainActivity extends AppCompatActivity{
         });
 
         connectToServer.setOnClickListener((v) -> {
-            serverConnectionStart();
+            try {
+                serverConnectionStart();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
 
         });
 
@@ -214,9 +220,9 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    private void serverConnectionStart(){
-        Client c = new Client(this);
-        c.start();
+    private void serverConnectionStart() throws URISyntaxException {
+        WebClient wc = new WebClient(new URI("ws://" + sharedPreferences.getString("webapp_url", "")  + ":22222"));
+        wc.connect();
     }
 
     /**

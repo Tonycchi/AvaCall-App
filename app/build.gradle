@@ -40,4 +40,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 	implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
     implementation 'io.github.controlwear:virtualjoystick:1.10.1'
+    implementation "org.java-websocket:Java-WebSocket:1.5.1"
 }
