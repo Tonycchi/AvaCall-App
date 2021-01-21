@@ -42,6 +42,7 @@
     <string name="connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
     <string name="connection_lost">Die Verbindung wurde verloren</string>
     <string name="debug_tag">NetworkStatusExample </string>
+    <string name="error_malformed_url">Bitte eine formgerechte URL angeben.</string>
 
     <!-- Misc -->
     <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
