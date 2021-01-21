@@ -1,11 +1,13 @@
 package com.example.rcvc;
 
+import android.content.Context;
+
 public abstract class Controller {
 
     final DirectCommander COMMANDER;
 
-    public Controller(BluetoothConnectionService b, int maxPower) {
-        COMMANDER = new DirectCommander(b, maxPower);
+    public Controller(Context context, BluetoothConnectionService b, int maxPower) {
+        COMMANDER = new DirectCommander(context, b, maxPower);
     }
 
     /**

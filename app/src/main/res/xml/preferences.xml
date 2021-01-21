@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <EditTextPreference
-        android:key="host_url"
-        android:defaultValue="mintclub.org"
-        android:summary="@string/setting_url_summary"
-        android:title="@string/setting_url_title"/>
+    <PreferenceCategory
+        app:key="networking_category"
+        app:title="@string/settings_category_network">
+        <EditTextPreference
+            android:key="host_url"
+            android:defaultValue="mintclub.org"
+            android:title="@string/setting_url_title"
+            android:summary="@string/setting_url_summary" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="control_category"
+        app:title="@string/settings_category_controls">
+        <SeekBarPreference
+            android:key="max_speed"
+            android:defaultValue="50"
+            app:min="0"
+            app:max="100"
+            android:title="@string/settings_title_max"
+            android:summary="@string/settings_summary_max"
+            app:showSeekBarValue="true"
+            app:updatesContinuously="true" />
+        <ListPreference
+            android:key="right_port"
+            android:defaultValue="1"
+            android:entries="@array/port_labels"
+            android:entryValues="@array/port_values"
+            android:title="@string/settings_title_right" />
+        <ListPreference
+            android:key="left_port"
+            android:defaultValue="4"
+            android:entries="@array/port_labels"
+            android:entryValues="@array/port_values"
+            android:title="@string/settings_title_left" />
+    </PreferenceCategory>
+
+
+
 </PreferenceScreen>
 

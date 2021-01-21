@@ -31,11 +31,6 @@
     <string name="connection_status_false">Keine Verbindung</string>
     <string name="connection_status_true">Verbunden mit: %s</string>
 
-    <!-- Settings Layout -->
-    <string name="settings">Einstellungen</string>
-    <string name="setting_url_title">Webanwendung</string>
-    <string name="setting_url_summary">URL zur Webanwendung</string>
-
     <!-- Errors -->
     <!--    Main Activity -->
     <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
@@ -48,4 +43,31 @@
     <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Settings Layout -->
+    <string name="settings">Einstellungen</string>
+    <string name="setting_url_title">Webanwendung</string>
+    <string name="setting_url_summary">URL zur Webanwendung</string>
+    <!--    Category titles -->
+    <string name="settings_category_controls">Steuerung</string>
+    <string name="settings_category_network">Netzwerk</string>
+    <!--    Preference titles/summaries -->
+    <string name="settings_title_max">Maximale Geschwindigkeit</string>
+    <string name="settings_summary_max">In Prozent</string>
+    <string name="settings_title_right">Rechter Port</string>
+    <string name="settings_title_left">Linker Porte</string>
+
+    <!-- Arrays -->
+    <string-array name="port_labels">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+    </string-array>
+    <string-array name="port_values">
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+    </string-array>
 </resources>
