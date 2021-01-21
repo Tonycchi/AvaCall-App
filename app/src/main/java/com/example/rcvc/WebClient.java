@@ -20,7 +20,7 @@ public class WebClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        send("Schmeckt nach Kohle");
+        send("Frisst das Pferd Gurkensalat?");
         System.out.println("new connection opened");
     }
 
@@ -31,7 +31,7 @@ public class WebClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        System.out.println("Der Server hätte gerne: " + message);
+        System.out.println("Der Server antwortet: " + message);
     }
 
     @Override
