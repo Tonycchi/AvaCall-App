@@ -1,7 +1,6 @@
 <resources>
     <!-- General -->
-    <string name="app_name">rcvc</string>
-    <string name="app_title">Appname</string>
+    <string name="app_name">AvaCall</string>
 
     <!-- General Menus -->
     <string name="dialog_close">Schließen</string>
