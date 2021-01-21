@@ -192,14 +192,14 @@ public class MainActivity extends AppCompatActivity{
             return true;
         });
 
-        connectToServer.setOnClickListener((v) -> {
-            try {
-                serverConnectionStart();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-
-        });
+//        connectToServer.setOnClickListener((v) -> {
+//            try {
+//                serverConnectionStart();
+//            } catch (URISyntaxException e) {
+//                e.printStackTrace();
+//            }
+//
+//        });
 
         // Try to start bluetooth connection with paired device that was clicked
         listviewDevices.setOnItemClickListener((parent, view, position, id) -> {
@@ -231,8 +231,11 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void serverConnectionStart() throws URISyntaxException {
+    /**
+     * testwise connection to the server. connects with a message and the server answers back
+     * @throws URISyntaxException
+     */
+    public void serverConnectionStart(View v) throws URISyntaxException {
         WebClient wc = new WebClient(new URI("ws://" + sharedPreferences.getString("webapp_url", "")  + ":22222"));
         wc.connect();
     }
