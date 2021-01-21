@@ -1,5 +1,10 @@
 package com.example.rcvc;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
+
 public class DirectCommander {
 
     private final BluetoothConnectionService B;
@@ -9,10 +14,11 @@ public class DirectCommander {
     private static final byte PORT_RIGHT = 0x01;
     private static final byte PORT_LEFT = 0x08;
 
-    private int maxPower = 50;
+    private int maxPower;
 
-    public DirectCommander(BluetoothConnectionService b, int maxPower) {
-        setMaxPow(maxPower);
+    public DirectCommander(Context context, BluetoothConnectionService b, int maxPower) {
+        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+        this.maxPower = p.getInt("max_speed", 50);
         B = b;
     }
 

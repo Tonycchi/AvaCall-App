@@ -1,5 +1,7 @@
 package com.example.rcvc;
 
+import android.content.Context;
+
 public class ButtonController extends Controller {
     //TODO use DirectCommander
 
@@ -9,8 +11,8 @@ public class ButtonController extends Controller {
     public static final int TURN_RIGHT = 3;
     public static final int TURN_LEFT = 4;
 
-    public ButtonController(BluetoothConnectionService b) {
-        super(b, 50);
+    public ButtonController(Context context, BluetoothConnectionService b) {
+        super(context, b, 50);
     }
 
     @Override

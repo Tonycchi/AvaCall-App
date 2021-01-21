@@ -250,8 +250,8 @@ public class MainActivity extends AppCompatActivity{
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device, mDeviceUUIDs);
         startedConnection = true;
-        buttonController = new ButtonController(mBluetoothConnection);
-        analogController = new AnalogController(mBluetoothConnection);
+        buttonController = new ButtonController(this, mBluetoothConnection);
+        analogController = new AnalogController(this, mBluetoothConnection);
     }
 
     /**
