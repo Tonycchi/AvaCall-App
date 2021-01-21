@@ -12,5 +12,7 @@ public class HostURL {
         if (!Patterns.WEB_URL.matcher(url).matches()) {
             throw new MalformedURLException();
         }
+        this.url = this.url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
+        this.url = this.url.replaceFirst("/.*", "");
     }
 }
