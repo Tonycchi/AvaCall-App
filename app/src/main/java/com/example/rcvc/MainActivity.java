@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity{
      * @throws URISyntaxException
      */
     public void serverConnectionStart(View v) throws URISyntaxException {
-        WebClient wc = new WebClient(new URI("ws://" + sharedPreferences.getString("webapp_url", "")  + ":22222"));
+        WebClient wc = new WebClient(new URI("ws://" + sharedPreferences.getString("host_url", "")  + ":22222"));
         wc.connect();
     }
 
