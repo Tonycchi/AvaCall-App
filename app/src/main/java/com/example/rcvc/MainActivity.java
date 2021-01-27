@@ -377,6 +377,8 @@ public class MainActivity extends AppCompatActivity{
      * @param v The link for the jitsi room gets copied to the clipboard
      */
     public void onClickShareLink(View v) {
+        buttonController = new ButtonController(this, mBluetoothConnection);
+        analogController = new AnalogController(this, mBluetoothConnection);
         if (room == null) {
             showToast(getString(R.string.toast_no_open_room));
         } else {

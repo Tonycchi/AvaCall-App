@@ -55,7 +55,7 @@
     <string name="settings_title_max">Maximale Geschwindigkeit</string>
     <string name="settings_summary_max">In Prozent</string>
     <string name="settings_title_right">Rechter Port</string>
-    <string name="settings_title_left">Linker Porte</string>
+    <string name="settings_title_left">Linker Port</string>
 
     <!-- Arrays -->
     <string-array name="port_labels">

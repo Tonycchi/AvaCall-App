@@ -2,6 +2,7 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -11,13 +12,16 @@ public class DirectCommander {
 
     //definitions will probably be able to be set in settings
     //should probably make library of ev3 command parts
-    private static final byte PORT_RIGHT = 0x01;
-    private static final byte PORT_LEFT = 0x08;
+    private final byte PORT_RIGHT;
+    private final byte PORT_LEFT;
 
     private int maxPower;
 
     public DirectCommander(Context context, BluetoothConnectionService b, int maxPower) {
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+
+        this.PORT_RIGHT = Byte.parseByte(p.getString("right_port", "1"));
+        this.PORT_LEFT = Byte.parseByte(p.getString("left_port", "8"));
         this.maxPower = p.getInt("max_speed", 50);
         B = b;
     }
@@ -74,7 +78,7 @@ public class DirectCommander {
         y[12] = (byte) 0xa4;
         y[15] = (byte) 0x81;
         y[17] = (byte) 0xa6;
-        y[19] = PORT_RIGHT + PORT_LEFT;
+        y[19] = (byte) (PORT_RIGHT + PORT_LEFT);
 
         y[9] = PORT_RIGHT;    // PORT right motor
         y[11] = right;  // POWER right motor

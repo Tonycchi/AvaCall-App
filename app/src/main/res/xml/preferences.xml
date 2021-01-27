@@ -18,7 +18,7 @@
             android:key="max_speed"
             android:defaultValue="50"
             app:min="0"
-            app:max="100"
+            android:max="100"
             android:title="@string/settings_title_max"
             android:summary="@string/settings_summary_max"
             app:showSeekBarValue="true"
