@@ -2,7 +2,6 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -16,6 +15,7 @@ public class DirectCommander {
     private final byte PORT_LEFT;
 
     private int maxPower;
+
 
     public DirectCommander(Context context, BluetoothConnectionService b, int maxPower) {
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
