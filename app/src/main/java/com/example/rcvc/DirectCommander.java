@@ -60,7 +60,6 @@ public class DirectCommander {
      * @param right,left motor speeds
      * @return direct command as byte array
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public byte[] createCommand(byte right, byte left) {
         //0x|14:00|2A:00|80|00:00|A4|00|01|81:RP|A4|0|08|81:LP|A6|00|09
         //   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19
