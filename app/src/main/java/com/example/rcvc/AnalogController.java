@@ -1,9 +1,11 @@
 package com.example.rcvc;
 
+import android.content.Context;
+
 public class AnalogController extends Controller {
 
-    public AnalogController(BluetoothConnectionService b) {
-        super(b, 75);
+    public AnalogController(Context context, BluetoothConnectionService b) {
+        super(context, b, 75);
     }
 
     @Override

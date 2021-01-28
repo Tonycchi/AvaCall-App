@@ -1,10 +1,8 @@
 package com.example.rcvc;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceManager;
-
 import android.annotation.SuppressLint;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -30,21 +28,25 @@ import android.widget.Toast;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Set;
 
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
 @SuppressLint("LogNotTimber")
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     // settings
     SharedPreferences sharedPreferences;
 
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
-    private boolean showController = false;
-    private boolean toggleController = false; //false is buttons, true is joystick
+    private boolean showController = true;
+    private boolean toggleController = true; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
     private Button buttonOpenRoom;
@@ -56,15 +58,21 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonTurnLeft;
     private Button buttonShowController;
     private Button buttonToggleController;
+    private Button connectToServer; //temporary test button
     private TextView textviewConnectionStatus;
     private ListView listviewDevices;
     private JoystickView joystick;
 
+    private Toast mToast;
+
     private JitsiRoom room;
+    private HostURL host;
+    private boolean hostReady;
 
     private static final String TAG = "MainActivity";
 
     BluetoothConnectionService mBluetoothConnection;
+    private boolean startedConnection;
 
     // Bluetooth adapter of our device
     private BluetoothAdapter btAdapter;
@@ -78,13 +86,25 @@ public class MainActivity extends AppCompatActivity {
     private ButtonController buttonController;
     private AnalogController analogController;
 
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        try {
+            host = new HostURL(sharedPreferences.getString("host_url", ""));
+            hostReady = true;
+        } catch (MalformedURLException e) {
+            Bundle bundle = new Bundle();
+            // first put id of error message in bundle using defined key
+            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
+            ErrorDialogFragment error = new ErrorDialogFragment();
+            // then pass bundle to dialog and show
+            error.setArguments(bundle);
+            error.show(this.getSupportFragmentManager(), TAG);
+            hostReady = false;
+        }
 
         setContentView(R.layout.activity_main);
         // get all buttons
@@ -100,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         buttonTurnLeft = findViewById(R.id.button_left);
         buttonShowController = findViewById(R.id.button_show_controller);
         buttonToggleController = findViewById(R.id.button_toggle_controller);
+        connectToServer = findViewById(R.id.connectToServer);
         joystick = findViewById(R.id.joystick);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -171,6 +192,15 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+//        connectToServer.setOnClickListener((v) -> {
+//            try {
+//                serverConnectionStart();
+//            } catch (URISyntaxException e) {
+//                e.printStackTrace();
+//            }
+//
+//        });
+
         // Try to start bluetooth connection with paired device that was clicked
         listviewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
@@ -178,6 +208,9 @@ public class MainActivity extends AppCompatActivity {
             mBluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, mDeviceUUIDs);
         });
+
+        //delete later in final version
+        this.setAllButtonsUsable();
     }
 
     @Override
@@ -199,6 +232,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * testwise connection to the server. connects with a message and the server answers back
+     * @throws URISyntaxException
+     */
+    public void serverConnectionStart(View v) throws URISyntaxException {
+        WebClient wc = new WebClient(new URI("ws://" + sharedPreferences.getString("host_url", "")  + ":22222"));
+        wc.connect();
+    }
+
+    /**
      * Starts a connection between our device and the device we want to connect with
      *
      * @param device the device to connect with
@@ -207,8 +249,19 @@ public class MainActivity extends AppCompatActivity {
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         mBluetoothConnection.startClient(device, mDeviceUUIDs);
-        buttonController = new ButtonController(mBluetoothConnection);
-        analogController = new AnalogController(mBluetoothConnection);
+        startedConnection = true;
+        buttonController = new ButtonController(this, mBluetoothConnection);
+        analogController = new AnalogController(this, mBluetoothConnection);
+    }
+
+    /**
+     * Method for coding and debugging
+     */
+    private void setAllButtonsUsable() {
+        buttonBluetooth.setEnabled(true);
+        buttonOpenRoom.setEnabled(true);
+        buttonShareLink.setEnabled(true);
+        buttonSwitchToRoom.setEnabled(true);
     }
 
     /**
@@ -304,8 +357,16 @@ public class MainActivity extends AppCompatActivity {
      *          switchToRoom button.
      */
     public void onClickOpenRoom(View v) {
-        if (room == null) {
-            room = new JitsiRoom(sharedPreferences.getString("webapp_url", ""));
+        if (room == null && hostReady) {
+            room = new JitsiRoom(host.url);
+        } else if (!hostReady) {
+            Bundle bundle = new Bundle();
+            // first put id of error message in bundle using defined key
+            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
+            ErrorDialogFragment error = new ErrorDialogFragment();
+            // then pass bundle to dialog and show
+            error.setArguments(bundle);
+            error.show(this.getSupportFragmentManager(), TAG);
         }
 
         setEnableLinkAndRoom(true);
@@ -316,6 +377,8 @@ public class MainActivity extends AppCompatActivity {
      * @param v The link for the jitsi room gets copied to the clipboard
      */
     public void onClickShareLink(View v) {
+        buttonController = new ButtonController(this, mBluetoothConnection);
+        analogController = new AnalogController(this, mBluetoothConnection);
         if (room == null) {
             showToast(getString(R.string.toast_no_open_room));
         } else {
@@ -337,8 +400,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * @param message The message to pop up at the bottom of the screen
      */
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void showToast(String message) {
+        if(mToast==null)
+            mToast = Toast.makeText( this  , "" , Toast.LENGTH_SHORT );
+        mToast.setText(message);
+        mToast.show();
     }
 
     /**
@@ -380,19 +446,22 @@ public class MainActivity extends AppCompatActivity {
      * reset connection and change variables when we disconnect (via button or bluetooth)
      */
     public void resetConnection() {
-        buttonController.sendPowers(ButtonController.STOP, 0);
-        btIsClicked = false;
-        buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
-        buttonOpenRoom.setEnabled(false);
-        setEnableLinkAndRoom(false);
-        textviewConnectionStatus.setText(getString(R.string.connection_status_false));
-        showController = true;
-        showController();
-        buttonShowController.setVisibility(View.INVISIBLE);
-        mBluetoothConnection.cancel();
-        selectedDevice = null;
-        pairedDevices = new ArrayList<>();
-        mDeviceUUIDs = null;
+        if (startedConnection) {
+            startedConnection = false;
+            buttonController.sendPowers(ButtonController.STOP, 0);
+            btIsClicked = false;
+            buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
+            buttonOpenRoom.setEnabled(false);
+            setEnableLinkAndRoom(false);
+            textviewConnectionStatus.setText(getString(R.string.connection_status_false));
+            showController = true;
+            showController();
+            buttonShowController.setVisibility(View.INVISIBLE);
+            mBluetoothConnection.cancel();
+            selectedDevice = null;
+            pairedDevices = new ArrayList<>();
+            mDeviceUUIDs = null;
+        }
     }
 
     public void onClickShowController(View v) {
