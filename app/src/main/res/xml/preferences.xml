@@ -31,7 +31,7 @@
             android:title="@string/settings_title_right" />
         <ListPreference
             android:key="left_port"
-            android:defaultValue="4"
+            android:defaultValue="8"
             android:entries="@array/port_labels"
             android:entryValues="@array/port_values"
             android:title="@string/settings_title_left" />
