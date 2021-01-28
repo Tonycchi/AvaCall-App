@@ -19,7 +19,7 @@ public class JitsiRoom {
 
     public JitsiRoom(String host) {
         id = randomLinkString(ROOM_LINK_LENGTH);
-        url = "https://meet." + host + "/" + id;
+        url = "https://avatar." + host + "/" + id;
         try {
             options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL("https://meet." + host))
