@@ -19,29 +19,13 @@ public class DirectCommander {
     private int maxPower;
 
 
-    public DirectCommander(Context context, BluetoothConnectionService b, int maxPower) {
+    public DirectCommander(Context context, BluetoothConnectionService b) {
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
 
-        this.PORT_RIGHT = Byte.parseByte(p.getString("right_port", "1"));
-        this.PORT_LEFT = Byte.parseByte(p.getString("left_port", "8"));
-        this.maxPower = p.getInt("max_speed", 50);
+        PORT_RIGHT = Byte.parseByte(p.getString("right_port", "1"));
+        PORT_LEFT = Byte.parseByte(p.getString("left_port", "8"));
+        maxPower = p.getInt("max_speed", 50);
         B = b;
-    }
-
-    /**
-     * bounds maxPow to [-100, 100]
-     *
-     * @param maxPow maximum motor power
-     */
-    public void setMaxPow(int maxPow) {
-        int pow = maxPow;
-        if (maxPow > 100) {
-            pow = 100;
-        }
-        if (maxPow < -100) {
-            pow = -100;
-        }
-        maxPower = pow;
     }
 
     /**

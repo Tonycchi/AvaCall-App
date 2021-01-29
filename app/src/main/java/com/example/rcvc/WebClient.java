@@ -1,5 +1,7 @@
 package com.example.rcvc;
 
+import android.util.Log;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -10,42 +12,44 @@ import org.java_websocket.handshake.ServerHandshake;
 
 public class WebClient extends WebSocketClient {
 
-    public WebClient(URI serverUri, Draft draft) {
-        super(serverUri, draft);
-    }
+    private final String TAG = "WebClient";
 
     public WebClient(URI serverURI) {
         super(serverURI);
     }
 
     @Override
-    public void onOpen(ServerHandshake handshakedata) {
+    /**
+     * Sends a message when succesfully connected to the server
+     */
+    public void onOpen(ServerHandshake handshakeData) {
         send("Frisst das Pferd Gurkensalat?");
-        System.out.println("new connection opened");
+        Log.d(TAG,"new connection opened");
     }
 
     @Override
+    /**
+     * Sends a message when connection is closed
+     */
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("closed with exit code " + code + " additional info: " + reason);
+        Log.d(TAG,"closed with exit code " + code + " additional info: " + reason);
     }
 
     @Override
     public void onMessage(String message) {
-        System.out.println("Der Server antwortet: " + message);
+        Log.d(TAG,"Der Server antwortet: " + message);
     }
 
     @Override
     public void onMessage(ByteBuffer message) {
-        System.out.println("received ByteBuffer");
+        Log.d(TAG,"received ByteBuffer");
     }
 
     @Override
+    /**
+     * Send an error log when an error occurs
+     */
     public void onError(Exception ex) {
-        System.err.println("an error occurred:" + ex);
+        Log.e(TAG,"an error occurred:" + ex);
     }
-
-//    public static void main(String[] args) throws URISyntaxException {
-//        WebSocketClient client = new WebClient(new URI("ws://localhost:8887"));
-//        client.connect();
-//    }
 }
