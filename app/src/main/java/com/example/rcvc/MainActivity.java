@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity{
     private ListView listViewDevices;
     private JoystickView joystick;
 
+    private WebClient wc;
+
     private Toast toast;
 
     private JitsiRoom room;
@@ -130,6 +132,9 @@ public class MainActivity extends AppCompatActivity{
         // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
         IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, connectionFilter);
+
+        IntentFilter forwardFilter = new IntentFilter(getString(R.string.action_move_forward));
+        registerReceiver(receiverForward, forwardFilter);
 
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -227,8 +232,20 @@ public class MainActivity extends AppCompatActivity{
      * @throws URISyntaxException
      */
     public void onClickServerConnect(View v) throws URISyntaxException {
-        WebClient wc = new WebClient(new URI("wss://" + sharedPreferences.getString("host_url", "")  + ":22222"));
+        wc = new WebClient(new URI("wss://" + sharedPreferences.getString("host_url", "")  + ":22222"), MainActivity.this);
         wc.connect();
+    }
+
+    public void onClickConnectionInfo(View v) {
+        if (wc != null) {
+            if (wc.isOpen()) {
+                Log.d(TAG, "wc is open");
+            }
+            Log.d(TAG, wc.getSocket().toString());
+            Log.d(TAG, wc.getURI().toString());
+        } else {
+            Log.d(TAG, "wc is null");
+        }
     }
 
     /**
@@ -302,6 +319,13 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public void onReceive(Context context, Intent intent) {
             onConnection();
+        }
+    };
+
+    private BroadcastReceiver receiverForward = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+             buttonController.sendPowers(ButtonController.FORWARD);
         }
     };
 

@@ -175,8 +175,17 @@
         android:onClick="onClickServerConnect"
         android:text="connect test"
         android:visibility="visible"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="11dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_connection_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickConnectionInfo"
+        android:text="showConnectionInfo"
+        app:layout_constraintStart_toEndOf="@+id/button_connect_to_server"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

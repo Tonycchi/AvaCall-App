@@ -1,5 +1,7 @@
 package com.example.rcvc;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.net.URI;
@@ -13,9 +15,11 @@ import org.java_websocket.handshake.ServerHandshake;
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
+    private Context context;
 
-    public WebClient(URI serverURI) {
+    public WebClient(URI serverURI, Context context) {
         super(serverURI);
+        this.context = context;
     }
 
     @Override
@@ -23,7 +27,7 @@ public class WebClient extends WebSocketClient {
      * Sends a message when succesfully connected to the server
      */
     public void onOpen(ServerHandshake handshakeData) {
-        send("Frisst das Pferd Gurkensalat?");
+        send("app");
         Log.d(TAG,"new connection opened");
     }
 
@@ -37,6 +41,10 @@ public class WebClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
+        if (message.equals("vorwärts")) {
+            Intent intent = new Intent(context.getString(R.string.action_move_forward));
+            context.sendBroadcast(intent);
+        }
         Log.d(TAG,"Der Server antwortet: " + message);
     }
 
