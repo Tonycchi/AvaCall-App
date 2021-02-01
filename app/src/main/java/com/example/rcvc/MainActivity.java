@@ -204,9 +204,6 @@ public class MainActivity extends AppCompatActivity{
             bluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, deviceUUIDs);
         });
-
-        //delete later in final version
-        setAllButtonsUsable();
     }
 
     @Override
@@ -228,27 +225,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * testwise connection to the server. connects with a message and the server answers back
-     * @throws URISyntaxException
-     */
-    public void onClickServerConnect(View v) throws URISyntaxException {
-        wc = new WebClient(new URI("wss://" + sharedPreferences.getString("host_url", "")  + ":22222"), MainActivity.this, room);
-        wc.connect();
-    }
-
-    public void onClickConnectionInfo(View v) {
-        if (wc != null) {
-            if (wc.isOpen()) {
-                Log.d(TAG, "wc is open");
-            }
-            Log.d(TAG, wc.getSocket().toString());
-            Log.d(TAG, wc.getURI().toString());
-        } else {
-            Log.d(TAG, "wc is null");
-        }
-    }
-
-    /**
      * Starts a connection between our device and the device we want to connect with
      *
      * @param device the device to connect with
@@ -260,17 +236,6 @@ public class MainActivity extends AppCompatActivity{
         startedConnection = true;
         buttonController = new ButtonController(this, bluetoothConnection);
         analogController = new AnalogController(this, bluetoothConnection);
-    }
-
-    /**
-     * @author Benedikt Schmehl
-     * Method for coding and debugging
-     */
-    private void setAllButtonsUsable() {
-        buttonBluetooth.setEnabled(true);
-        buttonOpenRoom.setEnabled(true);
-        buttonShareLink.setEnabled(true);
-        buttonSwitchToRoom.setEnabled(true);
     }
 
     /**
