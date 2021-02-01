@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity{
      * @throws URISyntaxException
      */
     public void onClickServerConnect(View v) throws URISyntaxException {
-        wc = new WebClient(new URI("wss://" + sharedPreferences.getString("host_url", "")  + ":22222"), MainActivity.this);
+        wc = new WebClient(new URI("wss://" + sharedPreferences.getString("host_url", "")  + ":22222"), MainActivity.this, room);
         wc.connect();
     }
 
@@ -372,9 +372,11 @@ public class MainActivity extends AppCompatActivity{
      * On click of the openRoom button we create a jitsi room with some options and enable the shareLink and
      * switchToRoom button.
      */
-    public void onClickOpenRoom(View v) {
+    public void onClickOpenRoom(View v) throws URISyntaxException {
         if (room == null && hostReady) {
             room = new JitsiRoom(host.url);
+            wc = new WebClient(new URI("wss://" + host.url  + ":22222"), MainActivity.this, room);
+            wc.connect();
         } else if (!hostReady) {
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key
@@ -481,6 +483,7 @@ public class MainActivity extends AppCompatActivity{
             selectedDevice = null;
             pairedDevices = new ArrayList<>();
             deviceUUIDs = null;
+            room = null;
         }
     }
 

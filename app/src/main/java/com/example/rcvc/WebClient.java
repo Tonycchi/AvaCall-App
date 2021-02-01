@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -16,10 +18,12 @@ public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
     private Context context;
+    private JitsiRoom room;
 
-    public WebClient(URI serverURI, Context context) {
+    public WebClient(URI serverURI, Context context, JitsiRoom room) {
         super(serverURI);
         this.context = context;
+        this.room = room;
     }
 
     @Override
@@ -28,6 +32,8 @@ public class WebClient extends WebSocketClient {
      */
     public void onOpen(ServerHandshake handshakeData) {
         send("app");
+        send(room.url);
+        send("https://meet.mintclub.org");
         Log.d(TAG,"new connection opened");
     }
 
