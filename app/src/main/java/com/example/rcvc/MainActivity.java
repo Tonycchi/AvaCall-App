@@ -275,6 +275,7 @@ public class MainActivity extends AppCompatActivity{
         resetConnection();
         unregisterReceiver(receiverActionStateChanged);
         unregisterReceiver(receiverConnection);
+        unregisterReceiver(receiverForward);
     }
 
     /**
