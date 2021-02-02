@@ -13,13 +13,11 @@ import org.java_websocket.handshake.ServerHandshake;
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
-    private Context context;
     private JitsiRoom room;
     private AnalogController analogController;
 
-    public WebClient(URI serverURI, Context context, JitsiRoom room, AnalogController analogController) {
+    public WebClient(URI serverURI, JitsiRoom room, AnalogController analogController) {
         super(serverURI);
-        this.context = context;
         this.room = room;
         this.analogController = analogController;
     }
