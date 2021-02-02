@@ -133,8 +133,9 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, connectionFilter);
 
-        IntentFilter forwardFilter = new IntentFilter(getString(R.string.action_move_forward));
-        registerReceiver(receiverForward, forwardFilter);
+        // Custom IntentFilter for catching controller inputs from WebClient
+        IntentFilter controllerFilter = new IntentFilter(getString(R.string.action_controller));
+        registerReceiver(receiverController, controllerFilter);
 
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity{
         resetConnection();
         unregisterReceiver(receiverActionStateChanged);
         unregisterReceiver(receiverConnection);
-        unregisterReceiver(receiverForward);
+        unregisterReceiver(receiverController);
     }
 
     /**
@@ -288,10 +289,12 @@ public class MainActivity extends AppCompatActivity{
         }
     };
 
-    private BroadcastReceiver receiverForward = new BroadcastReceiver() {
+    private BroadcastReceiver receiverController = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-             buttonController.sendPowers(ButtonController.FORWARD);
+            Bundle bundle = intent.getExtras();
+            String[] values = bundle.getStringArray("values");
+            analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
         }
     };
 
@@ -513,5 +516,20 @@ public class MainActivity extends AppCompatActivity{
 
     public void setVisibilityJoystick(int visibility) {
             joystick.setVisibility(visibility);
+    }
+
+    /**
+     * Testbutton weil server down ist
+     */
+    public void onClickTestButton(View v) {
+        Context context = MainActivity.this;
+        String message = "90;100";
+        String[] values = new String[2];
+        if (!(message.indexOf(";") == -1)) {
+            values = message.split(";");
+        }
+        Intent intent = new Intent(context.getString(R.string.action_controller));
+        intent.putExtra("values", values);
+        context.sendBroadcast(intent);
     }
 }

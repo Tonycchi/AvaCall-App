@@ -4,14 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.preference.PreferenceManager;
-
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
 
 public class WebClient extends WebSocketClient {
@@ -47,11 +43,13 @@ public class WebClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        if (message.equals("vorwärts")) {
-            Intent intent = new Intent(context.getString(R.string.action_move_forward));
-            context.sendBroadcast(intent);
+        String[] values = new String[2];
+        if (!(message.indexOf(";") == -1)) {
+            values = message.split(";");
         }
-        Log.d(TAG,"Der Server antwortet: " + message);
+        Intent intent = new Intent(context.getString(R.string.action_controller));
+        intent.putExtra("values", values);
+        context.sendBroadcast(intent);
     }
 
     @Override
