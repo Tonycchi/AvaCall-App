@@ -15,11 +15,13 @@ public class WebClient extends WebSocketClient {
     private final String TAG = "WebClient";
     private Context context;
     private JitsiRoom room;
+    private AnalogController analogController;
 
-    public WebClient(URI serverURI, Context context, JitsiRoom room) {
+    public WebClient(URI serverURI, Context context, JitsiRoom room, AnalogController analogController) {
         super(serverURI);
         this.context = context;
         this.room = room;
+        this.analogController = analogController;
     }
 
     @Override
@@ -46,10 +48,8 @@ public class WebClient extends WebSocketClient {
         String[] values = new String[2];
         if (!(message.indexOf(";") == -1)) {
             values = message.split(";");
+            analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
         }
-        Intent intent = new Intent(context.getString(R.string.action_controller));
-        intent.putExtra("values", values);
-        context.sendBroadcast(intent);
     }
 
     @Override

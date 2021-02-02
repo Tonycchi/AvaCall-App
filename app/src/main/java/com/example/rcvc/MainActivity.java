@@ -133,10 +133,6 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, connectionFilter);
 
-        // Custom IntentFilter for catching controller inputs from WebClient
-        IntentFilter controllerFilter = new IntentFilter(getString(R.string.action_controller));
-        registerReceiver(receiverController, controllerFilter);
-
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
@@ -276,7 +272,6 @@ public class MainActivity extends AppCompatActivity{
         resetConnection();
         unregisterReceiver(receiverActionStateChanged);
         unregisterReceiver(receiverConnection);
-        unregisterReceiver(receiverController);
     }
 
     /**
@@ -286,15 +281,6 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public void onReceive(Context context, Intent intent) {
             onConnection();
-        }
-    };
-
-    private BroadcastReceiver receiverController = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            String[] values = bundle.getStringArray("values");
-            analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
         }
     };
 
@@ -344,7 +330,7 @@ public class MainActivity extends AppCompatActivity{
     public void onClickOpenRoom(View v) throws URISyntaxException {
         if (room == null && hostReady) {
             room = new JitsiRoom(host.url);
-            wc = new WebClient(new URI("wss://" + host.url  + ":22222"), MainActivity.this, room);
+            wc = new WebClient(new URI("wss://" + host.url  + ":22222"), MainActivity.this, room, analogController);
             wc.connect();
         } else if (!hostReady) {
             Bundle bundle = new Bundle();
