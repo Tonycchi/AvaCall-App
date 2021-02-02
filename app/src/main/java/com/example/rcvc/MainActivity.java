@@ -453,6 +453,9 @@ public class MainActivity extends AppCompatActivity{
             pairedDevices = new ArrayList<>();
             deviceUUIDs = null;
             room = null;
+            if (wc != null) {
+                wc.close();
+            }
         }
     }
 
@@ -516,20 +519,5 @@ public class MainActivity extends AppCompatActivity{
 
     public void setVisibilityJoystick(int visibility) {
             joystick.setVisibility(visibility);
-    }
-
-    /**
-     * Testbutton weil server down ist
-     */
-    public void onClickTestButton(View v) {
-        Context context = MainActivity.this;
-        String message = "90;100";
-        String[] values = new String[2];
-        if (!(message.indexOf(";") == -1)) {
-            values = message.split(";");
-        }
-        Intent intent = new Intent(context.getString(R.string.action_controller));
-        intent.putExtra("values", values);
-        context.sendBroadcast(intent);
     }
 }
