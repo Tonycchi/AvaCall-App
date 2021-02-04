@@ -1,7 +1,11 @@
 package com.example.rcvc;
 
 import android.os.Bundle;
+import android.text.InputType;
+import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -12,6 +16,24 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
+        // sets that text box doesn't autocorrect
+        EditTextPreference hostURLedit = findPreference("host_url");
+        EditTextPreference jitsiURLedit = findPreference("jitsi_url");
+        EditTextPreference port = findPreference("host_port");
+        if (hostURLedit != null) {
+            hostURLedit.setOnBindEditTextListener(
+                    editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
+        }
+        if (jitsiURLedit != null) {
+            jitsiURLedit.setOnBindEditTextListener(
+                    editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
+        }
+        if (port != null) {
+            port.setOnBindEditTextListener(
+                    editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
+        }
+
+        // defines list items
         final ListPreference rightList = (ListPreference) findPreference("right_port");
         final ListPreference leftList = (ListPreference) findPreference("left_port");
 
