@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity{
     public void onClickOpenRoom(View v) throws URISyntaxException {
         if (room == null && hostReady) {
             room = new JitsiRoom(jitsiURL.url);
-            wc = new WebClient(new URI("wss://" + hostURL.url  + ":22222"), hostURL.url, jitsiURL.url, analogController);
+            wc = new WebClient(new URI("wss://" + hostURL.url  + ":" + sharedPreferences.getString("host_port", "22222")), hostURL.url, jitsiURL.url, analogController);
             wc.connect();
         } else if (!hostReady) {
             Bundle bundle = new Bundle();

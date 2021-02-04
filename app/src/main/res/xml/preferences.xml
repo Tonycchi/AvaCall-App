@@ -14,6 +14,11 @@
             android:defaultValue="meet.mintclub.org"
             android:title="@string/settings_title_jitsi_url"
             android:summary="@string/settings_summary_jitsi_url" />
+        <EditTextPreference
+            android:key="host_port"
+            android:defaultValue="22222"
+            android:title="@string/settings_title_host_port"
+            android:summary="@string/settings_summary_host_port" />
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -54,6 +54,8 @@
     <string name="settings_summary_host_url">URL zur Webanwendung</string>
     <string name="settings_title_jitsi_url">Jitsi-Instanz</string>
     <string name="settings_summary_jitsi_url">URL zur Jitsi-Instanz</string>
+    <string name="settings_title_host_port">Port</string>
+    <string name="settings_summary_host_port">Port für Verbindung zum Server</string>
     <string name="settings_title_max">Maximale Geschwindigkeit</string>
     <string name="settings_summary_max">In Prozent</string>
     <string name="settings_title_right">Rechter Port</string>

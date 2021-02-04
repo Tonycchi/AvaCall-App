@@ -17,10 +17,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         // sets that text box doesn't autocorrect
-        EditTextPreference url = findPreference("host_url");
-        if (url != null) {
-            url.setOnBindEditTextListener(
+        EditTextPreference hostURLedit = findPreference("host_url");
+        EditTextPreference jitsiURLedit = findPreference("jitsi_url");
+        EditTextPreference port = findPreference("host_port");
+        if (hostURLedit != null) {
+            hostURLedit.setOnBindEditTextListener(
                     editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
+        }
+        if (jitsiURLedit != null) {
+            jitsiURLedit.setOnBindEditTextListener(
+                    editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
+        }
+        if (port != null) {
+            port.setOnBindEditTextListener(
+                    editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         }
 
         // defines list items
