@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity{
             showToast(getString(R.string.toast_no_open_room));
         } else {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), room.url);
+            ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), "https://" + hostURL.url + "/" + room.id);
             clipboard.setPrimaryClip(clip);
 
             showToast(getString(R.string.toast_link_copied));
