@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity{
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key
             bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
-            ErrorDialogFragment error = new ErrorDialogFragment();
+            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
             // then pass bundle to dialog and show
             error.setArguments(bundle);
             error.show(this.getSupportFragmentManager(), TAG);
@@ -132,6 +132,10 @@ public class MainActivity extends AppCompatActivity{
         // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
         IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
         registerReceiver(receiverConnection, connectionFilter);
+
+        // Custom IntentFilter for catching action on closing negativeButton of ErrorDialogFragment
+        IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
+        registerReceiver(receiverNegativeButton, negativeButtonFilter);
 
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -274,6 +278,7 @@ public class MainActivity extends AppCompatActivity{
         resetConnection();
         unregisterReceiver(receiverActionStateChanged);
         unregisterReceiver(receiverConnection);
+        unregisterReceiver(receiverNegativeButton);
     }
 
     /**
@@ -283,6 +288,20 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public void onReceive(Context context, Intent intent) {
             onConnection();
+        }
+    };
+
+    private BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String intentMessage = bundle.getString("intent message");
+            if (intentMessage.equals(getString(R.string.error_no_paired_devices))) {
+                // if there are no paired devices, open bluetooth settings
+                Intent intentOpenBluetoothSettings = new Intent();
+                intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivity(intentOpenBluetoothSettings);
+            }
         }
     };
 
@@ -338,7 +357,7 @@ public class MainActivity extends AppCompatActivity{
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key
             bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
-            ErrorDialogFragment error = new ErrorDialogFragment();
+            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
             // then pass bundle to dialog and show
             error.setArguments(bundle);
             error.show(this.getSupportFragmentManager(), TAG);
@@ -408,17 +427,10 @@ public class MainActivity extends AppCompatActivity{
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key
             bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_no_paired_devices);
-            ErrorDialogFragment error = new ErrorDialogFragment();
+            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_no_paired_devices));
             // then pass bundle to dialog and show
             error.setArguments(bundle);
             error.show(this.getSupportFragmentManager(), TAG);
-
-
-
-            // if there are no paired devices, open bluetooth settings
-            Intent intentOpenBluetoothSettings = new Intent();
-            intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-            startActivity(intentOpenBluetoothSettings);
         }
         return names;
     }

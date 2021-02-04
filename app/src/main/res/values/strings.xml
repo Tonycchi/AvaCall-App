@@ -40,6 +40,7 @@
 
     <!-- Misc -->
     <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
+    <string name="action_negative_button">com.example-rcvc.action.NEGATIVE_BUTTON</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="jitsi_room_link">Jitsi Room Link</string>
