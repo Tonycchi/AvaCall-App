@@ -14,5 +14,6 @@ public class TrimmedURL {
         }
         this.url = this.url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
         this.url = this.url.replaceFirst("/.*", "");
+        this.url = "https://" + this.url;
     }
 }

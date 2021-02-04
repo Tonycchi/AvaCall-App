@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity{
     public void onClickOpenRoom(View v) throws URISyntaxException {
         if (room == null && hostReady) {
             room = new JitsiRoom(jitsiURL.url);
-            wc = new WebClient(new URI("wss://" + hostURL.url  + ":" + sharedPreferences.getString("host_port", "22222")), hostURL.url, jitsiURL.url, analogController);
+            wc = new WebClient(new URI("wss://" + "mintclub.org:" + sharedPreferences.getString("host_port", "22222")), hostURL.url + "/" + room.id, jitsiURL.url, analogController);
             wc.connect();
         } else if (!hostReady) {
             Bundle bundle = new Bundle();
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity{
             showToast(getString(R.string.toast_no_open_room));
         } else {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), "https://" + hostURL.url + "/" + room.id);
+            ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), hostURL.url + "/" + room.id);
             clipboard.setPrimaryClip(clip);
 
             showToast(getString(R.string.toast_link_copied));

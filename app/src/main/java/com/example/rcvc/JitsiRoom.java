@@ -10,12 +10,11 @@ public class JitsiRoom {
 
     private final int ROOM_LINK_LENGTH = 10;
 
-    public final String id, url;
+    public final String id;
     public JitsiMeetConferenceOptions options;
 
     public JitsiRoom(String host) {
         id = randomLinkString(ROOM_LINK_LENGTH);
-        this.url = "https://" + host + "/" + id;
         try {
             options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL(host))

@@ -30,7 +30,9 @@ public class WebClient extends WebSocketClient {
     public void onOpen(ServerHandshake handshakeData) {
         send("app");
         send(hostURL);
+        Log.d(TAG, hostURL);
         send(jitsiURL);
+        Log.d(TAG, jitsiURL);
         Log.d(TAG,"new connection opened");
     }
 
