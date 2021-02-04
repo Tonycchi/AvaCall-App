@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity{
     private Toast toast;
 
     private JitsiRoom room;
-    private HostURL host;
+    private TrimmedURL hostURL, jitsiURL;
     private boolean hostReady;
 
     private static final String TAG = "MainActivity";
@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity{
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         try {
-            host = new HostURL(sharedPreferences.getString("host_url", ""));
+            hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
+            jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
             hostReady = true;
         } catch (MalformedURLException e) {
             Bundle bundle = new Bundle();
@@ -331,8 +332,8 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onClickOpenRoom(View v) throws URISyntaxException {
         if (room == null && hostReady) {
-            room = new JitsiRoom(host.url, selectedDevice.getName());
-            wc = new WebClient(new URI("wss://" + host.url  + ":22222"), room, analogController);
+            room = new JitsiRoom(jitsiURL.url);
+            wc = new WebClient(new URI("wss://" + hostURL.url  + ":22222"), hostURL.url, jitsiURL.url, analogController);
             wc.connect();
         } else if (!hostReady) {
             Bundle bundle = new Bundle();

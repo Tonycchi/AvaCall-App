@@ -7,8 +7,13 @@
         <EditTextPreference
             android:key="host_url"
             android:defaultValue="avatar.mintclub.org"
-            android:title="@string/setting_url_title"
-            android:summary="@string/setting_url_summary" />
+            android:title="@string/settings_title_host_url"
+            android:summary="@string/settings_summary_host_url" />
+        <EditTextPreference
+            android:key="jitsi_url"
+            android:defaultValue="meet.mintclub.org"
+            android:title="@string/settings_title_jitsi_url"
+            android:summary="@string/settings_summary_jitsi_url" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -35,6 +40,11 @@
             android:entries="@array/port_labels"
             android:entryValues="@array/port_values"
             android:title="@string/settings_title_left" />
+        <!--<Preference
+            android:title="aa"
+            android:key="motors_test"
+            android:layout="@layout/motors" />-->
+
     </PreferenceCategory>
 
 

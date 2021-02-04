@@ -13,14 +13,13 @@ public class JitsiRoom {
     public final String id, url;
     public JitsiMeetConferenceOptions options;
 
-    public JitsiRoom(String host, String deviceName) {
+    public JitsiRoom(String host) {
         id = randomLinkString(ROOM_LINK_LENGTH);
-        url = "https://" + host + "/" + id;
+        this.url = "https://" + host + "/" + id;
         try {
             options = new JitsiMeetConferenceOptions.Builder()
-                    .setServerURL(new URL("https://meet.mintclub.org")) //TODO hardcoding entfernen
+                    .setServerURL(new URL(host))
                     .setRoom(id)
-                    .setSubject(deviceName) //TODO besserer Titel
                     .build();
             /*
             see github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js

@@ -13,12 +13,13 @@ import org.java_websocket.handshake.ServerHandshake;
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
-    private JitsiRoom room;
+    private final String hostURL, jitsiURL;
     private AnalogController analogController;
 
-    public WebClient(URI serverURI, JitsiRoom room, AnalogController analogController) {
+    public WebClient(URI serverURI, String hostURL, String jitsiURL, AnalogController analogController) {
         super(serverURI);
-        this.room = room;
+        this.hostURL = hostURL;
+        this.jitsiURL = jitsiURL;
         this.analogController = analogController;
     }
 
@@ -28,8 +29,8 @@ public class WebClient extends WebSocketClient {
      */
     public void onOpen(ServerHandshake handshakeData) {
         send("app");
-        send(room.url);
-        send("https://meet.mintclub.org"); //TODO hardcoding entfernen
+        send(hostURL);
+        send(jitsiURL);
         Log.d(TAG,"new connection opened");
     }
 
