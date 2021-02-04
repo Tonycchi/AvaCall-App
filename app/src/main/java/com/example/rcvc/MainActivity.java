@@ -201,6 +201,8 @@ public class MainActivity extends AppCompatActivity{
             bluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, deviceUUIDs);
         });
+
+        setAllButtonsUsable(); //TODO bei release rausnehmen
     }
 
     @Override
@@ -329,7 +331,7 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onClickOpenRoom(View v) throws URISyntaxException {
         if (room == null && hostReady) {
-            room = new JitsiRoom(host.url);
+            room = new JitsiRoom(host.url, selectedDevice.getName());
             wc = new WebClient(new URI("wss://" + host.url  + ":22222"), room, analogController);
             wc.connect();
         } else if (!hostReady) {
@@ -410,6 +412,8 @@ public class MainActivity extends AppCompatActivity{
             // then pass bundle to dialog and show
             error.setArguments(bundle);
             error.show(this.getSupportFragmentManager(), TAG);
+
+
 
             // if there are no paired devices, open bluetooth settings
             Intent intentOpenBluetoothSettings = new Intent();
@@ -505,5 +509,12 @@ public class MainActivity extends AppCompatActivity{
 
     public void setVisibilityJoystick(int visibility) {
             joystick.setVisibility(visibility);
+    }
+
+    private void setAllButtonsUsable() { //TODO später rausnehmen, nur zum testen
+        buttonBluetooth.setEnabled(true);
+        buttonOpenRoom.setEnabled(true);
+        buttonShareLink.setEnabled(true);
+        buttonSwitchToRoom.setEnabled(true);
     }
 }

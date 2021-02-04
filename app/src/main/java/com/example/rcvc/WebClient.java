@@ -29,7 +29,7 @@ public class WebClient extends WebSocketClient {
     public void onOpen(ServerHandshake handshakeData) {
         send("app");
         send(room.url);
-        send("https://meet.mintclub.org");
+        send("https://meet.mintclub.org"); //TODO hardcoding entfernen
         Log.d(TAG,"new connection opened");
     }
 

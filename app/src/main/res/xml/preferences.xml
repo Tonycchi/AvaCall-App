@@ -6,7 +6,7 @@
         app:title="@string/settings_category_network">
         <EditTextPreference
             android:key="host_url"
-            android:defaultValue="mintclub.org"
+            android:defaultValue="avatar.mintclub.org"
             android:title="@string/setting_url_title"
             android:summary="@string/setting_url_summary" />
     </PreferenceCategory>
