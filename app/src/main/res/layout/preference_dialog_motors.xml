@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:text="Rechter Motor Port"/>
+
+    <RadioGroup
+        android:id="@+id/right_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="false"
+        android:focusable="false"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_right_motor_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="A" />
+
+        <RadioButton
+            android:id="@+id/radio_right_motor_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="B" />
+
+        <RadioButton
+            android:id="@+id/radio_right_motor_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="C" />
+
+        <RadioButton
+            android:id="@+id/radio_right_motor_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="D" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceListItem"
+        android:text="Linker Motor Port"/>
+
+    <RadioGroup
+        android:id="@+id/left_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="false"
+        android:focusable="false"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_left_motor_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="A" />
+
+        <RadioButton
+            android:id="@+id/radio_left_motor_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="B" />
+
+        <RadioButton
+            android:id="@+id/radio_left_motor_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="C" />
+
+        <RadioButton
+            android:id="@+id/radio_left_motor_d"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onRadioButtonClicked"
+            android:text="D" />
+    </RadioGroup>
+
+</LinearLayout>

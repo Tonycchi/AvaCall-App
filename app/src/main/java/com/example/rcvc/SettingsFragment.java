@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -45,6 +46,30 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             setLists(leftList, rightList);
             return false;
         });
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        // Try if the preference is one of our custom Preferences
+        DialogFragment dialogFragment = null;
+        if (preference instanceof MotorPortDialogPreference) {
+            // Create a new instance of TimePreferenceDialogFragment with the key of the related
+            // Preference
+            dialogFragment = MotorPortDialogFragment
+                    .newInstance(preference.getKey());
+        }
+
+        // If it was one of our cutom Preferences, show its dialog
+        if (dialogFragment != null) {
+            dialogFragment.setTargetFragment(this, 0);
+            dialogFragment.show(this.getFragmentManager(),
+                    "android.support.v7.preference" +
+                            ".PreferenceFragment.DIALOG");
+        }
+        // Could not be handled here. Try with the super method.
+        else {
+            super.onDisplayPreferenceDialog(preference);
+        }
     }
 
     private static void setLists(ListPreference set, ListPreference other) {

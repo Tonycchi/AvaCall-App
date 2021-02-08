@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
-    android:background="?android:attr/selectableItemBackground" >
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingEnd="?android:attr/scrollbarSize"
+    tools:ignore="RtlSymmetry"
+    android:baselineAligned="false">
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dip"
         android:layout_marginEnd="6dip"
@@ -17,8 +21,9 @@
         <TextView android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dip"
             android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceListItem"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal" />
 
@@ -26,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/title"
+            android:layout_marginStart="15dip"
             android:orientation="horizontal">
             <RadioButton android:id="@+id/radio_right_motor_a"
                 android:layout_width="wrap_content"
@@ -43,40 +49,6 @@
                 android:text="C"
                 android:onClick="onRadioButtonClicked"/>
             <RadioButton android:id="@+id/radio_right_motor_d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="D"
-                android:onClick="onRadioButtonClicked"/>
-        </RadioGroup>
-
-        <TextView android:id="@android:id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal" />
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton android:id="@+id/radio_left_motor_a"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_left_motor_b"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="B"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_left_motor_c"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="C"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/radio_left_motor_d"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="D"

@@ -3,18 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         app:key="networking_category"
+        app:iconSpaceReserved="false"
         app:title="@string/settings_category_network">
         <EditTextPreference
+            app:iconSpaceReserved="false"
             android:key="host_url"
             android:defaultValue="avatar.mintclub.org"
             android:title="@string/settings_title_host_url"
             android:summary="@string/settings_summary_host_url" />
         <EditTextPreference
+            app:iconSpaceReserved="false"
             android:key="jitsi_url"
             android:defaultValue="meet.mintclub.org"
             android:title="@string/settings_title_jitsi_url"
             android:summary="@string/settings_summary_jitsi_url" />
         <EditTextPreference
+            app:iconSpaceReserved="false"
             android:key="host_port"
             android:defaultValue="22222"
             android:title="@string/settings_title_host_port"
@@ -22,9 +26,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:key="control_category"
         app:title="@string/settings_category_controls">
         <SeekBarPreference
+            app:iconSpaceReserved="false"
             android:key="max_speed"
             android:defaultValue="50"
             app:min="0"
@@ -34,21 +40,30 @@
             app:showSeekBarValue="true"
             app:updatesContinuously="true" />
         <ListPreference
+            app:iconSpaceReserved="false"
             android:key="right_port"
             android:defaultValue="1"
             android:entries="@array/port_labels"
             android:entryValues="@array/port_values"
             android:title="@string/settings_title_right" />
         <ListPreference
+            app:iconSpaceReserved="false"
             android:key="left_port"
             android:defaultValue="8"
             android:entries="@array/port_labels"
             android:entryValues="@array/port_values"
             android:title="@string/settings_title_left" />
+        <com.example.rcvc.MotorPortDialogPreference
+            app:iconSpaceReserved="false"
+            android:key="test"
+            android:title="Motor Ports"
+            android:summary="aa"
+            android:defaultValue="AD" />
         <!--<Preference
-            android:title="aa"
+            app:iconSpaceReserved="false"
+            android:title="Rechter Motor Port"
             android:key="motors_test"
-            android:layout="@layout/motors" />-->
+            android:layout="@layout/radio_group" />-->
 
     </PreferenceCategory>
 
