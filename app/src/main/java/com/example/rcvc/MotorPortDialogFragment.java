@@ -1,12 +1,17 @@
 package com.example.rcvc;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.preference.DialogPreference;
 import androidx.preference.PreferenceDialogFragmentCompat;
+
+import java.lang.reflect.Field;
 
 public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
@@ -34,35 +39,45 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
             throw new IllegalStateException();
         }
 
-        String motors = null;
+        int[] motors = null;
         DialogPreference pref = getPreference();
         if (pref instanceof MotorPortDialogPreference) {
             motors = ((MotorPortDialogPreference) pref).getPorts();
         }
 
         if (motors != null) {
-            char[] m = motors.toCharArray();
-            int ri = m[0] - 65, li = m[1] - 65;
+            int ri = binLogIndex(motors[0])-1;
+            int li = binLogIndex(motors[1])-1;
 
             ((RadioButton) right.getChildAt(ri)).setChecked(true);
             ((RadioButton) left.getChildAt(li)).setChecked(true);
         }
     }
 
+    private int binLogIndex(int x) {
+        int y = 0, i = x;
+        while (i > 0) {
+            i = i >> 1;
+            y++;
+        }
+        return y;
+    }
+
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
-            int r = right.getCheckedRadioButtonId();
-            int l = left.getCheckedRadioButtonId();
-            char[] m = new char[2];
+            int rid = right.getCheckedRadioButtonId();
+            View rb = right.findViewById(rid);
+            int r = right.indexOfChild(rb);
 
-            m[0] = (char) (65 + r);
-            m[1] = (char) (65 + l);
+            int lid = left.getCheckedRadioButtonId();
+            View lb = left.findViewById(lid);
+            int l = left.indexOfChild(lb);
 
             DialogPreference pref = getPreference();
             if (pref instanceof MotorPortDialogPreference) {
                 MotorPortDialogPreference mPref = (MotorPortDialogPreference) pref;
-                mPref.setPorts(new String(m));
+                mPref.setPorts((1 << r), (1 << l));
             }
         }
     }

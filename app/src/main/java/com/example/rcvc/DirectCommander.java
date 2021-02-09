@@ -75,4 +75,12 @@ public class DirectCommander {
     public byte calcPower(float x) {
         return (byte) (x * maxPower);
     }
+
+    public static int[] stringToPorts(String p) {
+        int[] r = new int[2];
+        int x = Integer.parseInt(p);
+        r[0] = x & 0b1111;
+        r[1] = (x & 0b11110000) >> 4;
+        return r;
+    }
 }

@@ -58,7 +58,7 @@
             android:key="test"
             android:title="Motor Ports"
             android:summary="aa"
-            android:defaultValue="AD" />
+            android:defaultValue="128" />
         <!--<Preference
             app:iconSpaceReserved="false"
             android:title="Rechter Motor Port"

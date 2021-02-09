@@ -26,28 +26,24 @@
             android:id="@+id/radio_right_motor_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="A" />
 
         <RadioButton
             android:id="@+id/radio_right_motor_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="B" />
 
         <RadioButton
             android:id="@+id/radio_right_motor_c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="C" />
 
         <RadioButton
             android:id="@+id/radio_right_motor_d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="D" />
     </RadioGroup>
 
@@ -74,28 +70,24 @@
             android:id="@+id/radio_left_motor_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="A" />
 
         <RadioButton
             android:id="@+id/radio_left_motor_b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="B" />
 
         <RadioButton
             android:id="@+id/radio_left_motor_c"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="C" />
 
         <RadioButton
             android:id="@+id/radio_left_motor_d"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="D" />
     </RadioGroup>
 
