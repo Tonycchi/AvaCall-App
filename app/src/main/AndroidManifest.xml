@@ -10,12 +10,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="com.example.rcvc.permission.signature" />
-
-    <permission
-        android:name="com.example.rcvc.permission.signature"
-        android:label="my_permission"
-        android:protectionLevel="signature"></permission>
 
     <application
         android:allowBackup="true"

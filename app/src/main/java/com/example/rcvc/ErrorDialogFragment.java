@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
@@ -30,9 +31,8 @@ public class ErrorDialogFragment extends DialogFragment {
         builder.setMessage(messageID)
                 .setNegativeButton(R.string.dialog_close, (dialog, which) -> {
                     Intent intent = new Intent(context.getString(R.string.action_negative_button));
-                    intent.addCategory("android.intent.category.APP_MESSAGING");
                     intent.putExtra("intent message", intentMessage);
-                    context.sendBroadcast(intent, "com.example.rcvc.permission.signature");
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 });
         // Create the AlertDialog object and return it
         return builder.create();

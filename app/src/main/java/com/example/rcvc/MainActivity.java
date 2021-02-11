@@ -130,15 +130,15 @@ public class MainActivity extends AppCompatActivity{
 
         //bluetooth filter for catching state changes of bluetooth connection (on/off)
         IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(receiverActionStateChanged, btFilter, "com.example.rcvc.permission.signature", null);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverActionStateChanged, btFilter);
 
         // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
         IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
-        registerReceiver(receiverConnection, connectionFilter, "com.example.rcvc.permission.signature", null);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverConnection, connectionFilter);
 
         // Custom IntentFilter for catching action on closing negativeButton of ErrorDialogFragment
         IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
-        registerReceiver(receiverNegativeButton, negativeButtonFilter, "com.example.rcvc.permission.signature", null);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverNegativeButton, negativeButtonFilter);
 
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity{
         super.onDestroy();
         resetConnection();
         unregisterReceiver(receiverActionStateChanged);
-        //unregisterReceiver(receiverConnection);
+        unregisterReceiver(receiverConnection);
         unregisterReceiver(receiverNegativeButton);
     }
 
