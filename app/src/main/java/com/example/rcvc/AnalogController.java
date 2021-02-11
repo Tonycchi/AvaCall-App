@@ -16,8 +16,15 @@ public class AnalogController {
      * @param strength the deflection of the joystick
      */
     public void sendPowers(int angle, int strength) {
+        int str = strength;
+        if (str > 100) {
+            str = 100;
+        }
+        if (str < 0) {
+            str = 0;
+        }
         //0 is r, 1 is l
-        float[] outputs = computePowers(angle, strength);
+        float[] outputs = computePowers(angle, str);
         COMMANDER.send(outputs[0], outputs[1]);
     }
 
