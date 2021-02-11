@@ -32,7 +32,7 @@ public class ErrorDialogFragment extends DialogFragment {
                     Intent intent = new Intent(context.getString(R.string.action_negative_button));
                     intent.addCategory("android.intent.category.APP_MESSAGING");
                     intent.putExtra("intent message", intentMessage);
-                    context.sendBroadcast(intent, Manifest.permission.signature);
+                    context.sendBroadcast(intent, "com.example.rcvc.permission.signature");
                 });
         // Create the AlertDialog object and return it
         return builder.create();

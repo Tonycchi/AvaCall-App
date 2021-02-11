@@ -354,7 +354,7 @@ public class BluetoothConnectionService {
 
     private void sendConnectionStatusBroadcast() {
         Intent intent = new Intent(context.getString(R.string.action_check_connection));
-        context.sendBroadcast(intent, Manifest.permission.signature);
+        context.sendBroadcast(intent, "com.example.rcvc.permission.signature");
     }
 
 }

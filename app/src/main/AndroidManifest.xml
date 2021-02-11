@@ -41,14 +41,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
-        <receiver
-            android:name=".BroadcastReceiver"
-            android:exported="true"
-            android:permission="com.example.rcvc.permission.signature">
-            <intent-filter>
-                <action android:name="com.example.rcvc.action.BLUETOOTH_INTENT"/>
-            </intent-filter>
-        </receiver>
 
 
     </application>
