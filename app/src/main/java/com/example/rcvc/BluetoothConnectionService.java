@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -352,7 +354,7 @@ public class BluetoothConnectionService {
 
     private void sendConnectionStatusBroadcast() {
         Intent intent = new Intent(context.getString(R.string.action_check_connection));
-        context.sendBroadcast(intent);
+        context.sendBroadcast(intent, Manifest.permission.signature);
     }
 
 }

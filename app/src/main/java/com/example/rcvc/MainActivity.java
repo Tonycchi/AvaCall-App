@@ -2,6 +2,7 @@ package com.example.rcvc;
 
 import android.annotation.SuppressLint;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity{
     private ButtonController buttonController;
     private AnalogController analogController;
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,15 +130,15 @@ public class MainActivity extends AppCompatActivity{
 
         //bluetooth filter for catching state changes of bluetooth connection (on/off)
         IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        registerReceiver(receiverActionStateChanged, btFilter);
+        registerReceiver(receiverActionStateChanged, btFilter, Manifest.permission.signature, null);
 
         // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
-        IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
-        registerReceiver(receiverConnection, connectionFilter);
+        //IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
+        //registerReceiver(receiverConnection, connectionFilter, Manifest.permission.signature, null);
 
         // Custom IntentFilter for catching action on closing negativeButton of ErrorDialogFragment
         IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
-        registerReceiver(receiverNegativeButton, negativeButtonFilter);
+        registerReceiver(receiverNegativeButton, negativeButtonFilter, Manifest.permission.signature, null);
 
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -278,21 +280,21 @@ public class MainActivity extends AppCompatActivity{
         super.onDestroy();
         resetConnection();
         unregisterReceiver(receiverActionStateChanged);
-        unregisterReceiver(receiverConnection);
+        //unregisterReceiver(receiverConnection);
         unregisterReceiver(receiverNegativeButton);
     }
 
     /**
      * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
      */
-    private BroadcastReceiver receiverConnection = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             onConnection();
         }
     };
 
-    private BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
@@ -310,7 +312,7 @@ public class MainActivity extends AppCompatActivity{
      * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
      * Whenever Bluetooth is turned off while we are in a connection, reset everything
      */
-    private BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
+    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {

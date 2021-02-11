@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class ErrorDialogFragment extends DialogFragment {
     public static final String MSG_KEY = "errnopair";
@@ -29,8 +30,9 @@ public class ErrorDialogFragment extends DialogFragment {
         builder.setMessage(messageID)
                 .setNegativeButton(R.string.dialog_close, (dialog, which) -> {
                     Intent intent = new Intent(context.getString(R.string.action_negative_button));
+                    intent.addCategory("android.intent.category.APP_MESSAGING");
                     intent.putExtra("intent message", intentMessage);
-                    context.sendBroadcast(intent);
+                    context.sendBroadcast(intent, Manifest.permission.signature);
                 });
         // Create the AlertDialog object and return it
         return builder.create();
