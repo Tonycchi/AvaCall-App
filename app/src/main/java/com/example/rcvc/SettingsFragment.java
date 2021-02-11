@@ -2,9 +2,6 @@ package com.example.rcvc;
 
 import android.os.Bundle;
 import android.text.InputType;
-import android.widget.EditText;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
@@ -62,7 +59,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // If it was one of our cutom Preferences, show its dialog
         if (dialogFragment != null) {
             dialogFragment.setTargetFragment(this, 0);
-            dialogFragment.show(this.getFragmentManager(),
+            dialogFragment.show(this.getParentFragmentManager(),
                     "android.support.v7.preference" +
                             ".PreferenceFragment.DIALOG");
         }

@@ -1,17 +1,11 @@
 package com.example.rcvc;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewParent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-
 import androidx.preference.DialogPreference;
 import androidx.preference.PreferenceDialogFragmentCompat;
-
-import java.lang.reflect.Field;
 
 public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 

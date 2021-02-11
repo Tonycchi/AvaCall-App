@@ -13,11 +13,11 @@ public class MotorPortDialogPreference extends DialogPreference {
 
     private final int DEFAULT_PORTS = 128;
     private String ports;
-    private int dialogLayoutResId = R.layout.preference_dialog_motors;
+    private final int dialogLayoutResId = R.layout.preference_dialog_motors;
 
     public MotorPortDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setDialogLayoutResource(R.layout.preference_dialog_motors);
+        setDialogLayoutResource(dialogLayoutResId);
         setPersistent(true);
     }
 

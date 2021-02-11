@@ -138,16 +138,13 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
         registerReceiver(receiverNegativeButton, negativeButtonFilter);
 
-        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
-            @Override
-            public void onMove(int angle, int strength) {
-                int str = strength;
-                if (str > 100) {
-                    str = 100;
-                }
-                analogController.sendPowers(angle, str);
-                Log.d(TAG, "joystick values: " + angle + " " + str);
+        joystick.setOnMoveListener((angle, strength) -> {
+            int str = strength;
+            if (str > 100) {
+                str = 100;
             }
+            analogController.sendPowers(angle, str);
+            Log.d(TAG, "joystick values: " + angle + " " + str);
         });
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
