@@ -22,8 +22,8 @@ public class DirectCommander {
     public DirectCommander(Context context, BluetoothConnectionService b) {
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
 
-        PORT_RIGHT = Byte.parseByte(p.getString("right_port", "1"));
-        PORT_LEFT = Byte.parseByte(p.getString("left_port", "8"));
+        PORT_RIGHT = (byte) p.getInt("motor_right", 1);
+        PORT_LEFT = (byte) p.getInt("motor_left", 8);
         maxPower = p.getInt("max_speed", 50);
         B = b;
     }
