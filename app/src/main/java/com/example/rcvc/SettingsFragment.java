@@ -31,18 +31,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         }
 
-        // defines list items
-        final ListPreference rightList = (ListPreference) findPreference("right_port");
-        final ListPreference leftList = (ListPreference) findPreference("left_port");
-
-        rightList.setOnPreferenceClickListener(preference -> {
-            setLists(rightList, leftList);
-            return false;
-        });
-        leftList.setOnPreferenceClickListener(preference -> {
-            setLists(leftList, rightList);
-            return false;
-        });
+//        // defines list items
+//        final ListPreference rightList = (ListPreference) findPreference("right_port");
+//        final ListPreference leftList = (ListPreference) findPreference("left_port");
+//
+//        rightList.setOnPreferenceClickListener(preference -> {
+//            setLists(rightList, leftList);
+//            return false;
+//        });
+//        leftList.setOnPreferenceClickListener(preference -> {
+//            setLists(leftList, rightList);
+//            return false;
+//        });
     }
 
     @Override

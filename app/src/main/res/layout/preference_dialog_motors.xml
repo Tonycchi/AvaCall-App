@@ -14,7 +14,7 @@
         android:text="Rechter Motor Port"/>
 
     <RadioGroup
-        android:id="@+id/right_port"
+        android:id="@+id/radio_group_right_port"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -58,7 +58,7 @@
         android:text="Linker Motor Port"/>
 
     <RadioGroup
-        android:id="@+id/left_port"
+        android:id="@+id/radio_group_left_port"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -39,35 +39,41 @@
             android:summary="@string/settings_summary_max"
             app:showSeekBarValue="true"
             app:updatesContinuously="true" />
-        <ListPreference
+        <!--<ListPreference
             app:iconSpaceReserved="false"
             android:key="right_port"
             android:defaultValue="1"
             android:entries="@array/port_labels"
             android:entryValues="@array/port_values"
-            android:title="@string/settings_title_right" />
-        <ListPreference
+            android:title="@string/settings_title_right" />-->
+        <!--<ListPreference
             app:iconSpaceReserved="false"
             android:key="left_port"
             android:defaultValue="8"
             android:entries="@array/port_labels"
             android:entryValues="@array/port_values"
-            android:title="@string/settings_title_left" />
+            android:title="@string/settings_title_left" />-->
+        <SwitchPreference
+            app:iconSpaceReserved="false"
+            android:key="additional_motors"
+            android:defaultValue="false"
+            android:title="Zusätzliche Motoren" />
         <com.example.rcvc.MotorPortDialogPreference
             app:iconSpaceReserved="false"
-            android:key="test"
+            android:key="motor_left"
+            android:defaultValue="@integer/A"
             android:title="Motor Ports"
-            android:summary="aa"
-            android:defaultValue="128" />
-        <!--<Preference
-            app:iconSpaceReserved="false"
-            android:title="Rechter Motor Port"
-            android:key="motors_test"
-            android:layout="@layout/radio_group" />-->
-
+            android:summary="aa" />
+        <Preference
+            android:key="motor_right"
+            android:defaultValue="@integer/D"
+            />
+        <Preference
+            android:key="motor_1"
+            />
+        <Preference
+            android:key="motor_2"
+            />
     </PreferenceCategory>
-
-
-
 </PreferenceScreen>
 
