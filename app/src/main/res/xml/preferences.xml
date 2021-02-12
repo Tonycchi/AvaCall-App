@@ -53,11 +53,11 @@
             android:entries="@array/port_labels"
             android:entryValues="@array/port_values"
             android:title="@string/settings_title_left" />-->
-        <SwitchPreference
+        <!--<SwitchPreference
             app:iconSpaceReserved="false"
             android:key="additional_motors"
             android:defaultValue="false"
-            android:title="@string/settings_title_additional_motors" />
+            android:title="@string/settings_title_additional_motors" />-->
         <com.example.rcvc.MotorPortDialogPreference
             app:iconSpaceReserved="false"
             android:key="motor_right"

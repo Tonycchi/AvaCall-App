@@ -66,18 +66,4 @@
     <string name="settings_summary_motor_ports">Einstellen der Ports für Motoren</string>
     <string name="dialog_right_motor_port">Rechter Motor Port</string>
     <string name="dialog_left_motor_port">Linker Motor Port</string>
-
-    <!-- Arrays -->
-    <string-array name="port_labels">
-        <item>A</item>
-        <item>B</item>
-        <item>C</item>
-        <item>D</item>
-    </string-array>
-    <string-array name="port_values">
-        <item>1</item>
-        <item>2</item>
-        <item>4</item>
-        <item>8</item>
-    </string-array>
 </resources>

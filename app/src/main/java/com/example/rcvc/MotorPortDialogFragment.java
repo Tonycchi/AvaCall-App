@@ -11,10 +11,18 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 
 public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
-    private SharedPreferences S;
+    private SharedPreferences P;
 
     private RadioGroup groupRight, groupLeft;
     private RadioButton[] buttonsRight, buttonsLeft;
+
+    /*
+    private LinearLayout testRight, testLeft;
+    private CheckBox[] cr, cl;
+    private boolean rchecked, lchecked;
+     */
+
+    //private Button test;
 
     public static MotorPortDialogFragment newInstance(
             String key) {
@@ -31,20 +39,24 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        S = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        P = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
         groupRight = view.findViewById(R.id.radio_group_right_port);
         groupLeft = view.findViewById(R.id.radio_group_left_port);
 
+        /*
+        test = view.findViewById(R.id.clear_test);
+        test.setOnClickListener((View v) -> {
+            groupRight.clearCheck();
+            groupLeft.clearCheck();
+            enableAll(buttonsRight);
+            enableAll(buttonsLeft);
+        });
+         */
+
         if (groupRight == null || groupLeft == null) {
             throw new IllegalStateException();
         }
-
-//        int[] motors = null;
-//        DialogPreference pref = getPreference();
-//        if (pref instanceof MotorPortDialogPreference) {
-//            motors = ((MotorPortDialogPreference) pref).getPorts();
-//        }
 
         buttonsRight = new RadioButton[4];
         buttonsLeft = new RadioButton[4];
@@ -52,39 +64,73 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
             int self = i;
             buttonsRight[i] = (RadioButton) groupRight.getChildAt(i);
             buttonsRight[i].setOnClickListener((View v) -> {
-                for (int k = 0; k < 4; k++) {
-                    buttonsLeft[k].setEnabled(true);
-                }
+                enableAll(buttonsLeft);
                 buttonsRight[self].setChecked(true);
                 buttonsLeft[self].setEnabled(false);
             });
             buttonsLeft[i] = (RadioButton) groupLeft.getChildAt(i);
             buttonsLeft[i].setOnClickListener((View v) -> {
-                for (int k = 0; k < 4; k++) {
-                    buttonsRight[k].setEnabled(true);
-                }
+                enableAll(buttonsRight);
                 buttonsLeft[self].setChecked(true);
                 buttonsRight[self].setEnabled(false);
             });
         }
 
-        //int ri = binLogIndex(motors[0])-1;
-        //int li = binLogIndex(motors[1])-1;
-
-        int ri = log2(S.getInt("motor_right", 1));
-        int li = log2(S.getInt("motor_left", 8));
+        int ri = log2(P.getInt("motor_right", 1));
+        int li = log2(P.getInt("motor_left", 8));
 
         buttonsRight[ri].setChecked(true);
         buttonsLeft[li].setChecked(true);
 
         buttonsRight[li].setEnabled(false);
         buttonsLeft[ri].setEnabled(false);
+
+        /*
+        testRight = view.findViewById(R.id.test_right);
+        testLeft = view.findViewById(R.id.test_left);
+
+        cr = new CheckBox[4];
+        cl = new CheckBox[4];
+
+        for (int i = 0; i < testRight.getChildCount(); i++) {
+            cr[i] = (CheckBox) testRight.getChildAt(i);
+            cl[i] = (CheckBox) testLeft.getChildAt(i);
+            int self = i;
+
+            cr[i].setOnClickListener((View v) -> {
+                if (((CheckBox) v).isChecked()) {
+                    ((CheckBox) v).setChecked(false);
+                    rchecked = false;
+                    cl[self].setEnabled(true);
+                } else {
+                    if (!rchecked) {
+                        rchecked = true;
+                        ((CheckBox) v).setChecked(true);
+                        cl[self].setEnabled(false);
+                    }
+                }
+            });
+            cl[i].setOnClickListener((View v) -> {
+                if (((CheckBox) v).isChecked()) {
+                    ((CheckBox) v).setChecked(false);
+                    lchecked = false;
+                    cr[self].setEnabled(true);
+                } else {
+                    if (!lchecked) {
+                        lchecked = true;
+                        ((CheckBox) v).setChecked(true);
+                        cr[self].setEnabled(false);
+                    }
+                }
+            });
+        }
+        */
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
-            SharedPreferences.Editor editor = S.edit();
+            SharedPreferences.Editor editor = P.edit();
 
             int rid = groupRight.getCheckedRadioButtonId();
             View rb = groupRight.findViewById(rid);
@@ -105,6 +151,10 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
                 mPref.setPorts((1 << r), (1 << l));
             }*/
         }
+    }
+
+    private void enableAll(RadioButton[] buttons) {
+        for (RadioButton b : buttons) b.setEnabled(true);
     }
 
     private int log2(int x) {
