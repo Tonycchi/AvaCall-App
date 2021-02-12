@@ -527,5 +527,7 @@ public class MainActivity extends AppCompatActivity{
         buttonOpenRoom.setEnabled(true);
         buttonShareLink.setEnabled(true);
         buttonSwitchToRoom.setEnabled(true);
+        buttonShowController.setVisibility(View.VISIBLE);
+        buttonToggleController.setVisibility(View.VISIBLE);
     }
 }
