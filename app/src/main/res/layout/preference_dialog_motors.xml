@@ -11,7 +11,7 @@
         android:fadingEdge="horizontal"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceListItem"
-        android:text="Rechter Motor Port"/>
+        android:text="@string/dialog_right_motor_port"/>
 
     <RadioGroup
         android:id="@+id/radio_group_right_port"
@@ -55,7 +55,7 @@
         android:fadingEdge="horizontal"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceListItem"
-        android:text="Linker Motor Port"/>
+        android:text="@string/dialog_left_motor_port"/>
 
     <RadioGroup
         android:id="@+id/radio_group_left_port"

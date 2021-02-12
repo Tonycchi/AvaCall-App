@@ -59,8 +59,13 @@
     <string name="settings_summary_host_port">Port für Verbindung zum Server</string>
     <string name="settings_title_max">Maximale Geschwindigkeit</string>
     <string name="settings_summary_max">In Prozent</string>
-    <string name="settings_title_right">Rechter Port</string>
-    <string name="settings_title_left">Linker Port</string>
+    <string name="settings_title_right">Rechter Port</string><!--todo delete-->
+    <string name="settings_title_left">Linker Port</string><!--todo delete-->
+    <string name="settings_title_additional_motors">Zusätzliche Motoren</string>
+    <string name="settings_title_motor_ports">Motor Ports</string>
+    <string name="settings_summary_motor_ports">Einstellen der Ports für Motoren</string>
+    <string name="dialog_right_motor_port">Rechter Motor Port</string>
+    <string name="dialog_left_motor_port">Linker Motor Port</string>
 
     <!-- Arrays -->
     <string-array name="port_labels">

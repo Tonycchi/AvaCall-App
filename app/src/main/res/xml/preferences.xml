@@ -57,13 +57,13 @@
             app:iconSpaceReserved="false"
             android:key="additional_motors"
             android:defaultValue="false"
-            android:title="Zusätzliche Motoren" />
+            android:title="@string/settings_title_additional_motors" />
         <com.example.rcvc.MotorPortDialogPreference
             app:iconSpaceReserved="false"
             android:key="motor_left"
             android:defaultValue="@integer/A"
-            android:title="Motor Ports"
-            android:summary="aa" />
+            android:title="@string/settings_title_motor_ports"
+            android:summary="@string/settings_summary_motor_ports" />
         <Preference
             android:key="motor_right"
             android:defaultValue="@integer/D"
