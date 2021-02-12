@@ -10,6 +10,7 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
     private RadioGroup right, left;
+    private RadioButton[] buttonsRight, buttonsLeft;
 
     public static MotorPortDialogFragment newInstance(
             String key) {
@@ -39,12 +40,35 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
             motors = ((MotorPortDialogPreference) pref).getPorts();
         }
 
+        buttonsRight = new RadioButton[4];
+        buttonsLeft = new RadioButton[4];
+        for (int i = 0; i < 4; i++) {
+            int a = i;
+            buttonsRight[i] = (RadioButton) right.getChildAt(i);
+            buttonsRight[i].setOnClickListener((View v) -> {
+                for (int k = 0; k < 4; k++) {
+                    buttonsLeft[k].setEnabled(true);
+                }
+                buttonsLeft[a].setEnabled(false);
+            });
+            buttonsLeft[i] = (RadioButton) left.getChildAt(i);
+            buttonsLeft[i].setOnClickListener((View v) -> {
+                for (int k = 0; k < 4; k++) {
+                    buttonsRight[k].setEnabled(true);
+                }
+                buttonsRight[a].setEnabled(false);
+            });
+        }
+
         if (motors != null) {
             int ri = binLogIndex(motors[0])-1;
             int li = binLogIndex(motors[1])-1;
 
-            ((RadioButton) right.getChildAt(ri)).setChecked(true);
-            ((RadioButton) left.getChildAt(li)).setChecked(true);
+            buttonsRight[ri].setChecked(true);
+            buttonsLeft[li].setChecked(true);
+
+            buttonsRight[li].setEnabled(false);
+            buttonsLeft[ri].setEnabled(false);
         }
     }
 
