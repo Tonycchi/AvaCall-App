@@ -275,9 +275,13 @@ public class MainActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         resetConnection();
-        unregisterReceiver(receiverActionStateChanged);
-        unregisterReceiver(receiverConnection);
-        unregisterReceiver(receiverNegativeButton);
+        try {
+            unregisterReceiver(receiverActionStateChanged);
+            unregisterReceiver(receiverConnection);
+            unregisterReceiver(receiverNegativeButton);
+        } catch (Exception e) {
+            
+        }
     }
 
     /**
