@@ -47,13 +47,10 @@ public class MainActivity extends AppCompatActivity{
     // settings
     SharedPreferences sharedPreferences;
 
-    private boolean booleanBluetooth = false;
-    private boolean booleanOpenRoom = false;
-
     // zum Testen von nicht implementierten Funktionen
-    private boolean btIsClicked = false;
-    private boolean showController = true;
-    private boolean toggleController = true; //false is buttons, true is joystick
+    private boolean btIsClicked;
+    private boolean showController;
+    private boolean toggleController; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
     private Button buttonOpenRoom;
@@ -231,13 +228,15 @@ public class MainActivity extends AppCompatActivity{
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
-        //setAllButtonsUsable(); //TODO bei release rausnehmen
+        setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null) {
             buttonOpenRoom.setEnabled(true);
             buttonShowController.setVisibility(View.VISIBLE);
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
+        showController = false;
+        toggleController = false;
 
         if (room != null) {
             setEnableLinkAndRoom(true);
@@ -309,10 +308,8 @@ public class MainActivity extends AppCompatActivity{
      */
     @Override
     protected void onDestroy() {
-        Log.e(TAG, "onDestroy called");
         super.onDestroy();
         if (isFinishing()) {
-            Log.e(TAG, "isFinishing called");
             resetConnection();
         }
         try {
@@ -517,6 +514,7 @@ public class MainActivity extends AppCompatActivity{
      * makes the controller visible or invisible
      */
     public void showController() {
+        Log.d(TAG, String.valueOf(showController));
         if (!showController) {
             buttonToggleController.setVisibility(View.VISIBLE);
             if (!toggleController) {
@@ -574,6 +572,5 @@ public class MainActivity extends AppCompatActivity{
         buttonShareLink.setEnabled(true);
         buttonSwitchToRoom.setEnabled(true);
         buttonShowController.setVisibility(View.VISIBLE);
-        buttonToggleController.setVisibility(View.VISIBLE);
     }
 }
