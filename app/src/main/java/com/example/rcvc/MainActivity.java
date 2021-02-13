@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity{
         if (bluetoothConnection != null) {
             buttonOpenRoom.setEnabled(true);
             buttonShowController.setVisibility(View.VISIBLE);
+            textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
 
         if (room != null) {
