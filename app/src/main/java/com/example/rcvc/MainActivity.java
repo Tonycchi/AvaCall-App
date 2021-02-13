@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity{
     // settings
     SharedPreferences sharedPreferences;
 
+    private boolean booleanBluetooth = false;
+    private boolean booleanOpenRoom = false;
+
     // zum Testen von nicht implementierten Funktionen
     private boolean btIsClicked = false;
     private boolean showController = true;
@@ -98,119 +101,146 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            try {
-                hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
-                jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
-                hostReady = true;
-            } catch (MalformedURLException e) {
-                Bundle bundle = new Bundle();
-                // first put id of error message in bundle using defined key
-                bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
-                ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
-                // then pass bundle to dialog and show
-                error.setArguments(bundle);
-                error.show(this.getSupportFragmentManager(), TAG);
-                hostReady = false;
+        setContentView(R.layout.activity_main);
+
+        InitialzieUI();
+
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_main);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_main);
+        }
+
+        InitialzieUI();
+    }
+
+    public void InitialzieUI() {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        try {
+            hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
+            jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
+            hostReady = true;
+        } catch (MalformedURLException e) {
+            Bundle bundle = new Bundle();
+            // first put id of error message in bundle using defined key
+            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
+            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
+            // then pass bundle to dialog and show
+            error.setArguments(bundle);
+            error.show(this.getSupportFragmentManager(), TAG);
+            hostReady = false;
+        }
+
+        // get all buttons
+        buttonBluetooth = findViewById(R.id.button_bluetooth);
+        buttonOpenRoom = findViewById(R.id.button_open_room);
+        buttonShareLink = findViewById(R.id.button_share_link);
+        buttonSwitchToRoom = findViewById(R.id.button_switch_to_room);
+        textViewConnectionStatus = findViewById(R.id.connection_status);
+        listViewDevices = findViewById(R.id.list_paired_devices);
+        buttonMoveForward = findViewById(R.id.button_forward);
+        buttonMoveBackward = findViewById(R.id.button_backward);
+        buttonTurnRight = findViewById(R.id.button_right);
+        buttonTurnLeft = findViewById(R.id.button_left);
+        buttonShowController = findViewById(R.id.button_show_controller);
+        buttonToggleController = findViewById(R.id.button_toggle_controller);
+        joystick = findViewById(R.id.joystick);
+
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        //bluetooth filter for catching state changes of bluetooth connection (on/off)
+        IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverActionStateChanged, btFilter);
+
+        // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
+        IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverConnection, connectionFilter);
+
+        // Custom IntentFilter for catching action on closing negativeButton of ErrorDialogFragment
+        IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiverNegativeButton, negativeButtonFilter);
+
+        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                analogController.sendPowers(angle, strength);
+                Log.d(TAG, "joystick values: " + angle + " " + strength);
+            }
+        });
+
+        buttonMoveForward.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct command for moving forward is send to ev3
+                buttonController.sendPowers(ButtonController.FORWARD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                buttonController.sendPowers(ButtonController.STOP);
             }
 
-            setContentView(R.layout.activity_main);
-            // get all buttons
-            buttonBluetooth = findViewById(R.id.button_bluetooth);
-            buttonOpenRoom = findViewById(R.id.button_open_room);
-            buttonShareLink = findViewById(R.id.button_share_link);
-            buttonSwitchToRoom = findViewById(R.id.button_switch_to_room);
-            textViewConnectionStatus = findViewById(R.id.connection_status);
-            listViewDevices = findViewById(R.id.list_paired_devices);
-            buttonMoveForward = findViewById(R.id.button_forward);
-            buttonMoveBackward = findViewById(R.id.button_backward);
-            buttonTurnRight = findViewById(R.id.button_right);
-            buttonTurnLeft = findViewById(R.id.button_left);
-            buttonShowController = findViewById(R.id.button_show_controller);
-            buttonToggleController = findViewById(R.id.button_toggle_controller);
-            joystick = findViewById(R.id.joystick);
+            return true;
+        });
 
-            btAdapter = BluetoothAdapter.getDefaultAdapter();
+        buttonMoveBackward.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct command for moving backward is send to ev3
+                buttonController.sendPowers(ButtonController.BACKWARD);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                buttonController.sendPowers(ButtonController.STOP);
+            }
 
-            //bluetooth filter for catching state changes of bluetooth connection (on/off)
-            IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            LocalBroadcastManager.getInstance(this).registerReceiver(receiverActionStateChanged, btFilter);
+            return true;
+        });
 
-            // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
-            IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
-            LocalBroadcastManager.getInstance(this).registerReceiver(receiverConnection, connectionFilter);
+        buttonTurnRight.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct commands for turning to the right are send to ev3
+                buttonController.sendPowers(ButtonController.TURN_RIGHT);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                buttonController.sendPowers(ButtonController.STOP);
+            }
 
-            // Custom IntentFilter for catching action on closing negativeButton of ErrorDialogFragment
-            IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
-            LocalBroadcastManager.getInstance(this).registerReceiver(receiverNegativeButton, negativeButtonFilter);
+            return true;
+        });
 
-            joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
-                @Override
-                public void onMove(int angle, int strength) {
-                    analogController.sendPowers(angle, strength);
-                    Log.d(TAG, "joystick values: " + angle + " " + strength);
-                }
-            });
+        buttonTurnLeft.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                //when button is being pressed down, direct commands for turning to the left are send to ev3
+                buttonController.sendPowers(ButtonController.TURN_LEFT);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                //when button is being released, direct command for stopping is send to ev3
+                buttonController.sendPowers(ButtonController.STOP);
+            }
 
-            buttonMoveForward.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct command for moving forward is send to ev3
-                    buttonController.sendPowers(ButtonController.FORWARD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    buttonController.sendPowers(ButtonController.STOP);
-                }
-
-                return true;
-            });
-
-            buttonMoveBackward.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct command for moving backward is send to ev3
-                    buttonController.sendPowers(ButtonController.BACKWARD);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    buttonController.sendPowers(ButtonController.STOP);
-                }
-
-                return true;
-            });
-
-            buttonTurnRight.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct commands for turning to the right are send to ev3
-                    buttonController.sendPowers(ButtonController.TURN_RIGHT);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    buttonController.sendPowers(ButtonController.STOP);
-                }
-
-                return true;
-            });
-
-            buttonTurnLeft.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //when button is being pressed down, direct commands for turning to the left are send to ev3
-                    buttonController.sendPowers(ButtonController.TURN_LEFT);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //when button is being released, direct command for stopping is send to ev3
-                    buttonController.sendPowers(ButtonController.STOP);
-                }
-
-                return true;
-            });
+            return true;
+        });
 
 
-            // Try to start bluetooth connection with paired device that was clicked
-            listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
-                selectedDevice = pairedDevices.get(position);
-                deviceUUIDs = selectedDevice.getUuids();
-                bluetoothConnection = new BluetoothConnectionService(MainActivity.this);
-                startBTConnection(selectedDevice, deviceUUIDs);
-            });
+        // Try to start bluetooth connection with paired device that was clicked
+        listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
+            selectedDevice = pairedDevices.get(position);
+            deviceUUIDs = selectedDevice.getUuids();
+            bluetoothConnection = new BluetoothConnectionService(MainActivity.this);
+            startBTConnection(selectedDevice, deviceUUIDs);
+        });
 
-            setAllButtonsUsable(); //TODO bei release rausnehmen
+        //setAllButtonsUsable(); //TODO bei release rausnehmen
 
+        if (bluetoothConnection != null) {
+            buttonOpenRoom.setEnabled(true);
+            buttonShowController.setVisibility(View.VISIBLE);
+        }
+
+        if (room != null) {
+            setEnableLinkAndRoom(true);
+        }
     }
 
     @Override
@@ -339,7 +369,6 @@ public class MainActivity extends AppCompatActivity{
      * If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
-        Log.e(TAG, "onClickBluetooth");
         if (btIsClicked) {
             resetConnection();
         } else {
@@ -465,6 +494,7 @@ public class MainActivity extends AppCompatActivity{
             showController();
             buttonShowController.setVisibility(View.INVISIBLE);
             bluetoothConnection.cancel();
+            bluetoothConnection = null;
             selectedDevice = null;
             pairedDevices = new ArrayList<>();
             deviceUUIDs = null;
