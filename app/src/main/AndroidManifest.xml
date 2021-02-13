@@ -20,8 +20,7 @@
         android:theme="@style/Theme.Rcvc">
         <activity
             android:name=".MainActivity"
-            android:enabled="true"
-            android:configChanges="screenSize">
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
