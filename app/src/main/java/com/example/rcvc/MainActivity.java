@@ -213,17 +213,6 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-//    @Override
-//    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//
-//        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-//            setContentView(R.layout.activity_main);
-//        } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            setContentView(R.layout.activity_main);
-//        }
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -350,6 +339,7 @@ public class MainActivity extends AppCompatActivity{
      * If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
+        Log.e(TAG, "onClickBluetooth");
         if (btIsClicked) {
             resetConnection();
         } else {
@@ -358,6 +348,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(enableBTIntent);
             }
             if (btAdapter.isEnabled()) {
+                Log.d(TAG, "btAdapterEnabled");
 
                 ArrayList<String> names = getPairedDevices();
                 ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
