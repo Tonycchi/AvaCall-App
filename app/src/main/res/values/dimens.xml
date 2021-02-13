@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity -->
-    <dimen name="standard_button_width">@dimen/_220sdp</dimen>
+    <dimen name="standard_button_width">@dimen/_210sdp</dimen>
     <dimen name="standard_button_height">@dimen/_40sdp</dimen>
     <dimen name="show_controller_width">@dimen/_170sdp</dimen>
     <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
     <dimen name="small_button_height">@dimen/_35sdp</dimen>
     <dimen name="control_button_width">@dimen/_100sdp</dimen>
     <dimen name="margin_top">@dimen/_32sdp</dimen>
-    <dimen name="margin_bot">@dimen/_48sdp</dimen>
+    <dimen name="margin_bot">@dimen/_32sdp</dimen>
     <dimen name="paired_devices_width">@dimen/_300sdp</dimen>
     <dimen name="paired_devices_height">@dimen/_175sdp</dimen>
     <dimen name="joystick_size">@dimen/_150sdp</dimen>
@@ -17,4 +17,12 @@
     <dimen name="standard_text_size">@dimen/_12sdp</dimen>
     <dimen name="small_text_size">@dimen/_10sdp</dimen>
     <dimen name="margin_connection_status">@dimen/_8sdp</dimen>
+    <dimen name="control_button_margin">@dimen/_60sdp</dimen>
+
+    <dimen name="landscape_margin_top">@dimen/_8sdp</dimen>
+    <dimen name="landscape_margin_side">@dimen/_20sdp</dimen>
+    <dimen name="landscape_standard_button_width">@dimen/_210sdp</dimen>
+    <dimen name="landscape_margin_top_between_buttons">@dimen/_1sdp</dimen>
+    <dimen name="landscape_paired_devices_width">@dimen/_210sdp</dimen>
+    <dimen name="landscape_paired_devices_height">@dimen/_200sdp</dimen>
 </resources>
