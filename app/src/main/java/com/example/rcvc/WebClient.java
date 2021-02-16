@@ -13,14 +13,14 @@ import org.java_websocket.handshake.ServerHandshake;
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
-    private final String hostURL, jitsiURL;
     private AnalogController analogController;
+    private boolean ready;
+    private String[] data;
 
-    public WebClient(URI serverURI, String hostURL, String jitsiURL, AnalogController analogController) {
+    public WebClient(URI serverURI, AnalogController analogController) {
         super(serverURI);
-        this.hostURL = hostURL;
-        this.jitsiURL = jitsiURL;
         this.analogController = analogController;
+        this.ready = false;
     }
 
     @Override
@@ -29,10 +29,10 @@ public class WebClient extends WebSocketClient {
      */
     public void onOpen(ServerHandshake handshakeData) {
         send("app");
-        send(hostURL);
-        Log.d(TAG, hostURL);
-        send(jitsiURL);
-        Log.d(TAG, jitsiURL);
+        //send(hostURL);
+        //Log.d(TAG, hostURL);
+        //send(jitsiURL);
+        //Log.d(TAG, jitsiURL);
         Log.d(TAG,"new connection opened");
     }
 
@@ -46,10 +46,18 @@ public class WebClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        String[] values = new String[2];
-        if (!(message.indexOf(";") == -1)) {
-            values = message.split(";");
-            analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
+        Log.d(TAG, message);
+        if (message.startsWith("data:")) {
+            data = message.split(":",4);
+            ready = true;
+        } else {
+            String[] values = new String[2];
+            if (message.contains(";")) {
+                values = message.split(";");
+                analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
+            } else {
+
+            }
         }
     }
 
@@ -64,5 +72,13 @@ public class WebClient extends WebSocketClient {
      */
     public void onError(Exception ex) {
         Log.e(TAG,"an error occurred:" + ex);
+    }
+
+    public String[] getData() {
+        return data;
+    }
+
+    public boolean ready() {
+        return ready;
     }
 }
