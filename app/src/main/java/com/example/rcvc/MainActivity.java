@@ -353,13 +353,14 @@ public class MainActivity extends AppCompatActivity{
      * On click of the openRoom button we create a jitsi room with some options and enable the shareLink and
      * switchToRoom button.
      */
-    public void onClickOpenRoom(View v) throws URISyntaxException {
+    public void onClickOpenRoom(View v) throws URISyntaxException, MalformedURLException {
         if (room == null && hostReady) {
             wc = new WebClient(new URI("wss://" + "mintclub.org:" + sharedPreferences.getString("host_port", "22222")), analogController);
             wc.connect();
 
-            while (!wc.ready());
+            while (!wc.dataReady());
             String[] data = wc.getData();
+            Log.d("datadata", data[0]+data[1]+data[2]+data[3]);
             room = new JitsiRoom(data[1], data[2]);
             shareURL = data[3];
         } else if (!hostReady) {

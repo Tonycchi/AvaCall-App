@@ -1,7 +1,5 @@
 package com.example.rcvc;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import java.net.URI;
@@ -14,13 +12,13 @@ public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
     private AnalogController analogController;
-    private boolean ready;
+    private boolean dataReady;
     private String[] data;
 
     public WebClient(URI serverURI, AnalogController analogController) {
         super(serverURI);
         this.analogController = analogController;
-        this.ready = false;
+        this.dataReady = false;
     }
 
     @Override
@@ -49,7 +47,7 @@ public class WebClient extends WebSocketClient {
         Log.d(TAG, message);
         if (message.startsWith("data:")) {
             data = message.split(":",4);
-            ready = true;
+            dataReady = true;
         } else {
             String[] values = new String[2];
             if (message.contains(";")) {
@@ -78,7 +76,7 @@ public class WebClient extends WebSocketClient {
         return data;
     }
 
-    public boolean ready() {
-        return ready;
+    public boolean dataReady() {
+        return dataReady;
     }
 }

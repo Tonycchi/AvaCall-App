@@ -1,5 +1,7 @@
 package com.example.rcvc;
 
+import android.util.Log;
+
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.net.MalformedURLException;
@@ -12,10 +14,10 @@ public class JitsiRoom {
 
     public JitsiMeetConferenceOptions options;
 
-    public JitsiRoom(String id, String host) {
+    public JitsiRoom(String id, String host) throws MalformedURLException {
         try {
             options = new JitsiMeetConferenceOptions.Builder()
-                    .setServerURL(new URL(host))
+                    .setServerURL(new URL("https://" + host))
                     .setRoom(id)
                     .build();
             /*
