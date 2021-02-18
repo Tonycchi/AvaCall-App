@@ -29,10 +29,6 @@ public class WebClient extends WebSocketClient {
      */
     public void onOpen(ServerHandshake handshakeData) {
         send("app:" + jitsi);
-        //send(hostURL);
-        //Log.d(TAG, hostURL);
-        //send(jitsiURL);
-        //Log.d(TAG, jitsiURL);
         Log.d(TAG,"new connection opened");
     }
 
@@ -78,7 +74,7 @@ public class WebClient extends WebSocketClient {
         return id;
     }
 
-    public boolean dataReady() {
+    public boolean isDataReady() {
         return dataReady;
     }
 }

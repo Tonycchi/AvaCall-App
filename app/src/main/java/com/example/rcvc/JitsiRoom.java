@@ -4,11 +4,8 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Random;
 
 public class JitsiRoom {
-
-    private final int ROOM_LINK_LENGTH = 10;
 
     public JitsiMeetConferenceOptions options;
 

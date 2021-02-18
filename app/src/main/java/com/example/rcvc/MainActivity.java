@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity{
             // TODO hardcoded link entfernen
             wc.connect();
 
-            while (!wc.dataReady());
+            while (!wc.isDataReady());
             String id = wc.getId();
             Log.d("datadata", id);
             room = new JitsiRoom(jitsi, id);
