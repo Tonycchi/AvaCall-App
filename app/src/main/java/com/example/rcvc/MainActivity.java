@@ -355,14 +355,16 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onClickOpenRoom(View v) throws URISyntaxException, MalformedURLException {
         if (room == null && hostReady) {
-            wc = new WebClient(new URI("wss://" + "mintclub.org:" + sharedPreferences.getString("host_port", "22222")), analogController);
+            String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
+            wc = new WebClient(new URI("wss://" + "mintclub.org:" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
+            // TODO hardcoded link entfernen
             wc.connect();
 
             while (!wc.dataReady());
-            String[] data = wc.getData();
-            Log.d("datadata", data[0]+data[1]+data[2]+data[3]);
-            room = new JitsiRoom(data[1], data[2]);
-            shareURL = data[3];
+            String id = wc.getId();
+            Log.d("datadata", id);
+            room = new JitsiRoom(jitsi, id);
+            shareURL = hostURL + "/" + id;
         } else if (!hostReady) {
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key
