@@ -440,6 +440,7 @@ public class MainActivity extends AppCompatActivity{
      * Opens the jitsi room with the options created before and switches to a new window with the jitsi room
      */
     public void onClickSwitchToRoom(View v) {
+        wc.setReceiveCommands();
         JitsiMeetActivity.launch(this, room.options);
     }
 

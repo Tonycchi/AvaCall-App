@@ -15,12 +15,14 @@ public class WebClient extends WebSocketClient {
     private boolean dataReady;
     private String id;
     private final String jitsi;
+    private boolean receiveCommands;
 
     public WebClient(URI serverURI, String jitsi, AnalogController analogController) {
         super(serverURI);
         this.analogController = analogController;
         this.dataReady = false;
         this.jitsi = jitsi;
+        receiveCommands = false;
     }
 
     @Override
@@ -47,12 +49,12 @@ public class WebClient extends WebSocketClient {
             id = message.split(":",2)[1];
             dataReady = true;
         } else {
-            String[] values = new String[2];
-            if (message.contains(";")) {
-                values = message.split(";", 2);
-                analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
-            } else {
-
+            if (receiveCommands) {
+                String[] values = new String[2];
+                if (message.contains(";")) {
+                    values = message.split(";", 2);
+                    analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
+                }
             }
         }
     }
@@ -76,5 +78,9 @@ public class WebClient extends WebSocketClient {
 
     public boolean isDataReady() {
         return dataReady;
+    }
+
+    public void setReceiveCommands() {
+        receiveCommands = true;
     }
 }
