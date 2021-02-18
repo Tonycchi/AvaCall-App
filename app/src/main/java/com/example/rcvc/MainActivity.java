@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity{
 
         setAllButtonsUsable(); //TODO bei release rausnehmen
 
-        if (bluetoothConnection != null) {
+        if (bluetoothConnection.getConnectionStatus() == 1) {
             btIsClicked = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonOpenRoom.setEnabled(true);
@@ -329,9 +329,7 @@ public class MainActivity extends AppCompatActivity{
     private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (bluetoothConnection != null) {
                 onConnection();
-            }
         }
     };
 
@@ -496,7 +494,6 @@ public class MainActivity extends AppCompatActivity{
             showController();
             buttonShowController.setVisibility(View.INVISIBLE);
             bluetoothConnection.cancel();
-            bluetoothConnection = null;
             selectedDevice = null;
             pairedDevices = new ArrayList<>();
             deviceUUIDs = null;
