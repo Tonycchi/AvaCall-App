@@ -1,6 +1,8 @@
 package com.example.rcvc;
 
 import android.annotation.SuppressLint;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -13,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -45,9 +48,9 @@ public class MainActivity extends AppCompatActivity{
     SharedPreferences sharedPreferences;
 
     // zum Testen von nicht implementierten Funktionen
-    private boolean btIsClicked = false;
-    private boolean showController = true;
-    private boolean toggleController = true; //false is buttons, true is joystick
+    private boolean btIsClicked;
+    private boolean showController;
+    private boolean toggleController; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
     private Button buttonOpenRoom;
@@ -91,11 +94,32 @@ public class MainActivity extends AppCompatActivity{
     private AnalogController analogController;
 
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+
+        InitialzieUI();
+
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_main);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_main);
+        }
+
+        InitialzieUI();
+    }
+
+    public void InitialzieUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         try {
             hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
@@ -112,7 +136,6 @@ public class MainActivity extends AppCompatActivity{
             hostReady = false;
         }
 
-        setContentView(R.layout.activity_main);
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);
         buttonOpenRoom = findViewById(R.id.button_open_room);
@@ -208,6 +231,20 @@ public class MainActivity extends AppCompatActivity{
         });
 
         setAllButtonsUsable(); //TODO bei release rausnehmen
+
+        if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
+            btIsClicked = true;
+            buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
+            buttonOpenRoom.setEnabled(true);
+            buttonShowController.setVisibility(View.VISIBLE);
+            textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+        }
+        showController = false;
+        toggleController = false;
+
+        if (room != null) {
+            setEnableLinkAndRoom(true);
+        }
     }
 
     @Override
@@ -276,13 +313,15 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        resetConnection();
+        if (isFinishing()) {
+            resetConnection();
+        }
         try {
             unregisterReceiver(receiverActionStateChanged);
             unregisterReceiver(receiverConnection);
             unregisterReceiver(receiverNegativeButton);
         } catch (Exception e) {
-            
+            Log.e(TAG, "Receiver not registered, could not unregister");
         }
     }
 
@@ -292,7 +331,7 @@ public class MainActivity extends AppCompatActivity{
     private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onConnection();
+                onConnection();
         }
     };
 
@@ -340,6 +379,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(enableBTIntent);
             }
             if (btAdapter.isEnabled()) {
+                Log.d(TAG, "btAdapterEnabled");
 
                 ArrayList<String> names = getPairedDevices();
                 ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
@@ -484,6 +524,7 @@ public class MainActivity extends AppCompatActivity{
      * makes the controller visible or invisible
      */
     public void showController() {
+        Log.d(TAG, String.valueOf(showController));
         if (!showController) {
             buttonToggleController.setVisibility(View.VISIBLE);
             if (!toggleController) {
@@ -540,5 +581,6 @@ public class MainActivity extends AppCompatActivity{
         buttonOpenRoom.setEnabled(true);
         buttonShareLink.setEnabled(true);
         buttonSwitchToRoom.setEnabled(true);
+        buttonShowController.setVisibility(View.VISIBLE);
     }
 }
