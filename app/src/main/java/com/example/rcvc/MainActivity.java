@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity{
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
-        setAllButtonsUsable(); //TODO bei release rausnehmen
+        //setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
             btIsClicked = true;
