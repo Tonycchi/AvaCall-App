@@ -364,7 +364,7 @@ public class MainActivity extends AppCompatActivity{
             String id = wc.getId();
             Log.d("datadata", id);
             room = new JitsiRoom(jitsi, id);
-            shareURL = hostURL + "/" + id;
+            shareURL = hostURL.url + "/" + id;
         } else if (!hostReady) {
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key

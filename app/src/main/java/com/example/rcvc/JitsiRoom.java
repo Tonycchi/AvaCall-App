@@ -26,17 +26,4 @@ public class JitsiRoom {
             e.printStackTrace();
         }
     }
-
-    /**
-     * @param length the length for the id of the roomlink
-     * @return the whole roomlink as a string which then can be copied
-     */
-    private String randomLinkString(int length) {
-        Random random = new Random();
-        char[] out = new char[length];
-        for (int i = 0; i < length; i++) {
-            out[i] = (char) (random.nextInt(26) + 97);
-        }
-        return new String(out);
-    }
 }
