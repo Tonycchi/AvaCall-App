@@ -9,7 +9,7 @@ public class JitsiRoom {
 
     public JitsiMeetConferenceOptions options;
 
-    public JitsiRoom(String host, String id) throws MalformedURLException {
+    public JitsiRoom(String host, String id) {
         try {
             options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL("https://" + host))
