@@ -51,28 +51,28 @@ public class DirectCommander {
         // 11 & 16: right and left motor speeds respectively
 
         byte length = 20;
-        byte[] y = new byte[length];
+        byte[] directCommand = new byte[length];
 
-        y[0] = (byte) (length - 2);
-        y[2] = 0x2a;
-        y[4] = (byte) 0x80;
-        y[7] = (byte) 0xa4;
-        y[10] = (byte) 0x81;
-        y[12] = (byte) 0xa4;
-        y[15] = (byte) 0x81;
-        y[17] = (byte) 0xa6;
-        y[19] = (byte) (PORT_RIGHT + PORT_LEFT);
+        directCommand[0] = (byte) (length - 2);
+        directCommand[2] = 0x2a;
+        directCommand[4] = (byte) 0x80
+        directCommand[7] = (byte) 0xa4;
+        directCommand[10] = (byte) 0x81;
+        directCommand[12] = (byte) 0xa4;
+        directCommand[15] = (byte) 0x81;
+        directCommand[17] = (byte) 0xa6;
+        directCommand[19] = (byte) (PORT_RIGHT + PORT_LEFT);
 
-        y[9] = PORT_RIGHT;    // PORT right motor
-        y[11] = right;  // POWER right motor
+        directCommand[9] = PORT_RIGHT;    // PORT right motor
+        directCommand[11] = right;  // POWER right motor
 
-        y[14] = PORT_LEFT;   // PORT left motor
-        y[16] = left;   // POWER left motor
+        directCommand[14] = PORT_LEFT;   // PORT left motor
+        directCommand[16] = left;   // POWER left motor
 
-        return y;
+        return directCommand;
     }
 
-    public byte calcPower(float x) {
-        return (byte) (x * maxPower);
+    public byte calcPower(float motorSpeed) {
+        return (byte) (motorSpeed * maxPower);
     }
 }
