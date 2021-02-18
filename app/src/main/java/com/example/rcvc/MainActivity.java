@@ -231,6 +231,8 @@ public class MainActivity extends AppCompatActivity{
         setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null) {
+            btIsClicked = true;
+            buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonOpenRoom.setEnabled(true);
             buttonShowController.setVisibility(View.VISIBLE);
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
