@@ -16,14 +16,6 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
     private RadioGroup groupRight, groupLeft;
     private RadioButton[] buttonsRight, buttonsLeft;
 
-    /*
-    private LinearLayout testRight, testLeft;
-    private CheckBox[] cr, cl;
-    private boolean rchecked, lchecked;
-     */
-
-    //private Button test;
-
     public static MotorPortDialogFragment newInstance(
             String key) {
         final MotorPortDialogFragment
@@ -43,16 +35,6 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
         groupRight = view.findViewById(R.id.radio_group_right_port);
         groupLeft = view.findViewById(R.id.radio_group_left_port);
-
-        /*
-        test = view.findViewById(R.id.clear_test);
-        test.setOnClickListener((View v) -> {
-            groupRight.clearCheck();
-            groupLeft.clearCheck();
-            enableAll(buttonsRight);
-            enableAll(buttonsLeft);
-        });
-         */
 
         if (groupRight == null || groupLeft == null) {
             throw new IllegalStateException();
@@ -84,47 +66,6 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
         buttonsRight[li].setEnabled(false);
         buttonsLeft[ri].setEnabled(false);
-
-        /*
-        testRight = view.findViewById(R.id.test_right);
-        testLeft = view.findViewById(R.id.test_left);
-
-        cr = new CheckBox[4];
-        cl = new CheckBox[4];
-
-        for (int i = 0; i < testRight.getChildCount(); i++) {
-            cr[i] = (CheckBox) testRight.getChildAt(i);
-            cl[i] = (CheckBox) testLeft.getChildAt(i);
-            int self = i;
-
-            cr[i].setOnClickListener((View v) -> {
-                if (((CheckBox) v).isChecked()) {
-                    ((CheckBox) v).setChecked(false);
-                    rchecked = false;
-                    cl[self].setEnabled(true);
-                } else {
-                    if (!rchecked) {
-                        rchecked = true;
-                        ((CheckBox) v).setChecked(true);
-                        cl[self].setEnabled(false);
-                    }
-                }
-            });
-            cl[i].setOnClickListener((View v) -> {
-                if (((CheckBox) v).isChecked()) {
-                    ((CheckBox) v).setChecked(false);
-                    lchecked = false;
-                    cr[self].setEnabled(true);
-                } else {
-                    if (!lchecked) {
-                        lchecked = true;
-                        ((CheckBox) v).setChecked(true);
-                        cr[self].setEnabled(false);
-                    }
-                }
-            });
-        }
-        */
     }
 
     @Override
@@ -144,12 +85,6 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
             editor.putInt("motor_left", pow2(l));
 
             editor.apply();
-
-            /*DialogPreference pref = getPreference();
-            if (pref instanceof MotorPortDialogPreference) {
-                MotorPortDialogPreference mPref = (MotorPortDialogPreference) pref;
-                mPref.setPorts((1 << r), (1 << l));
-            }*/
         }
     }
 

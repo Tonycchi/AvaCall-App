@@ -2,9 +2,7 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 
 public class DirectCommander {
