@@ -55,7 +55,7 @@ public class DirectCommander {
 
         directCommand[0] = (byte) (length - 2);
         directCommand[2] = 0x2a;
-        directCommand[4] = (byte) 0x80
+        directCommand[4] = (byte) 0x80;
         directCommand[7] = (byte) 0xa4;
         directCommand[10] = (byte) 0x81;
         directCommand[12] = (byte) 0xa4;
