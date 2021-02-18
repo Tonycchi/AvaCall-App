@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity{
 
         setAllButtonsUsable(); //TODO bei release rausnehmen
 
-        if (bluetoothConnection.getConnectionStatus() == 1) {
+        if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
             btIsClicked = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonOpenRoom.setEnabled(true);
