@@ -329,7 +329,9 @@ public class MainActivity extends AppCompatActivity{
     private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            onConnection();
+            if (bluetoothConnection != null) {
+                onConnection();
+            }
         }
     };
 
