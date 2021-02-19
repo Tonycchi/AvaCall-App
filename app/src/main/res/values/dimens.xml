@@ -13,7 +13,7 @@
     <dimen name="paired_devices_height">@dimen/_125sdp</dimen>
     <dimen name="joystick_size">@dimen/_125sdp</dimen>
     <dimen name="joystick_border_width">@dimen/_32sdp</dimen>
-    <dimen name="margin_top_between_buttons">@dimen/_1sdp</dimen>
+    <dimen name="margin_top_between_buttons">@dimen/_2sdp</dimen>
     <dimen name="standard_text_size">@dimen/_12sdp</dimen>
     <dimen name="small_text_size">@dimen/_10sdp</dimen>
     <dimen name="margin_connection_status">@dimen/_8sdp</dimen>
@@ -22,7 +22,7 @@
     <dimen name="landscape_margin_top">@dimen/_8sdp</dimen>
     <dimen name="landscape_margin_side">@dimen/_20sdp</dimen>
     <dimen name="landscape_standard_button_width">@dimen/_210sdp</dimen>
-    <dimen name="landscape_margin_top_between_buttons">@dimen/_1sdp</dimen>
+    <dimen name="landscape_margin_top_between_buttons">@dimen/_2sdp</dimen>
     <dimen name="landscape_paired_devices_width">@dimen/_210sdp</dimen>
     <dimen name="landscape_paired_devices_height">@dimen/_200sdp</dimen>
 </resources>
