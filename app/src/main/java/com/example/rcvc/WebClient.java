@@ -12,17 +12,20 @@ public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
     private AnalogController analogController;
-    private boolean dataReady;
     private String id;
     private final String jitsi;
     private boolean receiveCommands;
+    private MainActivity mainActivity;
+    private boolean ready;
 
-    public WebClient(URI serverURI, String jitsi, AnalogController analogController) {
+    public WebClient(URI serverURI, String jitsi, AnalogController analogController, MainActivity mainActivity) {
         super(serverURI);
         this.analogController = analogController;
-        this.dataReady = false;
         this.jitsi = jitsi;
-        receiveCommands = false;
+        this.mainActivity = mainActivity;
+        this.ready = false;
+        //as long as this is not correctly implemented let this on true
+        receiveCommands = true;
     }
 
     @Override
@@ -40,14 +43,15 @@ public class WebClient extends WebSocketClient {
      */
     public void onClose(int code, String reason, boolean remote) {
         Log.d(TAG,"closed with exit code " + code + " additional info: " + reason);
+        ready = false;
     }
 
     @Override
     public void onMessage(String message) {
         Log.d(TAG, message);
-        if (message.startsWith("data:")) {
+        if (message.startsWith("id:")) {
             id = message.split(":",2)[1];
-            dataReady = true;
+            ready = true;
         } else {
             if (receiveCommands) {
                 String[] values = new String[2];
@@ -64,6 +68,10 @@ public class WebClient extends WebSocketClient {
         Log.d(TAG,"received ByteBuffer");
     }
 
+    public boolean isReady(){
+        return ready;
+    }
+
     @Override
     /**
      * Send an error log when an error occurs
@@ -74,10 +82,6 @@ public class WebClient extends WebSocketClient {
 
     public String getId() {
         return id;
-    }
-
-    public boolean isDataReady() {
-        return dataReady;
     }
 
     public void setReceiveCommands() {
