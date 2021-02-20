@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity{
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
-        //setAllButtonsUsable(); //TODO bei release rausnehmen
+        setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
             btIsClicked = true;
@@ -403,7 +403,6 @@ public class MainActivity extends AppCompatActivity{
 
             long startTime = System.currentTimeMillis();
             boolean connectionError = false;
-            //TODO: this is shitty please think of something else
             while(!wc.isReady()) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
@@ -418,8 +417,6 @@ public class MainActivity extends AppCompatActivity{
                 room = new JitsiRoom(jitsi, id);
                 shareURL = hostURL.url + "/" + id;
 
-                buttonController = new ButtonController(this, bluetoothConnection);
-                analogController = new AnalogController(this, bluetoothConnection);
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
                 clipboard.setPrimaryClip(clip);
