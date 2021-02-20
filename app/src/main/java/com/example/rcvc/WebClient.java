@@ -24,8 +24,7 @@ public class WebClient extends WebSocketClient {
         this.jitsi = jitsi;
         this.mainActivity = mainActivity;
         this.ready = false;
-        //as long as this is not correctly implemented let this on true
-        receiveCommands = true;
+        receiveCommands = false;
     }
 
     @Override

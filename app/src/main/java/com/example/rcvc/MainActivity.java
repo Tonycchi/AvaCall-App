@@ -290,12 +290,12 @@ public class MainActivity extends AppCompatActivity{
                 buttonShowController.setVisibility(View.VISIBLE);
                 break;
             case 2: // Could not connect
-                showToast(getString(R.string.connection_init_error));
+                showToast(getString(R.string.bluetooth_connection_init_error));
                 resetConnection();
                 listViewDevices.setVisibility(View.INVISIBLE);
                 break;
             case 3: // Connection lost
-                showToast(getString(R.string.connection_lost));
+                showToast(getString(R.string.bluetooth_connection_lost));
                 resetConnection();
                 break;
             default: // connectionStatus was not set yet
@@ -401,26 +401,39 @@ public class MainActivity extends AppCompatActivity{
             wc.connect();
             //continue with share link when ws is connected
 
+            long startTime = System.currentTimeMillis();
+            boolean connectionError = false;
             //TODO: this is shitty please think of something else
-            while(!wc.isReady());
+            while(!wc.isReady()) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - startTime >= 5000) {
+                    connectionError = true;
+                    break;
+                }
+            }
 
-            String id = wc.getId();
-            Log.d("id", id);
-            room = new JitsiRoom(jitsi, id);
-            shareURL = hostURL.url + "/" + id;
+            if (!connectionError) {
+                String id = wc.getId();
+                Log.d("id", id);
+                room = new JitsiRoom(jitsi, id);
+                shareURL = hostURL.url + "/" + id;
 
-            buttonController = new ButtonController(this, bluetoothConnection);
-            analogController = new AnalogController(this, bluetoothConnection);
-            //this case should never happen -> delete code later
-        /*if (room == null) {
-            showToast(getString(R.string.toast_no_open_room));
-        } else {*/
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
-            clipboard.setPrimaryClip(clip);
-            buttonSwitchToRoom.setEnabled(true);
-            showToast(getString(R.string.toast_link_copied));
-            // }
+                buttonController = new ButtonController(this, bluetoothConnection);
+                analogController = new AnalogController(this, bluetoothConnection);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
+                clipboard.setPrimaryClip(clip);
+                buttonSwitchToRoom.setEnabled(true);
+                showToast(getString(R.string.toast_link_copied));
+            } else {
+                Bundle bundle = new Bundle();
+                // first put id of error message in bundle using defined key
+                bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.server_connection_error);
+                ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.server_connection_error));
+                // then pass bundle to dialog and show
+                error.setArguments(bundle);
+                error.show(this.getSupportFragmentManager(), TAG);
+            }
         } else if (!hostReady) {
             Bundle bundle = new Bundle();
             // first put id of error message in bundle using defined key
@@ -430,9 +443,6 @@ public class MainActivity extends AppCompatActivity{
             error.setArguments(bundle);
             error.show(this.getSupportFragmentManager(), TAG);
         }
-        //share link is started from webclient.java when server answers with id
-
-
     }
 
     /**
