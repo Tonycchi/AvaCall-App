@@ -39,34 +39,15 @@
             android:summary="@string/settings_summary_max"
             app:showSeekBarValue="true"
             app:updatesContinuously="true" />
-        <!--<ListPreference
-            app:iconSpaceReserved="false"
-            android:key="right_port"
-            android:defaultValue="1"
-            android:entries="@array/port_labels"
-            android:entryValues="@array/port_values"
-            android:title="@string/settings_title_right" />-->
-        <!--<ListPreference
-            app:iconSpaceReserved="false"
-            android:key="left_port"
-            android:defaultValue="8"
-            android:entries="@array/port_labels"
-            android:entryValues="@array/port_values"
-            android:title="@string/settings_title_left" />-->
-        <!--<SwitchPreference
-            app:iconSpaceReserved="false"
-            android:key="additional_motors"
-            android:defaultValue="false"
-            android:title="@string/settings_title_additional_motors" />-->
         <com.example.rcvc.MotorPortDialogPreference
             app:iconSpaceReserved="false"
             android:key="motor_right"
-            android:defaultValue="@integer/A"
+            android:defaultValue="@integer/port_value_A"
             android:title="@string/settings_title_motor_ports"
             android:summary="@string/settings_summary_motor_ports" />
         <Preference
             android:key="motor_left"
-            android:defaultValue="@integer/D"
+            android:defaultValue="@integer/port_value_D"
             />
         <Preference
             android:key="motor_1"

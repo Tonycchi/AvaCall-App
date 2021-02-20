@@ -14,16 +14,16 @@ public class DirectCommander {
     private final byte PORT_RIGHT;
     private final byte PORT_LEFT;
 
-    private int maxPower;
+    private final int maxPower;
 
 
-    public DirectCommander(Context context, BluetoothConnectionService b) {
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+    public DirectCommander(Context context, BluetoothConnectionService service) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        PORT_RIGHT = (byte) p.getInt("motor_right", 1);
-        PORT_LEFT = (byte) p.getInt("motor_left", 8);
-        maxPower = p.getInt("max_speed", 50);
-        B = b;
+        PORT_RIGHT = (byte) pref.getInt("motor_right", 1);
+        PORT_LEFT = (byte) pref.getInt("motor_left", 8);
+        maxPower = pref.getInt("max_speed", 50);
+        B = service;
     }
 
     /**
@@ -72,13 +72,5 @@ public class DirectCommander {
 
     public byte calcPower(float x) {
         return (byte) (x * maxPower);
-    }
-
-    public static int[] stringToPorts(String p) {
-        int[] r = new int[2];
-        int x = Integer.parseInt(p);
-        r[0] = x & 0b1111;
-        r[1] = (x & 0b11110000) >> 4;
-        return r;
     }
 }

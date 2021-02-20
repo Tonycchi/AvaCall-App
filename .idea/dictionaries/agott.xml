@@ -2,6 +2,8 @@
   <dictionary name="agott">
     <words>
       <w>jitsi</w>
+      <w>lindex</w>
+      <w>rindex</w>
     </words>
   </dictionary>
 </component>

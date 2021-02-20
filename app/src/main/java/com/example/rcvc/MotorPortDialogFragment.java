@@ -11,7 +11,7 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 
 public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
-    private SharedPreferences P;
+    private SharedPreferences pref;
 
     private RadioGroup groupRight, groupLeft;
     private RadioButton[] buttonsRight, buttonsLeft;
@@ -31,7 +31,9 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
     protected void onBindDialogView(View view) {
         super.onBindDialogView(view);
 
-        P = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        Context context = getContext();
+        if (context == null) throw new IllegalStateException();
+        pref = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
         groupRight = view.findViewById(R.id.radio_group_right_port);
         groupLeft = view.findViewById(R.id.radio_group_left_port);
@@ -58,31 +60,35 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
             });
         }
 
-        int ri = log2(P.getInt("motor_right", 1));
-        int li = log2(P.getInt("motor_left", 8));
+        // turn saved values into indices
+        int rIdx = motorToIndex(pref.getInt("motor_right", 1));
+        int lIdx = motorToIndex(pref.getInt("motor_left", 8));
 
-        buttonsRight[ri].setChecked(true);
-        buttonsLeft[li].setChecked(true);
+        // and set up UI accordingly
+        buttonsRight[rIdx].setChecked(true);
+        buttonsLeft[lIdx].setChecked(true);
 
-        buttonsRight[li].setEnabled(false);
-        buttonsLeft[ri].setEnabled(false);
+        buttonsRight[lIdx].setEnabled(false);
+        buttonsLeft[rIdx].setEnabled(false);
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
-            SharedPreferences.Editor editor = P.edit();
+            SharedPreferences.Editor editor = pref.edit();
 
+            // get indices of checked radio buttons for right
             int rid = groupRight.getCheckedRadioButtonId();
             View rb = groupRight.findViewById(rid);
-            int r = groupRight.indexOfChild(rb);
-
+            int rIdx = groupRight.indexOfChild(rb);
+            // and left
             int lid = groupLeft.getCheckedRadioButtonId();
             View lb = groupLeft.findViewById(lid);
-            int l = groupLeft.indexOfChild(lb);
+            int lIdx = groupLeft.indexOfChild(lb);
 
-            editor.putInt("motor_right", pow2(r));
-            editor.putInt("motor_left", pow2(l));
+            // save them in preferences
+            editor.putInt("motor_right", indexToMotor(rIdx));
+            editor.putInt("motor_left", indexToMotor(lIdx));
 
             editor.apply();
         }
@@ -92,7 +98,12 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
         for (RadioButton b : buttons) b.setEnabled(true);
     }
 
-    private int log2(int x) {
+    /**
+     * motor number to array index
+     * @param x input, normally 1, 2, 4 oder 8, (corresponding to ev3 motors)
+     * @return base 2 log of input as integer by bit shifting
+     */
+    private int motorToIndex(int x) {
         int y = 0, i = x;
         while (i > 1) {
             i = i >> 1;
@@ -101,7 +112,12 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
         return y;
     }
 
-    private int pow2(int x) {
+    /**
+     * array index to motor number
+     * @param x shift amount
+     * @return 1 shifted to the left by x
+     */
+    private int indexToMotor(int x) {
         int y = 1, i = x;
         while (i > 0) {
             y = y << 1;
