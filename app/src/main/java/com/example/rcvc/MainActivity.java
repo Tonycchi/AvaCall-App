@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
 
-        InitialzieUI();
+        InitializeUI();
     }
 
     @Override
@@ -114,23 +114,17 @@ public class MainActivity extends AppCompatActivity{
             setContentView(R.layout.activity_main);
         }
 
-        InitialzieUI();
+        InitializeUI();
     }
 
-    public void InitialzieUI() {
+    public void InitializeUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         try {
             hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
             jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
             hostReady = true;
         } catch (MalformedURLException e) {
-            Bundle bundle = new Bundle();
-            // first put id of error message in bundle using defined key
-            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
-            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
-            // then pass bundle to dialog and show
-            error.setArguments(bundle);
-            error.show(this.getSupportFragmentManager(), TAG);
+            showErrorDialogFragment(R.string.error_malformed_url);
             hostReady = false;
         }
 
@@ -393,7 +387,7 @@ public class MainActivity extends AppCompatActivity{
         if (room == null && hostReady) {
             String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
             try {// TODO hardcoded link entfernen
-                wc = new WebClient(new URI("wss://" + "avatar.mintclub.org:" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController, this);
+                wc = new WebClient(new URI("wss://" + hostURL + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -403,6 +397,7 @@ public class MainActivity extends AppCompatActivity{
 
             long startTime = System.currentTimeMillis();
             boolean connectionError = false;
+            //check if a timeout occurs while connecting to server
             while(!wc.isReady()) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
@@ -423,22 +418,10 @@ public class MainActivity extends AppCompatActivity{
                 buttonSwitchToRoom.setEnabled(true);
                 showToast(getString(R.string.toast_link_copied));
             } else {
-                Bundle bundle = new Bundle();
-                // first put id of error message in bundle using defined key
-                bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.server_connection_error);
-                ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.server_connection_error));
-                // then pass bundle to dialog and show
-                error.setArguments(bundle);
-                error.show(this.getSupportFragmentManager(), TAG);
+                showErrorDialogFragment(R.string.server_connection_error);
             }
         } else if (!hostReady) {
-            Bundle bundle = new Bundle();
-            // first put id of error message in bundle using defined key
-            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
-            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
-            // then pass bundle to dialog and show
-            error.setArguments(bundle);
-            error.show(this.getSupportFragmentManager(), TAG);
+            showErrorDialogFragment(R.string.error_malformed_url);
         }
     }
 
@@ -460,7 +443,6 @@ public class MainActivity extends AppCompatActivity{
         toast.show();
     }
 
-
     /**
      * @return an ArrayList which contains all paired bluetooth devices, if there are no paired devices an error message pops up
      * and you get redirected to the bluetooth settings
@@ -475,13 +457,7 @@ public class MainActivity extends AppCompatActivity{
                 names.add(device.getName());
             }
         } else {
-            Bundle bundle = new Bundle();
-            // first put id of error message in bundle using defined key
-            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_no_paired_devices);
-            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_no_paired_devices));
-            // then pass bundle to dialog and show
-            error.setArguments(bundle);
-            error.show(this.getSupportFragmentManager(), TAG);
+            showErrorDialogFragment(R.string.error_no_paired_devices);
         }
         return names;
     }
@@ -557,6 +533,20 @@ public class MainActivity extends AppCompatActivity{
             buttonToggleController.setText(R.string.button_switch_to_joystick);
         }
         toggleController = !toggleController;
+    }
+
+    /**
+     * Shows an ErrorDialogFragment on screen
+     * @param errorStringValue the errorMessage that gets shown
+     */
+    public void showErrorDialogFragment(int errorStringValue) {
+        Bundle bundle = new Bundle();
+        // first put id of error message in bundle using defined key
+        bundle.putInt(ErrorDialogFragment.MSG_KEY, errorStringValue);
+        ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(errorStringValue));
+        // then pass bundle to dialog and show
+        error.setArguments(bundle);
+        error.show(this.getSupportFragmentManager(), TAG);
     }
 
     /**
