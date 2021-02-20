@@ -273,7 +273,9 @@ public class MainActivity extends AppCompatActivity{
      * Checks if the connection is valid and changes variables and buttons on screen accordingly
      */
     public void onConnection() {
-        buttonController.sendPowers(ButtonController.STOP);
+        if (buttonController != null) {
+            buttonController.sendPowers(ButtonController.STOP);
+        }
         switch (bluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
                 textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
@@ -410,7 +412,7 @@ public class MainActivity extends AppCompatActivity{
                 String id = wc.getId();
                 Log.d("id", id);
                 room = new JitsiRoom(jitsi, id);
-                shareURL = hostURL.url + "/" + id;
+                shareURL = "https://" + hostURL.url + "/" + id;
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
