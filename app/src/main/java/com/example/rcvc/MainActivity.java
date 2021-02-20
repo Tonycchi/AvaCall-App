@@ -391,7 +391,7 @@ public class MainActivity extends AppCompatActivity{
         if (room == null && hostReady) {
             String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
             try {// TODO hardcoded link entfernen
-                wc = new WebClient(new URI("wss://" + hostURL.url + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
+                wc = new WebClient(new URI("wss://" + hostURL.getHostname() + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity{
                 String id = wc.getId();
                 Log.d("id", id);
                 room = new JitsiRoom(jitsi, id);
-                shareURL = "https://" + hostURL.url + "/" + id;
+                shareURL = hostURL.getUrl() + "/" + id;
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
