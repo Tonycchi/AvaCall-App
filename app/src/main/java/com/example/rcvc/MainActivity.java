@@ -388,43 +388,50 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onClickShareLink(View v) {
         //first create room
-        if (room == null && hostReady) {
-            String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
-            try {// TODO hardcoded link entfernen
-                wc = new WebClient(new URI("wss://" + hostURL.getHostname() + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-
-            wc.connect();
-            //continue with share link when ws is connected
-
-            long startTime = System.currentTimeMillis();
+        if (hostReady) {
             boolean connectionError = false;
-            //check if a timeout occurs while connecting to server
-            while(!wc.isReady()) {
-                long currentTime = System.currentTimeMillis();
-                if (currentTime - startTime >= 5000) {
-                    connectionError = true;
-                    break;
+            if (room == null) {
+                String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
+                try {// TODO hardcoded link entfernen
+                    wc = new WebClient(new URI("wss://" + hostURL.getHostname() + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+
+                wc.connect();
+                //continue with share link when ws is connected
+
+                long startTime = System.currentTimeMillis();
+                connectionError = false;
+                //check if a timeout occurs while connecting to server
+                while(!wc.isReady()) {
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - startTime >= 5000) {
+                        connectionError = true;
+                        break;
+                    }
+                }
+
+                if (!connectionError) {
+                    String id = wc.getId();
+                    Log.d("id", id);
+                    room = new JitsiRoom(jitsi, id);
+                    shareURL = hostURL.getUrl() + "/" + id;
+                    buttonSwitchToRoom.setEnabled(true);
+                } else {
+                    showErrorDialogFragment(R.string.server_connection_error);
                 }
             }
-
             if (!connectionError) {
-                String id = wc.getId();
-                Log.d("id", id);
-                room = new JitsiRoom(jitsi, id);
-                shareURL = hostURL.getUrl() + "/" + id;
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, shareURL);
+                sendIntent.setType("text/plain");
 
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
-                clipboard.setPrimaryClip(clip);
-                buttonSwitchToRoom.setEnabled(true);
-                showToast(getString(R.string.toast_link_copied));
-            } else {
-                showErrorDialogFragment(R.string.server_connection_error);
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
             }
-        } else if (!hostReady) {
+        } else {
             showErrorDialogFragment(R.string.error_malformed_url);
         }
     }
