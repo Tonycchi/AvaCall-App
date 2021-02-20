@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity{
         if (room == null && hostReady) {
             String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
             try {// TODO hardcoded link entfernen
-                wc = new WebClient(new URI("wss://" + hostURL + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
+                wc = new WebClient(new URI("wss://" + hostURL.url + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
