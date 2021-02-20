@@ -12,45 +12,50 @@ public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
     private AnalogController analogController;
-    private boolean dataReady;
     private String id;
     private final String jitsi;
     private boolean receiveCommands;
+    private boolean ready;
 
     public WebClient(URI serverURI, String jitsi, AnalogController analogController) {
         super(serverURI);
         this.analogController = analogController;
-        this.dataReady = false;
         this.jitsi = jitsi;
+        this.ready = false;
         receiveCommands = false;
     }
 
-    @Override
     /**
-     * Sends a message when succesfully connected to the server
+     * Sends a message when successfully connected to the server
      */
+    @Override
     public void onOpen(ServerHandshake handshakeData) {
         send("app:" + jitsi);
         Log.d(TAG,"new connection opened");
     }
 
-    @Override
     /**
      * Sends a message when connection is closed
      */
+    @Override
     public void onClose(int code, String reason, boolean remote) {
         Log.d(TAG,"closed with exit code " + code + " additional info: " + reason);
+        ready = false;
     }
 
+    /**
+     * Handles getting an input message from the WebClient
+     * @param message the input message
+     */
     @Override
     public void onMessage(String message) {
         Log.d(TAG, message);
-        if (message.startsWith("data:")) {
+        if (message.startsWith("id:")) {
             id = message.split(":",2)[1];
-            dataReady = true;
+            ready = true;
         } else {
             if (receiveCommands) {
-                String[] values = new String[2];
+                String[] values;
                 if (message.contains(";")) {
                     values = message.split(";", 2);
                     analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
@@ -64,20 +69,20 @@ public class WebClient extends WebSocketClient {
         Log.d(TAG,"received ByteBuffer");
     }
 
-    @Override
+    public boolean isReady(){
+        return ready;
+    }
+
     /**
      * Send an error log when an error occurs
      */
+    @Override
     public void onError(Exception ex) {
         Log.e(TAG,"an error occurred:" + ex);
     }
 
     public String getId() {
         return id;
-    }
-
-    public boolean isDataReady() {
-        return dataReady;
     }
 
     public void setReceiveCommands() {

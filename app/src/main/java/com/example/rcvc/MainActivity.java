@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity{
     private boolean toggleController; //false is buttons, true is joystick
     //Declare all the xml objects
     private Button buttonBluetooth;
-    private Button buttonOpenRoom;
     private Button buttonShareLink;
     private Button buttonSwitchToRoom;
     private Button buttonMoveForward;
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         InitializeUI();
-
     }
 
     @Override
@@ -126,19 +124,12 @@ public class MainActivity extends AppCompatActivity{
             jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
             hostReady = true;
         } catch (MalformedURLException e) {
-            Bundle bundle = new Bundle();
-            // first put id of error message in bundle using defined key
-            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
-            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
-            // then pass bundle to dialog and show
-            error.setArguments(bundle);
-            error.show(this.getSupportFragmentManager(), TAG);
+            showErrorDialogFragment(R.string.error_malformed_url);
             hostReady = false;
         }
 
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);
-        buttonOpenRoom = findViewById(R.id.button_open_room);
         buttonShareLink = findViewById(R.id.button_share_link);
         buttonSwitchToRoom = findViewById(R.id.button_switch_to_room);
         textViewConnectionStatus = findViewById(R.id.connection_status);
@@ -221,7 +212,6 @@ public class MainActivity extends AppCompatActivity{
             return true;
         });
 
-
         // Try to start bluetooth connection with paired device that was clicked
         listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
@@ -230,12 +220,12 @@ public class MainActivity extends AppCompatActivity{
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
-        //setAllButtonsUsable(); //TODO bei release rausnehmen
+        setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
             btIsClicked = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
-            buttonOpenRoom.setEnabled(true);
+            buttonShareLink.setEnabled(true);
             buttonShowController.setVisibility(View.VISIBLE);
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
@@ -243,7 +233,7 @@ public class MainActivity extends AppCompatActivity{
         toggleController = false;
 
         if (room != null) {
-            setEnableLinkAndRoom(true);
+            buttonSwitchToRoom.setEnabled(true);
         }
     }
 
@@ -289,17 +279,17 @@ public class MainActivity extends AppCompatActivity{
                 textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
-                buttonOpenRoom.setEnabled(true);
+                buttonShareLink.setEnabled(true);
                 listViewDevices.setVisibility(View.INVISIBLE);
                 buttonShowController.setVisibility(View.VISIBLE);
                 break;
             case 2: // Could not connect
-                showToast(getString(R.string.connection_init_error));
+                showToast(getString(R.string.bluetooth_connection_init_error));
                 resetConnection();
                 listViewDevices.setVisibility(View.INVISIBLE);
                 break;
             case 3: // Connection lost
-                showToast(getString(R.string.connection_lost));
+                showToast(getString(R.string.bluetooth_connection_lost));
                 resetConnection();
                 break;
             default: // connectionStatus was not set yet
@@ -390,51 +380,48 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * On click of the openRoom button we create a jitsi room with some options and enable the shareLink and
-     * switchToRoom button.
-     */
-    public void onClickOpenRoom(View v) throws URISyntaxException, MalformedURLException {
-        if (room == null && hostReady) {
-            String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
-            wc = new WebClient(new URI("wss://" + "mintclub.org:" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
-            // TODO hardcoded link entfernen
-            wc.connect();
-
-            while (!wc.isDataReady());
-            String id = wc.getId();
-            Log.d("datadata", id);
-            room = new JitsiRoom(jitsi, id);
-            shareURL = hostURL.url + "/" + id;
-        } else if (!hostReady) {
-            Bundle bundle = new Bundle();
-            // first put id of error message in bundle using defined key
-            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_malformed_url);
-            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_malformed_url));
-            // then pass bundle to dialog and show
-            error.setArguments(bundle);
-            error.show(this.getSupportFragmentManager(), TAG);
-        }
-
-        setEnableLinkAndRoom(true);
-        showToast(getString(R.string.toast_room_opened));
-    }
-
-    /**
      * The link for the jitsi room gets copied to the clipboard
      */
     public void onClickShareLink(View v) {
-        Log.d("testtest", sharedPreferences.getString("test", "oof"));
+        //first create room
+        if (room == null && hostReady) {
+            String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
+            try {// TODO hardcoded link entfernen
+                wc = new WebClient(new URI("wss://" + hostURL.url + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
 
-        buttonController = new ButtonController(this, bluetoothConnection);
-        analogController = new AnalogController(this, bluetoothConnection);
-        if (room == null) {
-            showToast(getString(R.string.toast_no_open_room));
-        } else {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
-            clipboard.setPrimaryClip(clip);
+            wc.connect();
+            //continue with share link when ws is connected
 
-            showToast(getString(R.string.toast_link_copied));
+            long startTime = System.currentTimeMillis();
+            boolean connectionError = false;
+            //check if a timeout occurs while connecting to server
+            while(!wc.isReady()) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - startTime >= 5000) {
+                    connectionError = true;
+                    break;
+                }
+            }
+
+            if (!connectionError) {
+                String id = wc.getId();
+                Log.d("id", id);
+                room = new JitsiRoom(jitsi, id);
+                shareURL = hostURL.url + "/" + id;
+
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
+                clipboard.setPrimaryClip(clip);
+                buttonSwitchToRoom.setEnabled(true);
+                showToast(getString(R.string.toast_link_copied));
+            } else {
+                showErrorDialogFragment(R.string.server_connection_error);
+            }
+        } else if (!hostReady) {
+            showErrorDialogFragment(R.string.error_malformed_url);
         }
     }
 
@@ -457,15 +444,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * @param enabled The boolean to decide if we want to enable or disable the buttons
-     *                Enables or disables the shareLink and switchToRoom button since they are only used together.
-     */
-    private void setEnableLinkAndRoom(boolean enabled) {
-        buttonShareLink.setEnabled(enabled);
-        buttonSwitchToRoom.setEnabled(enabled);
-    }
-
-    /**
      * @return an ArrayList which contains all paired bluetooth devices, if there are no paired devices an error message pops up
      * and you get redirected to the bluetooth settings
      */
@@ -479,13 +457,7 @@ public class MainActivity extends AppCompatActivity{
                 names.add(device.getName());
             }
         } else {
-            Bundle bundle = new Bundle();
-            // first put id of error message in bundle using defined key
-            bundle.putInt(ErrorDialogFragment.MSG_KEY, R.string.error_no_paired_devices);
-            ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(R.string.error_no_paired_devices));
-            // then pass bundle to dialog and show
-            error.setArguments(bundle);
-            error.show(this.getSupportFragmentManager(), TAG);
+            showErrorDialogFragment(R.string.error_no_paired_devices);
         }
         return names;
     }
@@ -499,8 +471,8 @@ public class MainActivity extends AppCompatActivity{
             buttonController.sendPowers(ButtonController.STOP);
             btIsClicked = false;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
-            buttonOpenRoom.setEnabled(false);
-            setEnableLinkAndRoom(false);
+            buttonShareLink.setEnabled(false);
+            buttonSwitchToRoom.setEnabled(false);
             textViewConnectionStatus.setText(getString(R.string.connection_status_false));
             showController = true;
             showController();
@@ -564,6 +536,20 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
+     * Shows an ErrorDialogFragment on screen
+     * @param errorStringValue the errorMessage that gets shown
+     */
+    public void showErrorDialogFragment(int errorStringValue) {
+        Bundle bundle = new Bundle();
+        // first put id of error message in bundle using defined key
+        bundle.putInt(ErrorDialogFragment.MSG_KEY, errorStringValue);
+        ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(errorStringValue));
+        // then pass bundle to dialog and show
+        error.setArguments(bundle);
+        error.show(this.getSupportFragmentManager(), TAG);
+    }
+
+    /**
      * Set the visibility of the control buttons according to the given param
      *
      * @param visibility the visibility that the control buttons will the get set to
@@ -581,7 +567,6 @@ public class MainActivity extends AppCompatActivity{
 
     private void setAllButtonsUsable() { //TODO später rausnehmen, nur zum testen
         buttonBluetooth.setEnabled(true);
-        buttonOpenRoom.setEnabled(true);
         buttonShareLink.setEnabled(true);
         buttonSwitchToRoom.setEnabled(true);
         buttonShowController.setVisibility(View.VISIBLE);

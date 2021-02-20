@@ -21,19 +21,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_open_room"
-        android:layout_width="@dimen/standard_button_width"
-        android:layout_height="@dimen/standard_button_height"
-        android:layout_marginTop="@dimen/margin_top_between_buttons"
-        android:enabled="false"
-        android:onClick="onClickOpenRoom"
-        android:text="@string/button_open_room"
-        android:textSize="@dimen/standard_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_bluetooth" />
-
-    <Button
         android:id="@+id/button_share_link"
         android:layout_width="@dimen/standard_button_width"
         android:layout_height="@dimen/standard_button_height"
@@ -44,7 +31,7 @@
         android:textSize="@dimen/standard_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_open_room" />
+        app:layout_constraintTop_toBottomOf="@+id/button_bluetooth" />
 
     <Button
         android:id="@+id/button_switch_to_room"
