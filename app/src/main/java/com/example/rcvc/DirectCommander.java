@@ -2,9 +2,7 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 
-import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 
 public class DirectCommander {
@@ -16,16 +14,16 @@ public class DirectCommander {
     private final byte PORT_RIGHT;
     private final byte PORT_LEFT;
 
-    private int maxPower;
+    private final int maxPower;
 
 
-    public DirectCommander(Context context, BluetoothConnectionService b) {
-        SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(context);
+    public DirectCommander(Context context, BluetoothConnectionService service) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        PORT_RIGHT = Byte.parseByte(p.getString("right_port", "1"));
-        PORT_LEFT = Byte.parseByte(p.getString("left_port", "8"));
-        maxPower = p.getInt("max_speed", 50);
-        B = b;
+        PORT_RIGHT = (byte) pref.getInt("motor_right", 1);
+        PORT_LEFT = (byte) pref.getInt("motor_left", 8);
+        maxPower = pref.getInt("max_speed", 50);
+        B = service;
     }
 
     /**

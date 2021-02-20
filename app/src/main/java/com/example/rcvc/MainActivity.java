@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity{
 
         setContentView(R.layout.activity_main);
 
-        InitialzieUI();
+        InitializeUI();
 
     }
 
@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity{
             setContentView(R.layout.activity_main);
         }
 
-        InitialzieUI();
+        InitializeUI();
     }
 
-    public void InitialzieUI() {
+    public void InitializeUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         try {
             hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
@@ -423,6 +423,8 @@ public class MainActivity extends AppCompatActivity{
      * The link for the jitsi room gets copied to the clipboard
      */
     public void onClickShareLink(View v) {
+        Log.d("testtest", sharedPreferences.getString("test", "oof"));
+
         buttonController = new ButtonController(this, bluetoothConnection);
         analogController = new AnalogController(this, bluetoothConnection);
         if (room == null) {
