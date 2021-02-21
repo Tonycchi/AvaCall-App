@@ -14,7 +14,7 @@
         <EditTextPreference
             app:iconSpaceReserved="false"
             android:key="jitsi_url"
-            android:defaultValue="meet.mintclub.org"
+            android:defaultValue="meet.jit.si"
             android:title="@string/settings_title_jitsi_url"
             android:summary="@string/settings_summary_jitsi_url" />
         <EditTextPreference
