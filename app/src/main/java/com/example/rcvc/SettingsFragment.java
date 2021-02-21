@@ -1,7 +1,6 @@
 package com.example.rcvc;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,11 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.EditTextPreference;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -85,11 +83,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             LayoutInflater inflater = requireActivity().getLayoutInflater();
 
             View dialogView = inflater.inflate(R.layout.preference_url, null);
+            TextView textView = dialogView.findViewById(R.id.url_fragment_title);
             EditText editText = dialogView.findViewById(R.id.input_url);
 
             String defVal = "";
-            if (p.getKey().equals("host_url")) defVal = "avatar.mintclub.org";
-            else defVal = "meet.mintclub.org";
+            if (p.getKey().equals("host_url")) {
+                textView.setText(R.string.settings_title_host_url);
+                defVal = "avatar.mintclub.org";
+            } else {
+                textView.setText(R.string.settings_title_jitsi_url);
+                defVal = "meet.mintclub.org";
+            }
 
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
@@ -115,12 +119,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                     handleText();
                 }
+
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
                 @Override
                 public void afterTextChanged(Editable s) {
                     handleText();
                 }
+
                 private void handleText() {
                     final Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
                     String text = editText.getText().toString();
