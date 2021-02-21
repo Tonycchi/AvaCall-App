@@ -1,23 +1,41 @@
 package com.example.rcvc;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+
+    private SharedPreferences pref;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         // sets that text box doesn't autocorrect
+        /*
         EditTextPreference hostURLedit = findPreference("host_url");
         EditTextPreference jitsiURLedit = findPreference("jitsi_url");
-        EditTextPreference port = findPreference("host_port");
         if (hostURLedit != null) {
             hostURLedit.setOnBindEditTextListener(
                     editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
@@ -26,23 +44,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             jitsiURLedit.setOnBindEditTextListener(
                     editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
         }
+
+         */
+        EditTextPreference port = findPreference("host_port");
         if (port != null) {
             port.setOnBindEditTextListener(
                     editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         }
-
-//        // defines list items
-//        final ListPreference rightList = (ListPreference) findPreference("right_port");
-//        final ListPreference leftList = (ListPreference) findPreference("left_port");
-//
-//        rightList.setOnPreferenceClickListener(preference -> {
-//            setLists(rightList, leftList);
-//            return false;
-//        });
-//        leftList.setOnPreferenceClickListener(preference -> {
-//            setLists(leftList, rightList);
-//            return false;
-//        });
     }
 
     @Override
@@ -69,23 +77,64 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private static void setLists(ListPreference set, ListPreference other) {
-        CharSequence[] defEntries = {"A", "B", "C", "D"};
-        CharSequence[] defEntryValues = {"1", "2", "4", "8"};
-        CharSequence[] entries = new CharSequence[3];
-        CharSequence[] entryValues = new CharSequence[3];
-        CharSequence otherEntry = other.getEntry();
+    @Override
+    public boolean onPreferenceTreeClick(Preference p) {
+        if (p.getKey().equals("host_url") || p.getKey().equals("jitsi_url")) {
+            Log.d("treeclick", "poop " + p.getKey());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        int k = 0;
-        for (int i = 0; i < 4; i++) {
-            if (!defEntries[i].equals(otherEntry)) {
-                entries[k] = defEntries[i];
-                entryValues[k] = defEntryValues[i];
-                k++;
-            }
+            View dialogView = inflater.inflate(R.layout.preference_url, null);
+            EditText editText = dialogView.findViewById(R.id.input_url);
+
+            String defVal = "";
+            if (p.getKey().equals("host_url")) defVal = "avatar.mintclub.org";
+            else defVal = "meet.mintclub.org";
+
+            editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+            String currentVal = pref.getString(p.getKey(), defVal);
+            Log.d("treeclick", "a: " + currentVal);
+            editText.setText(currentVal);
+
+            builder.setView(dialogView)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        SharedPreferences.Editor editor = pref.edit();
+                        String url = editText.getText().toString();
+                        editor.putString(p.getKey(), url);
+                        editor.apply();
+                    })
+                    .setNegativeButton(R.string.dialog_close, (dialog, which) -> {
+                        dialog.cancel();
+                    });
+
+            AlertDialog d = builder.create();
+
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    handleText();
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    handleText();
+                }
+                private void handleText() {
+                    final Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
+                    String text = editText.getText().toString();
+                    if (Patterns.WEB_URL.matcher(text).matches()) {
+                        okButton.setEnabled(true);
+                    } else {
+                        okButton.setEnabled(false);
+                    }
+                }
+            });
+
+            d.show();
+            //d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         }
-
-        set.setEntries(entries);
-        set.setEntryValues(entryValues);
+        return true;
     }
 }
