@@ -119,14 +119,9 @@ public class MainActivity extends AppCompatActivity{
 
     public void InitializeUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        try {
-            hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
-            jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
-            hostReady = true;
-        } catch (MalformedURLException e) {
-            showErrorDialogFragment(R.string.error_malformed_url);
-            hostReady = false;
-        }
+        hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
+        jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
+        hostReady = true;
 
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);

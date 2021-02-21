@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity -->
-    <dimen name="standard_button_width">@dimen/_210sdp</dimen>
+    <dimen name="standard_button_width">@dimen/_230sdp</dimen>
     <dimen name="standard_button_height">@dimen/_35sdp</dimen>
     <dimen name="show_controller_width">@dimen/_170sdp</dimen>
     <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
@@ -21,7 +21,7 @@
 
     <dimen name="landscape_margin_top">@dimen/_8sdp</dimen>
     <dimen name="landscape_margin_side">@dimen/_20sdp</dimen>
-    <dimen name="landscape_standard_button_width">@dimen/_210sdp</dimen>
+    <dimen name="landscape_standard_button_width">@dimen/_230sdp</dimen>
     <dimen name="landscape_margin_top_between_buttons">@dimen/_8sdp</dimen>
     <dimen name="landscape_paired_devices_width">@dimen/_210sdp</dimen>
     <dimen name="landscape_paired_devices_height">@dimen/_200sdp</dimen>
