@@ -92,7 +92,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 defVal = "avatar.mintclub.org";
             } else {
                 textView.setText(R.string.settings_title_jitsi_url);
-                defVal = "meet.mintclub.org";
+                defVal = "meet.jit.si";
             }
 
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
