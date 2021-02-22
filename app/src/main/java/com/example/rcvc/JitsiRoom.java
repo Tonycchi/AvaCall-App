@@ -12,7 +12,7 @@ public class JitsiRoom {
     public JitsiRoom(String host, String id) {
         try {
             options = new JitsiMeetConferenceOptions.Builder()
-                    .setServerURL(new URL("https://" + host))
+                    .setServerURL(new URL(host))
                     .setRoom(id)
                     .build();
             /*

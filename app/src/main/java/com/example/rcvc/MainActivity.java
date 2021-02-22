@@ -36,6 +36,7 @@ import org.jitsi.meet.sdk.JitsiMeetActivity;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity{
     private boolean hostReady;
 
     private String shareURL;
+
+    private URLFactory urlFactory;
 
     private static final String TAG = "MainActivity";
 
@@ -119,6 +122,10 @@ public class MainActivity extends AppCompatActivity{
 
     public void InitializeUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        urlFactory = new URLFactory(this);
+
+        // TODO delete
         try {
             hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
             jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
@@ -393,7 +400,7 @@ public class MainActivity extends AppCompatActivity{
             if (room == null) {
                 String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
                 try {
-                    wc = new WebClient(new URI("wss://" + hostURL.getHostname() + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
+                    wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiHttps, analogController);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -416,7 +423,7 @@ public class MainActivity extends AppCompatActivity{
                     String id = wc.getId();
                     Log.d("id", id);
                     room = new JitsiRoom(jitsi, id);
-                    shareURL = hostURL.getUrl() + "/" + id;
+                    shareURL = urlFactory.hostHttps + "/" + id;
                     buttonSwitchToRoom.setEnabled(true);
                 } else {
                     showErrorDialogFragment(R.string.server_connection_error);

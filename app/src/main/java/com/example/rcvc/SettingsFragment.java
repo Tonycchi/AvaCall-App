@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.EditTextPreference;
@@ -83,15 +82,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             LayoutInflater inflater = requireActivity().getLayoutInflater();
 
             View dialogView = inflater.inflate(R.layout.preference_url, null);
-            TextView textView = dialogView.findViewById(R.id.url_fragment_title);
             EditText editText = dialogView.findViewById(R.id.input_url);
 
             String defVal = "";
             if (p.getKey().equals("host_url")) {
-                textView.setText(R.string.settings_title_host_url);
                 defVal = "avatar.mintclub.org";
             } else {
-                textView.setText(R.string.settings_title_jitsi_url);
                 defVal = "meet.mintclub.org";
             }
 
@@ -104,7 +100,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             builder.setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialog, which) -> {
                         SharedPreferences.Editor editor = pref.edit();
+                        // TODO trim url
                         String url = editText.getText().toString();
+
+                        url = url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
+                        if (url.charAt(url.length() - 1) == '/') {
+                            url = url.substring(0, url.length() - 1);
+                        }
+
                         editor.putString(p.getKey(), url);
                         editor.apply();
                     })
@@ -113,6 +116,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     });
 
             AlertDialog d = builder.create();
+
+            if (p.getKey().equals("host_url")) {
+                d.setTitle(R.string.settings_title_host_url);
+            } else {
+                d.setTitle(R.string.settings_title_jitsi_url);
+            }
 
             editText.addTextChangedListener(new TextWatcher() {
                 @Override
