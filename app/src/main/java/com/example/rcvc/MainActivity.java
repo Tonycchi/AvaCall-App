@@ -125,15 +125,10 @@ public class MainActivity extends AppCompatActivity{
 
         urlFactory = new URLFactory(this);
 
-        // TODO delete
-        try {
-            hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
-            jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
-            hostReady = true;
-        } catch (MalformedURLException e) {
-            showErrorDialogFragment(R.string.error_malformed_url);
-            hostReady = false;
-        }
+        // TODO delete if above works
+        hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
+        jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
+        hostReady = true;
 
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);

@@ -7,11 +7,8 @@ public class TrimmedURL {
 
     private String hostname;
 
-    public TrimmedURL(String url) throws MalformedURLException {
+    public TrimmedURL(String url){
         this.hostname = url;
-        if (!Patterns.WEB_URL.matcher(url).matches()) {
-            throw new MalformedURLException();
-        }
         this.hostname = hostname.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
         this.hostname = hostname.replaceFirst("/.*", "");
     }

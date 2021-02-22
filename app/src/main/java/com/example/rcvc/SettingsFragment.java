@@ -88,7 +88,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if (p.getKey().equals("host_url")) {
                 defVal = "avatar.mintclub.org";
             } else {
-                defVal = "meet.mintclub.org";
+                defVal = "meet.jit.si"; // TODO central definition
             }
 
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
