@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity{
     public void InitializeUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         try {
-            hostURL = new TrimmedURL(sharedPreferences.getString("host_url", ""));
-            jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", ""));
+            hostURL = new TrimmedURL(sharedPreferences.getString("host_url", "avatar.mintclub.org"));
+            jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", "meet.jit.si"));
             hostReady = true;
         } catch (MalformedURLException e) {
             showErrorDialogFragment(R.string.error_malformed_url);
