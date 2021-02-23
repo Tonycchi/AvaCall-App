@@ -42,7 +42,7 @@ public class AnalogController {
         float left = 0.0f;
         output[0] = 0.0f;
         output[1] = 0.0f;
-        int delta = 5;
+        int delta = 10;
         int angleDif;
         float speedDif;
         float ratio = 90.0f;
@@ -57,11 +57,11 @@ public class AnalogController {
             right =1.0f;
             left =1.0f - speedDif;
         } else if (angle > 360 - delta || angle < 0 + delta) { // rotate right
-            right = -1.0f;
-            left = 1.0f;
+            right = -0.5f;
+            left = 0.5f;
         } else if (angle > 180 - delta && angle < 180 + delta) { // rotate left
-            right = 1.0f;
-            left = -1.0f;
+            right = 0.5f;
+            left = -0.5f;
         } else if (angle >= 180 + delta && angle <= 270) { // backwards left
             angleDif = 270 - angle;
             speedDif = (float) angleDif / ratio;

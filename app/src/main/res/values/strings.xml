@@ -44,6 +44,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="jitsi_room_link">Jitsi Room Link</string>
+    <string name="invalid_url">Invalid URL</string>
 
     <!-- Settings Layout -->
     <string name="settings">Einstellungen</string>
@@ -66,4 +67,7 @@
     <string name="settings_summary_motor_ports">Einstellen der Ports für Motoren</string>
     <string name="dialog_right_motor_port">Rechter Motor Port</string>
     <string name="dialog_left_motor_port">Linker Motor Port</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Schließen</string>
 </resources>

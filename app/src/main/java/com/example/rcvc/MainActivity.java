@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -36,6 +37,7 @@ import org.jitsi.meet.sdk.JitsiMeetActivity;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -70,10 +72,10 @@ public class MainActivity extends AppCompatActivity{
     private Toast toast;
 
     private JitsiRoom room;
-    private TrimmedURL hostURL, jitsiURL;
-    private boolean hostReady;
 
     private String shareURL;
+
+    private URLFactory urlFactory;
 
     private static final String TAG = "MainActivity";
 
@@ -119,14 +121,8 @@ public class MainActivity extends AppCompatActivity{
 
     public void InitializeUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        try {
-            hostURL = new TrimmedURL(sharedPreferences.getString("host_url", "avatar.mintclub.org"));
-            jitsiURL = new TrimmedURL(sharedPreferences.getString("jitsi_url", "meet.jit.si"));
-            hostReady = true;
-        } catch (MalformedURLException e) {
-            showErrorDialogFragment(R.string.error_malformed_url);
-            hostReady = false;
-        }
+
+        urlFactory = new URLFactory(this);
 
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);
@@ -388,51 +384,51 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onClickShareLink(View v) {
         //first create room
-        if (hostReady) {
-            boolean connectionError = false;
-            if (room == null) {
-                String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
-                try {
-                    wc = new WebClient(new URI("wss://" + hostURL.getHostname() + ":" + sharedPreferences.getString("host_port", "22222")), jitsi, analogController);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
+        boolean connectionError = false;
+        if (room == null) {
+            String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
+            try {
+                wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiHttps, analogController);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
 
-                wc.connect();
-                //continue with share link when ws is connected
+            wc.connect();
+            //continue with share link when ws is connected
 
-                long startTime = System.currentTimeMillis();
-                connectionError = false;
-                //check if a timeout occurs while connecting to server
-                while(!wc.isReady()) {
-                    long currentTime = System.currentTimeMillis();
-                    if (currentTime - startTime >= 5000) {
-                        connectionError = true;
-                        break;
-                    }
-                }
-
-                if (!connectionError) {
-                    String id = wc.getId();
-                    Log.d("id", id);
-                    room = new JitsiRoom(jitsi, id);
-                    shareURL = hostURL.getUrl() + "/" + id;
-                    buttonSwitchToRoom.setEnabled(true);
-                } else {
-                    showErrorDialogFragment(R.string.server_connection_error);
+            long startTime = System.currentTimeMillis();
+            connectionError = false;
+            //check if a timeout occurs while connecting to server
+            while(!wc.isReady()) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - startTime >= 5000) {
+                    connectionError = true;
+                    break;
                 }
             }
-            if (!connectionError) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, shareURL);
-                sendIntent.setType("text/plain");
 
+            if (!connectionError) {
+                String id = wc.getId();
+                Log.d("id", id);
+                room = new JitsiRoom(jitsi, id);
+                shareURL = urlFactory.hostHttps + "/" + id;
+                buttonSwitchToRoom.setEnabled(true);
+            } else {
+                showErrorDialogFragment(R.string.server_connection_error);
+            }
+        }
+        if (!connectionError) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, shareURL);
+            sendIntent.setType("text/plain");
+
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                startActivity(sendIntent);
+            } else {
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
                 startActivity(shareIntent);
             }
-        } else {
-            showErrorDialogFragment(R.string.error_malformed_url);
         }
     }
 

@@ -5,13 +5,13 @@
         app:key="networking_category"
         app:iconSpaceReserved="false"
         app:title="@string/settings_category_network">
-        <EditTextPreference
+        <Preference
             app:iconSpaceReserved="false"
             android:key="host_url"
             android:defaultValue="avatar.mintclub.org"
             android:title="@string/settings_title_host_url"
             android:summary="@string/settings_summary_host_url" />
-        <EditTextPreference
+        <Preference
             app:iconSpaceReserved="false"
             android:key="jitsi_url"
             android:defaultValue="meet.jit.si"

@@ -6,11 +6,6 @@ import android.os.Bundle;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    /*
-    https://developer.android.com/codelabs/android-training-adding-settings-to-app
-    finished 1.7 in this tutorial
-     */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,4 +14,5 @@ public class SettingsActivity extends AppCompatActivity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
     }
+
 }
