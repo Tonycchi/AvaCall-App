@@ -15,10 +15,6 @@ public class JitsiRoom {
                     .setServerURL(new URL(host))
                     .setRoom(id)
                     .build();
-            /*
-            see github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js
-            for feature flags
-             */
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

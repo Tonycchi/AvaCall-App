@@ -12,10 +12,10 @@ public class URLFactory {
     public URLFactory(Context context) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        hostPlain = pref.getString("host_url", "");
+        hostPlain = pref.getString("host_url", "avatar.mintclub.org");
         hostHttps = "https://" + hostPlain;
 
-        jitsiPlain = pref.getString("jitsi_url", "");
+        jitsiPlain = pref.getString("jitsi_url", "meet.jit.si");
         jitsiHttps = "https://" + jitsiPlain;
     }
 }

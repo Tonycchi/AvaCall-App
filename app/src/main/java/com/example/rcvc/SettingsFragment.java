@@ -29,20 +29,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        // sets that text box doesn't autocorrect
-        /*
-        EditTextPreference hostURLedit = findPreference("host_url");
-        EditTextPreference jitsiURLedit = findPreference("jitsi_url");
-        if (hostURLedit != null) {
-            hostURLedit.setOnBindEditTextListener(
-                    editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
-        }
-        if (jitsiURLedit != null) {
-            jitsiURLedit.setOnBindEditTextListener(
-                    editText -> editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS));
-        }
-
-         */
         EditTextPreference port = findPreference("host_port");
         if (port != null) {
             port.setOnBindEditTextListener(
@@ -77,14 +63,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public boolean onPreferenceTreeClick(Preference p) {
         if (p.getKey().equals("host_url") || p.getKey().equals("jitsi_url")) {
-            Log.d("treeclick", "poop " + p.getKey());
+            Log.d("treeclick", "p.getKey(): " + p.getKey());
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = requireActivity().getLayoutInflater();
 
             View dialogView = inflater.inflate(R.layout.preference_url, null);
             EditText editText = dialogView.findViewById(R.id.input_url);
 
-            String defVal = "";
+            String defVal;
             if (p.getKey().equals("host_url")) {
                 defVal = "avatar.mintclub.org";
             } else {
@@ -150,7 +136,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
 
             d.show();
-            //d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
         }
         return true;
     }
