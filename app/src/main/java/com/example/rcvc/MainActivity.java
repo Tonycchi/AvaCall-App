@@ -9,8 +9,6 @@ import androidx.preference.PreferenceManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -36,8 +34,6 @@ import org.jitsi.meet.sdk.JitsiMeetActivity;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -83,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
     private boolean startedConnection;
 
     // Bluetooth adapter of our device
-    private BluetoothAdapter btAdapter;
+    private BluetoothAdapter bluetoothAdapter;
     // Device we want to connect with
     private BluetoothDevice selectedDevice;
     // The UUIDs of the device we want to connect with
@@ -138,7 +134,7 @@ public class MainActivity extends AppCompatActivity{
         buttonToggleController = findViewById(R.id.button_toggle_controller);
         joystick = findViewById(R.id.joystick);
 
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         //bluetooth filter for catching state changes of bluetooth connection (on/off)
         IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -156,7 +152,6 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onMove(int angle, int strength) {
                 analogController.sendPowers(angle, strength);
-                Log.d(TAG, "joystick values: " + angle + " " + strength);
             }
         });
 
@@ -309,7 +304,7 @@ public class MainActivity extends AppCompatActivity{
             unregisterReceiver(receiverConnection);
             unregisterReceiver(receiverNegativeButton);
         } catch (Exception e) {
-            Log.e(TAG, "Receiver not registered, could not unregister");
+            Log.d(TAG, "Receiver not registered, could not unregister");
         }
     }
 
@@ -364,12 +359,12 @@ public class MainActivity extends AppCompatActivity{
         if (btIsClicked) {
             resetConnection();
         } else {
-            if (!btAdapter.isEnabled()) {
+            if (!bluetoothAdapter.isEnabled()) {
                 Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivity(enableBTIntent);
             }
-            if (btAdapter.isEnabled()) {
-                Log.d(TAG, "btAdapterEnabled");
+            if (bluetoothAdapter.isEnabled()) {
+                Log.d(TAG, "bluetoothAdapterEnabled");
 
                 ArrayList<String> names = getPairedDevices();
                 ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
@@ -409,7 +404,6 @@ public class MainActivity extends AppCompatActivity{
 
             if (!connectionError) {
                 String id = wc.getId();
-                Log.d("id", id);
                 room = new JitsiRoom(jitsi, id);
                 shareURL = urlFactory.hostHttps + "/" + id;
                 buttonSwitchToRoom.setEnabled(true);
@@ -455,7 +449,7 @@ public class MainActivity extends AppCompatActivity{
      * and you get redirected to the bluetooth settings
      */
     public ArrayList<String> getPairedDevices() {
-        Set<BluetoothDevice> devices = btAdapter.getBondedDevices();
+        Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         ArrayList<String> names = new ArrayList<>();
         if (devices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
@@ -506,7 +500,6 @@ public class MainActivity extends AppCompatActivity{
      * makes the controller visible or invisible
      */
     public void showController() {
-        Log.d(TAG, String.valueOf(showController));
         if (!showController) {
             buttonToggleController.setVisibility(View.VISIBLE);
             if (!toggleController) {

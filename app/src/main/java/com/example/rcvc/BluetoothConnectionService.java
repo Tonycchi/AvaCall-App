@@ -106,18 +106,8 @@ public class BluetoothConnectionService {
                 connected(socket);
             }
 
-            Log.i(TAG, "END mAcceptThread ");
+            Log.i(TAG, "END AcceptThread ");
         }
-
-        public void cancel() {
-            Log.d(TAG, "cancel: Canceling AcceptThread.");
-            try {
-                SERVER_SOCKET.close();
-            } catch (IOException e) {
-                Log.e(TAG, "cancel: Close of AcceptThread ServerSocket failed. " + e.getMessage());
-            }
-        }
-
     }
 
     /**
@@ -137,7 +127,7 @@ public class BluetoothConnectionService {
 
         public void run() {
             BluetoothSocket tmp = null;
-            Log.i(TAG, "RUN mConnectThread ");
+            Log.i(TAG, "RUN ConnectThread ");
 
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
@@ -170,7 +160,7 @@ public class BluetoothConnectionService {
                     bluetoothSocket.close();
                     Log.d(TAG, "run: Closed Socket.");
                 } catch (IOException e1) {
-                    Log.e(TAG, "mConnectThread: run: Unable to close connection in socket " + e1.getMessage());
+                    Log.e(TAG, "ConnectThread: run: Unable to close connection in socket " + e1.getMessage());
                 }
                 Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID);
             }
@@ -183,7 +173,7 @@ public class BluetoothConnectionService {
                 Log.d(TAG, "cancel: Closing Client Socket.");
                 bluetoothSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "cancel: close() of mmSocket in Connectthread failed. " + e.getMessage());
+                Log.e(TAG, "cancel: close() of bluetoothSocket in Connectthread failed. " + e.getMessage());
             }
         }
     }
@@ -258,7 +248,6 @@ public class BluetoothConnectionService {
             outputStream = tmpOut;
             // check connection with broadcast
             sendConnectionStatusBroadcast();
-            Log.d(TAG, "Connected Thread gestartet");
         }
 
         public void run() {

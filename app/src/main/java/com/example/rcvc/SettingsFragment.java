@@ -63,7 +63,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public boolean onPreferenceTreeClick(Preference p) {
         if (p.getKey().equals("host_url") || p.getKey().equals("jitsi_url")) {
-            Log.d("treeclick", "p.getKey(): " + p.getKey());
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = requireActivity().getLayoutInflater();
 
@@ -80,7 +79,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
             String currentVal = pref.getString(p.getKey(), defVal);
-            Log.d("treeclick", "a: " + currentVal);
             editText.setText(currentVal);
 
             builder.setView(dialogView)
