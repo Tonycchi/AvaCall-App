@@ -6,17 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class JitsiRoom {
-
-    public JitsiMeetConferenceOptions options;
-
-    public JitsiRoom(String host, String id) {
-        try {
-            options = new JitsiMeetConferenceOptions.Builder()
-                    .setServerURL(new URL(host))
-                    .setRoom(id)
-                    .build();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public static JitsiMeetConferenceOptions createRoom(String url, String id) throws MalformedURLException {
+        return new JitsiMeetConferenceOptions.Builder()
+                .setServerURL(new URL(url))
+                .setRoom(id)
+                .build();
     }
 }

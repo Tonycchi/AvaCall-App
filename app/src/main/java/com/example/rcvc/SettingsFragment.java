@@ -97,9 +97,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         editor.putString(p.getKey(), url);
                         editor.apply();
                     })
-                    .setNegativeButton(R.string.dialog_close, (dialog, which) -> {
-                        dialog.cancel();
-                    });
+                    .setNegativeButton(R.string.dialog_close, (dialog, which) -> dialog.cancel());
 
             AlertDialog d = builder.create();
 
@@ -127,11 +125,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 private void handleText() {
                     final Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
                     String text = editText.getText().toString();
-                    if (Patterns.WEB_URL.matcher(text).matches()) {
-                        okButton.setEnabled(true);
-                    } else {
-                        okButton.setEnabled(false);
-                    }
+                    okButton.setEnabled(Patterns.WEB_URL.matcher(text).matches());
                 }
             });
 

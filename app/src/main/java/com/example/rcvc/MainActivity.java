@@ -9,8 +9,6 @@ import androidx.preference.PreferenceManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -32,12 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
-
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -71,7 +68,7 @@ public class MainActivity extends AppCompatActivity{
 
     private Toast toast;
 
-    private JitsiRoom room;
+    private JitsiMeetConferenceOptions jitsiRoomOptions;
 
     private String shareURL;
 
@@ -228,7 +225,7 @@ public class MainActivity extends AppCompatActivity{
         showController = false;
         toggleController = false;
 
-        if (room != null) {
+        if (jitsiRoomOptions != null) {
             buttonSwitchToRoom.setEnabled(true);
         }
     }
@@ -382,10 +379,10 @@ public class MainActivity extends AppCompatActivity{
     /**
      * The link for the jitsi room gets copied to the clipboard
      */
-    public void onClickShareLink(View v) {
+    public void onClickShareLink(View v) throws MalformedURLException {
         //first create room
         boolean connectionError = false;
-        if (room == null) {
+        if (jitsiRoomOptions == null) {
             String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
             try {
                 wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiHttps, analogController);
@@ -410,7 +407,7 @@ public class MainActivity extends AppCompatActivity{
             if (!connectionError) {
                 String id = wc.getId();
                 Log.d("id", id);
-                room = new JitsiRoom(jitsi, id);
+                jitsiRoomOptions = JitsiRoom.createRoom(jitsi, id);
                 shareURL = urlFactory.hostHttps + "/" + id;
                 buttonSwitchToRoom.setEnabled(true);
             } else {
@@ -437,7 +434,7 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onClickSwitchToRoom(View v) {
         wc.setReceiveCommands();
-        JitsiMeetActivity.launch(this, room.options);
+        JitsiMeetActivity.launch(this, jitsiRoomOptions);
     }
 
     /**
@@ -488,7 +485,7 @@ public class MainActivity extends AppCompatActivity{
             selectedDevice = null;
             pairedDevices = new ArrayList<>();
             deviceUUIDs = null;
-            room = null;
+            jitsiRoomOptions = null;
             if (wc != null) {
                 wc.close();
             }
