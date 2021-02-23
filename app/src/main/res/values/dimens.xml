@@ -25,4 +25,8 @@
     <dimen name="landscape_margin_top_between_buttons">@dimen/_8sdp</dimen>
     <dimen name="landscape_paired_devices_width">@dimen/_210sdp</dimen>
     <dimen name="landscape_paired_devices_height">@dimen/_200sdp</dimen>
+
+    <dimen name="dialog_margin_start">20dip</dimen>
+    <dimen name="dialog_margin_end">15dip</dimen>
+    <dimen name="dialog_margin_top">10dip</dimen>
 </resources>

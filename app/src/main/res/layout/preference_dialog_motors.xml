@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"><TextView
+    android:layout_height="match_parent">
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dip"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceListItem"
-        android:text="@string/dialog_right_motor_port"/>
+        android:text="@string/dialog_right_motor_port"
+        android:layout_marginStart="@dimen/dialog_margin_start"
+        android:layout_marginEnd="@dimen/dialog_margin_end"
+        android:layout_marginTop="@dimen/dialog_margin_top"
+    />
 
     <RadioGroup
         android:id="@+id/radio_group_right_port"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="7dip"
         android:clickable="false"
         android:focusable="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/dialog_margin_start"
+        android:layout_marginEnd="@dimen/dialog_margin_end">
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -45,22 +51,24 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dip"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceListItem"
-        android:text="@string/dialog_left_motor_port"/>
+        android:text="@string/dialog_left_motor_port"
+        android:layout_marginStart="@dimen/dialog_margin_start"
+        android:layout_marginEnd="@dimen/dialog_margin_end"/>
 
     <RadioGroup
         android:id="@+id/radio_group_left_port"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="7dip"
         android:clickable="false"
         android:focusable="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/dialog_margin_start"
+        android:layout_marginEnd="@dimen/dialog_margin_end">
 
         <RadioButton
             android:layout_width="wrap_content"
