@@ -31,6 +31,7 @@ public class WebClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         send("app:" + jitsi);
+        Log.d(TAG, jitsi);
         Log.d(TAG,"new connection opened");
     }
 

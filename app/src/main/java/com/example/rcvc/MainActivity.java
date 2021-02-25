@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity{
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
-        setAllButtonsUsable(); //TODO bei release rausnehmen
+//        setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
             btIsClicked = true;
@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity{
         if (room == null) {
             String jitsi = urlFactory.jitsiHttps; //AAAAA
             try {
-                wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiHttps, analogController);
+                wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiPlain, analogController);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
