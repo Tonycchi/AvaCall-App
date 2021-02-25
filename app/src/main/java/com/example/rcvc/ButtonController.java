@@ -34,10 +34,10 @@ public class ButtonController {
                 COMMANDER.send(-1.0f, -1.0f);
                 break;
             case TURN_RIGHT:
-                COMMANDER.send(-1.0f, 1.0f);
+                COMMANDER.send(-0.5f, 0.5f);
                 break;
             case TURN_LEFT:
-                COMMANDER.send(1.0f, -1.0f);
+                COMMANDER.send(0.5f, -0.5f);
                 break;
             default:
         }
