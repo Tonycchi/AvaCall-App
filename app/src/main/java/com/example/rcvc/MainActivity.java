@@ -9,6 +9,8 @@ import androidx.preference.PreferenceManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -211,7 +213,7 @@ public class MainActivity extends AppCompatActivity{
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
-        //setAllButtonsUsable(); //TODO bei release rausnehmen
+        setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
             btIsClicked = true;
@@ -412,14 +414,17 @@ public class MainActivity extends AppCompatActivity{
             }
         }
         if (!connectionError) {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, shareURL);
-            sendIntent.setType("text/plain");
-
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-                startActivity(sendIntent);
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
+                clipboard.setPrimaryClip(clip);
+                showToast(getString(R.string.toast_link_copied));
             } else {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, shareURL);
+                sendIntent.setType("text/plain");
+
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
                 startActivity(shareIntent);
             }
