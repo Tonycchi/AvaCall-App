@@ -383,7 +383,7 @@ public class MainActivity extends AppCompatActivity{
         //first create room
         boolean connectionError = false;
         if (jitsiRoomOptions == null) {
-            String jitsi = sharedPreferences.getString("jitsi_url", "meet.jit.si");
+            String jitsi = urlFactory.jitsiHttps; //AAAAAAAA
             try {
                 wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiHttps, analogController);
             } catch (URISyntaxException e) {
