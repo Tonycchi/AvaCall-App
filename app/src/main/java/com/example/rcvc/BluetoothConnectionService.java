@@ -138,6 +138,7 @@ public class BluetoothConnectionService {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    counter++;
                     continue;
                 }
                 bluetoothAdapter.cancelDiscovery();
