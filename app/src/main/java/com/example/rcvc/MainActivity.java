@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity{
         listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
             deviceUUIDs = selectedDevice.getUuids();
-            bluetoothConnection = new BluetoothConnectionService(MainActivity.this, this);
+            bluetoothConnection = new BluetoothConnectionService(MainActivity.this);
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
@@ -290,6 +290,7 @@ public class MainActivity extends AppCompatActivity{
                 showToast(getString(R.string.bluetooth_connection_init_error));
                 resetConnection();
                 listViewDevices.setVisibility(View.INVISIBLE);
+                debugText.setVisibility(View.VISIBLE);
                 break;
             case 3: // Connection lost
                 showToast(getString(R.string.bluetooth_connection_lost));
@@ -375,6 +376,8 @@ public class MainActivity extends AppCompatActivity{
      * If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
+        debugText.setText("");
+        debugText.setVisibility(View.INVISIBLE);
         if (btIsClicked) {
             resetConnection();
         } else {
@@ -383,8 +386,6 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(enableBTIntent);
             }
             if (bluetoothAdapter.isEnabled()) {
-                debugText.setText("");
-                debugText.setVisibility(View.VISIBLE);
                 Log.d(TAG, "bluetoothAdapterEnabled");
 
                 ArrayList<String> names = getPairedDevices();

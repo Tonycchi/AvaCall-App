@@ -49,10 +49,9 @@ public class BluetoothConnectionService {
 
     private TextView debugText;
 
-    public BluetoothConnectionService(Context context, Activity activity) {
+    public BluetoothConnectionService(Context context) {
         this.context = context;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        debugText = activity.findViewById(R.id.debug_text);
         start();
     }
 
