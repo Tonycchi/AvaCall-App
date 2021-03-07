@@ -30,7 +30,7 @@ public class BluetoothConnectionService {
     private static final String APP_NAME = "AppName";
 
     private static final UUID MY_UUID =
-            UUID.fromString("fa87c0d0-afac-11de-8a39-0800200c9a66");
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private int connectionStatus = 0;
 
@@ -126,45 +126,73 @@ public class BluetoothConnectionService {
         }
 
         public void run() {
-            BluetoothSocket tmp = null;
-            Log.i(TAG, "RUN ConnectThread ");
-
-            // Get a BluetoothSocket for a connection with the
-            // given BluetoothDevice
-            try {
-                for (ParcelUuid mDeviceUUID : deviceUUIDs) {
-                    Log.d(TAG, "ConnectThread: Trying to create RfcommSocket using UUID: "
-                            + mDeviceUUID.getUuid());
-                    tmp = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
-                }
-            } catch (IOException e) {
-                Log.e(TAG, "ConnectThread: Could not create RfcommSocket " + e.getMessage());
-            }
-
-            bluetoothSocket = tmp;
-
-            // Always cancel discovery because it will slow down a connection
-            bluetoothAdapter.cancelDiscovery();
-
-            // Make a connection to the BluetoothSocket
-
-            try {
-                // This is a blocking call and will only return on a
-                // successful connection or an exception
-                bluetoothSocket.connect();
-
-                Log.d(TAG, "run: ConnectThread connected.");
-            } catch (IOException e) {
-                // Close the socket
+            int counter = 0;
+            for (ParcelUuid mDeviceUUID : deviceUUIDs) {
                 try {
-                    bluetoothSocket.close();
-                    Log.d(TAG, "run: Closed Socket.");
-                } catch (IOException e1) {
-                    Log.e(TAG, "ConnectThread: run: Unable to close connection in socket " + e1.getMessage());
+                    bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID);
+                bluetoothAdapter.cancelDiscovery();
+
+                try {
+                    bluetoothSocket.connect();
+                    break;
+                } catch (IOException e) {
+                    // Close the socket
+                    try {
+                        bluetoothSocket.close();
+                        Log.d(TAG, "run: Closed Socket.");
+                    } catch (IOException e1) {
+                        Log.e(TAG, "ConnectThread: run: Unable to close connection in socket " + e1.getMessage());
+                    }
+                    Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID);
+                    counter++;
+                }
             }
 
+//        public void run() {
+//            BluetoothSocket tmp = null;
+//            Log.i(TAG, "RUN ConnectThread ");
+//
+//            // Get a BluetoothSocket for a connection with the
+//            // given BluetoothDevice
+//            Log.e(TAG, "UUID Length: " + deviceUUIDs.length);
+//
+//            try {
+//                for (ParcelUuid mDeviceUUID : deviceUUIDs) {
+//                    Log.d(TAG, "ConnectThread: Trying to create RfcommSocket using UUID: "
+//                          + mDeviceUUID.getUuid());
+//                    tmp = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
+//                }
+//            } catch (IOException e) {
+//                Log.e(TAG, "ConnectThread: Could not create RfcommSocket " + e.getMessage());
+//            }
+//
+//            bluetoothSocket = tmp;
+//
+//            // Always cancel discovery because it will slow down a connection
+//            bluetoothAdapter.cancelDiscovery();
+//
+//            // Make a connection to the BluetoothSocket
+//
+//            try {
+//                // This is a blocking call and will only return on a
+//                // successful connection or an exception
+//                bluetoothSocket.connect();
+//
+//                Log.d(TAG, "run: ConnectThread connected.");
+//            } catch (IOException e) {
+//                // Close the socket
+//                try {
+//                    bluetoothSocket.close();
+//                    Log.d(TAG, "run: Closed Socket.");
+//                } catch (IOException e1) {
+//                    Log.e(TAG, "ConnectThread: run: Unable to close connection in socket " + e1.getMessage());
+//                }
+//                Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID);
+//            }
+            Log.d(TAG, "counter value: " + counter);
             connected(bluetoothSocket);
         }
 
