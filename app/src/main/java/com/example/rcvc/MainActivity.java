@@ -116,8 +116,6 @@ public class MainActivity extends AppCompatActivity{
             setContentView(R.layout.activity_main);
         }
 
-        debugText.setText("");
-
         InitializeUI();
     }
 
@@ -238,6 +236,8 @@ public class MainActivity extends AppCompatActivity{
         if (room != null) {
             buttonSwitchToRoom.setEnabled(true);
         }
+
+        debugText.setText("");
     }
 
     @Override
