@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity{
     private ListView listViewDevices;
     private JoystickView joystick;
 
+    private TextView debugText;
+
     private WebClient wc;
 
     private Toast toast;
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity{
         buttonToggleController = findViewById(R.id.button_toggle_controller);
         joystick = findViewById(R.id.joystick);
 
+        debugText = findViewById(R.id.debug_text);
+
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         //bluetooth filter for catching state changes of bluetooth connection (on/off)
@@ -149,6 +153,9 @@ public class MainActivity extends AppCompatActivity{
         // Custom IntentFilter for catching action on closing negativeButton of ErrorDialogFragment
         IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverNegativeButton, negativeButtonFilter);
+
+        IntentFilter debugFilter = new IntentFilter("debugAction");
+        LocalBroadcastManager.getInstance(this).registerReceiver(debugReceiver, debugFilter);
 
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -209,13 +216,14 @@ public class MainActivity extends AppCompatActivity{
         listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
             deviceUUIDs = selectedDevice.getUuids();
-            bluetoothConnection = new BluetoothConnectionService(MainActivity.this);
+            bluetoothConnection = new BluetoothConnectionService(MainActivity.this, this);
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
 //        setAllButtonsUsable(); //TODO bei release rausnehmen
 
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
+            debugText.setVisibility(View.INVISIBLE);
             btIsClicked = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonShareLink.setEnabled(true);
@@ -322,6 +330,15 @@ public class MainActivity extends AppCompatActivity{
         }
     };
 
+    private final BroadcastReceiver debugReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String intentMessage = bundle.getString("string");
+            debugText.append(intentMessage);
+        }
+    };
+
     private final BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -366,6 +383,8 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(enableBTIntent);
             }
             if (bluetoothAdapter.isEnabled()) {
+                debugText.setText("");
+                debugText.setVisibility(View.VISIBLE);
                 Log.d(TAG, "bluetoothAdapterEnabled");
 
                 ArrayList<String> names = getPairedDevices();
