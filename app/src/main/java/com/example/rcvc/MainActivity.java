@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity{
             setContentView(R.layout.activity_main);
         }
 
+        debugText.setText("");
+
         InitializeUI();
     }
 
@@ -279,6 +281,7 @@ public class MainActivity extends AppCompatActivity{
         }
         switch (bluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
+                debugText.setVisibility(View.INVISIBLE);
                 textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
