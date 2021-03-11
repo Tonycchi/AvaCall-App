@@ -63,6 +63,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public boolean onPreferenceTreeClick(Preference p) {
         if (p.getKey().equals("host_url") || p.getKey().equals("jitsi_url")) {
+            // start building url dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = requireActivity().getLayoutInflater();
 
@@ -76,6 +77,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 defVal = "meet.jit.si"; // TODO central definition
             }
 
+            // no auto-correct
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
             String currentVal = pref.getString(p.getKey(), defVal);
@@ -84,9 +86,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             builder.setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialog, which) -> {
                         SharedPreferences.Editor editor = pref.edit();
-                        // TODO trim url
                         String url = editText.getText().toString();
 
+                        // trim url, ie remove protocols, last /, etc
                         url = url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
                         if (url.charAt(url.length() - 1) == '/') {
                             url = url.substring(0, url.length() - 1);
@@ -122,6 +124,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     handleText();
                 }
 
+                /**
+                 * checks if entered string is a valid url (syntax)
+                 */
                 private void handleText() {
                     final Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
                     String text = editText.getText().toString();

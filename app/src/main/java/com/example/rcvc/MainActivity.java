@@ -44,14 +44,17 @@ import io.github.controlwear.virtual.joystick.android.JoystickView;
 @SuppressLint("LogNotTimber")
 public class MainActivity extends AppCompatActivity{
 
-    // settings
-    SharedPreferences sharedPreferences;
+    private static final String TAG = "MainActivity";
 
-    // zum Testen von nicht implementierten Funktionen
+    // settings
+    private SharedPreferences sharedPreferences;
+
+    // gui state booleans
     private boolean btIsClicked;
     private boolean showController;
-    private boolean toggleController; //false is buttons, true is joystick
-    //Declare all the xml objects
+    private boolean toggleJoystick; //false is buttons, true is joystick
+
+    // gui view elements
     private Button buttonBluetooth;
     private Button buttonShareLink;
     private Button buttonSwitchToRoom;
@@ -64,24 +67,19 @@ public class MainActivity extends AppCompatActivity{
     private TextView textViewConnectionStatus;
     private ListView listViewDevices;
     private JoystickView joystick;
-
     private TextView debugText;
-
-    private WebClient wc;
 
     private Toast toast;
 
+    // web & jitsi
+    private URLFactory urlFactory;
+    private WebClient wc;
     private JitsiRoom room;
-
     private String shareURL;
 
-    private URLFactory urlFactory;
-
-    private static final String TAG = "MainActivity";
-
-    BluetoothConnectionService bluetoothConnection;
+    // bluetooth
+    private BluetoothConnectionService bluetoothConnection;
     private boolean startedConnection;
-
     // Bluetooth adapter of our device
     private BluetoothAdapter bluetoothAdapter;
     // Device we want to connect with
@@ -95,6 +93,7 @@ public class MainActivity extends AppCompatActivity{
     private AnalogController analogController;
 
 
+    // lifecycle methods
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -119,6 +118,27 @@ public class MainActivity extends AppCompatActivity{
         InitializeUI();
     }
 
+    /**
+     * On destroy, all receivers will be unregistered
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isFinishing()) {
+            resetConnection();
+        }
+        try {
+            unregisterReceiver(receiverActionStateChanged);
+            unregisterReceiver(receiverConnection);
+            unregisterReceiver(receiverNegativeButton);
+        } catch (Exception e) {
+            Log.d(TAG, "Receiver not registered, could not unregister");
+        }
+    }
+
+    /**
+     * initialize UI + misc
+     */
     public void InitializeUI() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -220,8 +240,6 @@ public class MainActivity extends AppCompatActivity{
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
-//        setAllButtonsUsable(); //TODO bei release rausnehmen
-
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
             debugText.setVisibility(View.INVISIBLE);
             btIsClicked = true;
@@ -231,7 +249,7 @@ public class MainActivity extends AppCompatActivity{
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
         showController = false;
-        toggleController = false;
+        toggleJoystick = false;
 
         if (room != null) {
             buttonSwitchToRoom.setEnabled(true);
@@ -257,122 +275,6 @@ public class MainActivity extends AppCompatActivity{
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * Starts a connection between our device and the device we want to connect with
-     *
-     * @param device the device to connect with
-     * @param uuid   the uuids of the device
-     */
-    public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
-        Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
-        bluetoothConnection.startClient(device, uuid);
-        startedConnection = true;
-        buttonController = new ButtonController(this, bluetoothConnection);
-        analogController = new AnalogController(this, bluetoothConnection);
-    }
-
-    /**
-     * Checks if the connection is valid and changes variables and buttons on screen accordingly
-     */
-    public void onConnection() {
-        if (buttonController != null) {
-            buttonController.sendPowers(ButtonController.STOP);
-        }
-        switch (bluetoothConnection.getConnectionStatus()) {
-            case 1: // Connection was successful
-                debugText.setVisibility(View.INVISIBLE);
-                textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
-                buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
-                btIsClicked = true;
-                buttonShareLink.setEnabled(true);
-                listViewDevices.setVisibility(View.INVISIBLE);
-                buttonShowController.setVisibility(View.VISIBLE);
-                break;
-            case 2: // Could not connect
-                showToast(getString(R.string.bluetooth_connection_init_error));
-                resetConnection();
-                listViewDevices.setVisibility(View.INVISIBLE);
-                debugText.setVisibility(View.VISIBLE);
-                break;
-            case 3: // Connection lost
-                showToast(getString(R.string.bluetooth_connection_lost));
-                resetConnection();
-                break;
-            default: // connectionStatus was not set yet
-                break;
-        }
-    }
-
-    /**
-     * On destroy, all receivers will be unregistered
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isFinishing()) {
-            resetConnection();
-        }
-        try {
-            unregisterReceiver(receiverActionStateChanged);
-            unregisterReceiver(receiverConnection);
-            unregisterReceiver(receiverNegativeButton);
-        } catch (Exception e) {
-            Log.d(TAG, "Receiver not registered, could not unregister");
-        }
-    }
-
-    /**
-     * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
-     */
-    private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (bluetoothConnection != null) {
-                onConnection();
-            }
-        }
-    };
-
-    private final BroadcastReceiver debugReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            String intentMessage = bundle.getString("string");
-            debugText.append(intentMessage);
-        }
-    };
-
-    private final BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            String intentMessage = bundle.getString("intent message");
-            if (intentMessage.equals(getString(R.string.error_no_paired_devices))) {
-                // if there are no paired devices, open bluetooth settings
-                Intent intentOpenBluetoothSettings = new Intent();
-                intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                startActivity(intentOpenBluetoothSettings);
-            }
-        }
-    };
-
-    /**
-     * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
-     * Whenever Bluetooth is turned off while we are in a connection, reset everything
-     */
-    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-                // Bluetooth Status has been turned off
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
-                    resetConnection();
-                }
-            }
-        }
-    };
 
     /**
      * If bluetooth is disabled, this button will enable it, if bluetooth is is enabled and this button is clicked, it will show all paired devices.
@@ -463,6 +365,127 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
+     * toggles between buttonController and joystickController
+     */
+    public void onClickToggleController(View v) {
+        if (!toggleJoystick) {
+            setVisibilityButtons(View.INVISIBLE);
+            setVisibilityJoystick(View.VISIBLE);
+            buttonToggleController.setText(R.string.button_switch_to_buttons);
+        } else {
+            setVisibilityJoystick(View.INVISIBLE);
+            setVisibilityButtons(View.VISIBLE);
+            buttonToggleController.setText(R.string.button_switch_to_joystick);
+        }
+        toggleJoystick = !toggleJoystick;
+    }
+
+    /**
+     * calls the showController method
+     */
+    public void onClickShowController(View v) {
+        showController();
+    }
+
+    /**
+     * Starts a connection between our device and the device we want to connect with
+     *
+     * @param device the device to connect with
+     * @param uuid   the uuids of the device
+     */
+    public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
+        Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
+        bluetoothConnection.startClient(device, uuid);
+        startedConnection = true;
+        buttonController = new ButtonController(this, bluetoothConnection);
+        analogController = new AnalogController(this, bluetoothConnection);
+    }
+
+    /**
+     * Checks if the connection is valid and changes variables and buttons on screen accordingly
+     */
+    public void onConnection() {
+        if (buttonController != null) {
+            buttonController.sendPowers(ButtonController.STOP);
+        }
+        switch (bluetoothConnection.getConnectionStatus()) {
+            case 1: // Connection was successful
+                debugText.setVisibility(View.INVISIBLE);
+                textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+                buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
+                btIsClicked = true;
+                buttonShareLink.setEnabled(true);
+                listViewDevices.setVisibility(View.INVISIBLE);
+                buttonShowController.setVisibility(View.VISIBLE);
+                break;
+            case 2: // Could not connect
+                showToast(getString(R.string.bluetooth_connection_init_error));
+                resetConnection();
+                listViewDevices.setVisibility(View.INVISIBLE);
+                debugText.setVisibility(View.VISIBLE);
+                break;
+            case 3: // Connection lost
+                showToast(getString(R.string.bluetooth_connection_lost));
+                resetConnection();
+                break;
+            default: // connectionStatus was not set yet
+                break;
+        }
+    }
+
+    /**
+     * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
+     */
+    private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (bluetoothConnection != null) {
+                onConnection();
+            }
+        }
+    };
+
+    private final BroadcastReceiver debugReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String intentMessage = bundle.getString("string");
+            debugText.append(intentMessage);
+        }
+    };
+
+    private final BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String intentMessage = bundle.getString("intent message");
+            if (intentMessage.equals(getString(R.string.error_no_paired_devices))) {
+                // if there are no paired devices, open bluetooth settings
+                Intent intentOpenBluetoothSettings = new Intent();
+                intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivity(intentOpenBluetoothSettings);
+            }
+        }
+    };
+
+    /**
+     * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
+     * Whenever Bluetooth is turned off while we are in a connection, reset everything
+     */
+    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                // Bluetooth Status has been turned off
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
+                    resetConnection();
+                }
+            }
+        }
+    };
+
+    /**
      * @param message The message to pop up at the bottom of the screen
      */
     public void showToast(String message) {
@@ -492,6 +515,29 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
+     * makes the controller visible or invisible
+     */
+    public void showController() {
+        if (!showController) {
+            buttonToggleController.setVisibility(View.VISIBLE);
+            if (!toggleJoystick) {
+                setVisibilityButtons(View.VISIBLE);
+            } else {
+                setVisibilityJoystick(View.VISIBLE);
+            }
+            buttonShowController.setText(R.string.button_controller_disable);
+        } else {
+            setVisibilityButtons(View.INVISIBLE);
+            setVisibilityJoystick(View.INVISIBLE);
+            buttonToggleController.setVisibility(View.INVISIBLE);
+            buttonShowController.setText(R.string.button_controller_enable);
+            toggleJoystick = false;
+            buttonToggleController.setText(R.string.button_switch_to_joystick);
+        }
+        showController = !showController;
+    }
+
+    /**
      * reset connection and change variables when we disconnect (via button or bluetooth)
      */
     public void resetConnection() {
@@ -515,52 +561,6 @@ public class MainActivity extends AppCompatActivity{
                 wc.close();
             }
         }
-    }
-
-    /**
-     * calls the showController method
-     */
-    public void onClickShowController(View v) {
-        showController();
-    }
-
-    /**
-     * makes the controller visible or invisible
-     */
-    public void showController() {
-        if (!showController) {
-            buttonToggleController.setVisibility(View.VISIBLE);
-            if (!toggleController) {
-                setVisibilityButtons(View.VISIBLE);
-            } else {
-                setVisibilityJoystick(View.VISIBLE);
-            }
-            buttonShowController.setText(R.string.button_controller_disable);
-        } else {
-            setVisibilityButtons(View.INVISIBLE);
-            setVisibilityJoystick(View.INVISIBLE);
-            buttonToggleController.setVisibility(View.INVISIBLE);
-            buttonShowController.setText(R.string.button_controller_enable);
-            toggleController = false;
-            buttonToggleController.setText(R.string.button_switch_to_joystick);
-        }
-        showController = !showController;
-    }
-
-    /**
-     * toggles between buttonController and joystickController
-     */
-    public void onClickToggleController(View v) {
-        if (!toggleController) {
-            setVisibilityButtons(View.INVISIBLE);
-            setVisibilityJoystick(View.VISIBLE);
-            buttonToggleController.setText(R.string.button_switch_to_buttons);
-        } else {
-            setVisibilityJoystick(View.INVISIBLE);
-            setVisibilityButtons(View.VISIBLE);
-            buttonToggleController.setText(R.string.button_switch_to_joystick);
-        }
-        toggleController = !toggleController;
     }
 
     /**

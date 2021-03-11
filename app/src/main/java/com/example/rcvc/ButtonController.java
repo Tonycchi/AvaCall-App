@@ -3,7 +3,6 @@ package com.example.rcvc;
 import android.content.Context;
 
 public class ButtonController {
-    //TODO use DirectCommander
 
     public static final int STOP = 0;
     public static final int FORWARD = 1;
