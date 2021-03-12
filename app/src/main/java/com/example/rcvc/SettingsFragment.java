@@ -70,12 +70,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             View dialogView = inflater.inflate(R.layout.preference_url, null);
             EditText editText = dialogView.findViewById(R.id.input_url);
 
+            String defVal = pref.getString(p.getKey(), "");
+            /*
             String defVal;
             if (p.getKey().equals("host_url")) {
                 defVal = "avatar.mintclub.org";
             } else {
-                defVal = "meet.jit.si"; // TODO central definition
+                defVal = "meet.jit.si";
             }
+             */
 
             // no auto-correct
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
