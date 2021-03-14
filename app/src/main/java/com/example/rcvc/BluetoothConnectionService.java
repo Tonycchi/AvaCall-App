@@ -47,8 +47,6 @@ public class BluetoothConnectionService {
 
     private ConnectedThread connectedThread;
 
-    private TextView debugText;
-
     public BluetoothConnectionService(Context context) {
         this.context = context;
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -132,7 +130,6 @@ public class BluetoothConnectionService {
         public void run() {
             int counter = 0;
             Log.d(TAG, "number UUIDS: " + deviceUUIDs.length);
-            appendString("number UUIDS: " + deviceUUIDs.length + "\n");
             for (ParcelUuid mDeviceUUID : deviceUUIDs) {
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
@@ -155,12 +152,10 @@ public class BluetoothConnectionService {
                         Log.e(TAG, "ConnectThread: run: Unable to close connection in socket " + e1.getMessage());
                     }
                     Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + mDeviceUUID.getUuid());
-                    appendString("Could not connect to UUID: " + mDeviceUUID.getUuid() + "\n");
                     counter++;
                 }
             }
             Log.d(TAG, "counter value: " + counter);
-            appendString("counter value: " + counter);
             connected(bluetoothSocket);
         }
 
@@ -335,12 +330,6 @@ public class BluetoothConnectionService {
         Log.d(TAG, "write: Write Called.");
         //perform the write
         connectedThread.write(out);
-    }
-
-    private void appendString(String s) {
-        Intent intent = new Intent("debugAction");
-        intent.putExtra("string", s);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     private void sendConnectionStatusBroadcast() {

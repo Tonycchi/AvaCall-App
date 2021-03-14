@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity{
     private TextView textViewConnectionStatus;
     private ListView listViewDevices;
     private JoystickView joystick;
-    private TextView debugText;
 
     private Toast toast;
 
@@ -158,8 +157,6 @@ public class MainActivity extends AppCompatActivity{
         buttonToggleController = findViewById(R.id.button_toggle_controller);
         joystick = findViewById(R.id.joystick);
 
-        debugText = findViewById(R.id.debug_text);
-
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         //bluetooth filter for catching state changes of bluetooth connection (on/off)
@@ -241,7 +238,6 @@ public class MainActivity extends AppCompatActivity{
         });
 
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
-            debugText.setVisibility(View.INVISIBLE);
             btIsClicked = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonShareLink.setEnabled(true);
@@ -254,8 +250,6 @@ public class MainActivity extends AppCompatActivity{
         if (room != null) {
             buttonSwitchToRoom.setEnabled(true);
         }
-
-        debugText.setText("");
     }
 
     @Override
@@ -281,8 +275,6 @@ public class MainActivity extends AppCompatActivity{
      * If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
-        debugText.setText("");
-        debugText.setVisibility(View.INVISIBLE);
         if (btIsClicked) {
             resetConnection();
         } else {
@@ -410,7 +402,6 @@ public class MainActivity extends AppCompatActivity{
         }
         switch (bluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
-                debugText.setVisibility(View.INVISIBLE);
                 textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
@@ -422,7 +413,6 @@ public class MainActivity extends AppCompatActivity{
                 showToast(getString(R.string.bluetooth_connection_init_error));
                 resetConnection();
                 listViewDevices.setVisibility(View.INVISIBLE);
-                debugText.setVisibility(View.VISIBLE);
                 break;
             case 3: // Connection lost
                 showToast(getString(R.string.bluetooth_connection_lost));
@@ -450,7 +440,6 @@ public class MainActivity extends AppCompatActivity{
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             String intentMessage = bundle.getString("string");
-            debugText.append(intentMessage);
         }
     };
 
@@ -591,12 +580,5 @@ public class MainActivity extends AppCompatActivity{
 
     public void setVisibilityJoystick(int visibility) {
             joystick.setVisibility(visibility);
-    }
-
-    private void setAllButtonsUsable() { //TODO später rausnehmen, nur zum testen
-        buttonBluetooth.setEnabled(true);
-        buttonShareLink.setEnabled(true);
-        buttonSwitchToRoom.setEnabled(true);
-        buttonShowController.setVisibility(View.VISIBLE);
     }
 }
