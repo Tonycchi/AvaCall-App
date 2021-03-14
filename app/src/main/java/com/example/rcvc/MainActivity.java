@@ -170,9 +170,6 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverNegativeButton, negativeButtonFilter);
 
-        IntentFilter debugFilter = new IntentFilter("debugAction");
-        LocalBroadcastManager.getInstance(this).registerReceiver(debugReceiver, debugFilter);
-
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
@@ -361,10 +358,10 @@ public class MainActivity extends AppCompatActivity{
     public void onClickToggleController(View v) {
         if (!toggleJoystick) {
             setVisibilityButtons(View.INVISIBLE);
-            setVisibilityJoystick(View.VISIBLE);
+            joystick.setVisibility(View.VISIBLE);
             buttonToggleController.setText(R.string.button_switch_to_buttons);
         } else {
-            setVisibilityJoystick(View.INVISIBLE);
+            joystick.setVisibility(View.INVISIBLE);
             setVisibilityButtons(View.VISIBLE);
             buttonToggleController.setText(R.string.button_switch_to_joystick);
         }
@@ -430,14 +427,6 @@ public class MainActivity extends AppCompatActivity{
             if (bluetoothConnection != null) {
                 onConnection();
             }
-        }
-    };
-
-    private final BroadcastReceiver debugReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            String intentMessage = bundle.getString("string");
         }
     };
 
@@ -510,12 +499,12 @@ public class MainActivity extends AppCompatActivity{
             if (!toggleJoystick) {
                 setVisibilityButtons(View.VISIBLE);
             } else {
-                setVisibilityJoystick(View.VISIBLE);
+                joystick.setVisibility(View.VISIBLE);
             }
             buttonShowController.setText(R.string.button_controller_disable);
         } else {
             setVisibilityButtons(View.INVISIBLE);
-            setVisibilityJoystick(View.INVISIBLE);
+            joystick.setVisibility(View.INVISIBLE);
             buttonToggleController.setVisibility(View.INVISIBLE);
             buttonShowController.setText(R.string.button_controller_enable);
             toggleJoystick = false;
@@ -576,7 +565,4 @@ public class MainActivity extends AppCompatActivity{
             buttonTurnLeft.setVisibility(visibility);
     }
 
-    public void setVisibilityJoystick(int visibility) {
-            joystick.setVisibility(visibility);
-    }
 }
