@@ -73,8 +73,7 @@ public class MainActivity extends AppCompatActivity{
     // web & jitsi
     private URLFactory urlFactory;
     private WebClient wc;
-    private JitsiRoom room;
-    private String shareURL;
+    private SessionData session;
 
     // bluetooth
     private BluetoothConnectionService bluetoothConnection;
@@ -243,7 +242,7 @@ public class MainActivity extends AppCompatActivity{
         showController = false;
         toggleJoystick = false;
 
-        if (room != null) {
+        if (session != null) {
             buttonSwitchToRoom.setEnabled(true);
         }
     }
@@ -295,7 +294,7 @@ public class MainActivity extends AppCompatActivity{
     public void onClickShareLink(View v) {
         //first create room
         boolean connectionError = false;
-        if (room == null) {
+        if (session == null) {
             String jitsi = urlFactory.jitsiHttps; //AAAAA
             try {
                 wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiPlain, analogController);
@@ -319,8 +318,7 @@ public class MainActivity extends AppCompatActivity{
 
             if (!connectionError) {
                 String id = wc.getId();
-                room = new JitsiRoom(jitsi, id);
-                shareURL = urlFactory.hostHttps + "/" + id;
+                session = new SessionData(jitsi, urlFactory.hostHttps, id);
                 buttonSwitchToRoom.setEnabled(true);
             } else {
                 showErrorDialogFragment(R.string.server_connection_error);
@@ -329,13 +327,13 @@ public class MainActivity extends AppCompatActivity{
         if (!connectionError) {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), shareURL);
+                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), session.shareURL);
                 clipboard.setPrimaryClip(clip);
                 showToast(getString(R.string.toast_link_copied));
             } else {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, shareURL);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, session.shareURL);
                 sendIntent.setType("text/plain");
 
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -349,7 +347,7 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onClickSwitchToRoom(View v) {
         wc.setReceiveCommands();
-        JitsiMeetActivity.launch(this, room.options);
+        JitsiMeetActivity.launch(this, session.getOptions());
     }
 
     /**
@@ -532,7 +530,7 @@ public class MainActivity extends AppCompatActivity{
             selectedDevice = null;
             pairedDevices = new ArrayList<>();
             deviceUUIDs = null;
-            room = null;
+            session = null;
             if (wc != null) {
                 wc.close();
             }
