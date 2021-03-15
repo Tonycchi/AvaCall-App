@@ -12,8 +12,6 @@
     <string name="button_open_room">Daniel, bitte entferne diesen Button</string>
     <string name="button_share_link">Link teilen</string>
     <string name="button_switch_to_room">Zu Raum wechseln</string>
-    <string name="button_controller_enable">Steuerung anzeigen</string>
-    <string name="button_controller_disable">Steuerung verstecken</string>
     <string name="button_switch_to_joystick">Joystick</string>
     <string name="button_switch_to_buttons">Knöpfe</string>
     <!--    Directional Buttons -->

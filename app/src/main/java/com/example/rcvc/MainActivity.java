@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity{
 
     // gui state booleans
     private boolean btIsClicked;
-    private boolean showController;
-    private boolean toggleJoystick; //false is buttons, true is joystick
+    private boolean showController; //true is shown, false is not shown
+    private boolean toggleJoystick; //false is joystick, true is buttons
 
     // gui view elements
     private Button buttonBluetooth;
@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity{
     private Button buttonMoveBackward;
     private Button buttonTurnRight;
     private Button buttonTurnLeft;
-    private Button buttonShowController;
     private Button buttonToggleController;
     private TextView textViewConnectionStatus;
     private ListView listViewDevices;
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity{
         buttonMoveBackward = findViewById(R.id.button_backward);
         buttonTurnRight = findViewById(R.id.button_right);
         buttonTurnLeft = findViewById(R.id.button_left);
-        buttonShowController = findViewById(R.id.button_show_controller);
         buttonToggleController = findViewById(R.id.button_toggle_controller);
         joystick = findViewById(R.id.joystick);
 
@@ -236,7 +234,7 @@ public class MainActivity extends AppCompatActivity{
             btIsClicked = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonShareLink.setEnabled(true);
-            buttonShowController.setVisibility(View.VISIBLE);
+            showController();
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
         showController = false;
@@ -400,7 +398,7 @@ public class MainActivity extends AppCompatActivity{
                 btIsClicked = true;
                 buttonShareLink.setEnabled(true);
                 listViewDevices.setVisibility(View.INVISIBLE);
-                buttonShowController.setVisibility(View.VISIBLE);
+                showController();
                 break;
             case 2: // Could not connect
                 showToast(getString(R.string.bluetooth_connection_init_error));
@@ -494,17 +492,15 @@ public class MainActivity extends AppCompatActivity{
     public void showController() {
         if (!showController) {
             buttonToggleController.setVisibility(View.VISIBLE);
-            if (!toggleJoystick) {
+            if (toggleJoystick) {
                 setVisibilityButtons(View.VISIBLE);
             } else {
                 joystick.setVisibility(View.VISIBLE);
             }
-            buttonShowController.setText(R.string.button_controller_disable);
         } else {
             setVisibilityButtons(View.INVISIBLE);
             joystick.setVisibility(View.INVISIBLE);
             buttonToggleController.setVisibility(View.INVISIBLE);
-            buttonShowController.setText(R.string.button_controller_enable);
             toggleJoystick = false;
             buttonToggleController.setText(R.string.button_switch_to_joystick);
         }
@@ -525,7 +521,6 @@ public class MainActivity extends AppCompatActivity{
             textViewConnectionStatus.setText(getString(R.string.connection_status_false));
             showController = true;
             showController();
-            buttonShowController.setVisibility(View.INVISIBLE);
             bluetoothConnection.cancel();
             selectedDevice = null;
             pairedDevices = new ArrayList<>();

@@ -47,19 +47,6 @@
         app:layout_constraintTop_toBottomOf="@+id/button_share_link" />
 
     <Button
-        android:id="@+id/button_show_controller"
-        android:layout_width="@dimen/show_controller_width"
-        android:layout_height="@dimen/small_button_height"
-        android:layout_marginTop="@dimen/margin_top_between_buttons"
-        android:onClick="onClickShowController"
-        android:text="@string/button_controller_enable"
-        android:textSize="@dimen/small_text_size"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_switch_to_room" />
-
-    <Button
         android:id="@+id/button_toggle_controller"
         android:layout_width="@dimen/toggle_controller_width"
         android:layout_height="@dimen/small_button_height"
@@ -70,7 +57,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_show_controller" />
+        app:layout_constraintTop_toBottomOf="@+id/button_switch_to_room" />
 
     <TextView
         android:id="@+id/connection_status"
