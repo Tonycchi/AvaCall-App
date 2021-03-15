@@ -52,7 +52,7 @@
         android:layout_height="@dimen/small_button_height"
         android:layout_marginTop="@dimen/landscape_margin_top_between_buttons"
         android:onClick="onClickToggleController"
-        android:text="@string/button_switch_to_joystick"
+        android:text="@string/button_switch_to_buttons"
         android:textSize="@dimen/small_text_size"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/button_switch_to_room"

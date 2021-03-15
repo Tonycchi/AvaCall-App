@@ -237,8 +237,6 @@ public class MainActivity extends AppCompatActivity{
             showController();
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
-        showController = false;
-        toggleJoystick = false;
 
         if (session != null) {
             buttonSwitchToRoom.setEnabled(true);
@@ -352,7 +350,7 @@ public class MainActivity extends AppCompatActivity{
      * toggles between buttonController and joystickController
      */
     public void onClickToggleController(View v) {
-        if (!toggleJoystick) {
+        if (toggleJoystick) {
             setVisibilityButtons(View.INVISIBLE);
             joystick.setVisibility(View.VISIBLE);
             buttonToggleController.setText(R.string.button_switch_to_buttons);
@@ -362,13 +360,6 @@ public class MainActivity extends AppCompatActivity{
             buttonToggleController.setText(R.string.button_switch_to_joystick);
         }
         toggleJoystick = !toggleJoystick;
-    }
-
-    /**
-     * calls the showController method
-     */
-    public void onClickShowController(View v) {
-        showController();
     }
 
     /**
