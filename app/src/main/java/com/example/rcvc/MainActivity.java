@@ -234,6 +234,7 @@ public class MainActivity extends AppCompatActivity{
             btIsClicked = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonShareLink.setEnabled(true);
+            showController = false;
             showController();
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
