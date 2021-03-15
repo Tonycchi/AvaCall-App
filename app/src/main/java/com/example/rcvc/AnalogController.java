@@ -58,8 +58,8 @@ public class AnalogController {
 
 
         float[] output = new float[2];
-        output[0] = right * strength / 100;
-        output[1] = left * strength / 100;
+        output[0] = right * strength / 10000;
+        output[1] = left * strength / 10000;
         Log.d("Motorsignale", "Links:"+output[1]+" Rechts:"+output[0]);
 
         return output;
