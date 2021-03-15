@@ -3,11 +3,11 @@ package com.example.rcvc;
 import android.content.Context;
 import android.util.Log;
 
-public class AnalogController {
+public class Controller {
 
     private final DirectCommander COMMANDER;
 
-    public AnalogController(Context context, BluetoothConnectionService b) {
+    public Controller(Context context, BluetoothConnectionService b) {
         COMMANDER = new DirectCommander(context, b);
     }
 

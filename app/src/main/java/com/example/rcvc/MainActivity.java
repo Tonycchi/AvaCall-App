@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity{
     private ParcelUuid[] deviceUUIDs;
     // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<>();
-    // Connected Robots
-    private AnalogController analogController;
+    // Connected robot
+    private Controller controller;
 
 
     // lifecycle methods
@@ -172,17 +172,17 @@ public class MainActivity extends AppCompatActivity{
         joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
-                analogController.sendPowers(angle, strength);
+                controller.sendPowers(angle, strength);
             }
         });
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving forward is send to ev3
-                analogController.sendPowers(90, 100);
+                controller.sendPowers(90, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                analogController.sendPowers(0, 0);
+                controller.sendPowers(0, 0);
             }
 
             return true;
@@ -191,10 +191,10 @@ public class MainActivity extends AppCompatActivity{
         buttonMoveBackward.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving backward is send to ev3
-                analogController.sendPowers(270, 100);
+                controller.sendPowers(270, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                analogController.sendPowers(0, 0);
+                controller.sendPowers(0, 0);
             }
 
             return true;
@@ -203,10 +203,10 @@ public class MainActivity extends AppCompatActivity{
         buttonTurnRight.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the right are send to ev3
-                analogController.sendPowers(0, 100);
+                controller.sendPowers(0, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                analogController.sendPowers(0, 0);
+                controller.sendPowers(0, 0);
             }
 
             return true;
@@ -215,10 +215,10 @@ public class MainActivity extends AppCompatActivity{
         buttonTurnLeft.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the left are send to ev3
-                analogController.sendPowers(180, 100);
+                controller.sendPowers(180, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                analogController.sendPowers(0, 0);
+                controller.sendPowers(0, 0);
             }
 
             return true;
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity{
         if (session == null) {
             String jitsi = urlFactory.jitsiHttps; //AAAAA
             try {
-                wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiPlain, analogController);
+                wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiPlain, controller);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -383,15 +383,15 @@ public class MainActivity extends AppCompatActivity{
         Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         bluetoothConnection.startClient(device, uuid);
         startedConnection = true;
-        analogController = new AnalogController(this, bluetoothConnection);
+        controller = new Controller(this, bluetoothConnection);
     }
 
     /**
      * Checks if the connection is valid and changes variables and buttons on screen accordingly
      */
     public void onConnection() {
-        if (analogController != null) {
-            analogController.sendPowers(0, 0);
+        if (controller != null) {
+            controller.sendPowers(0, 0);
         }
         switch (bluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
@@ -517,7 +517,7 @@ public class MainActivity extends AppCompatActivity{
     public void resetConnection() {
         if (startedConnection) {
             startedConnection = false;
-            analogController.sendPowers(0, 0);
+            controller.sendPowers(0, 0);
             btIsClicked = false;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
             buttonShareLink.setEnabled(false);
