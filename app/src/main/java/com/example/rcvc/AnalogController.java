@@ -1,6 +1,7 @@
 package com.example.rcvc;
 
 import android.content.Context;
+import android.util.Log;
 
 public class AnalogController {
 
@@ -35,46 +36,32 @@ public class AnalogController {
      * @return speeds for right(o[0]) and left(o[1]) motor
      */
     public float[] computePowers(int angle, int strength) {
-        float factor = (float) strength / 100.0f;
-
-        float[] output = new float[2];
         float right = 0.0f;
         float left = 0.0f;
-        output[0] = 0.0f;
-        output[1] = 0.0f;
-        int delta = 10;
-        int angleDif;
-        float speedDif;
-        float ratio = 90.0f;
-        if (angle >= 0 + delta && angle <= 90) { // forwards right
-            angleDif = 90 - angle;
-            speedDif = (float) angleDif / ratio;
-            right = 1.0f - speedDif;
-            left = 1.0f;
-        } else if (angle > 90 && angle <= 180 - delta) { // forwards left
-            angleDif = angle - 90;
-            speedDif = (float) angleDif / ratio;
-            right =1.0f;
-            left =1.0f - speedDif;
-        } else if (angle > 360 - delta || angle < 0 + delta) { // rotate right
-            right = -0.5f;
-            left = 0.5f;
-        } else if (angle > 180 - delta && angle < 180 + delta) { // rotate left
-            right = 0.5f;
-            left = -0.5f;
-        } else if (angle >= 180 + delta && angle <= 270) { // backwards left
-            angleDif = 270 - angle;
-            speedDif = (float) angleDif / ratio;
-            right =-1.0f;
-            left =-1.0f + speedDif;
-        } else if (angle > 270 && angle <= 360 - delta){ // backwards right
-            angleDif = angle - 270;
-            speedDif = (float) angleDif / ratio;
-            right =-1.0f + speedDif;
-            left =-1.0f;
+
+        if (angle >= 0 && angle < 90) { //0°-89°
+            left = 50 + angle*5/9.0f; //50 to 100
+            right = -50 + angle*15/9.0f; //-50 to 100
+
+        } else if (angle >= 90 && angle < 180) { //90°-179°
+            left = 100 - (angle-90)*15/9.0f; //100 to -50
+            right = 100 - (angle-90)*5/9.0f; //100 to 50
+
+        } else if (angle >= 180 && angle < 270) { //180°-269°
+            left = -50 - (angle-180)*5/9.0f; //-50 to -100
+            right = 50 - (angle-180)*15/9.0f; //50 to -100
+
+        } else if (angle >= 270 && angle <= 360) {//270°-359°
+            left = -100 + (angle-270)*15/9.0f; //-100 to 50
+            right = -100 + (angle-270)*5/9.0f; //-100 to -50
         }
-        output[0] = right * factor;
-        output[1] = left * factor;
+
+
+        float[] output = new float[2];
+        output[0] = right * strength / 100;
+        output[1] = left * strength / 100;
+        Log.d("Motorsignale", "Links:"+output[1]+" Rechts:"+output[0]);
+
         return output;
     }
 }
