@@ -40,20 +40,20 @@ public class AnalogController {
         float left = 0.0f;
 
         if (angle >= 0 && angle < 90) { //0°-89°
-            left = 50 + angle*5/9.0f; //50 to 100
-            right = -50 + angle*15/9.0f; //-50 to 100
+            left = 100; //100 to 100
+            right = -100 + angle*20/9.0f; //-100 to 100
 
         } else if (angle >= 90 && angle < 180) { //90°-179°
-            left = 100 - (angle-90)*15/9.0f; //100 to -50
-            right = 100 - (angle-90)*5/9.0f; //100 to 50
+            left = 100 - (angle-90)*20/9.0f; //100 to -100
+            right = 100; //100 to 100
 
         } else if (angle >= 180 && angle < 270) { //180°-269°
-            left = -50 - (angle-180)*5/9.0f; //-50 to -100
-            right = 50 - (angle-180)*15/9.0f; //50 to -100
+            left = -100; //-100 to -100
+            right = 100 - (angle-180)*20/9.0f; //50 to -100
 
         } else if (angle >= 270 && angle <= 360) {//270°-359°
-            left = -100 + (angle-270)*15/9.0f; //-100 to 50
-            right = -100 + (angle-270)*5/9.0f; //-100 to -50
+            left = -100 + (angle-270)*20/9.0f; //-100 to 100
+            right = -100; //-100 to -100
         }
 
 
