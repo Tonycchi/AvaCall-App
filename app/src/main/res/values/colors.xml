@@ -10,11 +10,13 @@
     <color name="primaryVariant">#AA999999</color>
     <color name="secondary">#AAFF0000</color>
     <color name="secondaryVariant">#55FF0000</color>
+    <color name="thrird">#AA0080FF</color>
+    <color name="thrirdVariant">#550080FF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
     <color name="fontPrimary">#AA000000</color>
-    <color name="fontSecondary">#AA000000</color>
+    <color name="fontSecondary">#AAFF0000</color>
 
     <!-- main screen -->
     <color name="main_background">#FFFFFFFF</color>
