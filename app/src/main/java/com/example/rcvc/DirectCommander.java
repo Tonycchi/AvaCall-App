@@ -2,6 +2,7 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -66,6 +67,8 @@ public class DirectCommander {
 
         directCommand[14] = PORT_LEFT;   // PORT left motor
         directCommand[16] = left;   // POWER left motor
+
+        Log.d("Motorcommand","left:"+left+" right:"+right);
 
         return directCommand;
     }
