@@ -235,7 +235,9 @@ public class MainActivity extends AppCompatActivity{
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonShareLink.setEnabled(true);
             showController = false;
-            toggleJoystick = false;
+            if (toggleJoystick) {
+                buttonToggleController.setText(R.string.button_switch_to_joystick);
+            }
             buttonToggleController.setVisibility(View.VISIBLE);
             showController();
             textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
