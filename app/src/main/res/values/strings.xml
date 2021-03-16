@@ -23,9 +23,13 @@
     <!--    Toasts -->
     <string name="toast_room_opened">Verbindung hergestellt</string>
     <string name="toast_link_copied">Link kopiert</string>
-    <!--    Connection Status -->
-    <string name="connection_status_false">Keine Verbindung</string>
+    <!--    Bluetooth Connection Status -->
+    <string name="connection_status_false">Keine Bluetooth-Verbindung</string>
     <string name="connection_status_true">Verbunden mit: %s</string>
+
+    <!--    Server Connection Status -->
+    <string name="server_connection_status_false">Keine Verbindung zum Server</string>
+    <string name="server_connection_status_true">Kennnummer: %s</string>
 
     <!-- Errors -->
     <!--    Main Activity -->
@@ -68,4 +72,5 @@
 
     <string name="ok">Ok</string>
     <string name="cancel">Schließen</string>
+
 </resources>

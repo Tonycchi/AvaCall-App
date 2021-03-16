@@ -8,6 +8,19 @@
     android:visibility="visible"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/server_connection_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="200dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/server_connection_status_false"
+        android:textColor="@color/black"
+        android:textColorHighlight="@color/fontSecondary"
+        android:textSize="@dimen/standard_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <Button
         android:id="@+id/button_bluetooth"
         android:layout_width="@dimen/standard_button_width"
