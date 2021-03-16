@@ -76,7 +76,7 @@
         android:id="@+id/connection_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
         android:text="@string/connection_status_false"
         android:textColor="@color/black"
@@ -89,8 +89,9 @@
         android:layout_width="@dimen/landscape_paired_devices_width"
         android:layout_height="@dimen/landscape_paired_devices_height"
         android:layout_marginEnd="@dimen/landscape_margin_side"
+        android:layout_marginBottom="4dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/server_connection_status3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
