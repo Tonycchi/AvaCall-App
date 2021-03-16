@@ -9,9 +9,9 @@
     <!--    Buttons -->
     <string name="button_bluetooth_disconnected">Mit Bluetooth verbinden</string>
     <string name="button_bluetooth_connected">Verbindung trennen</string>
-    <string name="button_open_room">Daniel, bitte entferne diesen Button</string>
-    <string name="button_share_link">Link teilen</string>
-    <string name="button_switch_to_room">Zu Raum wechseln</string>
+    <string name="button_share_link">Einladung teilen</string>
+    <string name="button_show_id">Kennnummer anzeigen</string>
+    <string name="button_switch_to_room">Konferenz starten</string>
     <string name="button_switch_to_joystick">Joystick</string>
     <string name="button_switch_to_buttons">Knöpfe</string>
     <!--    Directional Buttons -->
