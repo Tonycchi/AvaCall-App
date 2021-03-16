@@ -8,6 +8,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
@@ -33,7 +34,7 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
         Context context = getContext();
         if (context == null) throw new IllegalStateException();
-        pref = getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        pref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         groupRight = view.findViewById(R.id.radio_group_right_port);
         groupLeft = view.findViewById(R.id.radio_group_left_port);
