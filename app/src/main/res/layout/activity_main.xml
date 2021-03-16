@@ -12,14 +12,14 @@
         android:id="@+id/server_connection_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
         android:text="@string/server_connection_status_false"
         android:textColor="@color/black"
         android:textColorHighlight="@color/fontSecondary"
         android:textSize="@dimen/standard_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button_bluetooth"
@@ -86,20 +86,20 @@
         android:id="@+id/connection_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_connection_status"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="4dp"
         android:text="@string/connection_status_false"
         android:textColor="@color/black"
         android:textColorHighlight="@color/fontSecondary"
         android:textSize="@dimen/standard_text_size"
         app:layout_constraintBottom_toTopOf="@+id/server_connection_status"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/list_paired_devices"
         android:layout_width="@dimen/paired_devices_width"
         android:layout_height="@dimen/paired_devices_height"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="85dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -163,7 +163,7 @@
         android:id="@+id/joystick"
         android:layout_width="@dimen/joystick_size"
         android:layout_height="@dimen/joystick_size"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="90dp"
         android:visibility="invisible"
         app:JV_autoReCenterButton="true"
         app:JV_backgroundColor="@color/joystick_background"
