@@ -17,6 +17,7 @@
     <dimen name="standard_text_size">@dimen/_12sdp</dimen>
     <dimen name="small_text_size">@dimen/_10sdp</dimen>
     <dimen name="margin_connection_status">@dimen/_8sdp</dimen>
+    <dimen name="margin_bottom_between">@dimen/_4sdp</dimen>
     <dimen name="control_button_margin">@dimen/_55sdp</dimen>
 
     <dimen name="landscape_margin_top">@dimen/_8sdp</dimen>

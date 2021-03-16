@@ -12,8 +12,8 @@
         android:id="@+id/server_connection_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="@dimen/margin_connection_status"
+        android:layout_marginBottom="@dimen/margin_connection_status"
         android:text="@string/server_connection_status_false"
         android:textColor="@color/black"
         android:textColorHighlight="@color/fontSecondary"
@@ -76,8 +76,8 @@
         android:id="@+id/connection_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="@dimen/margin_connection_status"
+        android:layout_marginBottom="@dimen/margin_connection_status"
         android:text="@string/connection_status_false"
         android:textColor="@color/black"
         android:textSize="@dimen/standard_text_size"
@@ -89,11 +89,11 @@
         android:layout_width="@dimen/landscape_paired_devices_width"
         android:layout_height="@dimen/landscape_paired_devices_height"
         android:layout_marginEnd="@dimen/landscape_margin_side"
-        android:layout_marginBottom="4dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/server_connection_status"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.266" />
 
     <Button
         android:id="@+id/button_forward"
