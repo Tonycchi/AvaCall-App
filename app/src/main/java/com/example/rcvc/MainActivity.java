@@ -247,8 +247,7 @@ public class MainActivity extends AppCompatActivity{
 
         if (session != null) {
             buttonSwitchToRoom.setEnabled(true);
-        }else{
-            //textViewServerConnectionStatus.setText(String.format(getResources().getString(R.string.server_connection_status_true), session.));
+            textViewServerConnectionStatus.setText(String.format(getResources().getString(R.string.server_connection_status_true), session.getID()));
         }
     }
 
@@ -324,6 +323,7 @@ public class MainActivity extends AppCompatActivity{
             if (!connectionError) {
                 String id = wc.getId();
                 session = new SessionData(jitsi, urlFactory.hostHttps, id);
+                textViewServerConnectionStatus.setText(String.format(getResources().getString(R.string.server_connection_status_true), session.getID()));
                 buttonSwitchToRoom.setEnabled(true);
             } else {
                 showErrorDialogFragment(R.string.server_connection_error);
