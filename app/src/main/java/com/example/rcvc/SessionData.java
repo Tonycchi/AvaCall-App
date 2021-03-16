@@ -9,8 +9,10 @@ public class SessionData {
 
     private JitsiMeetConferenceOptions options;
     public final String shareURL;
+    public final String id;
 
     public SessionData(String jitsi, String host, String id) {
+        this.id = id;
         try {
             options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL(jitsi))
@@ -21,6 +23,10 @@ public class SessionData {
             e.printStackTrace();
         }
         shareURL = host + "/" + id;
+    }
+
+    public String getID(){
+        return id;
     }
 
     public JitsiMeetConferenceOptions getOptions() {

@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity{
         if (session != null) {
             buttonSwitchToRoom.setEnabled(true);
         }else{
-
+            //textViewServerConnectionStatus.setText(String.format(getResources().getString(R.string.server_connection_status_true), session.));
         }
     }
 
