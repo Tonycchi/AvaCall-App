@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity{
     private Button buttonTurnRight;
     private Button buttonTurnLeft;
     private Button buttonToggleController;
-    private TextView textViewConnectionStatus;
+    private TextView textViewBluetoothConnectionStatus;
+    private TextView textViewServerConnectionStatus;
     private ListView listViewDevices;
     private JoystickView joystick;
 
@@ -144,7 +145,8 @@ public class MainActivity extends AppCompatActivity{
         buttonBluetooth = findViewById(R.id.button_bluetooth);
         buttonShareLink = findViewById(R.id.button_share_link);
         buttonSwitchToRoom = findViewById(R.id.button_switch_to_room);
-        textViewConnectionStatus = findViewById(R.id.connection_status);
+        textViewBluetoothConnectionStatus = findViewById(R.id.connection_status);
+        textViewServerConnectionStatus = findViewById(R.id.server_connection_status);
         listViewDevices = findViewById(R.id.list_paired_devices);
         buttonMoveForward = findViewById(R.id.button_forward);
         buttonMoveBackward = findViewById(R.id.button_backward);
@@ -240,11 +242,13 @@ public class MainActivity extends AppCompatActivity{
             }
             buttonToggleController.setVisibility(View.VISIBLE);
             showController();
-            textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+            textViewBluetoothConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
         }
 
         if (session != null) {
             buttonSwitchToRoom.setEnabled(true);
+        }else{
+
         }
     }
 
@@ -389,7 +393,7 @@ public class MainActivity extends AppCompatActivity{
         }
         switch (bluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
-                textViewConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
+                textViewBluetoothConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
                 buttonShareLink.setEnabled(true);
@@ -514,7 +518,7 @@ public class MainActivity extends AppCompatActivity{
             buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
             buttonShareLink.setEnabled(false);
             buttonSwitchToRoom.setEnabled(false);
-            textViewConnectionStatus.setText(getString(R.string.connection_status_false));
+            textViewBluetoothConnectionStatus.setText(getString(R.string.connection_status_false));
             showController = true;
             showController();
             bluetoothConnection.cancel();

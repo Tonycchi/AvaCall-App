@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/server_connection_status3"
+        android:id="@+id/server_connection_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -91,7 +91,7 @@
         android:layout_marginEnd="@dimen/landscape_margin_side"
         android:layout_marginBottom="4dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/server_connection_status3"
+        app:layout_constraintBottom_toTopOf="@+id/server_connection_status"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
