@@ -19,8 +19,7 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 
     public static MotorPortDialogFragment newInstance(
             String key) {
-        final MotorPortDialogFragment
-                fragment = new MotorPortDialogFragment();
+        final MotorPortDialogFragment fragment = new MotorPortDialogFragment();
         final Bundle b = new Bundle(1);
         b.putString(ARG_KEY, key);
         fragment.setArguments(b);

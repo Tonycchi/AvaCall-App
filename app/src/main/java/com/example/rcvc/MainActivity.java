@@ -121,22 +121,39 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isFinishing()) {
-            resetConnection();
-        }
+        Log.d(TAG, "Destroyed with ID: " + this);
         try {
-            unregisterReceiver(receiverActionStateChanged);
+//            unregisterReceiver(receiverActionStateChanged);
             unregisterReceiver(receiverConnection);
             unregisterReceiver(receiverNegativeButton);
         } catch (Exception e) {
             Log.d(TAG, "Receiver not registered, could not unregister");
         }
+//        super.onDestroy();
+//        if (isFinishing()) {
+//            resetConnection();
+//        }
+//        try {
+//            unregisterReceiver(receiverActionStateChanged);
+//            unregisterReceiver(receiverConnection);
+//            unregisterReceiver(receiverNegativeButton);
+//        } catch (Exception e) {
+//            Log.d(TAG, "Receiver not registered, could not unregister");
+//        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        urlFactory = new URLFactory(this);
+        controller = new Controller(this, bluetoothConnection);
     }
 
     /**
      * initialize UI + misc
      */
     public void InitializeUI() {
+        Log.d(TAG, "Initizalized with ID: " + this);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         urlFactory = new URLFactory(this);
@@ -158,8 +175,8 @@ public class MainActivity extends AppCompatActivity{
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         //bluetooth filter for catching state changes of bluetooth connection (on/off)
-        IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiverActionStateChanged, btFilter);
+//        IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+//        LocalBroadcastManager.getInstance(this).registerReceiver(receiverActionStateChanged, btFilter);
 
         // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
         IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
@@ -393,6 +410,7 @@ public class MainActivity extends AppCompatActivity{
         }
         switch (bluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
+                Log.d(TAG, "Connected: " + this);
                 textViewBluetoothConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
                 btIsClicked = true;
@@ -406,6 +424,7 @@ public class MainActivity extends AppCompatActivity{
                 listViewDevices.setVisibility(View.INVISIBLE);
                 break;
             case 3: // Connection lost
+                Log.d(TAG, "Disconnected: " + this);
                 showToast(getString(R.string.bluetooth_connection_lost));
                 resetConnection();
                 break;
@@ -444,18 +463,18 @@ public class MainActivity extends AppCompatActivity{
      * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
      * Whenever Bluetooth is turned off while we are in a connection, reset everything
      */
-    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-                // Bluetooth Status has been turned off
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
-                    resetConnection();
-                }
-            }
-        }
-    };
+//    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
+//        public void onReceive(Context context, Intent intent) {
+//            String action = intent.getAction();
+//            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+//                // Bluetooth Status has been turned off
+//                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+//                if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
+//                    resetConnection();
+//                }
+//            }
+//        }
+//    };
 
     /**
      * @param message The message to pop up at the bottom of the screen
@@ -512,6 +531,7 @@ public class MainActivity extends AppCompatActivity{
      */
     public void resetConnection() {
         if (startedConnection) {
+            Log.d(TAG, "reseeet");
             startedConnection = false;
             controller.sendPowers(0, 0);
             btIsClicked = false;

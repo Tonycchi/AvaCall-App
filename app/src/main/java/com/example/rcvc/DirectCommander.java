@@ -22,8 +22,11 @@ public class DirectCommander {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
         PORT_RIGHT = (byte) pref.getInt("motor_right", 1);
+        Log.d("DirectCommander", "Rechter Port: " + PORT_RIGHT);
         PORT_LEFT = (byte) pref.getInt("motor_left", 8);
+        Log.d("DirectCommander", "Linker Port: " + PORT_LEFT);
         maxPower = pref.getInt("max_speed", 50);
+        Log.d("DirectCommander", "Geschwindigkeit: " + maxPower);
         B = service;
     }
 
