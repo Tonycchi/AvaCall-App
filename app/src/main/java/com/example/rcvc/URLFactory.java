@@ -2,6 +2,7 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -20,5 +21,6 @@ public class URLFactory {
 
         port = pref.getString("host_port", "22222");
         hostWSS = "wss://" + hostPlain + ":" + port;
+        Log.d("URL", "WebSocket: " + hostWSS);
     }
 }

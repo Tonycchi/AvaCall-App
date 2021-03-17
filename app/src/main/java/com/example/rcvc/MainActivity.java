@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Destroyed with ID: " + this);
+        resetConnection();
         try {
 //            unregisterReceiver(receiverActionStateChanged);
             unregisterReceiver(receiverConnection);
@@ -516,7 +517,7 @@ public class MainActivity extends AppCompatActivity{
             joystick.setVisibility(View.INVISIBLE);
             buttonToggleController.setVisibility(View.INVISIBLE);
             toggleJoystick = false;
-            buttonToggleController.setText(R.string.button_switch_to_joystick);
+            buttonToggleController.setText(R.string.button_switch_to_buttons);
         }
         showController = !showController;
     }
@@ -534,6 +535,7 @@ public class MainActivity extends AppCompatActivity{
             buttonShareLink.setEnabled(false);
             buttonSwitchToRoom.setEnabled(false);
             textViewBluetoothConnectionStatus.setText(getString(R.string.connection_status_false));
+            textViewServerConnectionStatus.setText(getString(R.string.server_connection_status_false));
             showController = true;
             showController();
             bluetoothConnection.cancel();
