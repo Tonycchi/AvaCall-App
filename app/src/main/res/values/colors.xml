@@ -6,18 +6,17 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
 
-    <!--<color name="primary">#FF999999</color>-->
     <color name="primary">#AAFF0000</color>
-    <color name="primaryVariant">#AA999999</color>
+    <color name="primary_variant">#AA999999</color>
     <color name="secondary">#AAFF0000</color>
-    <color name="secondaryVariant">#55FF0000</color>
-    <color name="thrird">#AA0080FF</color>
-    <color name="thrirdVariant">#550080FF</color>
+    <color name="secondary_variant">#55FF0000</color>
+    <color name="third">#AA0080FF</color>
+    <color name="third_variant">#550080FF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="fontPrimary">#AA000000</color>
-    <color name="fontSecondary">#AAFF0000</color>
+    <color name="font_primary">#AA000000</color>
+    <color name="font_secondary">#AAFF0000</color>
 
     <!-- main screen -->
     <color name="main_background">#FFFFFFFF</color>

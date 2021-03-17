@@ -20,6 +20,7 @@
     <dimen name="margin_bottom_between">@dimen/_4sdp</dimen>
     <dimen name="control_button_margin">@dimen/_55sdp</dimen>
 
+    <!--extra dimensions for landscape mode -->
     <dimen name="landscape_margin_top">@dimen/_8sdp</dimen>
     <dimen name="landscape_margin_side">@dimen/_20sdp</dimen>
     <dimen name="landscape_standard_button_width">@dimen/_230sdp</dimen>

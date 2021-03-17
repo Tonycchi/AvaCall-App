@@ -1,7 +1,5 @@
 package com.example.rcvc;
 
-import android.util.Log;
-
 import java.net.URI;
 import java.nio.ByteBuffer;
 
@@ -11,15 +9,15 @@ import org.java_websocket.handshake.ServerHandshake;
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
-    private Controller analogController;
+    private Controller controller;
     private String id;
     private final String jitsi;
     private boolean receiveCommands;
     private boolean ready;
 
-    public WebClient(URI serverURI, String jitsi, Controller analogController) {
+    public WebClient(URI serverURI, String jitsi, Controller controller) {
         super(serverURI);
-        this.analogController = analogController;
+        this.controller = controller;
         this.jitsi = jitsi;
         this.ready = false;
         receiveCommands = false;
@@ -31,8 +29,6 @@ public class WebClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         send("app:" + jitsi);
-        Log.d(TAG, jitsi);
-        Log.d(TAG,"new connection opened");
     }
 
     /**
@@ -40,7 +36,7 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        Log.d(TAG,"closed with exit code " + code + " additional info: " + reason);
+        //Log.d(TAG,"closed with exit code " + code + " additional info: " + reason);
         ready = false;
     }
 
@@ -50,7 +46,6 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onMessage(String message) {
-        Log.d(TAG, message);
         if (message.startsWith("id:")) {
             id = message.split(":",2)[1];
             ready = true;
@@ -59,7 +54,7 @@ public class WebClient extends WebSocketClient {
                 String[] values;
                 if (message.contains(";")) {
                     values = message.split(";", 2);
-                    analogController.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
+                    controller.sendPowers(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
                 }
             }
         }
@@ -67,7 +62,6 @@ public class WebClient extends WebSocketClient {
 
     @Override
     public void onMessage(ByteBuffer message) {
-        Log.d(TAG,"received ByteBuffer");
     }
 
     public boolean isReady(){
@@ -79,7 +73,7 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onError(Exception ex) {
-        Log.e(TAG,"an error occurred:" + ex);
+        //Log.e(TAG,"an error occurred:" + ex);
     }
 
     public String getId() {

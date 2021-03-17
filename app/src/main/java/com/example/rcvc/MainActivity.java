@@ -5,7 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.preference.PreferenceManager;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -14,12 +14,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelUuid;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,9 +45,9 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
 
     // gui state booleans
-    private boolean btIsClicked;
-    private boolean showController; //true is shown, false is not shown
-    private boolean toggleJoystick; //false is joystick, true is buttons
+    private boolean bluetoothIsConnected;
+    private boolean controllerVisible;
+    private boolean directionalButtonsVisible;
 
     // gui view elements
     private Button buttonBluetooth;
@@ -89,27 +87,22 @@ public class MainActivity extends AppCompatActivity{
 
     // lifecycle methods
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
 
-        InitializeUI();
+        initializeUI();
     }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.activity_main);
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setContentView(R.layout.activity_main);
-        }
+        setContentView(R.layout.activity_main);
 
-        InitializeUI();
+        initializeUI();
     }
 
     /**
@@ -118,28 +111,18 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "Destroyed with ID: " + this);
         resetConnection();
         try {
-//            unregisterReceiver(receiverActionStateChanged);
             unregisterReceiver(receiverConnection);
             unregisterReceiver(receiverNegativeButton);
         } catch (Exception e) {
-            Log.d(TAG, "Receiver not registered, could not unregister");
+            //Log.d(TAG, "Receiver not registered, could not unregister");
         }
-//        super.onDestroy();
-//        if (isFinishing()) {
-//            resetConnection();
-//        }
-//        try {
-//            unregisterReceiver(receiverActionStateChanged);
-//            unregisterReceiver(receiverConnection);
-//            unregisterReceiver(receiverNegativeButton);
-//        } catch (Exception e) {
-//            Log.d(TAG, "Receiver not registered, could not unregister");
-//        }
     }
 
+    /**
+     * On resume, update all the setting changes
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -150,8 +133,8 @@ public class MainActivity extends AppCompatActivity{
     /**
      * initialize UI + misc
      */
-    public void InitializeUI() {
-        Log.d(TAG, "Initizalized with ID: " + this);
+    @SuppressLint("ClickableViewAccessibility")
+    public void initializeUI() {
         urlFactory = new URLFactory(this);
 
         // get all buttons
@@ -170,10 +153,6 @@ public class MainActivity extends AppCompatActivity{
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        //bluetooth filter for catching state changes of bluetooth connection (on/off)
-//        IntentFilter btFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-//        LocalBroadcastManager.getInstance(this).registerReceiver(receiverActionStateChanged, btFilter);
-
         // Custom IntentFilter for catching Intent from ConnectedThread if connection is lost
         IntentFilter connectionFilter = new IntentFilter(getString(R.string.action_check_connection));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverConnection, connectionFilter);
@@ -182,12 +161,7 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverNegativeButton, negativeButtonFilter);
 
-        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
-            @Override
-            public void onMove(int angle, int strength) {
-                controller.sendPowers(angle, strength);
-            }
-        });
+        joystick.setOnMoveListener((angle, strength) -> controller.sendPowers(angle, strength));
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -241,16 +215,17 @@ public class MainActivity extends AppCompatActivity{
         listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
             deviceUUIDs = selectedDevice.getUuids();
-            bluetoothConnection = new BluetoothConnectionService(MainActivity.this);
+            bluetoothConnection = new BluetoothConnectionService(this);
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
+        // if there is an existing connection, show buttons accordingly
         if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
-            btIsClicked = true;
+            bluetoothIsConnected = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonShareLink.setEnabled(true);
-            showController = false;
-            if (toggleJoystick) {
+            controllerVisible = false;
+            if (directionalButtonsVisible) {
                 buttonToggleController.setText(R.string.button_switch_to_joystick);
             }
             buttonToggleController.setVisibility(View.VISIBLE);
@@ -283,11 +258,64 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * If bluetooth is disabled, this button will enable it, if bluetooth is is enabled and this button is clicked, it will show all paired devices.
+     * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
+     */
+    private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (bluetoothConnection != null) {
+                onConnection();
+            }
+        }
+    };
+
+    /**
+     * Create a BroadcastReceiver that catches intents from errorDialogFragment
+     */
+    private final BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String intentMessage = bundle.getString("intent message");
+            if (intentMessage.equals(getString(R.string.error_no_paired_devices))) {
+                // if there are no paired devices, open bluetooth settings
+                Intent intentOpenBluetoothSettings = new Intent();
+                intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivity(intentOpenBluetoothSettings);
+            }
+        }
+    };
+
+    /**
+     * @param message The message to pop up at the bottom of the screen
+     */
+    public void showToast(String message) {
+        if(toast ==null)
+            toast = Toast.makeText( this  , "" , Toast.LENGTH_SHORT );
+        toast.setText(message);
+        toast.show();
+    }
+
+    /**
+     * Shows an ErrorDialogFragment on screen
+     * @param errorStringValue the errorMessage that gets shown
+     */
+    public void showErrorDialogFragment(int errorStringValue) {
+        Bundle bundle = new Bundle();
+        // first put id of error message in bundle using defined key
+        bundle.putInt(ErrorDialogFragment.MSG_KEY, errorStringValue);
+        ErrorDialogFragment error = new ErrorDialogFragment(this, getString(errorStringValue));
+        // then pass bundle to dialog and show
+        error.setArguments(bundle);
+        error.show(this.getSupportFragmentManager(), TAG);
+    }
+
+    /**
+     * If bluetooth is disabled, this button will enable it, if bluetooth is enabled and this button is clicked, it will show all paired devices.
      * If this button is clicked while we have a connection, it will reset the connection
      */
     public void onClickBluetooth(View v) {
-        if (btIsClicked) {
+        if (bluetoothIsConnected) {
             resetConnection();
         } else {
             if (!bluetoothAdapter.isEnabled()) {
@@ -295,8 +323,6 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(enableBTIntent);
             }
             if (bluetoothAdapter.isEnabled()) {
-                Log.d(TAG, "bluetoothAdapterEnabled");
-
                 ArrayList<String> names = getPairedDevices();
                 ArrayAdapter<String> listAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, names);
                 listViewDevices.setAdapter(listAdapter);
@@ -306,15 +332,15 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * The link for the jitsi room gets copied to the clipboard
+     * Starts a connection to the server and opens an intent to share the invite link
      */
     public void onClickShareLink(View v) {
         //first create room
         boolean connectionError = false;
         if (session == null) {
-            String jitsi = urlFactory.jitsiHttps; //AAAAA
+            String jitsi = urlFactory.JITSI_HTTPS;
             try {
-                wc = new WebClient(new URI(urlFactory.hostWSS), urlFactory.jitsiPlain, controller);
+                wc = new WebClient(new URI(urlFactory.HOST_WSS), urlFactory.JITSI_PLAIN, controller);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -335,7 +361,7 @@ public class MainActivity extends AppCompatActivity{
 
             if (!connectionError) {
                 String id = wc.getId();
-                session = new SessionData(jitsi, urlFactory.hostHttps, id);
+                session = new SessionData(jitsi, urlFactory.HOST_HTTPS, id);
                 textViewServerConnectionStatus.setText(String.format(getResources().getString(R.string.server_connection_status_true), session.getID()));
                 buttonSwitchToRoom.setEnabled(true);
             } else {
@@ -345,13 +371,13 @@ public class MainActivity extends AppCompatActivity{
         if (!connectionError) {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), session.shareURL);
+                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), session.SHARE_URL);
                 clipboard.setPrimaryClip(clip);
                 showToast(getString(R.string.toast_link_copied));
             } else {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, session.shareURL);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, session.SHARE_URL);
                 sendIntent.setType("text/plain");
 
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -369,10 +395,10 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * toggles between buttonController and joystickController
+     * Toggles between buttonController and joystickController
      */
     public void onClickToggleController(View v) {
-        if (toggleJoystick) {
+        if (directionalButtonsVisible) {
             setVisibilityButtons(View.INVISIBLE);
             joystick.setVisibility(View.VISIBLE);
             buttonToggleController.setText(R.string.button_switch_to_buttons);
@@ -381,7 +407,7 @@ public class MainActivity extends AppCompatActivity{
             setVisibilityButtons(View.VISIBLE);
             buttonToggleController.setText(R.string.button_switch_to_joystick);
         }
-        toggleJoystick = !toggleJoystick;
+        directionalButtonsVisible = !directionalButtonsVisible;
     }
 
     /**
@@ -391,7 +417,7 @@ public class MainActivity extends AppCompatActivity{
      * @param uuid   the uuids of the device
      */
     public void startBTConnection(BluetoothDevice device, ParcelUuid[] uuid) {
-        Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
+        //Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         bluetoothConnection.startClient(device, uuid);
         startedConnection = true;
         controller = new Controller(this, bluetoothConnection);
@@ -406,10 +432,10 @@ public class MainActivity extends AppCompatActivity{
         }
         switch (bluetoothConnection.getConnectionStatus()) {
             case 1: // Connection was successful
-                Log.d(TAG, "Connected: " + this);
+                //Log.d(TAG, "Connected: " + this);
                 textViewBluetoothConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));
                 buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
-                btIsClicked = true;
+                bluetoothIsConnected = true;
                 buttonShareLink.setEnabled(true);
                 listViewDevices.setVisibility(View.INVISIBLE);
                 showController();
@@ -420,66 +446,13 @@ public class MainActivity extends AppCompatActivity{
                 listViewDevices.setVisibility(View.INVISIBLE);
                 break;
             case 3: // Connection lost
-                Log.d(TAG, "Disconnected: " + this);
+                //Log.d(TAG, "Disconnected: " + this);
                 showToast(getString(R.string.bluetooth_connection_lost));
                 resetConnection();
                 break;
             default: // connectionStatus was not set yet
                 break;
         }
-    }
-
-    /**
-     * Create a BroadcastReceiver that catches Intent in ConnectedThread and runs onConnection
-     */
-    private final BroadcastReceiver receiverConnection = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (bluetoothConnection != null) {
-                onConnection();
-            }
-        }
-    };
-
-    private final BroadcastReceiver receiverNegativeButton = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            String intentMessage = bundle.getString("intent message");
-            if (intentMessage.equals(getString(R.string.error_no_paired_devices))) {
-                // if there are no paired devices, open bluetooth settings
-                Intent intentOpenBluetoothSettings = new Intent();
-                intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-                startActivity(intentOpenBluetoothSettings);
-            }
-        }
-    };
-
-    /**
-     * Create a BroadcastReceiver for ACTION_STATE_CHANGED changes
-     * Whenever Bluetooth is turned off while we are in a connection, reset everything
-     */
-//    private final BroadcastReceiver receiverActionStateChanged = new BroadcastReceiver() {
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
-//                // Bluetooth Status has been turned off
-//                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-//                if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
-//                    resetConnection();
-//                }
-//            }
-//        }
-//    };
-
-    /**
-     * @param message The message to pop up at the bottom of the screen
-     */
-    public void showToast(String message) {
-        if(toast ==null)
-            toast = Toast.makeText( this  , "" , Toast.LENGTH_SHORT );
-        toast.setText(message);
-        toast.show();
     }
 
     /**
@@ -502,12 +475,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     /**
-     * makes the controller visible or invisible
+     * Makes the controller visible or invisible
      */
     public void showController() {
-        if (!showController) {
+        if (!controllerVisible) {
             buttonToggleController.setVisibility(View.VISIBLE);
-            if (toggleJoystick) {
+            if (directionalButtonsVisible) {
                 setVisibilityButtons(View.VISIBLE);
             } else {
                 joystick.setVisibility(View.VISIBLE);
@@ -516,51 +489,37 @@ public class MainActivity extends AppCompatActivity{
             setVisibilityButtons(View.INVISIBLE);
             joystick.setVisibility(View.INVISIBLE);
             buttonToggleController.setVisibility(View.INVISIBLE);
-            toggleJoystick = false;
+            directionalButtonsVisible = false;
             buttonToggleController.setText(R.string.button_switch_to_buttons);
         }
-        showController = !showController;
+        controllerVisible = !controllerVisible;
     }
 
     /**
-     * reset connection and change variables when we disconnect (via button or bluetooth)
+     * Reset connection and change variables when we disconnect (via button or bluetooth)
      */
     public void resetConnection() {
         if (startedConnection) {
-            Log.d(TAG, "reseeet");
             startedConnection = false;
+            //stops the EV3 if connection gets lost
             controller.sendPowers(0, 0);
-            btIsClicked = false;
-            buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
-            buttonShareLink.setEnabled(false);
-            buttonSwitchToRoom.setEnabled(false);
-            textViewBluetoothConnectionStatus.setText(getString(R.string.connection_status_false));
-            textViewServerConnectionStatus.setText(getString(R.string.server_connection_status_false));
-            showController = true;
-            showController();
+            bluetoothIsConnected = false;
             bluetoothConnection.cancel();
             selectedDevice = null;
             pairedDevices = new ArrayList<>();
             deviceUUIDs = null;
             session = null;
+            controllerVisible = true;
+            showController();
+            buttonShareLink.setEnabled(false);
+            buttonSwitchToRoom.setEnabled(false);
+            buttonBluetooth.setText(getString(R.string.button_bluetooth_disconnected));
+            textViewBluetoothConnectionStatus.setText(getString(R.string.connection_status_false));
+            textViewServerConnectionStatus.setText(getString(R.string.server_connection_status_false));
             if (wc != null) {
                 wc.close();
             }
         }
-    }
-
-    /**
-     * Shows an ErrorDialogFragment on screen
-     * @param errorStringValue the errorMessage that gets shown
-     */
-    public void showErrorDialogFragment(int errorStringValue) {
-        Bundle bundle = new Bundle();
-        // first put id of error message in bundle using defined key
-        bundle.putInt(ErrorDialogFragment.MSG_KEY, errorStringValue);
-        ErrorDialogFragment error = new ErrorDialogFragment(MainActivity.this, getString(errorStringValue));
-        // then pass bundle to dialog and show
-        error.setArguments(bundle);
-        error.show(this.getSupportFragmentManager(), TAG);
     }
 
     /**

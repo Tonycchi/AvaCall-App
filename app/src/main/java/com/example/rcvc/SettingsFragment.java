@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if (getActivity() != null) {
+            pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        }
 
         EditTextPreference port = findPreference("host_port");
         if (port != null) {
@@ -47,7 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     .newInstance(preference.getKey());
         }
 
-        // If it was one of our cutom Preferences, show its dialog
+        // If it was one of our custom Preferences, show its dialog
         if (dialogFragment != null) {
             dialogFragment.setTargetFragment(this, 0);
             dialogFragment.show(this.getParentFragmentManager(),
@@ -71,14 +72,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             EditText editText = dialogView.findViewById(R.id.input_url);
 
             String defVal = pref.getString(p.getKey(), "");
-            /*
-            String defVal;
-            if (p.getKey().equals("host_url")) {
-                defVal = "avatar.mintclub.org";
-            } else {
-                defVal = "meet.jit.si";
-            }
-             */
 
             // no auto-correct
             editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -100,9 +93,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         editor.putString(p.getKey(), url);
                         editor.apply();
                     })
-                    .setNegativeButton(R.string.dialog_close, (dialog, which) -> {
-                        dialog.cancel();
-                    });
+                    .setNegativeButton(R.string.dialog_close, (dialog, which) -> dialog.cancel());
 
             AlertDialog d = builder.create();
 
@@ -133,11 +124,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 private void handleText() {
                     final Button okButton = d.getButton(AlertDialog.BUTTON_POSITIVE);
                     String text = editText.getText().toString();
-                    if (Patterns.WEB_URL.matcher(text).matches()) {
-                        okButton.setEnabled(true);
-                    } else {
-                        okButton.setEnabled(false);
-                    }
+                    okButton.setEnabled(Patterns.WEB_URL.matcher(text).matches());
                 }
             });
 

@@ -8,11 +8,11 @@ import java.net.URL;
 public class SessionData {
 
     private JitsiMeetConferenceOptions options;
-    public final String shareURL;
-    public final String id;
+    public final String SHARE_URL;
+    public final String ID;
 
     public SessionData(String jitsi, String host, String id) {
-        this.id = id;
+        this.ID = id;
         try {
             options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL(jitsi))
@@ -22,11 +22,11 @@ public class SessionData {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        shareURL = host + "/" + id;
+        SHARE_URL = host + "/" + id;
     }
 
     public String getID(){
-        return id;
+        return ID;
     }
 
     public JitsiMeetConferenceOptions getOptions() {

@@ -20,8 +20,7 @@ public class Controller {
         int str = strength;
         if (str > 100) {
             str = 100;
-        }
-        if (str < 0) {
+        } else if (str < 0) {
             str = 0;
         }
         //0 is r, 1 is l
@@ -56,11 +55,10 @@ public class Controller {
             right = -100; //-100 to -100
         }
 
-
         float[] output = new float[2];
         output[0] = right * strength / 10000;
         output[1] = left * strength / 10000;
-        Log.d("Motorsignale", "Links:"+output[1]+" Rechts:"+output[0]);
+        //Log.d("Motorsignale", "Links:"+output[1]+" Rechts:"+output[0]);
 
         return output;
     }

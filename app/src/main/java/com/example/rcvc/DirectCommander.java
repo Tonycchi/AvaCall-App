@@ -2,32 +2,26 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
 public class DirectCommander {
 
-    private final BluetoothConnectionService B;
+    private final BluetoothConnectionService BLUETOOTH;
 
     //definitions will probably be able to be set in settings
     //should probably make library of ev3 command parts
-    private final byte PORT_RIGHT;
-    private final byte PORT_LEFT;
+    private final byte PORT_RIGHT, PORT_LEFT;
 
-    private final int maxPower;
-
+    private final int MAX_POWER;
 
     public DirectCommander(Context context, BluetoothConnectionService service) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
         PORT_RIGHT = (byte) pref.getInt("motor_right", 1);
-        Log.d("DirectCommander", "Rechter Port: " + PORT_RIGHT);
         PORT_LEFT = (byte) pref.getInt("motor_left", 8);
-        Log.d("DirectCommander", "Linker Port: " + PORT_LEFT);
-        maxPower = pref.getInt("max_speed", 50);
-        Log.d("DirectCommander", "Geschwindigkeit: " + maxPower);
-        B = service;
+        MAX_POWER = pref.getInt("max_speed", 50);
+        BLUETOOTH = service;
     }
 
     /**
@@ -36,17 +30,17 @@ public class DirectCommander {
      * @param right,left motor speed scales
      */
     public void send(float right, float left) {
-        byte[] command = createCommand(calcPower(right), calcPower(left));
-        B.write(command);
+        byte[] command = createCommand(scalePower(right), scalePower(left));
+        BLUETOOTH.write(command);
     }
 
     /**
      * creates a direct command for movement
      *
-     * @param right,left motor speeds
+     * @param rightPower,leftPower motor speeds
      * @return direct command as byte array
      */
-    public byte[] createCommand(byte right, byte left) {
+    public byte[] createCommand(byte rightPower, byte leftPower) {
         //0x|14:00|2A:00|80|00:00|A4|00|01|81:RP|A4|0|08|81:LP|A6|00|09
         //   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19
         // 00: length 20
@@ -66,17 +60,21 @@ public class DirectCommander {
         directCommand[19] = (byte) (PORT_RIGHT + PORT_LEFT);
 
         directCommand[9] = PORT_RIGHT;    // PORT right motor
-        directCommand[11] = right;  // POWER right motor
+        directCommand[11] = rightPower;  // POWER right motor
 
         directCommand[14] = PORT_LEFT;   // PORT left motor
-        directCommand[16] = left;   // POWER left motor
-
-        Log.d("Motorcommand","left:"+left+" right:"+right);
+        directCommand[16] = leftPower;   // POWER left motor
 
         return directCommand;
     }
 
-    public byte calcPower(float motorSpeed) {
-        return (byte) (motorSpeed * maxPower);
+    /**
+     * scales the motor power according to the max power from settings
+     *
+     * @param motorPower the motor power to be scaled
+     * @return the scaled motor power
+     */
+    public byte scalePower(float motorPower) {
+        return (byte) (motorPower * MAX_POWER);
     }
 }

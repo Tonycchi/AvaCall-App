@@ -17,14 +17,13 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
     private RadioGroup groupRight, groupLeft;
     private RadioButton[] buttonsRight, buttonsLeft;
 
-    public static MotorPortDialogFragment newInstance(
-            String key) {
-        final MotorPortDialogFragment fragment = new MotorPortDialogFragment();
-        final Bundle b = new Bundle(1);
-        b.putString(ARG_KEY, key);
-        fragment.setArguments(b);
+    public static MotorPortDialogFragment newInstance(String key) {
+        final MotorPortDialogFragment FRAGMENT = new MotorPortDialogFragment();
+        final Bundle B = new Bundle(1);
+        B.putString(ARG_KEY, key);
+        FRAGMENT.setArguments(B);
 
-        return fragment;
+        return FRAGMENT;
     }
 
     @Override
@@ -94,6 +93,10 @@ public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
         }
     }
 
+    /**
+     * enables all the radio buttons
+     * @param buttons the buttons to enable
+     */
     private void enableAll(RadioButton[] buttons) {
         for (RadioButton b : buttons) b.setEnabled(true);
     }

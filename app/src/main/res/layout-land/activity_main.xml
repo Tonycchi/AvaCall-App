@@ -16,7 +16,7 @@
         android:layout_marginBottom="@dimen/margin_connection_status"
         android:text="@string/server_connection_status_false"
         android:textColor="@color/black"
-        android:textColorHighlight="@color/fontSecondary"
+        android:textColorHighlight="@color/font_secondary"
         android:textSize="@dimen/standard_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

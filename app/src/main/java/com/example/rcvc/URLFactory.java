@@ -2,25 +2,23 @@ package com.example.rcvc;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
 public class URLFactory {
 
-    public final String hostPlain, hostHttps, jitsiPlain, jitsiHttps, port, hostWSS;
+    public final String HOST_PLAIN, HOST_HTTPS, JITSI_PLAIN, JITSI_HTTPS, PORT, HOST_WSS;
 
     public URLFactory(Context context) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        hostPlain = pref.getString("host_url", "avatar.mintclub.org");
-        hostHttps = "https://" + hostPlain;
+        HOST_PLAIN = pref.getString("host_url", "avatar.mintclub.org");
+        HOST_HTTPS = "https://" + HOST_PLAIN;
 
-        jitsiPlain = pref.getString("jitsi_url", "meet.jit.si");
-        jitsiHttps = "https://" + jitsiPlain;
+        JITSI_PLAIN = pref.getString("jitsi_url", "meet.jit.si");
+        JITSI_HTTPS = "https://" + JITSI_PLAIN;
 
-        port = pref.getString("host_port", "22222");
-        hostWSS = "wss://" + hostPlain + ":" + port;
-        Log.d("URL", "WebSocket: " + hostWSS);
+        PORT = pref.getString("host_port", "22222");
+        HOST_WSS = "wss://" + HOST_PLAIN + ":" + PORT;
     }
 }
