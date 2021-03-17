@@ -46,9 +46,6 @@ public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "MainActivity";
 
-    // settings
-    private SharedPreferences sharedPreferences;
-
     // gui state booleans
     private boolean btIsClicked;
     private boolean showController; //true is shown, false is not shown
@@ -154,8 +151,6 @@ public class MainActivity extends AppCompatActivity{
      */
     public void InitializeUI() {
         Log.d(TAG, "Initizalized with ID: " + this);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         urlFactory = new URLFactory(this);
 
         // get all buttons
@@ -318,7 +313,7 @@ public class MainActivity extends AppCompatActivity{
         if (session == null) {
             String jitsi = urlFactory.jitsiHttps; //AAAAA
             try {
-                wc = new WebClient(new URI("wss://" + urlFactory.hostPlain + ":" + sharedPreferences.getString("host_port", "22222")), urlFactory.jitsiPlain, controller);
+                wc = new WebClient(new URI(urlFactory.hostWSS), urlFactory.jitsiPlain, controller);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }

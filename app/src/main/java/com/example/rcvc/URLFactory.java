@@ -7,7 +7,7 @@ import androidx.preference.PreferenceManager;
 
 public class URLFactory {
 
-    public final String hostPlain, hostHttps, jitsiPlain, jitsiHttps;
+    public final String hostPlain, hostHttps, jitsiPlain, jitsiHttps, port, hostWSS;
 
     public URLFactory(Context context) {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -17,5 +17,8 @@ public class URLFactory {
 
         jitsiPlain = pref.getString("jitsi_url", "meet.jit.si");
         jitsiHttps = "https://" + jitsiPlain;
+
+        port = pref.getString("host_port", "22222");
+        hostWSS = "wss://" + hostPlain + ":" + port;
     }
 }
