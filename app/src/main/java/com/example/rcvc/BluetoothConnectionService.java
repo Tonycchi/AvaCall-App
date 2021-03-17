@@ -104,7 +104,7 @@ public class BluetoothConnectionService {
                 connected(bluetoothSocket);
             }
 
-            Log.i(TAG, "END AcceptThread ");
+            //Log.d(TAG, "END AcceptThread ");
         }
     }
 
