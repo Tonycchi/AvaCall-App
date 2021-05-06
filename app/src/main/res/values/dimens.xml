@@ -22,6 +22,8 @@
 
     <!-- Bluetooth -->
 
+
+    <!-- OLD IS DELETED LATER -->
     <!-- Main Activity -->
     <dimen name="show_controller_width">@dimen/_170sdp</dimen>
     <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
