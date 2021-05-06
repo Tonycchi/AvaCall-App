@@ -177,5 +177,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/button1"
+        style="@style/button_navigation"
+        android:padding="10dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/button_next"
+        android:text="Schwoanz"
+        app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_toggle_controller" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
