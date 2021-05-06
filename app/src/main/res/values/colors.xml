@@ -27,8 +27,8 @@
     <color name="joystick_button">#FFFF0000</color>
 
     <!-- buttons -->
-    <color name="button_next_inner">#4022E400</color>
-    <color name="button_back_inner">#AAFF0000</color>
+    <color name="button_next_inner">#D230EA10</color>
+    <color name="button_back_inner">#BCFF1F1F</color>
     <color name="button_neutral_inner">#AA0047FF</color>
 
     <!-- textcolor -->

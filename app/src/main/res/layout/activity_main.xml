@@ -176,11 +176,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/button1"
         style="@style/button_next"
-        android:background="@drawable/button_navigation"
         android:text="Schwoanz"
+        android:layout_width="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -188,21 +188,18 @@
 
     <android.widget.Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_30sdp"
         style="@style/button_back"
+        android:layout_width="wrap_content"
         android:text="YEET"
-        android:textSize="@dimen/_11sdp"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toStartOf="@+id/button1"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/button_toggle_controller" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/button2"
         style="@style/button_neutral"
-        android:background="@drawable/button_neutral"
+        android:layout_width="wrap_content"
         android:text="Gaming"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Main Activity -->
+    <!-- New Design -->
+    <!-- General -->
+    <!-- Buttons -->
     <dimen name="standard_button_width">@dimen/_230sdp</dimen>
     <dimen name="standard_button_height">@dimen/_35sdp</dimen>
     <dimen name="standard_button_border_width">@dimen/_2sdp</dimen>
+
+    <dimen name="margin_top">@dimen/_16sdp</dimen>
+    <dimen name="margin_bottom">@dimen/_16sdp</dimen>
+
+    <dimen name="standard_text_size">@dimen/_12sdp</dimen>
+    <dimen name="small_text_size">@dimen/_10sdp</dimen>
+
+    <!-- Bluetooth -->
+
+    <!-- Main Activity -->
     <dimen name="show_controller_width">@dimen/_170sdp</dimen>
     <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
     <dimen name="small_button_height">@dimen/_30sdp</dimen>
     <dimen name="control_button_width">@dimen/_100sdp</dimen>
-    <dimen name="margin_top">@dimen/_16sdp</dimen>
-    <dimen name="margin_bot">@dimen/_32sdp</dimen>
     <dimen name="paired_devices_width">@dimen/_300sdp</dimen>
     <dimen name="paired_devices_height">@dimen/_125sdp</dimen>
     <dimen name="joystick_size">@dimen/_125sdp</dimen>
     <dimen name="joystick_border_width">@dimen/_32sdp</dimen>
     <dimen name="margin_top_between_buttons">@dimen/_8sdp</dimen>
-    <dimen name="standard_text_size">@dimen/_12sdp</dimen>
-    <dimen name="small_text_size">@dimen/_10sdp</dimen>
     <dimen name="margin_connection_status">@dimen/_8sdp</dimen>
     <dimen name="margin_bottom_between">@dimen/_4sdp</dimen>
     <dimen name="control_button_margin">@dimen/_55sdp</dimen>

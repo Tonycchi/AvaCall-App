@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.widget.Button
+        android:id="@+id/button3"
+        style="@style/button_neutral"
+        android:layout_width="@dimen/standard_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:text="@string/button_bluetooth_first_connection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="56dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_roboter_shown_question"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        tools:layout_editor_absoluteX="47dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
