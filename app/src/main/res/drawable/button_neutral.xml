@@ -17,7 +17,7 @@
     <item >
         <shape android:shape="rectangle"  >
             <corners android:radius="@dimen/_10sdp" />
-            <stroke android:width="@dimen/_2sdp" />
+            <stroke android:width="@dimen/standard_button_border_width" />
         </shape>
     </item>
 </selector>

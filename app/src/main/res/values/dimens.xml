@@ -3,6 +3,7 @@
     <!-- Main Activity -->
     <dimen name="standard_button_width">@dimen/_230sdp</dimen>
     <dimen name="standard_button_height">@dimen/_35sdp</dimen>
+    <dimen name="standard_button_border_width">@dimen/_2sdp</dimen>
     <dimen name="show_controller_width">@dimen/_170sdp</dimen>
     <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
     <dimen name="small_button_height">@dimen/_30sdp</dimen>

@@ -186,14 +186,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_toggle_controller" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_30sdp"
         style="@style/button_back"
-        android:background="@drawable/button_navigation"
         android:text="YEET"
+        android:textSize="@dimen/_11sdp"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toStartOf="@+id/button1"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/button_toggle_controller" />
 
     <Button

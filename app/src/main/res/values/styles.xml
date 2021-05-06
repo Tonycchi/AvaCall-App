@@ -13,7 +13,7 @@
 
     <style name="button_back" parent="buttons">
         <item name="android:layout_width">@dimen/_100sdp</item>
-        <item name="backgroundTint">@color/button_back_inner</item>
+        <item name="android:background">@drawable/button_navigation</item>
     </style>
 
     <style name="button_neutral" parent="buttons">
