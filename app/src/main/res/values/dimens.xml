@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- New Design -->
-    <!-- General -->
-    <!-- Buttons -->
-    <dimen name="standard_button_width">@dimen/_230sdp</dimen>
-    <dimen name="standard_button_height">@dimen/_35sdp</dimen>
-    <dimen name="standard_button_border_width">@dimen/_2sdp</dimen>
+        <!-- General -->
+            <!-- Buttons -->
+                <dimen name="standard_button_width">@dimen/_230sdp</dimen>
+                <dimen name="standard_button_height">@dimen/_35sdp</dimen>
+                <dimen name="standard_button_border_width">@dimen/_2sdp</dimen>
 
-    <dimen name="margin_top">@dimen/_16sdp</dimen>
-    <dimen name="margin_bottom">@dimen/_16sdp</dimen>
+            <!-- Margins -->
+                <dimen name="margin_top">@dimen/_16sdp</dimen>
+                <dimen name="margin_side">@dimen/_16sdp</dimen>
+                <dimen name="margin_horizontal_small">@dimen/_8sdp</dimen>
+                <dimen name="margin_vertical_small">@dimen/_8sdp</dimen>
+                <dimen name="margin_horizontal_big">@dimen/_16sdp</dimen>
+                <dimen name="margin_vertical_big">@dimen/_16sdp</dimen>
+                <dimen name="margin_bottom">@dimen/_16sdp</dimen>
 
-    <dimen name="standard_text_size">@dimen/_12sdp</dimen>
-    <dimen name="small_text_size">@dimen/_10sdp</dimen>
+            <!-- Text -->
+                <dimen name="standard_text_size">@dimen/_12sdp</dimen>
+                <dimen name="small_text_size">@dimen/_10sdp</dimen>
 
     <!-- Bluetooth -->
 

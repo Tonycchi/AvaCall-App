@@ -33,5 +33,6 @@
 
     <!-- textcolor -->
     <color name="text_button">#000000</color>
+    <color name="text_standard">#000000</color>
 
 </resources>
