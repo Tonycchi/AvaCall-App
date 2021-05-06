@@ -16,9 +16,8 @@
     <!--    </item>-->
     <item >
         <shape android:shape="rectangle"  >
-            <corners android:radius="10dip" />
-            <stroke android:width="1dip" android:color="@color/button_neutral_border" />
-            <solid android:color="@color/button_neutral_inner" />
+            <corners android:radius="@dimen/_10sdp" />
+            <stroke android:width="@dimen/_2sdp" />
         </shape>
     </item>
 </selector>

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
     android:visibility="visible"
     tools:context=".MainActivity">
 
@@ -35,7 +34,7 @@
         android:textSize="@dimen/standard_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_share_link"
@@ -179,9 +178,8 @@
 
     <Button
         android:id="@+id/button1"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        style="@style/buttons_test"
+        style="@style/button_next"
+        android:background="@drawable/button_navigation"
         android:text="Schwoanz"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toEndOf="parent"
@@ -190,9 +188,8 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_back"
+        style="@style/button_back"
+        android:background="@drawable/button_navigation"
         android:text="YEET"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toStartOf="@+id/button1"
@@ -201,8 +198,7 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/button_neutral"
         android:background="@drawable/button_neutral"
         android:text="Gaming"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
