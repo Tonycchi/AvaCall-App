@@ -1,4 +1,7 @@
 package com.example.rcvc;
 
-public class HostActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class HostActivity extends AppCompatActivity {
+    
 }
