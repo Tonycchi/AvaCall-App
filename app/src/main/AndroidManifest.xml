@@ -20,7 +20,7 @@
         android:theme="@style/Theme.Rcvc">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".HostActivity"
             android:enabled="true"
             android:configChanges="orientation|screenSize">
             <intent-filter>
