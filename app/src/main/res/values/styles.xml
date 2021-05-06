@@ -5,4 +5,9 @@
         <item name="android:layout_height">@dimen/_30sdp</item>
         <item name="android:textColor">@color/text_button</item>
     </style>
+
+    <style name="buttons_test">
+        <item name="android:backgroundTint">@color/button_next_inner</item>
+        <item name="android:src">@drawable/button_next</item>
+    </style>
 </resources>

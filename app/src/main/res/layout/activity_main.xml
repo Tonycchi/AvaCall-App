@@ -179,12 +179,35 @@
 
     <Button
         android:id="@+id/button1"
-        style="@style/button_navigation"
-        android:background="@drawable/button_next"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        style="@style/buttons_test"
         android:text="Schwoanz"
         app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_toggle_controller" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_back"
+        android:text="YEET"
+        app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
+        app:layout_constraintEnd_toStartOf="@+id/button1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_toggle_controller" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_neutral"
+        android:text="Gaming"
+        app:layout_constraintBottom_toTopOf="@+id/list_paired_devices"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button1"
         app:layout_constraintTop_toBottomOf="@+id/button_toggle_controller" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
