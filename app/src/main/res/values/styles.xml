@@ -3,12 +3,6 @@
     <style name="button_navigation">
         <item name="android:layout_width">@dimen/_100sdp</item>
         <item name="android:layout_height">@dimen/_30sdp</item>
-
-    </style>
-
-    <style name="button_next" parent="button_navigation">
-        <item name="android:backgroundTint">@color/button_next_inner</item>
         <item name="android:textColor">@color/text_button</item>
     </style>
-
 </resources>
