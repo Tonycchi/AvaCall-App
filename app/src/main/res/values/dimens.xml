@@ -6,6 +6,7 @@
                 <dimen name="standard_button_width">@dimen/_230sdp</dimen>
                 <dimen name="standard_button_height">@dimen/_35sdp</dimen>
                 <dimen name="standard_button_border_width">@dimen/_2sdp</dimen>
+                <dimen name="navigation_button_height">@dimen/_40sdp</dimen>
 
             <!-- Margins -->
                 <dimen name="margin_top">@dimen/_16sdp</dimen>
