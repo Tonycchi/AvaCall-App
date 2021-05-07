@@ -15,6 +15,9 @@ public class HostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //set the title
+        setTitle(R.string.bluetooth_title);
+
         //disables nightmode even if nightmode is activated on the device
         //TODO: implement nightmode and delete this line
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -27,8 +30,6 @@ public class HostActivity extends AppCompatActivity {
                     .setReorderingAllowed(true)
                     .add(R.id.fragment_container_view, BluetoothFragment.class, bundle)
                     .commit();
-
-            setTitle(R.string.bluetooth_title);
         }
     }
 
