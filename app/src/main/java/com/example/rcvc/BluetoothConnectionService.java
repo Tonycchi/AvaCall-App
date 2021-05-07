@@ -16,6 +16,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -48,6 +50,8 @@ public class BluetoothConnectionService {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         start();
     }
+
+
 
     /**
      * @return the current connection status
