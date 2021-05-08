@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.widget.Button
+        android:id="@+id/url_settings"
+        style="@style/button_neutral"
+        android:layout_width="@dimen/standard_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="@string/url_settings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <android.widget.Button
+        android:id="@+id/invite_partner"
+        style="@style/button_neutral"
+        android:layout_width="@dimen/standard_button_width"
+        android:layout_height="@dimen/big_button_height"
+        android:layout_marginTop="@dimen/_100sdp"
+        android:text="@string/invite_partner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/url_settings"
+        />
+
+    <android.widget.Button
+        android:id="@+id/access_videocall"
+        style="@style/button_neutral"
+        android:layout_width="@dimen/standard_button_width"
+        android:layout_height="@dimen/big_button_height"
+        android:layout_marginTop="@dimen/margin_top"
+        android:text="@string/access_videocall"
+        app:layout_constraintTop_toBottomOf="@+id/invite_partner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <android.widget.Button
+        android:id="@+id/test_controls"
+        style="@style/button_neutral"
+        android:layout_width="@dimen/standard_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:text="@string/test_controls"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

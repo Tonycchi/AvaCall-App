@@ -5,6 +5,9 @@
             <!-- Buttons -->
                 <dimen name="standard_button_width">@dimen/_230sdp</dimen>
                 <dimen name="standard_button_height">@dimen/_35sdp</dimen>
+
+                <dimen name="big_button_height">@dimen/_70sdp</dimen>
+
                 <dimen name="standard_button_border_width">@dimen/_2sdp</dimen>
 
             <!-- Margins -->

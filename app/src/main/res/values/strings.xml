@@ -9,6 +9,13 @@
     <string name="text_roboter_shown_question">Der Roboter wird noch nicht in der Liste angezeigt?</string>
     <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>
 
+    <!-- Video Connection -->
+    <string name="url_settings">URL-Einstellungen</string>
+    <string name="invite_partner">Partner einladen</string>
+    <string name="access_videocall">Zum Videocall</string>
+    <string name="test_controls">Steuerung testen</string>
+
+
     <!-- OLD IS DELETED LATER -->
     <!-- General Menus -->
     <string name="dialog_close">Schließen</string>
