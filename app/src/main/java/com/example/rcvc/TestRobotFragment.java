@@ -12,11 +12,20 @@ import androidx.fragment.app.FragmentManager;
 
 public class TestRobotFragment extends Fragment {
 
+    //true if this fragment was started directly from model selection
+    private boolean cameFromModelSelection;
+
     public TestRobotFragment(){super(R.layout.test_robot);}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        cameFromModelSelection = false;
+        try {
+            cameFromModelSelection = (requireArguments().getInt("cameFromModelSelection") == 1);
+        }catch(IllegalStateException _){   //when no argument got passed
+        }
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -46,16 +55,20 @@ public class TestRobotFragment extends Fragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null)
                 .setReorderingAllowed(true)
-                .addToBackStack(null) // name can be null
+                .addToBackStack(null)
                 .commit();
     }
     private void onClickNo(){
         FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.popBackStack();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, EditControlsFragment.class, null)
-                .setReorderingAllowed(true)
-                .addToBackStack(null) // name can be null
-                .commit();
+        if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, EditControlsFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        }else{  //if cameFromEdit: simply pop back
+            fragmentManager.popBackStack();
+        }
     }
 }

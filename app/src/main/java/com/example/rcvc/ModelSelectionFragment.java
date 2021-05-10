@@ -57,9 +57,12 @@ public class ModelSelectionFragment extends Fragment {
     }
 
     private void onClickUseModel(View v) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("cameFromModelSelection", 1);
+
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
+                .replace(R.id.fragment_container_view, TestRobotFragment.class, bundle)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
