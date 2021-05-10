@@ -28,19 +28,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_model_name" />
 
-    <fragment
-        android:id="@+id/edit_model_settings_fragment"
-        android:name="com.example.rcvc.BaseFragment"
-        android:layout_width="392dp"
-        android:layout_height="407dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_edit_model_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_model_spinner"
-        app:layout_constraintVertical_bias="0.484" />
+<!--    <fragment-->
+<!--        android:id="@+id/edit_model_settings_fragment"-->
+<!--        android:name="com.example.rcvc.EditEV3ControlFragment"-->
+<!--        android:layout_width="392dp"-->
+<!--        android:layout_height="407dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/button_edit_model_back"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.473"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/edit_model_spinner"-->
+<!--        app:layout_constraintVertical_bias="0.484" />-->
 
     <android.widget.Button
         android:id="@+id/button_edit_model_back"
