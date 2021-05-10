@@ -33,6 +33,7 @@
         android:id="@+id/text_control_question"
         style="@style/text_standard"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_vertical_small"
         android:text="@string/text_robot_control_question"
         app:layout_constraintBottom_toTopOf="@+id/button_yes"
