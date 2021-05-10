@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentManager;
 
 public class TestRobotFragment extends Fragment {
 
-    TestRobotFragment(){super(R.layout.test_robot);}
+    public TestRobotFragment(){super(R.layout.test_robot);}
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
