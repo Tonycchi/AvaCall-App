@@ -26,13 +26,13 @@
         android:layout_marginTop="@dimen/margin_vertical_big"
         android:layout_marginEnd="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_vertical_big"
-        app:layout_constraintBottom_toTopOf="@+id/edit_model"
+        app:layout_constraintBottom_toTopOf="@+id/button_edit_model"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/model_picture" />
 
     <android.widget.Button
-        android:id="@+id/use_model"
+        android:id="@+id/button_use_model"
         style="@style/button_neutral"
         android:layout_width="0dp"
         android:layout_height="@dimen/navigation_button_height"
@@ -41,13 +41,13 @@
         android:layout_marginBottom="@dimen/margin_bottom"
         android:text="@string/use_model"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edit_model"
+        app:layout_constraintEnd_toStartOf="@+id/button_edit_model"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/model_picker"
         app:layout_constraintVertical_bias="1.0" />
 
     <android.widget.Button
-        android:id="@+id/edit_model"
+        android:id="@+id/button_edit_model"
         style="@style/button_neutral"
         android:layout_width="0dp"
         android:layout_height="@dimen/navigation_button_height"
@@ -57,6 +57,6 @@
         android:text="@string/edit_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/use_model" />
+        app:layout_constraintStart_toEndOf="@+id/button_use_model" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
