@@ -41,6 +41,9 @@ public class TestRobotFragment extends Fragment {
     }
     private void onClickNo(){
         FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.popBackStack();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, EditControlsFragment.class, null)
+                .setReorderingAllowed(true)
+                .commit();
     }
 }
