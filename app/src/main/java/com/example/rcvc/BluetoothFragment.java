@@ -34,6 +34,8 @@ public class BluetoothFragment extends ConnectionFragment {
                 onClickFirstBluetoothConnection();
             }
         });
+
+        getActivity().setTitle(R.string.title_bluetooth);
     }
 
     private void onClickFirstBluetoothConnection(){

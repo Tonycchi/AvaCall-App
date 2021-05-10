@@ -27,24 +27,16 @@ public class EditControlsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Button buttonEditModelNext = (Button) view.findViewById(R.id.button_edit_model_next);
-        buttonEditModelNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickButtonEditModelNext();
-            }
-        });
+        Button buttonEditModelNext = view.findViewById(R.id.button_edit_model_next);
+        Button buttonEditModelBack = view.findViewById(R.id.button_edit_model_back);
 
-        Button buttonEditModelBack = (Button) view.findViewById(R.id.button_edit_model_back);
-        buttonEditModelBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickButtonEditModelBack();
-            }
-        });
+        buttonEditModelNext.setOnClickListener(this::onClickButtonEditModelNext);
+        buttonEditModelBack.setOnClickListener(this::onClickButtonEditModelBack);
+
+        getActivity().setTitle(R.string.title_edit_controls);
     }
 
-    private void onClickButtonEditModelNext(){
+    private void onClickButtonEditModelNext(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
@@ -53,7 +45,7 @@ public class EditControlsFragment extends Fragment {
                 .commit();
     }
 
-    private void onClickButtonEditModelBack(){
+    private void onClickButtonEditModelBack(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.popBackStack();
     }

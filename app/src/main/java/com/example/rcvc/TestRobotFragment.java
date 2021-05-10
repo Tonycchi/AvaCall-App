@@ -24,8 +24,7 @@ public class TestRobotFragment extends Fragment {
         cameFromModelSelection = false;
         try {
             cameFromModelSelection = (requireArguments().getInt("cameFromModelSelection") == 1);
-        }catch(IllegalStateException _){   //when no argument got passed
-        }
+        } catch(IllegalStateException ignore) { }
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -34,23 +33,16 @@ public class TestRobotFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Button buttonYes = (Button) view.findViewById(R.id.button_yes);
-        Button buttonNo = (Button) view.findViewById(R.id.button_no);
-        buttonYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickYes();
-            }
-        });
-        buttonNo.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                onClickNo();
-            }
-        });
+        Button buttonYes = view.findViewById(R.id.button_yes);
+        Button buttonNo = view.findViewById(R.id.button_no);
+
+        buttonYes.setOnClickListener(this::onClickYes);
+        buttonNo.setOnClickListener(this::onClickNo);
+
+        getActivity().setTitle(R.string.title_test_robot);
     }
 
-    private void onClickYes(){
+    private void onClickYes(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null)
@@ -58,7 +50,7 @@ public class TestRobotFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-    private void onClickNo(){
+    private void onClickNo(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();

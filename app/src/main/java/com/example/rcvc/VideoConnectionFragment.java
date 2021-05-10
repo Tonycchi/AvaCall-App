@@ -27,20 +27,17 @@ public class VideoConnectionFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Button buttonURLsettings = (Button) view.findViewById(R.id.button_url_settings);
-        Button buttonInvitePartner = (Button) view.findViewById(R.id.button_invite_partner);
-        Button buttonAccessVideoCall = (Button) view.findViewById(R.id.button_access_videocall);
-        Button buttonTestControls = (Button) view.findViewById(R.id.button_test_controls);
+        Button buttonURLsettings = view.findViewById(R.id.button_url_settings);
+        Button buttonInvitePartner = view.findViewById(R.id.button_invite_partner);
+        Button buttonAccessVideoCall = view.findViewById(R.id.button_access_videocall);
+        Button buttonTestControls = view.findViewById(R.id.button_test_controls);
 
-        buttonTestControls.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTestControlls();
-            }
-        });
+        buttonTestControls.setOnClickListener(this::onClickTestControls);
+
+        getActivity().setTitle(R.string.title_video_connection);
     }
 
-    private void onClickTestControlls(){
+    private void onClickTestControls(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.popBackStack();
     }

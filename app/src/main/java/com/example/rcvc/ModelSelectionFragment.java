@@ -32,19 +32,11 @@ public class ModelSelectionFragment extends Fragment {
         Button useModel = view.findViewById(R.id.button_use_model);
         Button editModel = view.findViewById(R.id.button_edit_model);
 
-        useModel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickUseModel(v);
-            }
-        });
+        useModel.setOnClickListener(this::onClickUseModel);
 
-        editModel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickEditModel(v);
-            }
-        });
+        editModel.setOnClickListener(this::onClickEditModel);
+
+        getActivity().setTitle(R.string.title_model_selection);
     }
 
     private void onClickEditModel(View v) {
@@ -57,10 +49,10 @@ public class ModelSelectionFragment extends Fragment {
     }
 
     private void onClickUseModel(View v) {
+        FragmentManager fragmentManager = getParentFragmentManager();
         Bundle bundle = new Bundle();
         bundle.putInt("cameFromModelSelection", 1);
 
-        FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, TestRobotFragment.class, bundle)
                 .setReorderingAllowed(true)

@@ -3,8 +3,14 @@
     <string name="app_name">AvaCall</string>
 
     <!-- New Design -->
+        <!-- Titles -->
+        <string name="title_bluetooth">AvaCall: Roboter verbinden</string>
+        <string name="title_model_selection">AvaCall: Modell wählen</string>
+        <string name="title_edit_controls">AvaCall: Steuerung bearbeiten</string>
+        <string name="title_test_robot">AvaCall: Steuerung testen</string>
+        <string name="title_video_connection">AvaCall: Videoanruf starten</string>
+
         <!-- Bluetooth -->
-        <string name="bluetooth_title">AvaCall: Roboter verbinden</string>
         <string name="text_connected_bluetooth_devices">Verbundene Geräte:</string>
         <string name="text_roboter_shown_question">Der Roboter wird noch nicht in der Liste angezeigt?</string>
         <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>

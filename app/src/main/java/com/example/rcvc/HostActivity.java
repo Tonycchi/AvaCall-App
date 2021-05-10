@@ -16,7 +16,7 @@ public class HostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //set the title
-        setTitle(R.string.bluetooth_title);
+        setTitle(R.string.title_bluetooth);
 
         //disables nightmode even if nightmode is activated on the device
         //TODO: implement nightmode and delete this line
