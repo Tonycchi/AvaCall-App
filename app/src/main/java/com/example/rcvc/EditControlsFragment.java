@@ -55,10 +55,7 @@ public class EditControlsFragment extends Fragment {
 
     private void onClickButtonEditModelBack(){
         FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
-                .setReorderingAllowed(true)
-                .commit();
+        fragmentManager.popBackStack();
     }
 
 
