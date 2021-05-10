@@ -35,7 +35,6 @@ public class VideoConnectionFragment extends Fragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
                 .setReorderingAllowed(true)
-                .addToBackStack(null) // name can be null
                 .commit();
     }
 

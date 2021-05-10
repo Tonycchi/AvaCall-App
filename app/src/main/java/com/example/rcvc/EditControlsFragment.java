@@ -53,7 +53,6 @@ public class EditControlsFragment extends Fragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
                 .setReorderingAllowed(true)
-                .addToBackStack(null)
                 .commit();
     }
 
