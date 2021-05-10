@@ -29,7 +29,7 @@ public class BluetoothFragment extends ConnectionFragment {
     private void onClickFirstBluetoothConnection(){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, .class, null)
+                .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
                 .setReorderingAllowed(true)
                 .addToBackStack("name") // name can be null
                 .commit();
