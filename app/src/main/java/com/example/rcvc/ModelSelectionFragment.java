@@ -22,18 +22,34 @@ public class ModelSelectionFragment extends Fragment {
         Button useModel = view.findViewById(R.id.button_use_model);
         Button editModel = view.findViewById(R.id.button_edit_model);
 
+        useModel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickUseModel(v);
+            }
+        });
+
         editModel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onClickEditModel(v);
             }
         });
     }
 
-    private void onClickUseModel(View view) {
+    private void onClickEditModel(View v) {
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, EditControlsFragment.class, null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void onClickUseModel(View v) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
