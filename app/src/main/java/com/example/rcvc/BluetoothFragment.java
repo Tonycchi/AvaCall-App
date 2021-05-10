@@ -17,8 +17,8 @@ public class BluetoothFragment extends ConnectionFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Button button_first_connection = (Button) view.findViewById(R.id.button_first_connection);
-        button_first_connection.setOnClickListener(new View.OnClickListener() {
+        Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
+        buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickFirstBluetoothConnection();
@@ -31,7 +31,7 @@ public class BluetoothFragment extends ConnectionFragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
                 .setReorderingAllowed(true)
-                .addToBackStack("name") // name can be null
+                .addToBackStack("") // name can be null
                 .commit();
 
     }
