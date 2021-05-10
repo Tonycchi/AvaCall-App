@@ -32,10 +32,7 @@ public class VideoConnectionFragment extends Fragment {
 
     private void onClickTestControlls(){
         FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
-                .setReorderingAllowed(true)
-                .commit();
+        fragmentManager.popBackStack();
     }
 
 
