@@ -31,7 +31,7 @@ public class BluetoothFragment extends ConnectionFragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
                 .setReorderingAllowed(true)
-                .addToBackStack("") // name can be null
+                .addToBackStack(null)
                 .commit();
 
     }
