@@ -32,7 +32,7 @@
 
     <android.widget.Button
         android:id="@+id/button_access_videocall"
-        style="@style/button_neutral"
+        style="@style/button_next"
         android:layout_width="@dimen/standard_button_width"
         android:layout_height="@dimen/big_button_height"
         android:layout_marginTop="@dimen/margin_vertical_small"
@@ -43,7 +43,7 @@
 
     <android.widget.Button
         android:id="@+id/button_test_controls"
-        style="@style/button_neutral"
+        style="@style/button_back"
         android:layout_width="@dimen/standard_button_width"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_bottom"
