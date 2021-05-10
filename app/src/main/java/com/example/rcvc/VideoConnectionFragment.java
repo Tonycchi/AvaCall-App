@@ -1,6 +1,7 @@
 package com.example.rcvc;
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,6 +14,15 @@ public class VideoConnectionFragment extends Fragment {
 
     public VideoConnectionFragment() {
         super(R.layout.video_connection);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setExitTransition(inflater.inflateTransition(R.transition.fade));
+        setEnterTransition(inflater.inflateTransition(R.transition.slide));
     }
 
     @Override
@@ -33,11 +43,5 @@ public class VideoConnectionFragment extends Fragment {
     private void onClickTestControlls(){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.popBackStack();
-    }
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 }

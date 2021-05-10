@@ -1,6 +1,7 @@
 package com.example.rcvc;
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,6 +13,15 @@ import androidx.fragment.app.FragmentManager;
 public class TestRobotFragment extends Fragment {
 
     public TestRobotFragment(){super(R.layout.test_robot);}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setExitTransition(inflater.inflateTransition(R.transition.fade));
+        setEnterTransition(inflater.inflateTransition(R.transition.slide));
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
