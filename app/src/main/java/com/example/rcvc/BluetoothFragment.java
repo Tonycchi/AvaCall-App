@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager;
 
 public class BluetoothFragment extends ConnectionFragment {
 
-
     public BluetoothFragment() {
         super(R.layout.bluetooth_connection);
     }
