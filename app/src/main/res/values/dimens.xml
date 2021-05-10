@@ -4,7 +4,8 @@
         <!-- General -->
             <!-- Buttons -->
                 <dimen name="standard_button_width">@dimen/_230sdp</dimen>
-                <dimen name="standard_button_height">@dimen/_35sdp</dimen>
+                <dimen name="small_button_height">@dimen/_30sdp</dimen>
+                <dimen name="standard_button_height">@dimen/_45sdp</dimen>
 
                 <dimen name="big_button_height">@dimen/_70sdp</dimen>
 
@@ -31,7 +32,6 @@
     <!-- Main Activity -->
     <dimen name="show_controller_width">@dimen/_170sdp</dimen>
     <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
-    <dimen name="small_button_height">@dimen/_30sdp</dimen>
     <dimen name="control_button_width">@dimen/_100sdp</dimen>
     <dimen name="paired_devices_width">@dimen/_300sdp</dimen>
     <dimen name="paired_devices_height">@dimen/_125sdp</dimen>
