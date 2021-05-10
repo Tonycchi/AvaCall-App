@@ -10,7 +10,7 @@
         android:id="@+id/button_first_connection"
         style="@style/button_neutral"
         android:layout_width="@dimen/standard_button_width"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/big_button_height"
         android:layout_marginBottom="@dimen/margin_bottom"
         android:text="@string/button_bluetooth_first_connection"
         app:layout_constraintBottom_toBottomOf="parent"
