@@ -1,6 +1,7 @@
 package com.example.rcvc;
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,6 +19,10 @@ public class EditControlsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setExitTransition(inflater.inflateTransition(R.transition.fade));
+        setEnterTransition(inflater.inflateTransition(R.transition.slide));
     }
 
     @Override
