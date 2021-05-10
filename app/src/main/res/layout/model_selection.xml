@@ -51,6 +51,7 @@
         style="@style/button_neutral"
         android:layout_width="0dp"
         android:layout_height="@dimen/navigation_button_height"
+        android:layout_marginStart="@dimen/margin_vertical_small"
         android:layout_marginEnd="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_bottom"
         android:text="@string/edit_model"

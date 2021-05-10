@@ -23,24 +23,23 @@
         style="@style/button_neutral"
         android:layout_width="@dimen/standard_button_width"
         android:layout_height="@dimen/big_button_height"
-        android:layout_marginTop="@dimen/_100sdp"
+
+        android:layout_marginBottom="8dp"
         android:text="@string/invite_partner"
+        app:layout_constraintBottom_toTopOf="@+id/group"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/url_settings"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.widget.Button
         android:id="@+id/access_videocall"
         style="@style/button_neutral"
         android:layout_width="@dimen/standard_button_width"
         android:layout_height="@dimen/big_button_height"
-        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginTop="@dimen/margin_vertical_small"
         android:text="@string/access_videocall"
-        app:layout_constraintTop_toBottomOf="@+id/invite_partner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/group" />
 
     <android.widget.Button
         android:id="@+id/test_controls"
@@ -53,4 +52,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="70dp"
+        android:layout_height="51dp"
+        app:layout_constraintBottom_toTopOf="@+id/test_controls"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/url_settings" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
