@@ -10,7 +10,6 @@
         android:id="@+id/button_url_settings"
         style="@style/button_neutral"
         android:layout_width="@dimen/standard_button_width"
-        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top"
         android:text="@string/url_settings"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,7 +22,6 @@
         style="@style/button_neutral"
         android:layout_width="@dimen/standard_button_width"
         android:layout_height="@dimen/big_button_height"
-
         android:layout_marginBottom="8dp"
         android:text="@string/invite_partner"
         app:layout_constraintBottom_toTopOf="@+id/group"
@@ -45,7 +43,6 @@
         android:id="@+id/button_test_controls"
         style="@style/button_neutral"
         android:layout_width="@dimen/standard_button_width"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_bottom"
         android:text="@string/test_controls"
         app:layout_constraintBottom_toBottomOf="parent"

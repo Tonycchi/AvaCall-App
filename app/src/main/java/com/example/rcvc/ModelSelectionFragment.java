@@ -17,7 +17,7 @@ public class ModelSelectionFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
+        //super.onViewCreated(view, savedInstanceState);
 
         Button useModel = view.findViewById(R.id.button_use_model);
         Button editModel = view.findViewById(R.id.button_edit_model);
@@ -25,19 +25,19 @@ public class ModelSelectionFragment extends Fragment {
         useModel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickUseModel();
+                onClickUseModel(v);
             }
         });
 
         editModel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickEditModel();
+                onClickEditModel(v);
             }
         });
     }
 
-    private void onClickEditModel() {
+    private void onClickEditModel(View v) {
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, EditControlsFragment.class, null)
@@ -46,7 +46,7 @@ public class ModelSelectionFragment extends Fragment {
                 .commit();
     }
 
-    private void onClickUseModel() {
+    private void onClickUseModel(View v) {
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
