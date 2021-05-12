@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/main_background"
     android:visibility="visible"
-    tools:context=".MainActivity">
+    tools:context="com.example.ui.MainActivity">
 
     <TextView
         android:id="@+id/server_connection_status"

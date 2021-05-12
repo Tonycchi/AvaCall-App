@@ -1,4 +1,4 @@
-package com.example.rcvc;
+package com.example.ui;
 
 import android.annotation.SuppressLint;
 
@@ -28,6 +28,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.model.BluetoothConnectionService;
+import com.example.model.Controller;
+import com.example.rcvc.R;
+import com.example.model.SessionData;
+import com.example.model.URLFactory;
+import com.example.model.WebClient;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 

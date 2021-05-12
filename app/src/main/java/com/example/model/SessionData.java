@@ -1,4 +1,4 @@
-package com.example.rcvc;
+package com.example.model;
 
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 

@@ -1,4 +1,4 @@
-package com.example.rcvc;
+package com.example.ui;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
@@ -17,6 +17,9 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.example.rcvc.MotorPortDialogPreference;
+import com.example.rcvc.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 

@@ -1,4 +1,4 @@
-package com.example.rcvc;
+package com.example.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.example.rcvc.R;
 
 public class ErrorDialogFragment extends DialogFragment {
     public static final String MSG_KEY = "errnopair";

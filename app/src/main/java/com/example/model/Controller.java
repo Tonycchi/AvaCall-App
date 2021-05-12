@@ -1,7 +1,6 @@
-package com.example.rcvc;
+package com.example.model;
 
 import android.content.Context;
-import android.util.Log;
 
 public class Controller {
 

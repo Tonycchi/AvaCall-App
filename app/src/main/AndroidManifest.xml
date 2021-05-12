@@ -20,7 +20,7 @@
         android:theme="@style/Theme.Rcvc">
 
         <activity
-            android:name=".HostActivity"
+            android:name="com.example.ui.HostActivity"
             android:enabled="true"
             android:configChanges="orientation|screenSize">
             <intent-filter>
@@ -29,12 +29,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.example.ui.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.example.ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value="com.example.ui.MainActivity"/>
         </activity>
 
 

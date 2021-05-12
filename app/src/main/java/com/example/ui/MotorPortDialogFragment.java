@@ -1,4 +1,4 @@
-package com.example.rcvc;
+package com.example.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,6 +9,8 @@ import android.widget.RadioGroup;
 
 import androidx.preference.PreferenceDialogFragmentCompat;
 import androidx.preference.PreferenceManager;
+
+import com.example.rcvc.R;
 
 public class MotorPortDialogFragment extends PreferenceDialogFragmentCompat {
 

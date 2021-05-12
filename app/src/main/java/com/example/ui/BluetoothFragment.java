@@ -1,4 +1,4 @@
-package com.example.rcvc;
+package com.example.ui;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -7,13 +7,14 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-public class EditControlsFragment extends Fragment {
+import com.example.rcvc.R;
 
-    public EditControlsFragment() {
-        super(R.layout.edit_controls);
+public class BluetoothFragment extends ConnectionFragment {
+
+    public BluetoothFragment() {
+        super(R.layout.bluetooth_connection);
     }
 
     @Override
@@ -27,27 +28,25 @@ public class EditControlsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        Button buttonEditModelNext = view.findViewById(R.id.button_edit_model_next);
-        Button buttonEditModelBack = view.findViewById(R.id.button_edit_model_back);
+        Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
+        buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickFirstBluetoothConnection();
+            }
+        });
 
-        buttonEditModelNext.setOnClickListener(this::onClickButtonEditModelNext);
-        buttonEditModelBack.setOnClickListener(this::onClickButtonEditModelBack);
-
-        getActivity().setTitle(R.string.title_edit_controls);
+        getActivity().setTitle(R.string.title_bluetooth);
     }
 
-    private void onClickButtonEditModelNext(View v){
+    private void onClickFirstBluetoothConnection(){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
+                .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
-    }
 
-    private void onClickButtonEditModelBack(View v){
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.popBackStack();
     }
 
 

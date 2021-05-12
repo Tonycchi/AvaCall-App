@@ -1,4 +1,4 @@
-package com.example.rcvc;
+package com.example.model;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -12,6 +12,8 @@ import android.os.ParcelUuid;
 import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.example.rcvc.R;
 
 import java.io.IOException;
 import java.io.InputStream;
