@@ -56,7 +56,7 @@ public class ModelSelectionFragment extends Fragment {
         bundle.putInt("cameFromModelSelection", 1);
 
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, TestRobotFragment.class, bundle)
+                .replace(R.id.fragment_container_view, VideoConnectionFragment.class, bundle)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
