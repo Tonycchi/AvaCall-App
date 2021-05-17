@@ -30,10 +30,6 @@ public class AvaCallModel {
         robotConnectionModel = new BluetoothModel();
     }
 
-    public void updatePairedDevicesName(){
-        robotConnectionModel.updatePairedDeviceNames();
-    }
-
     public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
         return robotConnectionModel.getPairedDevicesName();
     }

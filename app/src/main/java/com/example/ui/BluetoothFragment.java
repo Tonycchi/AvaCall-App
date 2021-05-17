@@ -88,8 +88,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
                     recycler.setAdapter(bluetoothDeviceListAdapter);
                     // if state equals Bluetooth turned on
                 } else if(state == BluetoothAdapter.STATE_ON){
-                    // update pairedDevices
-                    viewModel.updatePairedDevicesName();
 
                     //if there is no device -> add placeholder into list
                     if(viewModel.getPairedDevicesName().getValue().size() == 0) {
@@ -109,14 +107,13 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         recycler = view.findViewById(R.id.list_paired_devices);
-        //update the list of devices
-        viewModel.updatePairedDevicesName();
-        recycler.setHasFixedSize(true);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycler.setAdapter(bluetoothDeviceListAdapter);
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         viewModel.getPairedDevicesName().observe(getViewLifecycleOwner(), devicesObserver);
+
+        recycler.setHasFixedSize(true);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        recycler.setAdapter(bluetoothDeviceListAdapter);
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
         buttonFirstConnection.setOnClickListener(new View.OnClickListener() {

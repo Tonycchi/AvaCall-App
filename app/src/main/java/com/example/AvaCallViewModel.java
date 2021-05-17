@@ -28,11 +28,7 @@ public class AvaCallViewModel extends ViewModel {
     public AvaCallViewModel(){
         model = new AvaCallModel();
     }
-
-    public void updatePairedDevicesName() {
-        model.updatePairedDevicesName();
-    }
-
+    
     public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
         return model.getPairedDevicesName();
     }

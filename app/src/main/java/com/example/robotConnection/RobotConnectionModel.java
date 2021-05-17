@@ -9,7 +9,5 @@ public abstract class RobotConnectionModel {
     // All paired devices
     protected MutableLiveData<ArrayList<String>> pairedDeviceNames;
 
-    abstract public void updatePairedDeviceNames();
-
     public abstract MutableLiveData<ArrayList<String>> getPairedDevicesName();
 }

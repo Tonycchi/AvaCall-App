@@ -31,7 +31,7 @@ public class BluetoothModel extends RobotConnectionModel{
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
-    public void updatePairedDeviceNames(){
+    private void updatePairedDeviceNames(){
         if(pairedDeviceNames == null) {
             pairedDeviceNames = new MutableLiveData<ArrayList<String>>();
         }
@@ -54,8 +54,6 @@ public class BluetoothModel extends RobotConnectionModel{
         }
 
         pairedDeviceNames.setValue(bluetoothNames);
-
-
     }
 
     @Override
