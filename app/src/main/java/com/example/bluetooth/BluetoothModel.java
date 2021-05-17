@@ -33,26 +33,27 @@ public class BluetoothModel {
         this.context = context;
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        pairedDevices = new ArrayList<>();
     }
 
     /**
      * @return an ArrayList which contains all paired bluetooth devices, if there are no paired devices an error message pops up
      * and you get redirected to the bluetooth settings
      */
-    public ArrayList<String> getPairedDevices() {
+    public MutableLiveData<List<String>> getPairedDevices() {
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         ArrayList<String> names = new ArrayList<>();
         if (devices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
-                pairedDevices.add(device);
+
                 names.add(device.getName());
             }
         } else {
             // error
         }
-        return names;
+
+        pairedDevices.postValue(names);
+        return pairedDevices;
     }
 
 }
