@@ -30,7 +30,7 @@ public class AvaCallModel {
         robotConnectionModel = new BluetoothModel();
     }
 
-    public void updatePairedDevices(){
+    public void updatePairedDevicesName(){
         robotConnectionModel.updatePairedDeviceNames();
     }
 

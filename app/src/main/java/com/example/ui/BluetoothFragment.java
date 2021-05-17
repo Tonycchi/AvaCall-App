@@ -17,7 +17,6 @@ import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
 import com.example.robotConnection.PairedDevicesCustomAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class BluetoothFragment extends RobotConnectionFragment {
@@ -58,7 +57,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         bluetoothDevicesName.observe(getViewLifecycleOwner(), devicesObserver);
-        viewModel.updatePairedDevices();
+        viewModel.updatePairedDevicesName();
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
         buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
