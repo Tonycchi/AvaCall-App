@@ -1,5 +1,7 @@
 package com.example;
 
+import android.bluetooth.BluetoothDevice;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -25,7 +27,7 @@ public class AvaCallViewModel extends ViewModel {
         model = new AvaCallModel();
     }
 
-    public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
-        return model.getPairedDevicesName();
+    public MutableLiveData<ArrayList<BluetoothDevice>> getPairedDevices() {
+        return model.getPairedDevices();
     }
 }

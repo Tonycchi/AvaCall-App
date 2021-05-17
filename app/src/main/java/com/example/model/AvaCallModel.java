@@ -1,5 +1,6 @@
 package com.example.model;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
@@ -30,7 +31,7 @@ public class AvaCallModel {
         robotConnectionModel = new BluetoothModel();
     }
 
-    public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
-        return robotConnectionModel.getPairedDevicesName();
+    public MutableLiveData<ArrayList<BluetoothDevice>> getPairedDevices() {
+        return robotConnectionModel.getPairedDevices();
     }
 }

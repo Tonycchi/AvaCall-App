@@ -31,36 +31,35 @@ public class BluetoothModel extends RobotConnectionModel{
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
-    private void updatePairedDeviceNames(){
-        if(pairedDeviceNames == null) {
-            pairedDeviceNames = new MutableLiveData<ArrayList<String>>();
+    private void updatePairedDevice(){
+        if(pairedDevices == null) {
+            pairedDevices = new MutableLiveData<ArrayList<BluetoothDevice>>();
         }
         Log.d(TAG,"Update paired devices");
 
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
-        ArrayList<String> bluetoothNames = new ArrayList<String>();
+        ArrayList<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
 
         if (devices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
-                bluetoothNames.add(device.getName());
+                bluetoothDevices.add(device);
             }
             Log.d(TAG,"Found paired devices");
 
         } else {
-            // TODO: hard coded String leider ka wie man das aus Resources holt
-            bluetoothNames.add("Kein Gerät verbunden. Aktivieren Sie Bluetooth oder benutzen Sie \"Mit Roboter koppeln\"!");
+            // TODO: something
             Log.d(TAG,"No Device found!");
         }
 
-        pairedDeviceNames.setValue(bluetoothNames);
+        pairedDevices.setValue(bluetoothDevices);
     }
 
     @Override
-    public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
+    public MutableLiveData<ArrayList<BluetoothDevice>> getPairedDevices() {
         Log.d(TAG,"Get paired devices");
-        updatePairedDeviceNames();
-        return pairedDeviceNames;
+        updatePairedDevice();
+        return pairedDevices;
     }
 
 }

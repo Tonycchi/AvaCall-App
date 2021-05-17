@@ -1,5 +1,6 @@
 package com.example.robotConnection;
 
+import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevicesCustomAdapter.ViewHolder> {
 
-    private MutableLiveData<ArrayList<String>> bluetoothDevicesName;
+    private MutableLiveData<ArrayList<BluetoothDevice>> bluetoothDevices;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -55,11 +56,11 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
     /**
      * Initialize the dataset of the Adapter.
      *
-     * @param bluetoothDevicesName ArrayList<String> containing the data to populate views to be used
+     * @param bluetoothDevices ArrayList<String> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<String>> bluetoothDevicesName) {
-        this.bluetoothDevicesName = bluetoothDevicesName;
+    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<BluetoothDevice>> bluetoothDevices) {
+        this.bluetoothDevices = bluetoothDevices;
     }
 
     // Create new views (invoked by the layout manager)
@@ -78,14 +79,14 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getDeviceView().setText(bluetoothDevicesName.getValue().get(position));
+        viewHolder.getDeviceView().setText(bluetoothDevices.getValue().get(position).getName());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if(bluetoothDevicesName.getValue() != null)
-            return bluetoothDevicesName.getValue().size();
+        if(bluetoothDevices.getValue() != null)
+            return bluetoothDevices.getValue().size();
         else
             return 0;
     }
