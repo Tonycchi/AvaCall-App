@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.ParcelUuid;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.rcvc.R;
@@ -31,7 +32,7 @@ public class BluetoothConnectionService {
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    private int connectionStatus = 0;
+    private MutableLiveData<Integer> connectionStatus;
 
     private final Context CONTEXT;
 
@@ -47,18 +48,11 @@ public class BluetoothConnectionService {
     public BluetoothConnectionService(Context context) {
         this.CONTEXT = context;
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
+        connectionStatus = new MutableLiveData<Integer>();
+        connectionStatus.setValue(0);
         start();
     }
 
-
-
-    /**
-     * @return the current connection status
-     * 0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
-     */
-    public int getConnectionStatus() {
-        return connectionStatus;
-    }
 
     /**
      * This thread runs while listening for incoming connections. It behaves
@@ -276,19 +270,19 @@ public class BluetoothConnectionService {
                 OUTPUT_STREAM.write(bytes);
             } catch (IOException e) {
                 // could not connect, so connection status gets set to 2
-                if (connectionStatus == 0) {
-                    connectionStatus = 2;
+                if (connectionStatus.getValue() == 0) {
+                    connectionStatus.setValue(2);
                 }
                 // connection got lost, so status gets set to 3
-                if (connectionStatus == 1) {
-                    connectionStatus = 3;
+                if (connectionStatus.getValue() == 1) {
+                    connectionStatus.setValue(3);
                 }
                 //Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
             }
             // if connection status is still 0 at this point,
             // the connection was successful and it gets set to 1
-            if (connectionStatus == 0) {
-                connectionStatus = 1;
+            if (connectionStatus.getValue() == 0) {
+                connectionStatus.setValue(1);
             }
         }
 
