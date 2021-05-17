@@ -2,6 +2,7 @@ package com.example.model;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -38,5 +39,9 @@ public class AvaCallModel {
 
     public MutableLiveData<Integer> getConnectionStatus() {
         return robotConnectionModel.getConnectionStatus();
+    }
+
+    public void startConnection(Device device) {
+        robotConnectionModel.startConnection(device);
     }
 }

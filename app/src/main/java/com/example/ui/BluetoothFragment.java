@@ -38,9 +38,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     private AvaCallViewModel viewModel;
 
-    // bluetooth
-    private BluetoothConnectionService bluetoothConnection;
-
     //dialog while connecting to device
     private ProgressDialog progressDialog;
 
@@ -121,18 +118,11 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     public void onClickDevice(Device device){
-        BluetoothDevice bluetoothDevice = (BluetoothDevice) device.getParcelable();
-        ParcelUuid[] deviceUUIDs = bluetoothDevice.getUuids();
-
-        //TODO: dont do that
-        bluetoothConnection = new BluetoothConnectionService(this.getContext());
-        MutableLiveData<Integer> bluetoothConnectionStatus = bluetoothConnection.getConnectionStatus();
-        //do that
-        //MutableLiveData<Integer> bluetoothConnectionStatus = viewModel.getConnectionStatus();
+        MutableLiveData<Integer> bluetoothConnectionStatus = viewModel.getConnectionStatus();
 
         bluetoothConnectionStatus.observe(getViewLifecycleOwner(), bluetoothConnectionStatusObserver);
 
-        bluetoothConnection.startClient(bluetoothDevice, deviceUUIDs);
+        viewModel.startConnection(device);
     }
 
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection

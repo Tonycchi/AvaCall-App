@@ -1,6 +1,7 @@
 package com.example;
 
 import android.bluetooth.BluetoothDevice;
+import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -34,5 +35,9 @@ public class AvaCallViewModel extends ViewModel {
 
     public MutableLiveData<Integer> getConnectionStatus(){
         return model.getConnectionStatus();
+    }
+
+    public void startConnection(Device device) {
+        model.startConnection(device);
     }
 }

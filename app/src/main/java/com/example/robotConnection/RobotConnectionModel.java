@@ -1,6 +1,7 @@
 package com.example.robotConnection;
 
 import android.bluetooth.BluetoothDevice;
+import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -14,4 +15,6 @@ public abstract class RobotConnectionModel {
     public abstract MutableLiveData<ArrayList<Device>> getPairedDevices();
 
     public abstract MutableLiveData<Integer> getConnectionStatus();
+
+    public abstract void startConnection(Device device);
 }

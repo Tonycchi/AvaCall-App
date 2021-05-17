@@ -24,9 +24,12 @@ public class BluetoothModel extends RobotConnectionModel{
     private BluetoothDevice selectedDevice;
     // The UUIDs of the device we want to connect with
     private ParcelUuid[] deviceUUIDs;
+    //bluetooth
+    private BluetoothConnectionService bluetoothConnectionService;
 
     public BluetoothModel() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        bluetoothConnectionService = new BluetoothConnectionService();
     }
 
     private void updatePairedDevice(){
@@ -61,9 +64,15 @@ public class BluetoothModel extends RobotConnectionModel{
 
     @Override
     public MutableLiveData<Integer> getConnectionStatus() {
-        //TODO: uncomment
-        //return bluetoothConnectionService.getConnectionStatus();
-        return null;
+        return bluetoothConnectionService.getConnectionStatus();
+    }
+
+    @Override
+    public void startConnection(Device device) {
+        BluetoothDevice bluetoothDevice = (BluetoothDevice)device.getParcelable();
+        ParcelUuid[] uuids = bluetoothDevice.getUuids();
+
+        bluetoothConnectionService.startClient(bluetoothDevice, uuids);
     }
 
 }

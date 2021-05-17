@@ -35,8 +35,6 @@ public class BluetoothConnectionService {
     //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
     private MutableLiveData<Integer> connectionStatus;
 
-    private final Context CONTEXT;
-
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
@@ -44,8 +42,7 @@ public class BluetoothConnectionService {
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     private BluetoothDevice bluetoothDevice;
 
-    public BluetoothConnectionService(Context context) {
-        this.CONTEXT = context;
+    public BluetoothConnectionService() {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<Integer>();
         connectionStatus.setValue(0);
@@ -218,8 +215,9 @@ public class BluetoothConnectionService {
 
             INPUT_STREAM = tmpIn;
             OUTPUT_STREAM = tmpOut;
+            //TODO: delete if not needed
             // check connection with broadcast
-            sendConnectionStatusBroadcast();
+            //sendConnectionStatusBroadcast();
         }
 
         public void run() {
@@ -239,8 +237,9 @@ public class BluetoothConnectionService {
                     incomingMessageIntent.putExtra("theMessage", incomingMessage);
 
                 } catch (IOException e) {
+                    //TODO: delete if not needed
                     // in case of exception check connection with broadcast
-                    sendConnectionStatusBroadcast();
+                    // sendConnectionStatusBroadcast();
                     //Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
                     break;
                 }
@@ -320,12 +319,13 @@ public class BluetoothConnectionService {
         connectedThread.write(out);
     }
 
+    //TODO: delete if not needed
     /**
      * Sends an intent to the MainActivity to check the connection status
      */
-    private void sendConnectionStatusBroadcast() {
+    /*private void sendConnectionStatusBroadcast() {
         Intent intent = new Intent(CONTEXT.getString(R.string.action_check_connection));
         LocalBroadcastManager.getInstance(CONTEXT).sendBroadcast(intent);
-    }
+    }*/
 
 }
