@@ -5,9 +5,12 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.ParcelUuid;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.bluetooth.BluetoothConnectionService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class BluetoothModel {
@@ -24,7 +27,7 @@ public class BluetoothModel {
     // The UUIDs of the device we want to connect with
     private ParcelUuid[] deviceUUIDs;
     // All paired devices
-    private ArrayList<BluetoothDevice> pairedDevices;
+    private MutableLiveData<List<String>> pairedDevices;
 
     public BluetoothModel(Context context) {
         this.context = context;

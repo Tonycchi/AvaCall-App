@@ -19,9 +19,6 @@ public class AvaCallModel {
 
     private Context context;
 
-
-    private MutableLiveData<List<String>> pairedDevicesList;
-
     // Model for ModelSelectionFragment
     // TODO modelle abspeichern?
 
