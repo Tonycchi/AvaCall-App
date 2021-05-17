@@ -1,13 +1,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/paired_devices_height"
-    android:gravity="center_vertical"
     android:background="@drawable/list_item">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/button_bluetooth_device"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:text="@string/placeholder"
-        android:layout_gravity="center_vertical"/>
+        />
 </FrameLayout>
