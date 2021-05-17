@@ -27,7 +27,7 @@ public class BluetoothModel {
     // The UUIDs of the device we want to connect with
     private ParcelUuid[] deviceUUIDs;
     // All paired devices
-    private MutableLiveData<List<String>> pairedDevices;
+    private MutableLiveData<List<BluetoothDevice>> pairedDevices;
 
     public BluetoothModel(Context context) {
         this.context = context;
@@ -36,24 +36,16 @@ public class BluetoothModel {
     }
 
     /**
-     * @return an ArrayList which contains all paired bluetooth devices, if there are no paired devices an error message pops up
-     * and you get redirected to the bluetooth settings
+     * update the list of paired Devices
      */
-    public MutableLiveData<List<String>> getPairedDevices() {
+    public void updatePairedDevices() {
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
-        ArrayList<String> names = new ArrayList<>();
-        if (devices.size() > 0) {
-            // There are paired devices. Get the name and address of each paired device.
-            for (BluetoothDevice device : devices) {
 
-                names.add(device.getName());
-            }
-        } else {
-            // error
+        if (devices.size() <= 0) {
+          //TODO: define behaviour if there is no device
         }
 
-        pairedDevices.postValue(names);
-        return pairedDevices;
+        pairedDevices.postValue(new ArrayList<>(devices));
     }
 
 }
