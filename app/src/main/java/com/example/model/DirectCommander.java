@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import com.example.bluetooth.BluetoothConnectionService;
+import com.example.robotConnection.BluetoothConnectionService;
 
 public class DirectCommander {
 

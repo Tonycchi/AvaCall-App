@@ -3,8 +3,6 @@ package com.example.ui;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -14,12 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.AvaCallViewModel;
-import com.example.bluetooth.PairedDevicesCustomAdapter;
 import com.example.rcvc.R;
 
-import java.util.ArrayList;
-
-public class BluetoothFragment extends ConnectionFragment {
+public class BluetoothFragment extends RobotConnectionFragment {
 
     private AvaCallViewModel viewModel;
 
@@ -31,6 +26,8 @@ public class BluetoothFragment extends ConnectionFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
+
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
         setEnterTransition(inflater.inflateTransition(R.transition.slide));
@@ -38,10 +35,9 @@ public class BluetoothFragment extends ConnectionFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
 
         RecyclerView recycler = view.findViewById(R.id.list_paired_devices);
-        recycler.setAdapter(new PairedDevicesCustomAdapter());
+        viewModel.updatePairedDevices();
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
         buttonFirstConnection.setOnClickListener(new View.OnClickListener() {

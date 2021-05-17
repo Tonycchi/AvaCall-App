@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.AvaCallViewModel;
+import com.example.robotConnection.BluetoothModel;
+import com.example.robotConnection.RobotConnectionModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.List;
 public class AvaCallModel {
 
     private Context context;
+
+    private RobotConnectionModel robotConnectionModel;
 
     // Model for ModelSelectionFragment
     // TODO modelle abspeichern?
@@ -32,5 +36,10 @@ public class AvaCallModel {
 
     public AvaCallModel(Context context) {
         this.context = context;
+        robotConnectionModel = new BluetoothModel(context);
+    }
+
+    public void updatePairedDevices(){
+        robotConnectionModel.updatePairedDevices();
     }
 }

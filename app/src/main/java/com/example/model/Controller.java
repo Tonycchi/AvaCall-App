@@ -2,7 +2,7 @@ package com.example.model;
 
 import android.content.Context;
 
-import com.example.bluetooth.BluetoothConnectionService;
+import com.example.robotConnection.BluetoothConnectionService;
 
 public class Controller {
 

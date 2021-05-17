@@ -1,4 +1,4 @@
-package com.example.bluetooth;
+package com.example.robotConnection;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rcvc.R;
 
+import java.util.ArrayList;
+
 public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevicesCustomAdapter.ViewHolder> {
 
-    private String[] localDataSet;
+    private ArrayList<String> bluetoothDevicesName;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -35,11 +37,11 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
     /**
      * Initialize the dataset of the Adapter.
      *
-     * @param dataSet String[] containing the data to populate views to be used
+     * @param bluetoothDevicesName ArrayList<String> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public PairedDevicesCustomAdapter(String[] dataSet) {
-        localDataSet = dataSet;
+    public PairedDevicesCustomAdapter(ArrayList<String> bluetoothDevicesName) {
+        this.bluetoothDevicesName = bluetoothDevicesName;
     }
 
     // Create new views (invoked by the layout manager)
@@ -58,12 +60,12 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(localDataSet[position]);
+        viewHolder.getTextView().setText(bluetoothDevicesName.get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return localDataSet.length;
+        return bluetoothDevicesName.size();
     }
 }

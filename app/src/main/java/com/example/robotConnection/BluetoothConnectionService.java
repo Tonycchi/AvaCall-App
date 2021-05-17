@@ -1,4 +1,4 @@
-package com.example.bluetooth;
+package com.example.robotConnection;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.ParcelUuid;
-import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -18,8 +17,6 @@ import com.example.rcvc.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Set;
 import java.util.UUID;
 
 /**
