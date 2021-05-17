@@ -98,6 +98,22 @@ public class BluetoothFragment extends RobotConnectionFragment {
         //update the list of devices
         MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
 
+        RecyclerView.Adapter bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(bluetoothDevicesName);
+
+        recycler.setAdapter((RecyclerView.Adapter) bluetoothDeviceListAdapter);
+
+        // Create the observer which updates the UI and fills the bluetoothDevicesList
+        final Observer<ArrayList<String>> devicesObserver = new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<String> newDevicesNameList) {
+                // Update the UI
+                ((RecyclerView.Adapter<?>) bluetoothDeviceListAdapter).notifyDataSetChanged();
+            }
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        bluetoothDevicesName.observe(getViewLifecycleOwner(), devicesObserver);
+
         //if there is no device -> add placeholder into list
         if(bluetoothDevicesName.getValue() == null) {
             ArrayList<String> noDevicePlaceholder = new ArrayList<String>();
