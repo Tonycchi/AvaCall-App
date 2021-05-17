@@ -30,6 +30,10 @@ public class BluetoothModel extends RobotConnectionModel{
     }
 
     public void updatePairedDeviceNames(){
+        if(pairedDeviceNames == null) {
+            pairedDeviceNames = new MutableLiveData<ArrayList<String>>();
+        }
+
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         ArrayList<String> bluetoothNames = new ArrayList<>();
 
@@ -50,10 +54,7 @@ public class BluetoothModel extends RobotConnectionModel{
 
     @Override
     public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
-        if(pairedDeviceNames == null){
-            pairedDeviceNames = new MutableLiveData<ArrayList<String>>();
-            updatePairedDeviceNames();
-        }
+        updatePairedDeviceNames();
         return pairedDeviceNames;
     }
 
