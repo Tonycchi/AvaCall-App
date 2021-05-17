@@ -83,7 +83,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 // if state is bluetooth turned off
                 if(state == BluetoothAdapter.STATE_OFF) {
-                   viewModel.updatePairedDevicesName();
+                    viewModel.updatePairedDevicesName();
 
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
                     viewModel.getPairedDevicesName().observe(getViewLifecycleOwner(), devicesObserver);
