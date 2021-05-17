@@ -1,5 +1,7 @@
 package com.example.model;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
@@ -8,6 +10,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class VideoConnectionModel {
+
+    private String TAG = "VideoConnection";
 
     private AvaCallModel model;
     private MutableLiveData<String> inviteLink = new MutableLiveData<String>();
@@ -39,9 +43,9 @@ public class VideoConnectionModel {
 
             long startTime = System.currentTimeMillis();
             //check if a timeout occurs while connecting to server
-            while(getWebClient().isReady()) {
+            while(!getWebClient().isReady()) {
                 long currentTime = System.currentTimeMillis();
-                if (currentTime -startTime >= 5000) {
+                if (currentTime - startTime >= 5000) {
                     connectionError = true;
                     break;
                 }
