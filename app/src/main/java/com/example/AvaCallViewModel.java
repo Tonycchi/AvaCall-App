@@ -25,6 +25,10 @@ public class AvaCallViewModel extends ViewModel {
     private MutableLiveData<List<String>> robotModelList;
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
 
+    public AvaCallViewModel(){
+        model = new AvaCallModel();
+    }
+
     public void updatePairedDevices() {
         model.updatePairedDevices();
     }

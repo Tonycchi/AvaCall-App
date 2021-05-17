@@ -26,9 +26,8 @@ public class AvaCallModel {
     private WebClient wc;
     private SessionData session;
 
-    public AvaCallModel(Context context) {
-        this.context = context;
-        robotConnectionModel = new BluetoothModel(context);
+    public AvaCallModel() {
+        robotConnectionModel = new BluetoothModel();
     }
 
     public void updatePairedDevices(){

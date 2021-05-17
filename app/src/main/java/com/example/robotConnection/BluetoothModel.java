@@ -12,8 +12,6 @@ import java.util.Set;
 
 public class BluetoothModel extends RobotConnectionModel{
 
-    private Context context;
-
     // Model for BluetoothFragment
     // bluetooth
     private BluetoothConnectionService bluetoothConnection;
@@ -24,9 +22,7 @@ public class BluetoothModel extends RobotConnectionModel{
     // The UUIDs of the device we want to connect with
     private ParcelUuid[] deviceUUIDs;
 
-    public BluetoothModel(Context context) {
-        this.context = context;
-
+    public BluetoothModel() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
@@ -47,6 +43,9 @@ public class BluetoothModel extends RobotConnectionModel{
 
     @Override
     public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
+        if(pairedDeviceNames == null){
+            pairedDeviceNames = new MutableLiveData<ArrayList<String>>();
+        }
         return pairedDeviceNames;
     }
 

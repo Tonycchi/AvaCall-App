@@ -3,7 +3,6 @@ package com.example.ui;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -45,7 +44,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
         RecyclerView recycler = view.findViewById(R.id.list_paired_devices);
         MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
-        Adapter bluetoothDeviceListAdapter = (Adapter) new PairedDevicesCustomAdapter(bluetoothDevicesName);
+        RecyclerView.Adapter bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(bluetoothDevicesName);
         recycler.setAdapter((RecyclerView.Adapter) bluetoothDeviceListAdapter);
 
         // Create the observer which updates the UI and fills the bluetoothDevicesList
