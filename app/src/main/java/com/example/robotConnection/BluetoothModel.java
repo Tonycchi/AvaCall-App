@@ -32,12 +32,14 @@ public class BluetoothModel extends RobotConnectionModel{
     public void updatePairedDeviceNames(){
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         ArrayList<String> bluetoothNames = new ArrayList<>();
+
         if (devices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
                 bluetoothNames.add(device.getName());
             }
 
+            Log.d(TAG,"Update paired devices");
             pairedDeviceNames.postValue(bluetoothNames);
         } else {
             //TODO: handle error
@@ -49,6 +51,7 @@ public class BluetoothModel extends RobotConnectionModel{
     public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
         if(pairedDeviceNames == null){
             pairedDeviceNames = new MutableLiveData<ArrayList<String>>();
+            updatePairedDeviceNames();
         }
         return pairedDeviceNames;
     }

@@ -2,6 +2,7 @@ package com.example.ui;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,6 +22,8 @@ import com.example.robotConnection.PairedDevicesCustomAdapter;
 import java.util.ArrayList;
 
 public class BluetoothFragment extends RobotConnectionFragment {
+
+    private static final String TAG = "BluetoothFragment";
 
     private AvaCallViewModel viewModel;
 
@@ -44,6 +47,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
         RecyclerView recycler = view.findViewById(R.id.list_paired_devices);
         MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
+
+        Log.d(TAG, "firstBluetoothDevice:"+bluetoothDevicesName.getValue().get(0));
+
         RecyclerView.Adapter bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(bluetoothDevicesName);
 
         recycler.setHasFixedSize(true);
@@ -61,7 +67,8 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         bluetoothDevicesName.observe(getViewLifecycleOwner(), devicesObserver);
-        viewModel.updatePairedDevicesName();
+        //TODO: is this really needed???
+        //viewModel.updatePairedDevicesName();
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
         buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
