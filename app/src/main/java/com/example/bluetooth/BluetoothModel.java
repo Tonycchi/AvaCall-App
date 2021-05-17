@@ -1,11 +1,11 @@
-package com.example.model;
+package com.example.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.ParcelUuid;
 
-import com.example.rcvc.R;
+import com.example.bluetooth.BluetoothConnectionService;
 
 import java.util.ArrayList;
 import java.util.Set;

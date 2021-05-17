@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.example.bluetooth.BluetoothConnectionService;
+
 public class DirectCommander {
 
     private final BluetoothConnectionService BLUETOOTH;

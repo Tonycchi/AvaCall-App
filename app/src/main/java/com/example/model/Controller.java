@@ -2,6 +2,8 @@ package com.example.model;
 
 import android.content.Context;
 
+import com.example.bluetooth.BluetoothConnectionService;
+
 public class Controller {
 
     private final DirectCommander COMMANDER;

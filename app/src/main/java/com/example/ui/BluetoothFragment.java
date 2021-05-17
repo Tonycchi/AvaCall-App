@@ -44,7 +44,6 @@ public class BluetoothFragment extends ConnectionFragment {
                 android.R.layout.simple_list_item_1, names);
         recycler.setAdapter(listAdapter);
 
-
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
         buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
             @Override
