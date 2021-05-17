@@ -40,7 +40,7 @@ public class BluetoothModel extends RobotConnectionModel{
             }
 
             Log.d(TAG,"Update paired devices");
-            pairedDeviceNames.postValue(bluetoothNames);
+            pairedDeviceNames.setValue(bluetoothNames);
         } else {
             //TODO: handle error
             Log.d(TAG,"No Device found!");
