@@ -12,10 +12,6 @@ public class AvaCallViewModel extends ViewModel {
 
     private AvaCallModel model;
 
-    // Data for BluetoothFragment
-    private MutableLiveData<Boolean> bluetoothConnected;
-    private MutableLiveData<List<String>> pairedDevicesList;
-
     // Data for ModelSelectionFragment
     private MutableLiveData<String> selectedModel; //TODO evtl String abändern (je nachdem wie wir Modelle abspeichern wollen)
     private MutableLiveData<List<String>> modelList;
@@ -28,7 +24,7 @@ public class AvaCallViewModel extends ViewModel {
     public AvaCallViewModel(){
         model = new AvaCallModel();
     }
-    
+
     public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
         return model.getPairedDevicesName();
     }
