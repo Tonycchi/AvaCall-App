@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.ParcelUuid;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class BluetoothModel extends RobotConnectionModel{
+
+    private static final String TAG = "BluetoothModel";
 
     // Model for BluetoothFragment
     // bluetooth
@@ -38,6 +41,7 @@ public class BluetoothModel extends RobotConnectionModel{
             pairedDeviceNames.postValue(bluetoothNames);
         } else {
             //TODO: handle error
+            Log.d(TAG,"No Device found!");
         }
     }
 
