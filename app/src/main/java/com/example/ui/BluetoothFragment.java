@@ -82,8 +82,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         bluetoothDevicesName.observe(getViewLifecycleOwner(), devicesObserver);
-        //TODO: is this really needed???
-        //viewModel.updatePairedDevicesName();
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
         buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
