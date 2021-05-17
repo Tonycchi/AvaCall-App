@@ -1,14 +1,12 @@
 package com.example.model;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.robotConnection.BluetoothModel;
-import com.example.robotConnection.Device;
-import com.example.robotConnection.RobotConnectionModel;
+import com.example.model.robotConnection.BluetoothModel;
+import com.example.model.robotConnection.Device;
+import com.example.model.robotConnection.RobotConnectionModel;
 
 import java.util.ArrayList;
 

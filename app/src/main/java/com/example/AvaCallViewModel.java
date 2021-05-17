@@ -1,13 +1,10 @@
 package com.example;
 
-import android.bluetooth.BluetoothDevice;
-import android.os.ParcelUuid;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.model.AvaCallModel;
-import com.example.robotConnection.Device;
+import com.example.model.robotConnection.Device;
 
 import java.util.ArrayList;
 import java.util.List;

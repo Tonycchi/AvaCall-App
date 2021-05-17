@@ -1,4 +1,4 @@
-package com.example.robotConnection;
+package com.example.model.robotConnection;
 
 import android.os.Parcelable;
 

@@ -1,9 +1,9 @@
-package com.example.ui;
+package com.example.ui.robotConnection;
 
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 
-import com.example.robotConnection.Device;
+import com.example.model.robotConnection.Device;
 
 public abstract class RobotConnectionFragment extends Fragment {
 

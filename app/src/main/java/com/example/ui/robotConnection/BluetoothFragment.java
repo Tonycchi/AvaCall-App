@@ -1,14 +1,12 @@
-package com.example.ui;
+package com.example.ui.robotConnection;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.ParcelUuid;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
@@ -25,8 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
-import com.example.robotConnection.BluetoothConnectionService;
-import com.example.robotConnection.Device;
+import com.example.model.robotConnection.Device;
+import com.example.ui.ModelSelectionFragment;
 
 import java.util.ArrayList;
 

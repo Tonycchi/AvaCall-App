@@ -29,7 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.robotConnection.BluetoothConnectionService;
+import com.example.model.robotConnection.BluetoothConnectionService;
 import com.example.model.Controller;
 import com.example.rcvc.R;
 import com.example.model.SessionData;

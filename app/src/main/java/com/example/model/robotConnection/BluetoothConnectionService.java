@@ -1,19 +1,14 @@
-package com.example.robotConnection;
+package com.example.model.robotConnection;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
 import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
-import com.example.rcvc.R;
 
 import java.io.IOException;
 import java.io.InputStream;
