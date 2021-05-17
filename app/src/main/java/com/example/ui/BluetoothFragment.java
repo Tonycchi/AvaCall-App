@@ -3,16 +3,23 @@ package com.example.ui;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
+import com.example.robotConnection.PairedDevicesCustomAdapter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class BluetoothFragment extends RobotConnectionFragment {
 
@@ -37,6 +44,21 @@ public class BluetoothFragment extends RobotConnectionFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         RecyclerView recycler = view.findViewById(R.id.list_paired_devices);
+        MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
+        Adapter bluetoothDeviceListAdapter = (Adapter) new PairedDevicesCustomAdapter(bluetoothDevicesName);
+        recycler.setAdapter((RecyclerView.Adapter) bluetoothDeviceListAdapter);
+
+        // Create the observer which updates the UI and fills the bluetoothDevicesList
+        final Observer<ArrayList<String>> devicesObserver = new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<String> newDevicesNameList) {
+                // Update the UI
+                ((RecyclerView.Adapter<?>) bluetoothDeviceListAdapter).notifyDataSetChanged();
+            }
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        bluetoothDevicesName.observe(getViewLifecycleOwner(), devicesObserver);
         viewModel.updatePairedDevices();
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);

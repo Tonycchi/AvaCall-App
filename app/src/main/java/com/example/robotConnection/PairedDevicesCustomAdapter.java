@@ -5,15 +5,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rcvc.R;
+import com.facebook.infer.annotation.Mutable;
 
 import java.util.ArrayList;
 
 public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevicesCustomAdapter.ViewHolder> {
 
-    private ArrayList<String> bluetoothDevicesName;
+    private MutableLiveData<ArrayList<String>> bluetoothDevicesName;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -40,7 +44,7 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
      * @param bluetoothDevicesName ArrayList<String> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public PairedDevicesCustomAdapter(ArrayList<String> bluetoothDevicesName) {
+    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<String>> bluetoothDevicesName) {
         this.bluetoothDevicesName = bluetoothDevicesName;
     }
 
@@ -60,12 +64,12 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(bluetoothDevicesName.get(position));
+        viewHolder.getTextView().setText(bluetoothDevicesName.getValue().get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return bluetoothDevicesName.size();
+        return bluetoothDevicesName.getValue().size();
     }
 }

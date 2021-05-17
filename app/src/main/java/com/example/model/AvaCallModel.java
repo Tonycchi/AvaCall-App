@@ -1,21 +1,13 @@
 package com.example.model;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.Intent;
-import android.os.ParcelUuid;
-import android.view.View;
-import android.widget.ArrayAdapter;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.AvaCallViewModel;
 import com.example.robotConnection.BluetoothModel;
 import com.example.robotConnection.RobotConnectionModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AvaCallModel {
 
@@ -40,6 +32,10 @@ public class AvaCallModel {
     }
 
     public void updatePairedDevices(){
-        robotConnectionModel.updatePairedDevices();
+        robotConnectionModel.updatePairedDeviceNames();
+    }
+
+    public MutableLiveData<ArrayList<String>> getPairedDevicesName() {
+        return robotConnectionModel.getPairedDevicesName();
     }
 }
