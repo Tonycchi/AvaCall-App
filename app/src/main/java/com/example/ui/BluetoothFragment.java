@@ -44,13 +44,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
 
-        //bluetooth is disabled
-        if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
-            Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enableBluetoothIntent);
-            Log.d(TAG,"Bluetooth is disabled!");
-        }
-
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
         setEnterTransition(inflater.inflateTransition(R.transition.slide));
@@ -95,6 +88,14 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        //bluetooth is disabled
+        if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
+            Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBluetoothIntent);
+            Log.d(TAG,"Bluetooth is disabled!");
+        }
+
         //update the list of devices
         MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
 
