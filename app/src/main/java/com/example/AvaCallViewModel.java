@@ -17,7 +17,6 @@ import java.util.List;
 public class AvaCallViewModel extends ViewModel {
 
     AvaCallModel model = new AvaCallModel();
-    VideoConnectionModel videoConnectionModel = new VideoConnectionModel();
 
     // Data for BluetoothFragment
     private MutableLiveData<Boolean> bluetoothConnected;
@@ -33,14 +32,14 @@ public class AvaCallViewModel extends ViewModel {
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
 
     public void invitePartner() {
-        videoConnectionModel.invitePartner();
+        model.invitePartner();
     }
 
     public MutableLiveData<String> getInviteLink() {
-        return videoConnectionModel.getInviteLink();
+        return model.getInviteLink();
     }
 
     public SessionData getSession() {
-        return videoConnectionModel.getSession();
+        return model.getSession();
     }
 }

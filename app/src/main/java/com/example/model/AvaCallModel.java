@@ -39,4 +39,16 @@ public class AvaCallModel {
     public VideoConnectionModel getVideoConnectionModel() {
         return this.videoConnectionModel;
     }
+
+    public void invitePartner() {
+        videoConnectionModel.invitePartner();
+    }
+
+    public MutableLiveData<String> getInviteLink() {
+        return videoConnectionModel.getInviteLink();
+    }
+
+    public SessionData getSession() {
+        return videoConnectionModel.getSession();
+    }
 }
