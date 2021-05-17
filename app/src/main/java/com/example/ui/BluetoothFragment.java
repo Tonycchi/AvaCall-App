@@ -19,6 +19,7 @@ import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
 import com.example.robotConnection.PairedDevicesCustomAdapter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class BluetoothFragment extends RobotConnectionFragment {
@@ -48,7 +49,11 @@ public class BluetoothFragment extends RobotConnectionFragment {
         RecyclerView recycler = view.findViewById(R.id.list_paired_devices);
         MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
 
-        Log.d(TAG, "firstBluetoothDevice:"+bluetoothDevicesName.getValue().get(0));
+        if(bluetoothDevicesName.getValue() == null) {
+            ArrayList<String> noDevicePlaceholder = new ArrayList<String>();
+            noDevicePlaceholder.add(getResources().getString(R.string.no_bluetooth_device));
+            bluetoothDevicesName.setValue(noDevicePlaceholder);
+        }
 
         RecyclerView.Adapter bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(bluetoothDevicesName);
 

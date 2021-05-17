@@ -15,6 +15,7 @@
         <string name="text_roboter_shown_question">Der Roboter wird noch nicht in der Liste angezeigt?</string>
         <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>
         <string name="placeholder">Nothing to see here</string>
+        <string name="no_bluetooth_device">Kein Gerät verbunden. Benutzen Sie "Mit Roboter koppeln"!</string>
 
         <!-- Test Robot -->
         <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>
