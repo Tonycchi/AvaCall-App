@@ -1,5 +1,7 @@
 package com.example.ui;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -26,6 +28,8 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     private static final String TAG = "BluetoothFragment";
 
+    //TODO: decide what of this class can be transfered to RobotConnectionModel
+
     private AvaCallViewModel viewModel;
 
     public BluetoothFragment() {
@@ -37,6 +41,12 @@ public class BluetoothFragment extends RobotConnectionFragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
+
+        //bluetooth is disabled
+        if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
+            Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBluetoothIntent);
+        }
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
