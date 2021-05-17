@@ -32,6 +32,7 @@ public class BluetoothConnectionService {
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
     private MutableLiveData<Integer> connectionStatus;
 
     private final Context CONTEXT;
@@ -43,8 +44,6 @@ public class BluetoothConnectionService {
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     private BluetoothDevice bluetoothDevice;
 
-    private ProgressDialog progressDialog;
-
     public BluetoothConnectionService(Context context) {
         this.CONTEXT = context;
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
@@ -53,6 +52,10 @@ public class BluetoothConnectionService {
         start();
     }
 
+
+    public MutableLiveData<Integer> getConnectionStatus(){
+        return connectionStatus;
+    }
 
     /**
      * This thread runs while listening for incoming connections. It behaves
@@ -186,11 +189,6 @@ public class BluetoothConnectionService {
 
     public void startClient(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
         //Log.d(TAG, "startClient: Started.");
-
-        //initprogress dialog
-        progressDialog = ProgressDialog.show(CONTEXT, "Connecting Bluetooth"
-                , "Please Wait...", true);
-
         connectThread = new ConnectThread(device, deviceUUIDs);
         connectThread.start();
     }
@@ -210,14 +208,6 @@ public class BluetoothConnectionService {
             BLUETOOTH_SOCKET = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
-
-            //dismiss the progressdialog when connection is established
-            try {
-                progressDialog.dismiss();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
 
             try {
                 tmpIn = BLUETOOTH_SOCKET.getInputStream();

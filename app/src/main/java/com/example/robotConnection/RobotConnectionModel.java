@@ -12,4 +12,6 @@ public abstract class RobotConnectionModel {
     protected MutableLiveData<ArrayList<Device>> pairedDevices;
 
     public abstract MutableLiveData<ArrayList<Device>> getPairedDevices();
+
+    public abstract MutableLiveData<Integer> getConnectionStatus();
 }

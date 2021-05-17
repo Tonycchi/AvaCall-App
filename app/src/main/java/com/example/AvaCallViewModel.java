@@ -31,4 +31,8 @@ public class AvaCallViewModel extends ViewModel {
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return model.getPairedDevices();
     }
+
+    public MutableLiveData<Integer> getConnectionStatus(){
+        return model.getConnectionStatus();
+    }
 }

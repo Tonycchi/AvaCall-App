@@ -16,6 +16,8 @@
         <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>
         <string name="placeholder">Nothing to see here</string>
         <string name="no_bluetooth_device">Kein Gerät verbunden. Aktivieren Sie Bluetooth oder benutzen Sie "Mit Roboter koppeln"!</string>
+        <string name="connecting_bluetooth_title">Verbindung wird hergestellt</string>
+        <string name="connecting_bluetooth_wait">Bitte warten...</string>
 
         <!-- Test Robot -->
         <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>

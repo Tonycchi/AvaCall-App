@@ -59,4 +59,11 @@ public class BluetoothModel extends RobotConnectionModel{
         return pairedDevices;
     }
 
+    @Override
+    public MutableLiveData<Integer> getConnectionStatus() {
+        //TODO: uncomment
+        //return bluetoothConnectionService.getConnectionStatus();
+        return null;
+    }
+
 }

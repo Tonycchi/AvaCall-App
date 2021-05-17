@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +41,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
     // bluetooth
     private BluetoothConnectionService bluetoothConnection;
 
+    //dialog while connecting to device
+    private ProgressDialog progressDialog;
+
     private RecyclerView recycler;
 
     private PairedDevicesCustomAdapter bluetoothDeviceListAdapter;
@@ -55,6 +60,46 @@ public class BluetoothFragment extends RobotConnectionFragment {
             (bluetoothDeviceListAdapter).notifyDataSetChanged();
         }
     };
+
+    // Observer to check if bluetooth connection status
+    public final Observer<Integer> bluetoothConnectionStatusObserver = new Observer<Integer>() {
+        @Override
+        public void onChanged(@Nullable final Integer newBluetoothConnectionStatus) {
+            // Update the UI
+            //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+            switch(newBluetoothConnectionStatus){
+                case 0:
+                    showProgressDialog();
+                    break;
+
+                case 1:
+                    hideProgessDialog();
+                    break;
+
+                case 2:
+                   hideProgessDialog();
+                   break;
+
+                case 3:
+                    break;
+            }
+        }
+    };
+
+    protected void showProgressDialog(){
+        //initprogress dialog
+        progressDialog = ProgressDialog.show(this.getContext(), getResources().getString(R.string.connecting_bluetooth_title),
+                getResources().getString(R.string.connecting_bluetooth_wait), true);
+    }
+
+    protected void hideProgessDialog(){
+        //dismiss the progressdialog when connection is established
+        try {
+            progressDialog.dismiss();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +123,15 @@ public class BluetoothFragment extends RobotConnectionFragment {
     public void onClickDevice(Device device){
         BluetoothDevice bluetoothDevice = (BluetoothDevice) device.getParcelable();
         ParcelUuid[] deviceUUIDs = bluetoothDevice.getUuids();
+
+        //TODO: dont do that
         bluetoothConnection = new BluetoothConnectionService(this.getContext());
+        MutableLiveData<Integer> bluetoothConnectionStatus = bluetoothConnection.getConnectionStatus();
+        //do that
+        //MutableLiveData<Integer> bluetoothConnectionStatus = viewModel.getConnectionStatus();
+
+        bluetoothConnectionStatus.observe(getViewLifecycleOwner(), bluetoothConnectionStatusObserver);
+
         bluetoothConnection.startClient(bluetoothDevice, deviceUUIDs);
     }
 

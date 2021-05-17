@@ -35,4 +35,8 @@ public class AvaCallModel {
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return robotConnectionModel.getPairedDevices();
     }
+
+    public MutableLiveData<Integer> getConnectionStatus() {
+        return robotConnectionModel.getConnectionStatus();
+    }
 }
