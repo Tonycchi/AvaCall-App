@@ -1,11 +1,18 @@
+package com.example.bluetooth;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+import com.example.rcvc.R;
+
+import org.jetbrains.annotations.NotNull;
+
+public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevicesCustomAdapter.ViewHolder> {
 
     private String[] localDataSet;
 
@@ -43,7 +50,7 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<CustomAdapt
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.text_row_item, viewGroup, false);
+                .inflate(R.layout.list_item, viewGroup, false);
 
         return new ViewHolder(view);
     }
