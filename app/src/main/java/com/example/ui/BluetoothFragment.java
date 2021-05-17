@@ -1,11 +1,13 @@
 package com.example.ui;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
@@ -14,19 +16,16 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
+import com.example.robotConnection.BluetoothConnectionService;
 import com.example.robotConnection.Device;
-import com.example.robotConnection.PairedDevicesCustomAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class BluetoothFragment extends RobotConnectionFragment {
@@ -36,6 +35,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
     //TODO: decide what of this class can be transfered to RobotConnectionModel
 
     private AvaCallViewModel viewModel;
+
+    // bluetooth
+    private BluetoothConnectionService bluetoothConnection;
 
     private RecyclerView recycler;
 
@@ -59,7 +61,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
-        bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(viewModel.getPairedDevices());
+        bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(viewModel.getPairedDevices(), this);
 
         //bluetooth is disabled
         if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
@@ -71,6 +73,13 @@ public class BluetoothFragment extends RobotConnectionFragment {
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
         setEnterTransition(inflater.inflateTransition(R.transition.slide));
+    }
+
+    public void onClickDevice(Device device){
+        BluetoothDevice bluetoothDevice = (BluetoothDevice) device.getParcelable();
+        ParcelUuid[] deviceUUIDs = bluetoothDevice.getUuids();
+        bluetoothConnection = new BluetoothConnectionService(this.getContext());
+        bluetoothConnection.startClient(bluetoothDevice, deviceUUIDs);
     }
 
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection

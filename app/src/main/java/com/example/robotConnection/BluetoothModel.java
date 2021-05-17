@@ -18,8 +18,6 @@ public class BluetoothModel extends RobotConnectionModel{
     private static final String TAG = "BluetoothModel";
 
     // Model for BluetoothFragment
-    // bluetooth
-    private BluetoothConnectionService bluetoothConnection;
     // Bluetooth adapter of our device
     private BluetoothAdapter bluetoothAdapter;
     // Device we want to connect with
@@ -35,7 +33,6 @@ public class BluetoothModel extends RobotConnectionModel{
         if(pairedDevices == null) {
             pairedDevices = new MutableLiveData<ArrayList<Device>>();
         }
-        Log.d(TAG,"Update paired devices");
 
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         ArrayList<Device> bluetoothDevices = new ArrayList<Device>();

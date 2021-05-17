@@ -1,24 +1,22 @@
-package com.example.robotConnection;
+package com.example.ui;
 
-import android.bluetooth.BluetoothDevice;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rcvc.R;
-import com.facebook.infer.annotation.Mutable;
+import com.example.robotConnection.Device;
 
 import java.util.ArrayList;
 
 public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevicesCustomAdapter.ViewHolder> {
 
     private MutableLiveData<ArrayList<Device>> devices;
+    private final RobotConnectionFragment robotConnectionFragment;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -36,7 +34,7 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
             deviceButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickDevice(device);
+                    robotConnectionFragment.onClickDevice(device);
                 }
             });
         }
@@ -48,21 +46,16 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
 
     }
 
-    public void onClickDevice(Device device){
-        /*deviceUUIDs = device.getParcelable().getUuids();
-        bluetoothConnection = new BluetoothConnectionService(this);
-        startBTConnection(selectedDevice, deviceUUIDs);
-        bluetoothConnection.startClient(device, uuid);*/
-    }
-
     /**
      * Initialize the dataset of the Adapter.
      *
      * @param devices ArrayList<String> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<Device>> devices) {
+    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<Device>> devices, RobotConnectionFragment robotConnectionFragment) {
         this.devices = devices;
+
+        this.robotConnectionFragment = robotConnectionFragment;
     }
 
     // Create new views (invoked by the layout manager)
