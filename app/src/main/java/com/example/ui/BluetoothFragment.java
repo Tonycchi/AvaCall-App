@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.AvaCallViewModel;
@@ -44,6 +45,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
         RecyclerView recycler = view.findViewById(R.id.list_paired_devices);
         MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
         RecyclerView.Adapter bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(bluetoothDevicesName);
+
+        recycler.setHasFixedSize(true);
+        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         recycler.setAdapter((RecyclerView.Adapter) bluetoothDeviceListAdapter);
 
         // Create the observer which updates the UI and fills the bluetoothDevicesList
