@@ -32,6 +32,8 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     private AvaCallViewModel viewModel;
 
+    private RecyclerView recycler;
+
     public BluetoothFragment() {
         super(R.layout.bluetooth_connection);
     }
@@ -46,6 +48,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
             Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(enableBluetoothIntent);
+            Log.d(TAG,"Bluetooth is disabled!");
         }
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
@@ -56,14 +59,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
-        RecyclerView recycler = view.findViewById(R.id.list_paired_devices);
+        recycler = view.findViewById(R.id.list_paired_devices);
+        //update the list of devices
         MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
-
-        if(bluetoothDevicesName.getValue() == null) {
-            ArrayList<String> noDevicePlaceholder = new ArrayList<String>();
-            noDevicePlaceholder.add(getResources().getString(R.string.no_bluetooth_device));
-            bluetoothDevicesName.setValue(noDevicePlaceholder);
-        }
 
         RecyclerView.Adapter bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(bluetoothDevicesName);
 
@@ -92,6 +90,21 @@ public class BluetoothFragment extends RobotConnectionFragment {
         });
 
         getActivity().setTitle(R.string.title_bluetooth);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //update the list of devices
+        MutableLiveData<ArrayList<String>> bluetoothDevicesName = viewModel.getPairedDevicesName();
+
+        //if there is no device -> add placeholder into list
+        if(bluetoothDevicesName.getValue() == null) {
+            ArrayList<String> noDevicePlaceholder = new ArrayList<String>();
+            noDevicePlaceholder.add(getResources().getString(R.string.no_bluetooth_device));
+            bluetoothDevicesName.setValue(noDevicePlaceholder);
+        }
+
     }
 
     private void onClickFirstBluetoothConnection(){
