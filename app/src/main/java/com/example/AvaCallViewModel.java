@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.model.AvaCallModel;
+import com.example.robotConnection.Device;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class AvaCallViewModel extends ViewModel {
         model = new AvaCallModel();
     }
 
-    public MutableLiveData<ArrayList<BluetoothDevice>> getPairedDevices() {
+    public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return model.getPairedDevices();
     }
 }

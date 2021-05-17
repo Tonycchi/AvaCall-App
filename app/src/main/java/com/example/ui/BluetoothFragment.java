@@ -1,7 +1,6 @@
 package com.example.ui;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
+import com.example.robotConnection.Device;
 import com.example.robotConnection.PairedDevicesCustomAdapter;
 
 import java.lang.reflect.Array;
@@ -46,9 +46,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     // Observer to check if amount of paired Devices has been changed
-    public final Observer<ArrayList<BluetoothDevice>> devicesObserver = new Observer<ArrayList<BluetoothDevice>>() {
+    public final Observer<ArrayList<Device>> devicesObserver = new Observer<ArrayList<Device>>() {
         @Override
-        public void onChanged(@Nullable final ArrayList<BluetoothDevice> newDevicesList) {
+        public void onChanged(@Nullable final ArrayList<Device> newDevicesList) {
             // Update the UI
             (bluetoothDeviceListAdapter).notifyDataSetChanged();
         }
@@ -92,9 +92,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
                     //if there is no device -> add placeholder into list
                     if(viewModel.getPairedDevices().getValue().size() == 0) {
-                        ArrayList<BluetoothDevice> noDevicePlaceholder = new ArrayList<BluetoothDevice>();
+                        ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
                         String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
-                        noDevicePlaceholder.add(new BluetoothDevice(noDevicePlaceholderText));
+                        noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
                         viewModel.getPairedDevices().setValue(noDevicePlaceholder);
                     }
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.

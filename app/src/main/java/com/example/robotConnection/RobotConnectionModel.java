@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public abstract class RobotConnectionModel {
 
     // All paired devices
-    protected MutableLiveData<ArrayList<BluetoothDevice>> pairedDevices;
+    protected MutableLiveData<ArrayList<Device>> pairedDevices;
 
-    public abstract MutableLiveData<ArrayList<BluetoothDevice>> getPairedDevices();
+    public abstract MutableLiveData<ArrayList<Device>> getPairedDevices();
 }

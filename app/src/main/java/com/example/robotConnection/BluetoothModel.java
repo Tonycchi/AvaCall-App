@@ -33,17 +33,17 @@ public class BluetoothModel extends RobotConnectionModel{
 
     private void updatePairedDevice(){
         if(pairedDevices == null) {
-            pairedDevices = new MutableLiveData<ArrayList<BluetoothDevice>>();
+            pairedDevices = new MutableLiveData<ArrayList<Device>>();
         }
         Log.d(TAG,"Update paired devices");
 
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
-        ArrayList<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
+        ArrayList<Device> bluetoothDevices = new ArrayList<Device>();
 
         if (devices.size() > 0) {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
-                bluetoothDevices.add(device);
+                bluetoothDevices.add(new Device(device, device.getName()));
             }
             Log.d(TAG,"Found paired devices");
 
@@ -56,7 +56,7 @@ public class BluetoothModel extends RobotConnectionModel{
     }
 
     @Override
-    public MutableLiveData<ArrayList<BluetoothDevice>> getPairedDevices() {
+    public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         Log.d(TAG,"Get paired devices");
         updatePairedDevice();
         return pairedDevices;

@@ -18,36 +18,38 @@ import java.util.ArrayList;
 
 public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevicesCustomAdapter.ViewHolder> {
 
-    private MutableLiveData<ArrayList<BluetoothDevice>> bluetoothDevices;
+    private MutableLiveData<ArrayList<Device>> devices;
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final Button deviceView;
+        private final Button deviceButton;
+        private Device device;
 
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
 
-            deviceView = view.findViewById(R.id.button_bluetooth_device);
-            deviceView.setOnClickListener(new View.OnClickListener() {
+            deviceButton = view.findViewById(R.id.button_bluetooth_device);
+            deviceButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onClickDevice();
+                    onClickDevice(device);
                 }
             });
         }
 
-        public Button getDeviceView() {
-            return deviceView;
+        public void setDeviceView(Device device){
+            deviceButton.setText(device.getName());
+            this.device = device;
         }
+
     }
 
-    public void onClickDevice(){
-        /*selectedDevice = pairedDevices.get(position);
-        deviceUUIDs = selectedDevice.getUuids();
+    public void onClickDevice(Device device){
+        /*deviceUUIDs = device.getParcelable().getUuids();
         bluetoothConnection = new BluetoothConnectionService(this);
         startBTConnection(selectedDevice, deviceUUIDs);
         bluetoothConnection.startClient(device, uuid);*/
@@ -56,11 +58,11 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
     /**
      * Initialize the dataset of the Adapter.
      *
-     * @param bluetoothDevices ArrayList<String> containing the data to populate views to be used
+     * @param devices ArrayList<String> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<BluetoothDevice>> bluetoothDevices) {
-        this.bluetoothDevices = bluetoothDevices;
+    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<Device>> devices) {
+        this.devices = devices;
     }
 
     // Create new views (invoked by the layout manager)
@@ -77,16 +79,15 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
-        viewHolder.getDeviceView().setText(bluetoothDevices.getValue().get(position).getName());
+        // Get element from your dataset at this position and set the device
+        viewHolder.setDeviceView(devices.getValue().get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if(bluetoothDevices.getValue() != null)
-            return bluetoothDevices.getValue().size();
+        if(devices.getValue() != null)
+            return devices.getValue().size();
         else
             return 0;
     }
