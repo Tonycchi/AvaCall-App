@@ -3,7 +3,7 @@ package com.example.robotConnection;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
@@ -23,19 +23,33 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private final Button deviceView;
 
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
 
-            textView = (TextView) view.findViewById(R.id.button_bluetooth_device);
+            deviceView = view.findViewById(R.id.button_bluetooth_device);
+            deviceView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickDevice();
+                }
+            });
         }
 
-        public TextView getTextView() {
-            return textView;
+        public Button getDeviceView() {
+            return deviceView;
         }
+    }
+
+    public void onClickDevice(){
+        /*selectedDevice = pairedDevices.get(position);
+        deviceUUIDs = selectedDevice.getUuids();
+        bluetoothConnection = new BluetoothConnectionService(this);
+        startBTConnection(selectedDevice, deviceUUIDs);
+        bluetoothConnection.startClient(device, uuid);*/
     }
 
     /**
@@ -64,7 +78,7 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getTextView().setText(bluetoothDevicesName.getValue().get(position));
+        viewHolder.getDeviceView().setText(bluetoothDevicesName.getValue().get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
