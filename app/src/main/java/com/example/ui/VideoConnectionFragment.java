@@ -49,7 +49,7 @@ public class VideoConnectionFragment extends Fragment {
                     ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), s);
                     clipboard.setPrimaryClip(clip);
-//                    showToast(getString(R.string.toast_link_copied));
+//                    showToast(getString(R.string.toast_link_copied)); TODO: showToast implementieren
                 } else {
                     Intent sendIntent = new Intent();
                     sendIntent.setAction(Intent.ACTION_SEND);
