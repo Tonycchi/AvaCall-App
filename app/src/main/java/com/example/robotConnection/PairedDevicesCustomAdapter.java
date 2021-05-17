@@ -70,6 +70,9 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return bluetoothDevicesName.getValue().size();
+        if(bluetoothDevicesName.getValue() != null)
+            return bluetoothDevicesName.getValue().size();
+        else
+            return 0;
     }
 }
