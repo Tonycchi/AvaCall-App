@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity{
         listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
             deviceUUIDs = selectedDevice.getUuids();
-            bluetoothConnection = new BluetoothConnectionService(this);
+            //bluetoothConnection = new BluetoothConnectionService(this);
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
