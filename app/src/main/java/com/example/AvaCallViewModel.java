@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.model.AvaCallModel;
+import com.example.model.SessionData;
 import com.example.model.VideoConnectionModel;
 import com.example.model.WebClient;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class AvaCallViewModel extends ViewModel {
 
     AvaCallModel model = new AvaCallModel();
-    VideoConnectionModel videoConnectionModel = new VideoConnectionModel(model);
+    VideoConnectionModel videoConnectionModel = new VideoConnectionModel();
 
     // Data for BluetoothFragment
     private MutableLiveData<Boolean> bluetoothConnected;
@@ -37,5 +38,9 @@ public class AvaCallViewModel extends ViewModel {
 
     public MutableLiveData<String> getInviteLink() {
         return videoConnectionModel.getInviteLink();
+    }
+
+    public SessionData getSession() {
+        return videoConnectionModel.getSession();
     }
 }

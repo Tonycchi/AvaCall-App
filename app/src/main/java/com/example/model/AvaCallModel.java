@@ -6,9 +6,13 @@ import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.AvaCallViewModel;
+
 import java.util.ArrayList;
 
 public class AvaCallModel {
+
+    private VideoConnectionModel videoConnectionModel;
 
     // Model for BluetoothFragment
     // bluetooth
@@ -28,38 +32,11 @@ public class AvaCallModel {
     // Model for EditControlsFragment
     // TODO Liste von eigener controller klasse???????
 
-    // Model for VideoConnectionFragment
-    private URLFactory urlFactory;
-    private WebClient wc;
-    private String id;
-    private SessionData session;
-
-
-    public URLFactory getUrlFactory() {
-        return this.urlFactory;
+    public AvaCallModel() {
+        videoConnectionModel = new VideoConnectionModel();
     }
 
-    public WebClient getWebClient() {
-        return this.wc;
-    }
-
-    public void setWebClient (WebClient webClient) {
-        this.wc = webClient;
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId (String ID) {
-        this.id = ID;
-    }
-
-    public SessionData getSession() {
-        return this.session;
-    }
-
-    public void setSession(SessionData sessionData) {
-        this.session = sessionData;
+    public VideoConnectionModel getVideoConnectionModel() {
+        return this.videoConnectionModel;
     }
 }

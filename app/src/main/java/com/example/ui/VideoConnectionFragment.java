@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
 
+import org.jitsi.meet.sdk.JitsiMeetActivity;
+
 public class VideoConnectionFragment extends Fragment {
 
     private AvaCallViewModel viewModel;
@@ -67,8 +69,9 @@ public class VideoConnectionFragment extends Fragment {
         Button buttonAccessVideoCall = view.findViewById(R.id.button_access_videocall);
         Button buttonTestControls = view.findViewById(R.id.button_test_controls);
 
-        buttonTestControls.setOnClickListener(this::onClickTestControls);
         buttonInvitePartner.setOnClickListener(this::onClickInvitePartner);
+        buttonTestControls.setOnClickListener(this::onClickTestControls);
+        buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
 
         getActivity().setTitle(R.string.title_video_connection);
     }
@@ -80,5 +83,10 @@ public class VideoConnectionFragment extends Fragment {
 
     private void onClickInvitePartner(View v) {
         viewModel.invitePartner();
+    }
+
+    private void onClickSwitchToVideoCall(View v) {
+        // TODO setReceiveCommands kommt hier noch hin
+        JitsiMeetActivity.launch(getActivity(), viewModel.getSession().getOptions());
     }
 }
