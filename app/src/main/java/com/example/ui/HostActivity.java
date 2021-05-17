@@ -4,10 +4,14 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
 
 public class HostActivity extends AppCompatActivity {
+
+    private AvaCallViewModel viewModel;
 
     public HostActivity() {
         super(R.layout.host);
@@ -16,6 +20,8 @@ public class HostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        viewModel = new ViewModelProvider(this).get(AvaCallViewModel.class);
 
         //set the title
         setTitle(R.string.title_bluetooth);

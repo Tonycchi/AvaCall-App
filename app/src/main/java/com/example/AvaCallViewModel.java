@@ -3,9 +3,14 @@ package com.example;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.model.AvaCallModel;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class AvaCallViewModel extends ViewModel {
+
+    private AvaCallModel model;
 
     // Data for BluetoothFragment
     private MutableLiveData<Boolean> bluetoothConnected;
@@ -20,5 +25,8 @@ public class AvaCallViewModel extends ViewModel {
     private MutableLiveData<List<String>> robotModelList;
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
 
+    public ArrayList<String> getPairedDevices() {
+        return null;
+    }
 
 }
