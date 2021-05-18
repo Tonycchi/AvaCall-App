@@ -115,11 +115,22 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     public void onClickDevice(Device device){
-        MutableLiveData<Integer> bluetoothConnectionStatus = viewModel.getConnectionStatus();
+        if(device.getParcelable() != null) {
+            viewModel.getConnectionStatus().observe(getViewLifecycleOwner(), bluetoothConnectionStatusObserver);
+            viewModel.startConnection(device);
+        }else{
+            onClickFirstBluetoothConnection();
+        }
+    }
 
-        bluetoothConnectionStatus.observe(getViewLifecycleOwner(), bluetoothConnectionStatusObserver);
+    private void setPlaceholder(){
 
-        viewModel.startConnection(device);
+        Log.d(TAG, "No device");
+        ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
+        String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
+        noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
+        viewModel.getPairedDevices().setValue(noDevicePlaceholder);
+
     }
 
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection
@@ -138,19 +149,15 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
                     // if state equals Bluetooth turned on
                 } else if(state == BluetoothAdapter.STATE_ON){
-
+                    Log.d(TAG, "Bluetooth state_on");
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
                     viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
                     recycler.setAdapter(bluetoothDeviceListAdapter);
 
                     //if there is no device -> add placeholder into list
                     if(viewModel.getPairedDevices().getValue().size() == 0) {
-                        ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
-                        String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
-                        noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
-                        viewModel.getPairedDevices().setValue(noDevicePlaceholder);
+                        setPlaceholder();
                     }
-
                 }
 
             }
@@ -192,6 +199,11 @@ public class BluetoothFragment extends RobotConnectionFragment {
         getActivity().registerReceiver(bluetoothStateChangeReceiver, bluetoothStateChange);
 
         viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
+
+        //if there is no device -> add placeholder into list
+        if(viewModel.getPairedDevices().getValue().size() == 0) {
+            setPlaceholder();
+        }
     }
 
     public void onPause(){
