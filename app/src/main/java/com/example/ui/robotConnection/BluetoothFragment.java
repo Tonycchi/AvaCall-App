@@ -103,16 +103,15 @@ public class BluetoothFragment extends RobotConnectionFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
         bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(viewModel.getPairedDevices(), this);
 
-        //bluetooth is disabled
-        if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
-            Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enableBluetoothIntent);
-            Log.d(TAG,"Bluetooth is disabled!");
-        }
-
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
         setEnterTransition(inflater.inflateTransition(R.transition.slide));
+    }
+
+    private void showEnableBluetooth(){
+        Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivity(enableBluetoothIntent);
+        Log.d(TAG,"Bluetooth is disabled!");
     }
 
     public void onClickDevice(Device device){
@@ -135,10 +134,14 @@ public class BluetoothFragment extends RobotConnectionFragment {
                 // if state is bluetooth turned off
                 if(state == BluetoothAdapter.STATE_OFF) {
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-                    viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
-                    recycler.setAdapter(bluetoothDeviceListAdapter);
+                    showEnableBluetooth();
+
                     // if state equals Bluetooth turned on
                 } else if(state == BluetoothAdapter.STATE_ON){
+
+                    // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+                    viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
+                    recycler.setAdapter(bluetoothDeviceListAdapter);
 
                     //if there is no device -> add placeholder into list
                     if(viewModel.getPairedDevices().getValue().size() == 0) {
@@ -147,9 +150,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
                         noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
                         viewModel.getPairedDevices().setValue(noDevicePlaceholder);
                     }
-                    // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-                    viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
-                    recycler.setAdapter(bluetoothDeviceListAdapter);
+
                 }
 
             }
@@ -180,6 +181,11 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        //bluetooth is disabled
+        if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
+            showEnableBluetooth();
+        }
 
         // Tells Broadcastreceiver to wait for certain events in this case Bluetooth Action State Changed(On or Off)
         IntentFilter bluetoothStateChange = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
