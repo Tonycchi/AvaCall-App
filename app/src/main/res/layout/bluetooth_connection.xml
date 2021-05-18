@@ -10,8 +10,10 @@
     <android.widget.Button
         android:id="@+id/button_first_connection"
         style="@style/button_neutral"
-        android:layout_width="@dimen/standard_button_width"
+        android:layout_width="0dp"
         android:layout_height="@dimen/big_button_height"
+        android:layout_marginLeft="@dimen/margin_side"
+        android:layout_marginRight="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_bottom"
         android:text="@string/button_bluetooth_first_connection"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,10 +25,10 @@
         style="@style/text_standard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_vertical_small"
         android:text="@string/text_roboter_shown_question"
         app:layout_constraintBottom_toTopOf="@+id/button_first_connection"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
