@@ -6,8 +6,6 @@ import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.AvaCallViewModel;
-
 import java.util.ArrayList;
 
 public class AvaCallModel {
