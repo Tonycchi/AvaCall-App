@@ -66,11 +66,17 @@ public class VideoConnectionFragment extends Fragment {
         Button buttonAccessVideoCall = view.findViewById(R.id.button_access_videocall);
         Button buttonTestControls = view.findViewById(R.id.button_test_controls);
 
+        buttonURLsettings.setOnClickListener(this::openURLSettings);
         buttonInvitePartner.setOnClickListener(this::onClickInvitePartner);
         buttonTestControls.setOnClickListener(this::onClickTestControls);
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
 
         getActivity().setTitle(R.string.title_video_connection);
+    }
+
+    private void openURLSettings(View v) {
+        new URLDialogFragment().show(
+                getChildFragmentManager(), URLDialogFragment.TAG);
     }
 
     private void onClickTestControls(View v) {
