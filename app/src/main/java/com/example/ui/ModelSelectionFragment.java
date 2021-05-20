@@ -2,6 +2,7 @@ package com.example.ui;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -13,6 +14,8 @@ import androidx.fragment.app.FragmentManager;
 import com.example.rcvc.R;
 
 public class ModelSelectionFragment extends HostedFragment {
+
+    private static final String TAG = "ModelSelectionFragment";
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
