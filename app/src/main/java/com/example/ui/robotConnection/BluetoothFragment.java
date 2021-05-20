@@ -218,12 +218,15 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     private void onClickFirstBluetoothConnection(){
-        FragmentManager fragmentManager = getParentFragmentManager();
+        Intent intentOpenBluetoothSettings = new Intent();
+        intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+        startActivity(intentOpenBluetoothSettings);
+        /*FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
-                .commit();
+                .commit();*/
     }
 
 
