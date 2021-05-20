@@ -33,9 +33,12 @@ public class URLDialogFragment extends DialogFragment {
                 editWebPort = dialogView.findViewById(R.id.edit_web_port);
 
         // set editText texts = current values
-        editWebURL.setText(pref.getString("host_url", ""));
-        editJitsiURL.setText(pref.getString("jitsi_url", ""));
-        editWebPort.setText(pref.getString("host_port", ""));
+        String currentWebURL = pref.getString("host_url", ""),
+                currentJitsiURL = pref.getString("jitsi_url", ""),
+                currentWebPort = pref.getString("host_port", "");
+        editWebURL.setText(currentWebURL);
+        editJitsiURL.setText(currentJitsiURL);
+        editWebPort.setText(currentWebPort);
 
         // build dialog and
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext())
@@ -59,7 +62,8 @@ public class URLDialogFragment extends DialogFragment {
         TextWatcher urlWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                handleText();
+                final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                okButton.setEnabled(Patterns.WEB_URL.matcher(s).matches() && s.length() > 0);
             }
 
             @Override
@@ -71,19 +75,14 @@ public class URLDialogFragment extends DialogFragment {
             public void afterTextChanged(Editable s) {
 
             }
-            /**
-             * checks if entered string is a valid url (syntax)
-             */
-            private void handleText() {
-                final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                String webURL = editWebURL.getText().toString();
-                String jitsiURL = editJitsiURL.getText().toString();
-                okButton.setEnabled(
-                    Patterns.WEB_URL.matcher(webURL).matches() &&
-                    Patterns.WEB_URL.matcher(jitsiURL).matches()
-                );
-            }
         };
+
+        alertDialog.setOnShowListener(dialog -> {
+            if (currentWebURL.length() == 0 || currentJitsiURL.length() == 0 || currentWebPort.length() == 0) {
+                final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                okButton.setEnabled(false);
+            }
+        });
 
         editJitsiURL.addTextChangedListener(urlWatcher);
         editWebURL.addTextChangedListener(urlWatcher);
@@ -98,7 +97,7 @@ public class URLDialogFragment extends DialogFragment {
      */
     private String trimURL(String url) {
         String r = url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
-        if (r.charAt(r.length() - 1) == '/') {
+        if (r.length() > 0 && r.charAt(r.length() - 1) == '/') {
             r = r.substring(0, r.length() - 1);
         }
         return r;
