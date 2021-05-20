@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -97,7 +98,16 @@ public class BluetoothFragment extends RobotConnectionFragment {
         Log.d(TAG, "show ProgressDialog");
         //initprogress dialog
         progressDialog = ProgressDialog.show(this.getContext(), getResources().getString(R.string.connecting_bluetooth_title),
-                getResources().getString(R.string.connecting_bluetooth_wait), true);
+                getResources().getString(R.string.connecting_bluetooth_wait), false, true, new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        onClickBluetoothConnectionCanceled();
+                    }
+                });
+    }
+
+    private void onClickBluetoothConnectionCanceled(){
+        viewModel.connectingCanceled();
     }
 
     protected void hideProgessDialog(){

@@ -14,4 +14,6 @@ public abstract class RobotConnectionModel {
     public abstract MutableLiveData<Integer> getConnectionStatus();
 
     public abstract void startConnection(Device device);
+
+    public abstract void connectingCanceled();
 }

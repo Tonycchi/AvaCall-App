@@ -72,4 +72,9 @@ public class BluetoothModel extends RobotConnectionModel{
         bluetoothConnectionService.startClient(bluetoothDevice, uuids);
     }
 
+    @Override
+    public void connectingCanceled() {
+        bluetoothConnectionService.connectingCanceled();
+    }
+
 }

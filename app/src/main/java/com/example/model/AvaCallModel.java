@@ -63,4 +63,8 @@ public class AvaCallModel {
     public SessionData getSession() {
         return videoConnectionModel.getSession();
     }
+
+    public void connectingCanceled() {
+        robotConnectionModel.connectingCanceled();
+    }
 }

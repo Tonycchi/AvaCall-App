@@ -48,6 +48,11 @@ public class BluetoothConnectionService {
         return connectionStatus;
     }
 
+    public void connectingCanceled() {
+        if(connectThread!=null)
+            connectThread.cancel();
+    }
+
     /**
      * This thread runs while listening for incoming connections. It behaves
      * like a server-side client. It runs until a connection is accepted

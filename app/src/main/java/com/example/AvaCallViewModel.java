@@ -62,4 +62,8 @@ public class AvaCallViewModel extends ViewModel {
     public SessionData getSession() {
         return model.getSession();
     }
+
+    public void connectingCanceled() {
+        model.connectingCanceled();
+    }
 }
