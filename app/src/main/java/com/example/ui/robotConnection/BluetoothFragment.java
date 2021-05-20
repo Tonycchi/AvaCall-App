@@ -64,36 +64,41 @@ public class BluetoothFragment extends RobotConnectionFragment {
         public void onChanged(@Nullable final Integer newConnectionStatus) {
             // Update the UI
             //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
-            switch(newConnectionStatus){
-                case 0:
-                    Log.d(TAG, "Case 0: Not tested!");
-                    showProgressDialog();
-                    break;
-
-                case 1:
-                    Log.d(TAG, "Case 1: Is connected!");
-                    hideProgessDialog();
-                    switchToNextFragment();
-                    break;
-
-                case 2:
-                    Log.d(TAG, "Case 2: Could not connect!");
-                    ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
-                    hideProgessDialog();
-                    break;
-
-                case 3:
-                    Log.d(TAG, "Case 3: Connection lost!");
-                    ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
-                    break;
-
-                default:
-                    Log.d(TAG, "Default: Something strange or nothing(Case -1)");
-                    showProgressDialog();
-                    break;
-            }
+            connectionStatusChanged(newConnectionStatus);
         }
     };
+
+    protected void connectionStatusChanged(int newConnectionStatus){
+        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+        switch(newConnectionStatus){
+            case 0:
+                Log.d(TAG, "Case 0: Not tested!");
+                showProgressDialog();
+                break;
+
+            case 1:
+                Log.d(TAG, "Case 1: Is connected!");
+                hideProgessDialog();
+                switchToNextFragment();
+                break;
+
+            case 2:
+                Log.d(TAG, "Case 2: Could not connect!");
+                ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
+                hideProgessDialog();
+                break;
+
+            case 3:
+                Log.d(TAG, "Case 3: Connection lost!");
+                ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
+                break;
+
+            default:
+                Log.d(TAG, "Default: Something strange or nothing(Case -1)");
+                showProgressDialog();
+                break;
+        }
+    }
 
     protected void showProgressDialog(){
         Log.d(TAG, "show ProgressDialog");
