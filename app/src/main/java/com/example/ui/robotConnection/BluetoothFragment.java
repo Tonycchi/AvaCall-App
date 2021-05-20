@@ -104,6 +104,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
+        Log.d(TAG, "onCreate");
         bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(viewModel.getPairedDevices(), this);
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
@@ -131,6 +132,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
         String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
         noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
+        Log.d(TAG, "setPlaceholder");
         viewModel.getPairedDevices().setValue(noDevicePlaceholder);
     }
 
@@ -188,6 +190,8 @@ public class BluetoothFragment extends RobotConnectionFragment {
     public void onResume() {
         super.onResume();
 
+
+
         //bluetooth is disabled
         if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
             showEnableBluetooth();
@@ -197,6 +201,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         IntentFilter bluetoothStateChange = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         getActivity().registerReceiver(bluetoothStateChangeReceiver, bluetoothStateChange);
 
+        Log.d(TAG, "onResume");
         MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
         pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
 
