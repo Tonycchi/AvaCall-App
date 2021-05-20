@@ -119,7 +119,7 @@ public class BluetoothConnectionService {
         }
 
         public void run() {
-            Log.d(TAG, "number of trys: "+deviceUUIDs.length);
+            Log.d(TAG, "number of UUIDs: "+deviceUUIDs.length);
             for (ParcelUuid mDeviceUUID : deviceUUIDs) {
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
