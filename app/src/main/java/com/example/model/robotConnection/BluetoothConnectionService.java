@@ -144,7 +144,6 @@ public class BluetoothConnectionService {
                 }
             }
             connected(bluetoothSocket);
-            connectionStatus.postValue(1);
         }
 
         /**
@@ -217,13 +216,14 @@ public class BluetoothConnectionService {
 
             INPUT_STREAM = tmpIn;
             OUTPUT_STREAM = tmpOut;
-            //TODO: delete if not needed
-            // check connection with broadcast
-            //sendConnectionStatusBroadcast();
         }
 
         public void run() {
             Log.d(TAG, "connectedThread running");
+
+            //TODO: only do this if its an ev3!
+            connectionStatus.postValue(1);
+
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
             int bytes; // bytes returned from read()
@@ -240,10 +240,6 @@ public class BluetoothConnectionService {
                     incomingMessageIntent.putExtra("theMessage", incomingMessage);
 
                 } catch (IOException e) {
-                    //TODO: delete if not needed
-                    // in case of exception check connection with broadcast
-                    // sendConnectionStatusBroadcast();
-
                     // could not connect, so connection status gets set to 2
                     if (connectionStatus.getValue() == 0) {
                         connectionStatus.postValue(2);
@@ -330,14 +326,4 @@ public class BluetoothConnectionService {
         //perform the write
         connectedThread.write(out);
     }
-
-    //TODO: delete if not needed
-    /**
-     * Sends an intent to the MainActivity to check the connection status
-     */
-    /*private void sendConnectionStatusBroadcast() {
-        Intent intent = new Intent(CONTEXT.getString(R.string.action_check_connection));
-        LocalBroadcastManager.getInstance(CONTEXT).sendBroadcast(intent);
-    }*/
-
 }
