@@ -86,7 +86,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
                     break;
 
                 default:
-                    Log.d(TAG, "Case -1: Something strange or nothing :/");
+                    Log.d(TAG, "Default: Something strange or nothing(Case -1)");
                     showProgressDialog();
                     break;
             }
