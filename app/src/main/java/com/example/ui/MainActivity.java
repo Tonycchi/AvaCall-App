@@ -347,9 +347,9 @@ public class MainActivity extends AppCompatActivity{
         //first create room
         boolean connectionError = false;
         if (session == null) {
-            String jitsi = urlFactory.JITSI_HTTPS;
+            String jitsi = urlFactory.getJitsi_https();
             try {
-                wc = new WebClient(new URI(urlFactory.HOST_WSS), urlFactory.JITSI_PLAIN, controller);
+                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), controller);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -370,7 +370,7 @@ public class MainActivity extends AppCompatActivity{
 
             if (!connectionError) {
                 String id = wc.getId();
-                session = new SessionData(jitsi, urlFactory.HOST_HTTPS, id);
+                session = new SessionData(jitsi, urlFactory.getHost_https(), id);
                 textViewServerConnectionStatus.setText(String.format(getResources().getString(R.string.server_connection_status_true), session.getID()));
                 buttonSwitchToRoom.setEnabled(true);
             } else {
@@ -380,13 +380,13 @@ public class MainActivity extends AppCompatActivity{
         if (!connectionError) {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), session.SHARE_URL);
+                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), session.getShareURL());
                 clipboard.setPrimaryClip(clip);
                 showToast(getString(R.string.toast_link_copied));
             } else {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, session.SHARE_URL);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, session.getShareURL());
                 sendIntent.setType("text/plain");
 
                 Intent shareIntent = Intent.createChooser(sendIntent, null);

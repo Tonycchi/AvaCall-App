@@ -8,8 +8,8 @@ import java.net.URL;
 public class SessionData {
 
     private JitsiMeetConferenceOptions options;
-    public final String SHARE_URL;
-    public final String ID;
+    private final String SHARE_URL;
+    private final String ID;
 
     public SessionData(String jitsi, String host, String id) {
         this.ID = id;
@@ -25,11 +25,13 @@ public class SessionData {
         SHARE_URL = host + "/" + id;
     }
 
-    public String getID(){
-        return ID;
+    public JitsiMeetConferenceOptions getOptions() {
+        return this.options;
     }
 
-    public JitsiMeetConferenceOptions getOptions() {
-        return options;
+    public String getShareURL() {return this.SHARE_URL; }
+
+    public String getID(){
+        return this.ID;
     }
 }

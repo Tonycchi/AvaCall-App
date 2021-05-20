@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.ParcelUuid;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 

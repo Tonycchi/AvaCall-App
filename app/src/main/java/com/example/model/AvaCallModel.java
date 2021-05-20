@@ -8,6 +8,8 @@ import com.example.model.robotConnection.BluetoothModel;
 import com.example.model.robotConnection.Device;
 import com.example.model.robotConnection.RobotConnectionModel;
 
+import androidx.lifecycle.MutableLiveData;
+
 import java.util.ArrayList;
 
 public class AvaCallModel {
@@ -15,6 +17,8 @@ public class AvaCallModel {
     private Context context;
 
     private RobotConnectionModel robotConnectionModel;
+
+    private VideoConnectionModel videoConnectionModel;
 
     // Model for ModelSelectionFragment
     // TODO modelle abspeichern?
@@ -28,6 +32,7 @@ public class AvaCallModel {
     private SessionData session;
 
     public AvaCallModel() {
+        videoConnectionModel = new VideoConnectionModel();
         robotConnectionModel = new BluetoothModel();
     }
 
@@ -41,5 +46,21 @@ public class AvaCallModel {
 
     public void startConnection(Device device) {
         robotConnectionModel.startConnection(device);
+    }
+
+    public VideoConnectionModel getVideoConnectionModel() {
+        return this.videoConnectionModel;
+    }
+
+    public void invitePartner() {
+        videoConnectionModel.invitePartner();
+    }
+
+    public MutableLiveData<String> getInviteLink() {
+        return videoConnectionModel.getInviteLink();
+    }
+
+    public SessionData getSession() {
+        return videoConnectionModel.getSession();
     }
 }
