@@ -2,7 +2,6 @@ package com.example.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 
-import com.dropbox.core.v2.sharing.ShareFolderBuilder;
 import com.example.rcvc.R;
 
 public class URLDialogFragment extends DialogFragment {
@@ -33,9 +31,9 @@ public class URLDialogFragment extends DialogFragment {
                 editWebPort = dialogView.findViewById(R.id.edit_web_port);
 
         // set editText texts = current values
-        String currentWebURL = pref.getString("host_url", ""),
-                currentJitsiURL = pref.getString("jitsi_url", ""),
-                currentWebPort = pref.getString("host_port", "");
+        String currentWebURL = pref.getString("host_url", getResources().getString(R.string.host_url)),
+                currentJitsiURL = pref.getString("jitsi_url", getResources().getString(R.string.jitsi_url)),
+                currentWebPort = pref.getString("host_port", getResources().getString(R.string.host_port));
         editWebURL.setText(currentWebURL);
         editJitsiURL.setText(currentJitsiURL);
         editWebPort.setText(currentWebPort);

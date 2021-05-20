@@ -25,16 +25,20 @@
         <string name="use_model">Modell verwenden</string>
         <string name="edit_model">Steuerung des Roboters bearbeiten</string>
 
-    <!-- Video Connection -->
-    <string name="url_settings">URL-Einstellungen</string>
-    <string name="invite_partner">Partner einladen</string>
-    <string name="access_videocall">Zum Videocall</string>
-    <string name="test_controls">Steuerung testen</string>
+        <!-- Video Connection -->
+        <string name="url_settings">URL-Einstellungen</string>
+        <string name="invite_partner">Partner einladen</string>
+        <string name="access_videocall">Zum Videocall</string>
+        <string name="test_controls">Steuerung testen</string>
 
-    <string name="title_web_url">URL zur Webanwendung</string>
-    <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>
-    <string name="title_port_url">Port für Verbindung zum Server</string>
+        <string name="title_web_url">URL zur Webanwendung</string>
+        <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>
+        <string name="title_port_url">Port für Verbindung zum Server</string>
 
+        <!-- URLS -->
+        <string name="host_url">avatar.mintclub.org</string>
+        <string name="jitsi_url">meet.jit.si</string>
+        <string name="host_port">22222</string>
 
     <!-- OLD TODO DELETED LATER -->
     <!-- General Menus -->

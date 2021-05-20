@@ -8,19 +8,16 @@
         <Preference
             app:iconSpaceReserved="false"
             android:key="host_url"
-            android:defaultValue="avatar.mintclub.org"
             android:title="@string/settings_title_host_url"
             android:summary="@string/settings_summary_host_url" />
         <Preference
             app:iconSpaceReserved="false"
             android:key="jitsi_url"
-            android:defaultValue="meet.jit.si"
             android:title="@string/settings_title_jitsi_url"
             android:summary="@string/settings_summary_jitsi_url" />
         <EditTextPreference
             app:iconSpaceReserved="false"
             android:key="host_port"
-            android:defaultValue="22222"
             android:title="@string/settings_title_host_port"
             android:summary="@string/settings_summary_host_port" />
     </PreferenceCategory>
