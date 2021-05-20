@@ -62,9 +62,9 @@ public class EditControlsFragment extends HostedFragment {
         fragmentManager.popBackStack();
     }
 
-
     @Override
     public void connectionStatusChanged(Integer newConnectionStatus) {
         //TODO: implement
+        ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
     }
 }
