@@ -54,7 +54,6 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
      */
     public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<Device>> devices, RobotConnectionFragment robotConnectionFragment) {
         this.devices = devices;
-
         this.robotConnectionFragment = robotConnectionFragment;
     }
 
