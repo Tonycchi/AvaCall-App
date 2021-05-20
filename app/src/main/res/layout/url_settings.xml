@@ -10,7 +10,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/web_url"
+        android:id="@+id/edit_web_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textUri"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/jitsi_url"
+        android:id="@+id/edit_jitsi_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textUri"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/web_port"
+        android:id="@+id/edit_web_port"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
