@@ -42,7 +42,7 @@ public class URLDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
                 .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
-        // define what happens on press ok
+        // define what happens on press ok (save strings)
         builder.setPositiveButton(getResources().getString(R.string.ok), (dialog, which) -> {
             SharedPreferences.Editor editor = pref.edit();
             String webURL = trimURL(editWebURL.getText().toString());
@@ -57,16 +57,28 @@ public class URLDialogFragment extends DialogFragment {
 
         AlertDialog alertDialog = builder.create();
 
+        // urlWatcher verifies that only valid urls can be saved
         TextWatcher urlWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                okButton.setEnabled(Patterns.WEB_URL.matcher(s).matches() && s.length() > 0);
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
+                /*String webURL = editWebURL.getText().toString(),
+                        jitsiURL = editJitsiURL.getText().toString(),
+                        port = editWebPort.getText().toString();
+
+                okButton.setEnabled(
+                        Patterns.WEB_URL.matcher(webURL).matches()
+                                && Patterns.WEB_URL.matcher(jitsiURL).matches()
+                                && port.length() > 0
+                );*/
+
+                okButton.setEnabled(Patterns.WEB_URL.matcher(s).matches());
             }
 
             @Override
@@ -74,16 +86,16 @@ public class URLDialogFragment extends DialogFragment {
 
             }
         };
+        editJitsiURL.addTextChangedListener(urlWatcher);
+        editWebURL.addTextChangedListener(urlWatcher);
 
+        // set ok disabled if no values yet present
         alertDialog.setOnShowListener(dialog -> {
             if (currentWebURL.length() == 0 || currentJitsiURL.length() == 0 || currentWebPort.length() == 0) {
                 final Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 okButton.setEnabled(false);
             }
         });
-
-        editJitsiURL.addTextChangedListener(urlWatcher);
-        editWebURL.addTextChangedListener(urlWatcher);
 
         return alertDialog;
     }
