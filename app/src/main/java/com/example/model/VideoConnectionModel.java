@@ -8,8 +8,7 @@ import java.net.URISyntaxException;
 public class VideoConnectionModel {
 
     private String TAG = "VideoConnection";
-
-    private AvaCallModel model;
+    
     private final MutableLiveData<String> inviteLink = new MutableLiveData<String>();
 
     private URLFactory urlFactory;

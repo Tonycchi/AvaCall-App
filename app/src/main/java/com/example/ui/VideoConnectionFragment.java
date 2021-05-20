@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,7 +48,7 @@ public class VideoConnectionFragment extends Fragment {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), link);
                 clipboard.setPrimaryClip(clip);
-//                    showToast(getString(R.string.toast_link_copied)); TODO: showToast implementieren
+                ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
             } else {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
@@ -60,7 +61,7 @@ public class VideoConnectionFragment extends Fragment {
         };
 
         viewModel.getInviteLink().observe(getActivity(), sharedLinkObserver);
-//
+
         Button buttonURLsettings = view.findViewById(R.id.button_url_settings);
         Button buttonInvitePartner = view.findViewById(R.id.button_invite_partner);
         Button buttonAccessVideoCall = view.findViewById(R.id.button_access_videocall);

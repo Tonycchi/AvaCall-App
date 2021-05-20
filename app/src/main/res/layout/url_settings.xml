@@ -7,7 +7,9 @@
     <TextView
         android:text="@string/title_web_url"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style = "@style/text_standard"
+        android:gravity="center" />
 
     <EditText
         android:id="@+id/edit_web_url"
@@ -19,7 +21,9 @@
     <TextView
         android:text="@string/title_jitsi_url"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style = "@style/text_standard"
+        android:gravity="center"/>
 
     <EditText
         android:id="@+id/edit_jitsi_url"
@@ -31,7 +35,9 @@
     <TextView
         android:text="@string/title_port_url"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style = "@style/text_standard"
+        android:gravity="center"/>
 
     <EditText
         android:id="@+id/edit_web_port"
