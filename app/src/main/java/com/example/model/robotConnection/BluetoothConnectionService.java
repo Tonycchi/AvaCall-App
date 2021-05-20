@@ -43,7 +43,6 @@ public class BluetoothConnectionService {
         connectionStatus = new MutableLiveData<Integer>();
     }
 
-
     public MutableLiveData<Integer> getConnectionStatus(){
         return connectionStatus;
     }

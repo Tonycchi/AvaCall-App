@@ -73,6 +73,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
                 case 1:
                     Log.d(TAG, "Case 1: Is connected!");
                     hideProgessDialog();
+                    switchToNextFragment();
                     break;
 
                 case 2:
@@ -233,17 +234,19 @@ public class BluetoothFragment extends RobotConnectionFragment {
         getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
 
-    private void onClickFirstBluetoothConnection(){
-        Intent intentOpenBluetoothSettings = new Intent();
-        intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-        startActivity(intentOpenBluetoothSettings);
-
-        /*FragmentManager fragmentManager = getParentFragmentManager();
+    private void switchToNextFragment(){
+        FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
-                .commit();*/
+                .commit();
+    }
+
+    private void onClickFirstBluetoothConnection(){
+        Intent intentOpenBluetoothSettings = new Intent();
+        intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+        startActivity(intentOpenBluetoothSettings);
     }
 
 
