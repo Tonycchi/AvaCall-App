@@ -237,6 +237,15 @@ public class BluetoothConnectionService {
                     //TODO: delete if not needed
                     // in case of exception check connection with broadcast
                     // sendConnectionStatusBroadcast();
+
+                    // could not connect, so connection status gets set to 2
+                    if (connectionStatus.getValue() == 0) {
+                        connectionStatus.postValue(2);
+                    }
+                    // connection got lost, so status gets set to 3
+                    if (connectionStatus.getValue() == 1) {
+                        connectionStatus.postValue(3);
+                    }
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
                     break;
                 }
@@ -257,18 +266,18 @@ public class BluetoothConnectionService {
             } catch (IOException e) {
                 // could not connect, so connection status gets set to 2
                 if (connectionStatus.getValue() == 0) {
-                    connectionStatus.setValue(2);
+                    connectionStatus.postValue(2);
                 }
                 // connection got lost, so status gets set to 3
                 if (connectionStatus.getValue() == 1) {
-                    connectionStatus.setValue(3);
+                    connectionStatus.postValue(3);
                 }
                 Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
             }
             // if connection status is still 0 at this point,
             // the connection was successful and it gets set to 1
             if (connectionStatus.getValue() == 0) {
-                connectionStatus.setValue(1);
+                connectionStatus.postValue(1);
             }
         }
 
