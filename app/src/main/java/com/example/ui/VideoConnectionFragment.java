@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -9,7 +10,6 @@ import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +43,7 @@ public class VideoConnectionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
+        @SuppressLint("ObsoleteSdkInt")
         Observer<String> sharedLinkObserver = link -> {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -60,7 +61,7 @@ public class VideoConnectionFragment extends Fragment {
             }
         };
 
-        viewModel.getInviteLink().observe(getActivity(), sharedLinkObserver);
+        viewModel.getInviteLink().observe(requireActivity(), sharedLinkObserver);
 
         Button buttonURLsettings = view.findViewById(R.id.button_url_settings);
         Button buttonInvitePartner = view.findViewById(R.id.button_invite_partner);
@@ -72,7 +73,7 @@ public class VideoConnectionFragment extends Fragment {
         buttonTestControls.setOnClickListener(this::onClickTestControls);
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
 
-        getActivity().setTitle(R.string.title_video_connection);
+        requireActivity().setTitle(R.string.title_video_connection);
     }
 
     private void openURLSettings(View v) {
@@ -91,6 +92,6 @@ public class VideoConnectionFragment extends Fragment {
 
     private void onClickSwitchToVideoCall(View v) {
         // TODO setReceiveCommands kommt hier noch hin
-        JitsiMeetActivity.launch(getActivity(), viewModel.getSession().getOptions());
+        JitsiMeetActivity.launch(requireContext(), viewModel.getSession().getOptions());
     }
 }

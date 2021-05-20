@@ -17,10 +17,13 @@ import androidx.preference.PreferenceManager;
 
 import com.example.rcvc.R;
 
+import org.jetbrains.annotations.NotNull;
+
 public class URLDialogFragment extends DialogFragment {
 
     SharedPreferences pref;
 
+    @NotNull
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         pref = PreferenceManager.getDefaultSharedPreferences(requireActivity());
 

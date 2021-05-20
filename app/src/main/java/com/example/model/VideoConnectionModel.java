@@ -7,18 +7,18 @@ import java.net.URISyntaxException;
 
 public class VideoConnectionModel {
 
-    private String TAG = "VideoConnection";
-    
-    private final MutableLiveData<String> inviteLink = new MutableLiveData<String>();
+    private final String TAG = "VideoConnection";
+
+    // observed by VideoConnectionFragment
+    private final MutableLiveData<String> inviteLink = new MutableLiveData<>();
 
     private URLFactory urlFactory;
     private WebClient wc;
     private SessionData session;
 
-    public VideoConnectionModel() {
-
-    }
-
+    /**
+     * creates connection w/ WebSocket, fetches share link and saves in inviteLink
+     */
     public void invitePartner() {
         boolean connectionError = false;
         if (session == null) {
