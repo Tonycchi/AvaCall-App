@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
 import com.example.model.robotConnection.Device;
+import com.example.ui.HostActivity;
 import com.example.ui.ModelSelectionFragment;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
             //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
             switch(newBluetoothConnectionStatus){
                 case 0:
-                    Log.d(TAG, "Case 1: Not tested!");
+                    Log.d(TAG, "Case 0: Not tested!");
                     showProgressDialog();
                     break;
 
@@ -75,11 +76,18 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
                 case 2:
                     Log.d(TAG, "Case 2: Could not connect!");
+                    ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
                     hideProgessDialog();
                     break;
 
                 case 3:
                     Log.d(TAG, "Case 3: Connection lost!");
+                    ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
+                    break;
+
+                default:
+                    Log.d(TAG, "Case -1: Something strange or nothing :/");
+                    showProgressDialog();
                     break;
             }
         }
@@ -221,6 +229,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         Intent intentOpenBluetoothSettings = new Intent();
         intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
         startActivity(intentOpenBluetoothSettings);
+
         /*FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
