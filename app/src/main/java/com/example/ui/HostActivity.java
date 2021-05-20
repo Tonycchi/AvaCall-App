@@ -1,6 +1,7 @@
 package com.example.ui;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -12,7 +13,9 @@ import com.example.ui.robotConnection.BluetoothFragment;
 
 public class HostActivity extends AppCompatActivity {
 
+
     private AvaCallViewModel viewModel;
+    private Toast toast;
 
     public HostActivity() {
         super(R.layout.host);
@@ -40,6 +43,13 @@ public class HostActivity extends AppCompatActivity {
                     .add(R.id.fragment_container_view, BluetoothFragment.class, bundle)
                     .commit();
         }
+    }
+
+    public void showToast(String message) {
+        if(toast ==null)
+            toast = Toast.makeText( this  , "" , Toast.LENGTH_SHORT );
+        toast.setText(message);
+        toast.show();
     }
 
 }
