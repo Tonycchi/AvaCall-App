@@ -64,20 +64,22 @@ public class BluetoothFragment extends RobotConnectionFragment {
             //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
             switch(newBluetoothConnectionStatus){
                 case 0:
+                    Log.d(TAG, "Case 1: Not tested!");
                     showProgressDialog();
                     break;
 
                 case 1:
-                    Log.d(TAG, "Is connected!");
+                    Log.d(TAG, "Case 1: Is connected!");
                     hideProgessDialog();
                     break;
 
                 case 2:
-                    Log.d(TAG, "Could not connect!");
-                   hideProgessDialog();
-                   break;
+                    Log.d(TAG, "Case 2: Could not connect!");
+                    hideProgessDialog();
+                    break;
 
                 case 3:
+                    Log.d(TAG, "Case 3: Connection lost!");
                     break;
             }
         }
