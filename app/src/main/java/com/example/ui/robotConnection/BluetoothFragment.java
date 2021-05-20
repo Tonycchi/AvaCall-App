@@ -152,11 +152,12 @@ public class BluetoothFragment extends RobotConnectionFragment {
                 } else if(state == BluetoothAdapter.STATE_ON){
                     Log.d(TAG, "Bluetooth state_on");
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-                    viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
+                    MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
+                    pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
                     recycler.setAdapter(bluetoothDeviceListAdapter);
 
                     //if there is no device -> add placeholder into list
-                    if(viewModel.getPairedDevices().getValue().size() == 0) {
+                    if(pairedDevices.getValue().size() == 0) {
                         setPlaceholder();
                     }
                 }
@@ -168,9 +169,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         recycler = view.findViewById(R.id.list_paired_devices);
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
 
         recycler.setHasFixedSize(true);
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -199,10 +197,11 @@ public class BluetoothFragment extends RobotConnectionFragment {
         IntentFilter bluetoothStateChange = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         getActivity().registerReceiver(bluetoothStateChangeReceiver, bluetoothStateChange);
 
-        viewModel.getPairedDevices().observe(getViewLifecycleOwner(), devicesObserver);
+        MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
+        pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
 
         //if there is no device -> add placeholder into list
-        if(viewModel.getPairedDevices().getValue().size() == 0) {
+        if(pairedDevices.getValue().size() == 0) {
             setPlaceholder();
         }
     }
