@@ -68,10 +68,12 @@ public class BluetoothFragment extends RobotConnectionFragment {
                     break;
 
                 case 1:
+                    Log.d(TAG, "Is connected!");
                     hideProgessDialog();
                     break;
 
                 case 2:
+                    Log.d(TAG, "Could not connect!");
                    hideProgessDialog();
                    break;
 
@@ -82,6 +84,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     };
 
     protected void showProgressDialog(){
+        Log.d(TAG, "show ProgressDialog");
         //initprogress dialog
         progressDialog = ProgressDialog.show(this.getContext(), getResources().getString(R.string.connecting_bluetooth_title),
                 getResources().getString(R.string.connecting_bluetooth_wait), true);
@@ -124,13 +127,11 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     private void setPlaceholder(){
-
-        Log.d(TAG, "No device");
+        Log.d(TAG, "Set placeholder");
         ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
         String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
         noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
         viewModel.getPairedDevices().setValue(noDevicePlaceholder);
-
     }
 
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection
@@ -218,7 +219,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
-
     }
 
 
