@@ -128,7 +128,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     private void setPlaceholder(){
-        Log.d(TAG, "Set placeholder");
         ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
         String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
         noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
