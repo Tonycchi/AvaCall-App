@@ -41,7 +41,6 @@ public class BluetoothConnectionService {
     public BluetoothConnectionService() {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<Integer>();
-        start();
     }
 
 
@@ -181,6 +180,7 @@ public class BluetoothConnectionService {
      **/
 
     public void startClient(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
+        start();
         Log.d(TAG, "startClient: Started.");
         connectionStatus.setValue(0);
         connectThread = new ConnectThread(device, deviceUUIDs);

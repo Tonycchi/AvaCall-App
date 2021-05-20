@@ -199,8 +199,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
     public void onResume() {
         super.onResume();
 
-
-
         //bluetooth is disabled
         if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
             showEnableBluetooth();
