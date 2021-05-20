@@ -144,6 +144,7 @@ public class BluetoothConnectionService {
                 }
             }
             connected(bluetoothSocket);
+            connectionStatus.postValue(1);
         }
 
         /**
