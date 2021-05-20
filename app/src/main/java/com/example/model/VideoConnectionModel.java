@@ -1,6 +1,9 @@
 package com.example.model;
 
+import android.content.SharedPreferences;
+
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,18 +19,23 @@ public class VideoConnectionModel {
     private WebClient wc;
     private SessionData session;
 
+    public VideoConnectionModel(SharedPreferences sharedPreferences) {
+        urlFactory = new URLFactory(sharedPreferences);
+    }
+
     /**
      * creates connection w/ WebSocket, fetches share link and saves in inviteLink
      */
     public void invitePartner() {
         boolean connectionError = false;
         if (session == null) {
-//            String jitsi = getUrlFactory().getJitsi_https(); TODO: hardcode nur zum testen
-            String jitsi = "https://meet.jit.si";
+            String jitsi = urlFactory.getJitsi_https();
+//            TODO: hardcode nur zum testen
+//            String jitsi = "https://meet.jit.si";
             try {
-//                setWebClient(new WebClient(new URI(getUrlFactory().getHost_wss()), getUrlFactory().getJitsi_plain(), null));
+                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), null);
 //                TODO: harcode nur zum testen
-                wc = new WebClient(new URI("wss://avatar.mintclub.org:22222"), "meet.jit.si", null);
+//                wc = new WebClient(new URI("wss://avatar.mintclub.org:22222"), "meet.jit.si", null);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -47,9 +55,9 @@ public class VideoConnectionModel {
 
             if (!connectionError) {
                 String id = wc.getId();
-//                model.setSession(new SessionData(jitsi, model.getUrlFactory().getHost_https(), model.getId()));
+                session = new SessionData(jitsi, urlFactory.getHost_https(), id);
 //                TODO: hardcode nur zum testen
-                session = new SessionData(jitsi, "https://avatar.mintclub.org", id);
+//                session = new SessionData(jitsi, "https://avatar.mintclub.org", id);
                 inviteLink.setValue(session.getShareURL());
                 // TODO: Zum Videocall hier auf visible setzen!
             } else {

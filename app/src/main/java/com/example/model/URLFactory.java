@@ -26,8 +26,6 @@ public class URLFactory {
 
 public class URLFactory {
 
-
-
     private String host_plain;
     private String host_https;
     private String jitsi_plain;
@@ -36,8 +34,7 @@ public class URLFactory {
     private String host_wss;
 
 
-    public URLFactory(Context context) {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+    public URLFactory(SharedPreferences pref) {
 
         this.setHost(pref.getString("host_url", "avatar.mintclub.org"));
         this.setJitsi(pref.getString("jitsi_url", "meet.jit.si"));

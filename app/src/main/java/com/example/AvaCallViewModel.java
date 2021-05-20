@@ -1,22 +1,22 @@
 package com.example;
 
 import android.app.Activity;
+import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.preference.PreferenceManager;
 
 import com.example.model.AvaCallModel;
 import com.example.model.SessionData;
-import com.example.model.VideoConnectionModel;
-import com.example.model.WebClient;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
-public class AvaCallViewModel extends ViewModel {
+public class AvaCallViewModel extends AndroidViewModel {
 
-    AvaCallModel model = new AvaCallModel();
+    AvaCallModel model = new AvaCallModel(PreferenceManager.getDefaultSharedPreferences(getApplication()));
 
     // Data for BluetoothFragment
     private MutableLiveData<Boolean> bluetoothConnected;
@@ -31,6 +31,10 @@ public class AvaCallViewModel extends ViewModel {
     private MutableLiveData<List<String>> robotModelList;
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
 
+    public AvaCallViewModel(@NonNull Application application) {
+        super(application);
+    }
+
     public void invitePartner() {
         model.invitePartner();
     }
@@ -42,4 +46,5 @@ public class AvaCallViewModel extends ViewModel {
     public SessionData getSession() {
         return model.getSession();
     }
+
 }

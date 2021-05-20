@@ -2,6 +2,7 @@ package com.example.model;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.SharedPreferences;
 import android.os.ParcelUuid;
 
 import androidx.lifecycle.MutableLiveData;
@@ -30,8 +31,8 @@ public class AvaCallModel {
     // Model for EditControlsFragment
     // TODO Liste von eigener controller klasse???????
 
-    public AvaCallModel() {
-        videoConnectionModel = new VideoConnectionModel();
+    public AvaCallModel(SharedPreferences sharedPreferences) {
+        videoConnectionModel = new VideoConnectionModel(sharedPreferences);
     }
 
     public VideoConnectionModel getVideoConnectionModel() {

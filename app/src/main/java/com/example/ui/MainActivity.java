@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        urlFactory = new URLFactory(this);
+//        urlFactory = new URLFactory(this);
         controller = new Controller(this, bluetoothConnection);
     }
 
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity{
      */
     @SuppressLint("ClickableViewAccessibility")
     public void initializeUI() {
-        urlFactory = new URLFactory(this);
+//        urlFactory = new URLFactory(this);
 
         // get all buttons
         buttonBluetooth = findViewById(R.id.button_bluetooth);
