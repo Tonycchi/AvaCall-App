@@ -58,17 +58,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         }
     };
 
-    // Observer to check if bluetooth connection status
-    public final Observer<Integer> connectionStatusObserver = new Observer<Integer>() {
-        @Override
-        public void onChanged(@Nullable final Integer newConnectionStatus) {
-            // Update the UI
-            //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
-            connectionStatusChanged(newConnectionStatus);
-        }
-    };
-
-    protected void connectionStatusChanged(int newConnectionStatus){
+    public void connectionStatusChanged(Integer newConnectionStatus){
         //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
         switch(newConnectionStatus){
             case 0:
@@ -146,7 +136,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     public void onClickDevice(Device device){
         if(device.getParcelable() != null) {
-            viewModel.getConnectionStatus().observe(getViewLifecycleOwner(), connectionStatusObserver);
             viewModel.startConnection(device);
         }else{
             onClickFirstBluetoothConnection();

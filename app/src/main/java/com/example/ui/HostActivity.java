@@ -3,19 +3,32 @@ package com.example.ui;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.AvaCallViewModel;
 import com.example.rcvc.R;
 import com.example.ui.robotConnection.BluetoothFragment;
+import com.example.ui.robotConnection.RobotConnectionFragment;
 
 public class HostActivity extends AppCompatActivity {
 
 
     private AvaCallViewModel viewModel;
     private Toast toast;
+
+    // Observer to check if bluetooth connection status
+    public final Observer<Integer> connectionStatusObserver = new Observer<Integer>() {
+        @Override
+        public void onChanged(@Nullable final Integer newConnectionStatus) {
+            //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+            HostedFragment currentFragment = (HostedFragment)getSupportFragmentManager().findFragmentByTag("HOSTEDFRAGMENT");
+            currentFragment.connectionStatusChanged(newConnectionStatus);
+        }
+    };
 
     public HostActivity() {
         super(R.layout.host);
@@ -26,6 +39,7 @@ public class HostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(AvaCallViewModel.class);
+        viewModel.getConnectionStatus().observe(this, connectionStatusObserver);
 
         //set the title
         setTitle(R.string.title_bluetooth);
@@ -40,7 +54,7 @@ public class HostActivity extends AppCompatActivity {
 
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_view, BluetoothFragment.class, bundle)
+                    .add(R.id.fragment_container_view, BluetoothFragment.class, bundle, getResources().getString(R.string.fragment_tag_hosted))
                     .commit();
         }
     }
