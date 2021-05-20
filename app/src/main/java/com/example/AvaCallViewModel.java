@@ -49,6 +49,7 @@ public class AvaCallViewModel extends ViewModel {
 
     public void startConnection(Device device) {
         model.startConnection(device);
+    }
 
     public void invitePartner() {
         model.invitePartner();
