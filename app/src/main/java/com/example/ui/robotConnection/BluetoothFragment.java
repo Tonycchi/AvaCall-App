@@ -231,7 +231,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     private void switchToNextFragment(){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null)
+                .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();

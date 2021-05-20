@@ -23,7 +23,7 @@ import com.example.rcvc.R;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 
-public class VideoConnectionFragment extends Fragment {
+public class VideoConnectionFragment extends HostedFragment {
 
     private AvaCallViewModel viewModel;
 
@@ -92,5 +92,10 @@ public class VideoConnectionFragment extends Fragment {
     private void onClickSwitchToVideoCall(View v) {
         // TODO setReceiveCommands kommt hier noch hin
         JitsiMeetActivity.launch(getActivity(), viewModel.getSession().getOptions());
+    }
+
+    @Override
+    public void connectionStatusChanged(Integer newConnectionStatus) {
+        //TODO: implement
     }
 }
