@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity{
         if (!connectionError) {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), session.getShareURL());
+                ClipData clip = ClipData.newPlainText(getString(R.string.room_link), session.getShareURL());
                 clipboard.setPrimaryClip(clip);
                 showToast(getString(R.string.toast_link_copied));
             } else {

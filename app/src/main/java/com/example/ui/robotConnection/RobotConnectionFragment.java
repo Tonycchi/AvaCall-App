@@ -26,7 +26,7 @@ public abstract class RobotConnectionFragment extends HostedFragment {
 
     private static final String TAG = "RobotConnectionFragment";
 
-    protected final MainViewModel viewModel;
+    protected MainViewModel viewModel;
     protected PairedDevicesItem deviceListItem;
     protected RecyclerView deviceList;
 
@@ -44,13 +44,14 @@ public abstract class RobotConnectionFragment extends HostedFragment {
 
     public RobotConnectionFragment(@LayoutRes int contentLayoutId){
         super(contentLayoutId);
-        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         deviceListItem = new PairedDevicesItem(viewModel.getPairedDevices(), this);
 
         Log.d(TAG, "onCreate");
