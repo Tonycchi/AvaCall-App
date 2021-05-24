@@ -13,7 +13,7 @@ import com.example.model.robotConnection.Device;
 
 import java.util.ArrayList;
 
-public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevicesCustomAdapter.ViewHolder> {
+public class PairedDevicesItem extends RecyclerView.Adapter<PairedDevicesItem.ViewHolder> {
 
     private MutableLiveData<ArrayList<Device>> devices;
     private final RobotConnectionFragment robotConnectionFragment;
@@ -52,7 +52,7 @@ public class PairedDevicesCustomAdapter extends RecyclerView.Adapter<PairedDevic
      * @param devices ArrayList<String> containing the data to populate views to be used
      * by RecyclerView.
      */
-    public PairedDevicesCustomAdapter(MutableLiveData<ArrayList<Device>> devices, RobotConnectionFragment robotConnectionFragment) {
+    public PairedDevicesItem(MutableLiveData<ArrayList<Device>> devices, RobotConnectionFragment robotConnectionFragment) {
         this.devices = devices;
         this.robotConnectionFragment = robotConnectionFragment;
     }
