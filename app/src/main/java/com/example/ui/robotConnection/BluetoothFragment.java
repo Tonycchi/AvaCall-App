@@ -34,8 +34,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     private static final String TAG = "BluetoothFragment";
 
-    //dialog while connecting to device
-    private ProgressDialog progressDialog;
 
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection
     private final BroadcastReceiver bluetoothStateChangeReceiver = new BroadcastReceiver() {
@@ -157,31 +155,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
         }
     }
 
-
-    private void showProgressDialog(){
-        Log.d(TAG, "show ProgressDialog");
-        //initprogress dialog
-        progressDialog = ProgressDialog.show(this.getContext(), getResources().getString(R.string.connecting_bluetooth_title),
-                getResources().getString(R.string.connecting_bluetooth_wait), false, true, new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        onClickBluetoothConnectionCanceled();
-                    }
-                });
-    }
-
-    private void onClickBluetoothConnectionCanceled(){
-        viewModel.connectingCanceled();
-    }
-
-    private void hideProgessDialog(){
-        //dismiss the progressdialog when connection is established
-        try {
-            progressDialog.dismiss();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void showEnableBluetooth(){
         Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);

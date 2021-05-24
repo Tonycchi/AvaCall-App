@@ -1,5 +1,7 @@
 package com.example.ui.robotConnection;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -27,6 +29,9 @@ public abstract class RobotConnectionFragment extends HostedFragment {
     protected final MainViewModel viewModel;
     protected PairedDevicesItem deviceListItem;
     protected RecyclerView deviceList;
+
+    //dialog while connecting to device
+    protected ProgressDialog progressDialog;
 
     // Observer to check if amount of paired Devices has been changed
     public final Observer<ArrayList<Device>> devicesObserver = new Observer<ArrayList<Device>>() {
@@ -62,6 +67,26 @@ public abstract class RobotConnectionFragment extends HostedFragment {
         deviceList.setHasFixedSize(true);
         deviceList.setLayoutManager(new LinearLayoutManager(getContext()));
         deviceList.setAdapter(deviceListItem);
+    }
+
+    protected void showProgressDialog(){
+        Log.d(TAG, "show ProgressDialog");
+        //initprogress dialog
+        progressDialog = ProgressDialog.show(this.getContext(), getResources().getString(R.string.connecting_title),
+                getResources().getString(R.string.connecting_bluetooth_wait), false, true, new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        viewModel.connectingCanceled();
+                    }
+                });
+    }
+
+    protected void hideProgessDialog(){
+        try {
+            progressDialog.dismiss();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public abstract void onClickDevice(Device device);
