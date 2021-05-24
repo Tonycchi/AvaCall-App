@@ -25,7 +25,7 @@ import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
 
-    MainModel model = new MainModel(PreferenceManager.getDefaultSharedPreferences(getApplication()));
+    private final MainModel model;
 
     // Data for BluetoothFragment
     private MutableLiveData<Boolean> bluetoothConnected;
@@ -42,7 +42,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application){
         super(application);
-        model = new MainModel();
+        model = new MainModel(PreferenceManager.getDefaultSharedPreferences(getApplication()));
     }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {

@@ -1,6 +1,7 @@
 package com.example.model;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -31,8 +32,8 @@ public class MainModel {
     private WebClient wc;
     private SessionData session;
 
-    public MainModel() {
-        videoConnectionModel = new VideoConnectionModel();
+    public MainModel(SharedPreferences sharedPreferences) {
+        videoConnectionModel = new VideoConnectionModel(sharedPreferences);
         robotConnectionModel = new BluetoothModel();
     }
 
