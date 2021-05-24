@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.rcvc.R;
 
-public class TestRobotFragment extends Fragment {
+public class TestRobotFragment extends HostedFragment {
 
     //true if this fragment was started directly from model selection
     private boolean cameFromModelSelection;
@@ -47,7 +47,7 @@ public class TestRobotFragment extends Fragment {
     private void onClickYes(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null)
+                .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -57,12 +57,18 @@ public class TestRobotFragment extends Fragment {
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, EditControlsFragment.class, null)
+                    .replace(R.id.fragment_container_view, EditControlsFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
         }else{  //if cameFromEdit: simply pop back
             fragmentManager.popBackStack();
         }
+    }
+
+    @Override
+    public void connectionStatusChanged(Integer newConnectionStatus) {
+        //TODO: implement
+        ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
     }
 }

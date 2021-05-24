@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.rcvc.R;
 
-public class EditControlsFragment extends Fragment {
+public class EditControlsFragment extends HostedFragment {
 
     public EditControlsFragment() {
         super(R.layout.edit_controls);
@@ -51,7 +51,7 @@ public class EditControlsFragment extends Fragment {
     private void onClickButtonEditModelNext(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, TestRobotFragment.class, null)
+                .replace(R.id.fragment_container_view, TestRobotFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
@@ -62,5 +62,9 @@ public class EditControlsFragment extends Fragment {
         fragmentManager.popBackStack();
     }
 
-
+    @Override
+    public void connectionStatusChanged(Integer newConnectionStatus) {
+        //TODO: implement
+        ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
+    }
 }

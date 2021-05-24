@@ -10,10 +10,22 @@
         <string name="title_test_robot">AvaCall: Steuerung testen</string>
         <string name="title_video_connection">AvaCall: Videoanruf starten</string>
 
+        <!--   TAGs     -->
+        <string name="fragment_tag_hosted">HOSTEDFRAGMENT</string>
+
+        <!--  Connection      -->
+        <string name="connecting_title">Verbindung wird hergestellt</string>
+
         <!-- Bluetooth -->
-        <string name="text_connected_bluetooth_devices">Verbundene Geräte:</string>
+        <string name="text_connected_bluetooth_devices">Zuletzt verbundene Geräte:</string>
         <string name="text_roboter_shown_question">Der Roboter wird noch nicht in der Liste angezeigt?</string>
         <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>
+        <string name="placeholder">Nothing to see here</string>
+        <string name="no_bluetooth_device">Kein Gerät verbunden. Mit Roboter koppeln!</string>
+
+        <string name="connecting_bluetooth_wait">Bitte warten...</string>
+        <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
+        <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
 
         <!-- Test Robot -->
         <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>
@@ -73,8 +85,6 @@
     <!-- Errors -->
     <!--    Main Activity -->
     <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
-    <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
-    <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
     <string name="debug_tag">NetworkStatusExample </string>
     <string name="error_malformed_url">Bitte eine formgerechte URL angeben.</string>
     <string name="server_connection_error">Es konnte keine Verbindung zum Server hergestellt werden, versuche es später erneut.</string>

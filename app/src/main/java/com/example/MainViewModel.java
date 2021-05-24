@@ -9,14 +9,23 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.preference.PreferenceManager;
 
-import com.example.model.AvaCallModel;
-import com.example.model.SessionData;
+import com.example.model.MainModel;
 
+import com.example.model.robotConnection.Device;
+
+import java.util.ArrayList;
+
+import com.example.model.SessionData;
+import com.example.model.VideoConnectionModel;
+import com.example.model.WebClient;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
-public class AvaCallViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel {
 
-    AvaCallModel model = new AvaCallModel(PreferenceManager.getDefaultSharedPreferences(getApplication()));
+    MainModel model = new MainModel(PreferenceManager.getDefaultSharedPreferences(getApplication()));
 
     // Data for BluetoothFragment
     private MutableLiveData<Boolean> bluetoothConnected;
@@ -31,8 +40,21 @@ public class AvaCallViewModel extends AndroidViewModel {
     private MutableLiveData<List<String>> robotModelList;
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
 
-    public AvaCallViewModel(@NonNull Application application) {
+    public MainViewModel(@NonNull Application application){
         super(application);
+        model = new MainModel();
+    }
+
+    public MutableLiveData<ArrayList<Device>> getPairedDevices() {
+        return model.getPairedDevices();
+    }
+
+    public MutableLiveData<Integer> getConnectionStatus(){
+        return model.getConnectionStatus();
+    }
+
+    public void startConnection(Device device) {
+        model.startConnection(device);
     }
 
     public void invitePartner() {
@@ -47,4 +69,7 @@ public class AvaCallViewModel extends AndroidViewModel {
         return model.getSession();
     }
 
+    public void connectingCanceled() {
+        model.connectingCanceled();
+    }
 }

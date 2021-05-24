@@ -29,8 +29,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.model.BluetoothConnectionService;
-import com.example.model.Controller;
+import com.example.model.robotConnection.BluetoothConnectionService;
+import com.example.model.robotControls.Controller;
 import com.example.rcvc.R;
 import com.example.model.SessionData;
 import com.example.model.URLFactory;
@@ -222,12 +222,14 @@ public class MainActivity extends AppCompatActivity{
         listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
             selectedDevice = pairedDevices.get(position);
             deviceUUIDs = selectedDevice.getUuids();
-            bluetoothConnection = new BluetoothConnectionService(this);
+            //bluetoothConnection = new BluetoothConnectionService(this);
             startBTConnection(selectedDevice, deviceUUIDs);
         });
 
         // if there is an existing connection, show buttons accordingly
-        if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
+        //REPLACED:
+        //if (bluetoothConnection != null && bluetoothConnection.getConnectionStatus() == 1) {
+        if (bluetoothConnection != null){
             bluetoothIsConnected = true;
             buttonBluetooth.setText(getString(R.string.button_bluetooth_connected));
             buttonShareLink.setEnabled(true);
@@ -437,7 +439,9 @@ public class MainActivity extends AppCompatActivity{
         if (controller != null) {
             controller.sendPowers(0, 0);
         }
-        switch (bluetoothConnection.getConnectionStatus()) {
+        //REPLACED:
+        //switch (bluetoothConnection.getConnectionStatus()) {
+        switch (0) {
             case 1: // Connection was successful
                 //Log.d(TAG, "Connected: " + this);
                 textViewBluetoothConnectionStatus.setText(String.format(getResources().getString(R.string.connection_status_true), selectedDevice.getName()));

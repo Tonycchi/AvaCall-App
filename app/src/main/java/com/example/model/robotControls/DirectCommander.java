@@ -1,9 +1,11 @@
-package com.example.model;
+package com.example.model.robotControls;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
+
+import com.example.model.robotConnection.BluetoothConnectionService;
 
 public class DirectCommander {
 

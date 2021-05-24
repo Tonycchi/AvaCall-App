@@ -1,18 +1,15 @@
-package com.example.model;
+package com.example.model.robotConnection;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
 import android.os.ParcelUuid;
+import android.util.Log;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
-import com.example.rcvc.R;
+import androidx.lifecycle.MutableLiveData;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,13 +24,12 @@ import java.util.UUID;
 public class BluetoothConnectionService {
     private static final String TAG = "BluetoothConnectionServ";
 
-    private static final String APP_NAME = "AppName";
+    private static final String APP_NAME = "AvaCall";
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    private int connectionStatus = 0;
-
-    private final Context CONTEXT;
+    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+    private MutableLiveData<Integer> connectionStatus;
 
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
@@ -42,22 +38,18 @@ public class BluetoothConnectionService {
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     private BluetoothDevice bluetoothDevice;
 
-    private ProgressDialog progressDialog;
-
-    public BluetoothConnectionService(Context context) {
-        this.CONTEXT = context;
+    public BluetoothConnectionService() {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
-        start();
+        connectionStatus = new MutableLiveData<Integer>();
     }
 
-
-
-    /**
-     * @return the current connection status
-     * 0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
-     */
-    public int getConnectionStatus() {
+    public MutableLiveData<Integer> getConnectionStatus(){
         return connectionStatus;
+    }
+
+    public void connectingCanceled() {
+        if(connectThread!=null)
+            connectThread.cancel();
     }
 
     /**
@@ -77,37 +69,37 @@ public class BluetoothConnectionService {
             try {
                 tmp = BLUETOOTH_ADAPTER.listenUsingRfcommWithServiceRecord(APP_NAME, MY_UUID);
 
-                //Log.d(TAG, "AcceptThread: Setting up Server using: " + MY_UUID);
+                Log.d(TAG, "AcceptThread: Setting up Server using: " + MY_UUID);
             } catch (IOException e) {
-                //Log.e(TAG, "AcceptThread: IOException: " + e.getMessage());
+                Log.e(TAG, "AcceptThread: IOException: " + e.getMessage());
             }
 
             SERVER_SOCKET = tmp;
         }
 
         public void run() {
-            //Log.d(TAG, "run: AcceptThread Running.");
+            Log.d(TAG, "run: AcceptThread Running.");
 
             BluetoothSocket bluetoothSocket = null;
 
             try {
                 // This is a blocking call and will only return on a
                 // successful connection or an exception
-                //Log.d(TAG, "run: RFCOM server socket start.....");
+                Log.d(TAG, "run: RFCOM server socket start.....");
 
                 bluetoothSocket = SERVER_SOCKET.accept();
 
-                //Log.d(TAG, "run: RFCOM server socket accepted connection.");
+                Log.d(TAG, "run: RFCOM server socket accepted connection.");
 
             } catch (IOException e) {
-                //Log.e(TAG, "AcceptThread: IOException: " + e.getMessage());
+                Log.e(TAG, "AcceptThread: IOException: " + e.getMessage());
             }
 
             if (bluetoothSocket != null) {
                 connected(bluetoothSocket);
             }
 
-            //Log.d(TAG, "END AcceptThread ");
+            Log.d(TAG, "END AcceptThread ");
         }
     }
 
@@ -121,12 +113,13 @@ public class BluetoothConnectionService {
         private ParcelUuid[] deviceUUIDs;
 
         public ConnectThread(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
-            //Log.d(TAG, "ConnectThread: started.");
+            Log.d(TAG, "ConnectThread: started.");
             bluetoothDevice = device;
             this.deviceUUIDs = deviceUUIDs;
         }
 
         public void run() {
+            Log.d(TAG, "number of UUIDs: "+deviceUUIDs.length);
             for (ParcelUuid mDeviceUUID : deviceUUIDs) {
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
@@ -143,11 +136,11 @@ public class BluetoothConnectionService {
                     // Close the socket
                     try {
                         bluetoothSocket.close();
-                        //Log.d(TAG, "run: Closed Socket.");
+                        Log.d(TAG, "run: Closed Socket.");
                     } catch (IOException e1) {
-                        //Log.e(TAG, "ConnectThread: run: Unable to close connection in socket " + e1.getMessage());
+                        Log.e(TAG, "ConnectThread: run: Unable to close connection in socket " + e1.getMessage());
                     }
-                    ////Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + mDeviceUUID.getUuid());
+                    Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + mDeviceUUID.getUuid());
                 }
             }
             connected(bluetoothSocket);
@@ -158,10 +151,10 @@ public class BluetoothConnectionService {
          */
         public void cancel() {
             try {
-                //Log.d(TAG, "cancel: Closing Client Socket.");
+                Log.d(TAG, "cancel: Closing Client Socket.");
                 bluetoothSocket.close();
             } catch (IOException e) {
-                //Log.e(TAG, "cancel: close() of bluetoothSocket in Connectthread failed. " + e.getMessage());
+                Log.e(TAG, "cancel: close() of bluetoothSocket in Connectthread failed. " + e.getMessage());
             }
         }
     }
@@ -172,7 +165,7 @@ public class BluetoothConnectionService {
      * session in listening (server) mode. Called by the Activity onResume()
      */
     public synchronized void start() {
-        //Log.d(TAG, "start");
+        Log.d(TAG, "start");
 
         // Cancel any thread attempting to make a connection
         if (connectThread != null) {
@@ -191,12 +184,9 @@ public class BluetoothConnectionService {
      **/
 
     public void startClient(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
-        //Log.d(TAG, "startClient: Started.");
-
-        //initprogress dialog
-        progressDialog = ProgressDialog.show(CONTEXT, "Connecting Bluetooth"
-                , "Please Wait...", true);
-
+        start();
+        Log.d(TAG, "startClient: Started.");
+        connectionStatus.setValue(0);
         connectThread = new ConnectThread(device, deviceUUIDs);
         connectThread.start();
     }
@@ -211,19 +201,11 @@ public class BluetoothConnectionService {
         private final OutputStream OUTPUT_STREAM;
 
         public ConnectedThread(BluetoothSocket socket) {
-            //Log.d(TAG, "ConnectedThread: Starting.");
+            Log.d(TAG, "ConnectedThread: Starting.");
 
             BLUETOOTH_SOCKET = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
-
-            //dismiss the progressdialog when connection is established
-            try {
-                progressDialog.dismiss();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
 
             try {
                 tmpIn = BLUETOOTH_SOCKET.getInputStream();
@@ -234,11 +216,14 @@ public class BluetoothConnectionService {
 
             INPUT_STREAM = tmpIn;
             OUTPUT_STREAM = tmpOut;
-            // check connection with broadcast
-            sendConnectionStatusBroadcast();
         }
 
         public void run() {
+            Log.d(TAG, "connectedThread running");
+
+            //TODO: only do this if its an ev3!
+            connectionStatus.postValue(1);
+
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
             int bytes; // bytes returned from read()
@@ -249,15 +234,21 @@ public class BluetoothConnectionService {
                 try {
                     bytes = INPUT_STREAM.read(buffer);
                     String incomingMessage = new String(buffer, 0, bytes);
-                    //Log.d(TAG, "InputStream: " + incomingMessage);
+                    Log.d(TAG, "InputStream: " + incomingMessage);
 
                     Intent incomingMessageIntent = new Intent("incomingMessage");
                     incomingMessageIntent.putExtra("theMessage", incomingMessage);
 
                 } catch (IOException e) {
-                    // in case of exception check connection with broadcast
-                    sendConnectionStatusBroadcast();
-                    //Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
+                    // could not connect, so connection status gets set to 2
+                    if (connectionStatus.getValue() == 0) {
+                        connectionStatus.postValue(2);
+                    }
+                    // connection got lost, so status gets set to 3
+                    if (connectionStatus.getValue() == 1) {
+                        connectionStatus.postValue(3);
+                    }
+                    Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
                     break;
                 }
             }
@@ -276,19 +267,19 @@ public class BluetoothConnectionService {
                 OUTPUT_STREAM.write(bytes);
             } catch (IOException e) {
                 // could not connect, so connection status gets set to 2
-                if (connectionStatus == 0) {
-                    connectionStatus = 2;
+                if (connectionStatus.getValue() == 0) {
+                    connectionStatus.postValue(2);
                 }
                 // connection got lost, so status gets set to 3
-                if (connectionStatus == 1) {
-                    connectionStatus = 3;
+                if (connectionStatus.getValue() == 1) {
+                    connectionStatus.postValue(3);
                 }
-                //Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
+                Log.e(TAG, "write: Error writing to output stream. " + e.getMessage());
             }
             // if connection status is still 0 at this point,
             // the connection was successful and it gets set to 1
-            if (connectionStatus == 0) {
-                connectionStatus = 1;
+            if (connectionStatus.getValue() == 0) {
+                connectionStatus.postValue(1);
             }
         }
 
@@ -308,7 +299,7 @@ public class BluetoothConnectionService {
      * @param bluetoothSocket the socket to connect with
      */
     private void connected(BluetoothSocket bluetoothSocket) {
-        //Log.d(TAG, "connected: Starting.");
+        Log.d(TAG, "connected: Starting.");
 
         // Start the thread to manage the connection and perform transmissions
         connectedThread = new ConnectedThread(bluetoothSocket);
@@ -319,7 +310,7 @@ public class BluetoothConnectionService {
      * Cancels the existing connection
      */
     public void cancel() {
-        //Log.d(TAG, "cancel: Connection cancelled.");
+        Log.d(TAG, "cancel: Connection cancelled.");
         connectedThread.cancel();
     }
 
@@ -331,17 +322,8 @@ public class BluetoothConnectionService {
      */
     public void write(byte[] out) {
         // Synchronize a copy of the ConnectedThread
-        //Log.d(TAG, "write: Write Called.");
+        Log.d(TAG, "write: Write Called.");
         //perform the write
         connectedThread.write(out);
     }
-
-    /**
-     * Sends an intent to the MainActivity to check the connection status
-     */
-    private void sendConnectionStatusBroadcast() {
-        Intent intent = new Intent(CONTEXT.getString(R.string.action_check_connection));
-        LocalBroadcastManager.getInstance(CONTEXT).sendBroadcast(intent);
-    }
-
 }
