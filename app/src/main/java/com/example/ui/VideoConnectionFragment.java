@@ -48,7 +48,7 @@ public class VideoConnectionFragment extends HostedFragment {
         Observer<String> sharedLinkObserver = link -> {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.jitsi_room_link), link);
+                ClipData clip = ClipData.newPlainText(getString(R.string.room_link), link);
                 clipboard.setPrimaryClip(clip);
                 ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
             } else {

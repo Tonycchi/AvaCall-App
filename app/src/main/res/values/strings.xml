@@ -42,6 +42,7 @@
         <string name="invite_partner">Partner einladen</string>
         <string name="access_videocall">Zum Videocall</string>
         <string name="test_controls">Steuerung testen</string>
+        <string name="room_link">Jitsi Room Link</string>
 
         <string name="title_web_url">URL zur Webanwendung</string>
         <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>
@@ -92,7 +93,6 @@
     <!-- Misc -->
     <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
     <string name="action_negative_button">com.example-rcvc.action.NEGATIVE_BUTTON</string>
-    <string name="jitsi_room_link">Jitsi Room Link</string>
     <string name="invalid_url">Invalid URL</string>
 
     <!-- Settings Layout -->
