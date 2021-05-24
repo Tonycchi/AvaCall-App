@@ -36,27 +36,12 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     //TODO: decide what of this class can be transfered to RobotConnectionModel
 
-    private MainViewModel viewModel;
-
     //dialog while connecting to device
     private ProgressDialog progressDialog;
-
-    private RecyclerView recycler;
-
-    private PairedDevicesCustomAdapter bluetoothDeviceListAdapter;
 
     public BluetoothFragment() {
         super(R.layout.bluetooth_connection);
     }
-
-    // Observer to check if amount of paired Devices has been changed
-    public final Observer<ArrayList<Device>> devicesObserver = new Observer<ArrayList<Device>>() {
-        @Override
-        public void onChanged(@Nullable final ArrayList<Device> newDevicesList) {
-            // Update the UI
-            (bluetoothDeviceListAdapter).notifyDataSetChanged();
-        }
-    };
 
     public void connectionStatusChanged(Integer newConnectionStatus){
         //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
@@ -115,25 +100,13 @@ public class BluetoothFragment extends RobotConnectionFragment {
         }
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        Log.d(TAG, "onCreate");
-        bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(viewModel.getPairedDevices(), this);
-
-        TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setExitTransition(inflater.inflateTransition(R.transition.fade));
-        setEnterTransition(inflater.inflateTransition(R.transition.slide));
-    }
-
     private void showEnableBluetooth(){
         Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivity(enableBluetoothIntent);
         Log.d(TAG,"Bluetooth is disabled!");
     }
 
+    @Override
     public void onClickDevice(Device device){
         if(device.getParcelable() != null) {
             viewModel.startConnection(device);
@@ -170,7 +143,8 @@ public class BluetoothFragment extends RobotConnectionFragment {
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
                     MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
                     pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
-                    recycler.setAdapter(bluetoothDeviceListAdapter);
+                    //TODO: needed??
+                    recycler.setAdapter(deviceListAdapter);
 
                     //if there is no device -> add placeholder into list
                     if(pairedDevices.getValue().size() == 0) {
@@ -184,11 +158,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        recycler = view.findViewById(R.id.list_paired_devices);
-
-        recycler.setHasFixedSize(true);
-        recycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        recycler.setAdapter(bluetoothDeviceListAdapter);
+       super.onViewCreated(view, savedInstanceState);
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
         buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +184,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         getActivity().registerReceiver(bluetoothStateChangeReceiver, bluetoothStateChange);
 
         Log.d(TAG, "onResume");
+        //TODO: needed??
         MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
         pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
 
