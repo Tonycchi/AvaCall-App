@@ -9,23 +9,21 @@ import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.AvaCallViewModel;
+import com.example.MainViewModel;
 import com.example.rcvc.R;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 
 public class VideoConnectionFragment extends HostedFragment {
 
-    private AvaCallViewModel viewModel;
+    private MainViewModel viewModel;
 
     public VideoConnectionFragment() {
         super(R.layout.video_connection);
@@ -42,7 +40,7 @@ public class VideoConnectionFragment extends HostedFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         Observer<String> sharedLinkObserver = link -> {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);

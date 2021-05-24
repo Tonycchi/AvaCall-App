@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.AvaCallViewModel;
+import com.example.MainViewModel;
 import com.example.rcvc.R;
 import com.example.model.robotConnection.Device;
 import com.example.ui.HostActivity;
@@ -36,7 +36,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     //TODO: decide what of this class can be transfered to RobotConnectionModel
 
-    private AvaCallViewModel viewModel;
+    private MainViewModel viewModel;
 
     //dialog while connecting to device
     private ProgressDialog progressDialog;
@@ -119,7 +119,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(AvaCallViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         Log.d(TAG, "onCreate");
         bluetoothDeviceListAdapter = new PairedDevicesCustomAdapter(viewModel.getPairedDevices(), this);
 

@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.robotControls;
 
 import android.content.Context;
 import android.content.SharedPreferences;

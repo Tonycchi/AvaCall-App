@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.model.robotConnection.BluetoothConnectionService;
-import com.example.model.Controller;
+import com.example.model.robotControls.Controller;
 import com.example.rcvc.R;
 import com.example.model.SessionData;
 import com.example.model.URLFactory;

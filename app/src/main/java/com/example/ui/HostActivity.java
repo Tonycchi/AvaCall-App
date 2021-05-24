@@ -9,15 +9,14 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.AvaCallViewModel;
+import com.example.MainViewModel;
 import com.example.rcvc.R;
 import com.example.ui.robotConnection.BluetoothFragment;
-import com.example.ui.robotConnection.RobotConnectionFragment;
 
 public class HostActivity extends AppCompatActivity {
 
 
-    private AvaCallViewModel viewModel;
+    private MainViewModel viewModel;
     private Toast toast;
 
     // Observer to check if bluetooth connection status
@@ -38,7 +37,7 @@ public class HostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewModel = new ViewModelProvider(this).get(AvaCallViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.getConnectionStatus().observe(this, connectionStatusObserver);
 
         //set the title

@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 
-public class AvaCallModel {
+public class MainModel {
 
     private Context context;
 
@@ -31,7 +31,7 @@ public class AvaCallModel {
     private WebClient wc;
     private SessionData session;
 
-    public AvaCallModel() {
+    public MainModel() {
         videoConnectionModel = new VideoConnectionModel();
         robotConnectionModel = new BluetoothModel();
     }

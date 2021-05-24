@@ -1,29 +1,22 @@
 package com.example;
 
-import android.app.Activity;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.model.AvaCallModel;
+import com.example.model.MainModel;
 
 import com.example.model.robotConnection.Device;
 
 import java.util.ArrayList;
 
 import com.example.model.SessionData;
-import com.example.model.VideoConnectionModel;
-import com.example.model.WebClient;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import java.util.List;
 
-public class AvaCallViewModel extends ViewModel {
+public class MainViewModel extends ViewModel {
 
 
-    private AvaCallModel model;
+    private MainModel model;
 
     // Data for ModelSelectionFragment
     private MutableLiveData<String> selectedModel; //TODO evtl String abändern (je nachdem wie wir Modelle abspeichern wollen)
@@ -35,8 +28,8 @@ public class AvaCallViewModel extends ViewModel {
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
 
 
-    public AvaCallViewModel(){
-        model = new AvaCallModel();
+    public MainViewModel(){
+        model = new MainModel();
     }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {

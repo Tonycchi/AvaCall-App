@@ -1,5 +1,7 @@
 package com.example.model;
 
+import com.example.model.robotControls.Controller;
+
 import java.net.URI;
 import java.nio.ByteBuffer;
 
