@@ -142,9 +142,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
                     Log.d(TAG, "Bluetooth state_on");
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
                     MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
-                    pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
-                    //TODO: needed??
-                    recycler.setAdapter(deviceListAdapter);
 
                     //if there is no device -> add placeholder into list
                     if(pairedDevices.getValue().size() == 0) {
@@ -184,7 +181,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
         getActivity().registerReceiver(bluetoothStateChangeReceiver, bluetoothStateChange);
 
         Log.d(TAG, "onResume");
-        //TODO: needed??
         MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
         pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
 
