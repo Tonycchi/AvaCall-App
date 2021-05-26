@@ -2,9 +2,11 @@ package com.example.model.robotConnection;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class BluetoothModel extends RobotConnectionModel{
         bluetoothConnectionService = new BluetoothConnectionService();
     }
 
+
     private void updatePairedDevice(){
         if(pairedDevices == null) {
             pairedDevices = new MutableLiveData<ArrayList<Device>>();
@@ -38,11 +41,20 @@ public class BluetoothModel extends RobotConnectionModel{
         ArrayList<Device> bluetoothDevices = new ArrayList<Device>();
 
         if (devices.size() > 0) {
+
+
+
+
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
-                bluetoothDevices.add(new Device(device, device.getName()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    bluetoothDevices.add(new Device(device, device.getAlias())); //alias is the local name of the device
+                }else{
+                    bluetoothDevices.add(new Device(device, device.getName())); //the name of the device
+                }
+                Log.d(TAG,"Device name: "+device.getName()+" type: "+device.getType()+" class: "+device.getClass()+" bondstage: "+device.getBondState());
             }
-            Log.d(TAG,"Found paired devices");
+
 
         } else {
             // TODO: something
