@@ -36,13 +36,14 @@ public class MainModel {
     private URLFactory urlFactory;
     private WebClient wc;
     private SessionData session;
+    private LocalDatabase localDatabase;
+
 
     public MainModel(@NonNull Application application) {
-        LocalDatabase db = Room.databaseBuilder(application,
-                LocalDatabase.class, "database-name").build();
+        localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database").build();
 
         videoConnectionModel = new VideoConnectionModel(PreferenceManager.getDefaultSharedPreferences(application));
-        robotConnectionModel = new BluetoothModel();
+        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());
     }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {

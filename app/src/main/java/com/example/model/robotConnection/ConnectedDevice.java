@@ -2,6 +2,7 @@ package com.example.model.robotConnection;
 
 import android.os.ParcelUuid;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,11 +11,25 @@ import androidx.room.PrimaryKey;
 @Entity
 public class ConnectedDevice {
 
+    @NonNull
     @PrimaryKey
     @ColumnInfo(name = "address")
-    private String address;
+    public String address;
 
     @ColumnInfo(name = "lastConnected")
-    private long lastConnected;
+    public long lastConnected;
+
+    public ConnectedDevice(String address, long lastConnected){
+        this.address = address;
+        this.lastConnected = lastConnected;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    public long getLastConnected(){
+        return lastConnected;
+    }
 
 }

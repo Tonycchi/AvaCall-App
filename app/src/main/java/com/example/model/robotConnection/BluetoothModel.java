@@ -9,7 +9,10 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.model.LocalDatabase;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class BluetoothModel extends RobotConnectionModel{
@@ -26,9 +29,12 @@ public class BluetoothModel extends RobotConnectionModel{
     //bluetooth
     private BluetoothConnectionService bluetoothConnectionService;
 
-    public BluetoothModel() {
+    private ConnectedDeviceDAO connectedDeviceDAO;
+
+    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothConnectionService = new BluetoothConnectionService();
+        this.connectedDeviceDAO = connectedDeviceDAO;
     }
 
 
@@ -37,19 +43,37 @@ public class BluetoothModel extends RobotConnectionModel{
             pairedDevices = new MutableLiveData<ArrayList<Device>>();
         }
 
+        //the devices that are stored from the system
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+
+        //the devices that are stored in localDatabase are the Devices that where used by this app previously
+        List<ConnectedDevice> connectedDevices = connectedDeviceDAO.getSortedDevices();
+
+        //the list that is shown to the user
         ArrayList<Device> bluetoothDevices = new ArrayList<Device>();
 
         if (devices.size() > 0) {
-
-            // There are paired devices. Get the name and address of each paired device.
+            //add the previously used devices to the list and remove those from the set
+            for(ConnectedDevice connectedDevice : connectedDevices) {
+                for (BluetoothDevice device : devices) {
+                    if(device.getAddress().equals(connectedDevice.getAddress())){ //the address of a device in the set is equal to the connected device
+                        if(devices.remove(device)) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                bluetoothDevices.add(new Device(device, device.getAlias())); //alias is the local name of the device
+                            } else {
+                                bluetoothDevices.add(new Device(device, device.getName())); //the name of the device
+                            }
+                        }
+                    }
+                }
+            }
+            // add all remaining devices to the list
             for (BluetoothDevice device : devices) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     bluetoothDevices.add(new Device(device, device.getAlias())); //alias is the local name of the device
                 }else{
                     bluetoothDevices.add(new Device(device, device.getName())); //the name of the device
                 }
-
                 Log.d(TAG,"Device name: "+device.getName()+" type: "+device.getType()+" class: "+device.getClass()+" bondstage: "+device.getBondState());
             }
 
