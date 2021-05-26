@@ -43,8 +43,13 @@ dependencies {
     implementation "org.java-websocket:Java-WebSocket:1.5.1"
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
+    //for the database
     def room_version = "2.3.0"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+    //RxJava3 support for Room
     implementation "androidx.room:room-rxjava3:$room_version"
+    //Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:$room_version"
+
 }
