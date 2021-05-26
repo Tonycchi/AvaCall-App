@@ -42,9 +42,6 @@ public class BluetoothModel extends RobotConnectionModel{
 
         if (devices.size() > 0) {
 
-
-
-
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : devices) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -52,9 +49,9 @@ public class BluetoothModel extends RobotConnectionModel{
                 }else{
                     bluetoothDevices.add(new Device(device, device.getName())); //the name of the device
                 }
+
                 Log.d(TAG,"Device name: "+device.getName()+" type: "+device.getType()+" class: "+device.getClass()+" bondstage: "+device.getBondState());
             }
-
 
         } else {
             // TODO: something

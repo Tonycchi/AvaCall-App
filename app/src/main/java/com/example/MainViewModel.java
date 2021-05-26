@@ -42,7 +42,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application){
         super(application);
-        model = new MainModel(PreferenceManager.getDefaultSharedPreferences(getApplication()));
+        model = new MainModel(application);
     }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
