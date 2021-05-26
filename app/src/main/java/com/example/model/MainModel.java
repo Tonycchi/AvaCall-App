@@ -40,7 +40,7 @@ public class MainModel {
 
 
     public MainModel(@NonNull Application application) {
-        localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database").build();
+        localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database").allowMainThreadQueries().build();
 
         videoConnectionModel = new VideoConnectionModel(PreferenceManager.getDefaultSharedPreferences(application));
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());
