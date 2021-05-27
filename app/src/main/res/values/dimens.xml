@@ -9,7 +9,7 @@
 
                 <dimen name="big_button_height">@dimen/_70sdp</dimen>
 
-                <dimen name="standard_button_border_width">@dimen/_2sdp</dimen>
+                <dimen name="standard_button_border_width">@dimen/_1sdp</dimen>
                 <dimen name="navigation_button_height">@dimen/_40sdp</dimen>
 
             <!-- Margins -->
