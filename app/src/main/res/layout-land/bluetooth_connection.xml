@@ -1,17 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.example.ui.HostActivity">
 
-    <Button
-        android:id="@+id/button3"
+    <android.widget.Button
+        android:id="@+id/button_first_connection"
+        style="@style/button_neutral"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/big_button_height_land"
+        android:layout_marginStart="@dimen/margin_horizontal_big_land"
+        android:layout_marginEnd="@dimen/margin_side_land"
+        android:layout_marginBottom="@dimen/margin_bottom_land"
+        android:text="@string/button_bluetooth_first_connection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list_paired_devices" />
+
+    <TextView
+        android:id="@+id/text_device_not_shown"
+        style="@style/text_standard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal_big_land"
+        android:layout_marginEnd="@dimen/margin_side_land"
+        android:layout_marginBottom="@dimen/margin_vertical_small_land"
+        android:text="@string/text_roboter_shown_question"
+        app:layout_constraintBottom_toTopOf="@+id/button_first_connection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/list_paired_devices" />
+
+    <TextView
+        android:id="@+id/text_connected_devices"
+        style="@style/text_standard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="495dp" />
+        android:layout_marginStart="@dimen/margin_side_land"
+        android:layout_marginTop="@dimen/margin_top_land"
+        android:text="@string/text_connected_bluetooth_devices"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_paired_devices"
+        android:layout_width="@dimen/standard_button_width_land"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_side_land"
+        android:layout_marginTop="@dimen/margin_vertical_small_land"
+        android:layout_marginBottom="@dimen/margin_bottom_land"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_connected_devices" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
