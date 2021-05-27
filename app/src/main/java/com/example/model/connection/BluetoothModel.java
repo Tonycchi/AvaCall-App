@@ -79,8 +79,6 @@ public class BluetoothModel extends RobotConnectionModel {
             // other bonded devices from system
             shownDevices.addAll(devicesByAddress.values());
 
-            // RecyclerView shows them in reverse order so ??????
-            Collections.reverse(shownDevices);
         } else {
             // TODO: something
             Log.d(TAG, "No Device found!");

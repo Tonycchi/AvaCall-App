@@ -10,7 +10,7 @@ import java.util.List;
 
 @Dao
 public interface ConnectedDeviceDAO {
-    @Query("SELECT address FROM ConnectedDevice ORDER BY lastConnected")
+    @Query("SELECT address FROM ConnectedDevice ORDER BY lastConnected DESC")
     List<String> getSortedAddresses();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
