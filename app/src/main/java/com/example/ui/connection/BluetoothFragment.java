@@ -1,30 +1,21 @@
-package com.example.ui.robotConnection;
+package com.example.ui.connection;
 
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.MainViewModel;
+import com.example.model.connection.Device;
 import com.example.rcvc.R;
-import com.example.model.robotConnection.Device;
 import com.example.ui.HostActivity;
 import com.example.ui.ModelSelectionFragment;
 

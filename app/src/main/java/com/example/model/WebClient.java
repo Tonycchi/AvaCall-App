@@ -1,12 +1,12 @@
 package com.example.model;
 
-import com.example.model.robotControls.Controller;
-
-import java.net.URI;
-import java.nio.ByteBuffer;
+import com.example.model.controls.Controller;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+
+import java.net.URI;
+import java.nio.ByteBuffer;
 
 public class WebClient extends WebSocketClient {
 

@@ -1,6 +1,4 @@
-package com.example.model.robotConnection;
-
-import android.os.ParcelUuid;
+package com.example.data;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -19,16 +17,16 @@ public class ConnectedDevice {
     @ColumnInfo(name = "lastConnected")
     public long lastConnected;
 
-    public ConnectedDevice(String address, long lastConnected){
+    public ConnectedDevice(String address, long lastConnected) {
         this.address = address;
         this.lastConnected = lastConnected;
     }
 
-    public String getAddress(){
+    public String getAddress() {
         return address;
     }
 
-    public long getLastConnected(){
+    public long getLastConnected() {
         return lastConnected;
     }
 

@@ -1,26 +1,16 @@
 package com.example;
 
-import android.app.Activity;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.preference.PreferenceManager;
 
 import com.example.model.MainModel;
-
-import com.example.model.robotConnection.Device;
+import com.example.model.SessionData;
+import com.example.model.connection.Device;
 
 import java.util.ArrayList;
-
-import com.example.model.SessionData;
-import com.example.model.VideoConnectionModel;
-import com.example.model.WebClient;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {

@@ -3,7 +3,8 @@ package com.example.model;
 import android.content.SharedPreferences;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
+
+import com.example.data.URLFactory;
 
 import java.net.URI;
 import java.net.URISyntaxException;

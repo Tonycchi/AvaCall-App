@@ -1,4 +1,4 @@
-package com.example.model.robotConnection;
+package com.example.model.connection;
 
 import androidx.lifecycle.MutableLiveData;
 

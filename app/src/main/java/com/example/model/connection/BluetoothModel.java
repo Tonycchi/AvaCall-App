@@ -1,4 +1,4 @@
-package com.example.model.robotConnection;
+package com.example.model.connection;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,15 +8,16 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.data.ConnectedDevice;
+import com.example.data.ConnectedDeviceDAO;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BluetoothModel extends RobotConnectionModel{
+public class BluetoothModel extends RobotConnectionModel {
 
     private static final String TAG = "BluetoothModel";
 
@@ -39,8 +40,8 @@ public class BluetoothModel extends RobotConnectionModel{
     }
 
 
-    private void updatePairedDevice(){
-        if(pairedDevices == null) {
+    private void updatePairedDevice() {
+        if (pairedDevices == null) {
             pairedDevices = new MutableLiveData<>();
         }
 
@@ -58,7 +59,7 @@ public class BluetoothModel extends RobotConnectionModel{
             HashMap<String, Device> devicesByAddress = new HashMap<>();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 for (BluetoothDevice d : bondedDevices) {
-                        devicesByAddress.put(d.getAddress(), new Device(d, d.getAlias()));
+                    devicesByAddress.put(d.getAddress(), new Device(d, d.getAlias()));
                 }
             } else {
                 for (BluetoothDevice d : bondedDevices) {
@@ -82,7 +83,7 @@ public class BluetoothModel extends RobotConnectionModel{
             Collections.reverse(shownDevices);
         } else {
             // TODO: something
-            Log.d(TAG,"No Device found!");
+            Log.d(TAG, "No Device found!");
         }
 
         pairedDevices.setValue(shownDevices);
@@ -90,7 +91,7 @@ public class BluetoothModel extends RobotConnectionModel{
 
     @Override
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
-        Log.d(TAG,"Get paired devices");
+        Log.d(TAG, "Get paired devices");
         updatePairedDevice();
         return pairedDevices;
     }

@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
 import com.example.rcvc.R;
-import com.example.ui.robotConnection.BluetoothFragment;
+import com.example.ui.connection.BluetoothFragment;
 
 public class HostActivity extends AppCompatActivity {
 

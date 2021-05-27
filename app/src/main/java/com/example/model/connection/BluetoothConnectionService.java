@@ -1,4 +1,4 @@
-package com.example.model.robotConnection;
+package com.example.model.connection;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -27,15 +27,12 @@ public class BluetoothConnectionService {
     private static final String APP_NAME = "AvaCall";
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
+    private final BluetoothAdapter BLUETOOTH_ADAPTER;
     //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
     private MutableLiveData<Integer> connectionStatus;
-
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
-
-    private final BluetoothAdapter BLUETOOTH_ADAPTER;
     private BluetoothDevice bluetoothDevice;
 
     public BluetoothConnectionService() {
@@ -43,13 +40,78 @@ public class BluetoothConnectionService {
         connectionStatus = new MutableLiveData<Integer>();
     }
 
-    public MutableLiveData<Integer> getConnectionStatus(){
+    public MutableLiveData<Integer> getConnectionStatus() {
         return connectionStatus;
     }
 
     public void connectingCanceled() {
-        if(connectThread!=null)
+        if (connectThread != null)
             connectThread.cancel();
+    }
+
+    /**
+     * Start the chat service. Specifically start AcceptThread to begin a
+     * session in listening (server) mode. Called by the Activity onResume()
+     */
+    public synchronized void start() {
+        Log.d(TAG, "start");
+
+        // Cancel any thread attempting to make a connection
+        if (connectThread != null) {
+            connectThread.cancel();
+            connectThread = null;
+        }
+        if (acceptThread == null) {
+            acceptThread = new AcceptThread();
+            acceptThread.start();
+        }
+    }
+
+    /**
+     * AcceptThread starts and sits waiting for a connection.
+     * Then ConnectThread starts and attempts to make a connection with the other devices AcceptThread.
+     **/
+
+    public void startClient(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
+        start();
+        Log.d(TAG, "startClient: Started.");
+        connectionStatus.setValue(0);
+        connectThread = new ConnectThread(device, deviceUUIDs);
+        connectThread.start();
+    }
+
+    /**
+     * Starts the bluetooth connection with the given socket
+     *
+     * @param bluetoothSocket the socket to connect with
+     */
+    private void connected(BluetoothSocket bluetoothSocket) {
+        Log.d(TAG, "connected: Starting.");
+
+        // Start the thread to manage the connection and perform transmissions
+        connectedThread = new ConnectedThread(bluetoothSocket);
+        connectedThread.start();
+    }
+
+    /**
+     * Cancels the existing connection
+     */
+    public void cancel() {
+        Log.d(TAG, "cancel: Connection cancelled.");
+        connectedThread.cancel();
+    }
+
+    /**
+     * Write to the ConnectedThread in an unsynchronized manner
+     *
+     * @param out The bytes to write
+     * @see ConnectedThread#write(byte[])
+     */
+    public void write(byte[] out) {
+        // Synchronize a copy of the ConnectedThread
+        Log.d(TAG, "write: Write Called.");
+        //perform the write
+        connectedThread.write(out);
     }
 
     /**
@@ -119,7 +181,7 @@ public class BluetoothConnectionService {
         }
 
         public void run() {
-            Log.d(TAG, "number of UUIDs: "+deviceUUIDs.length);
+            Log.d(TAG, "number of UUIDs: " + deviceUUIDs.length);
             for (ParcelUuid mDeviceUUID : deviceUUIDs) {
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
@@ -157,38 +219,6 @@ public class BluetoothConnectionService {
                 Log.e(TAG, "cancel: close() of bluetoothSocket in Connectthread failed. " + e.getMessage());
             }
         }
-    }
-
-
-    /**
-     * Start the chat service. Specifically start AcceptThread to begin a
-     * session in listening (server) mode. Called by the Activity onResume()
-     */
-    public synchronized void start() {
-        Log.d(TAG, "start");
-
-        // Cancel any thread attempting to make a connection
-        if (connectThread != null) {
-            connectThread.cancel();
-            connectThread = null;
-        }
-        if (acceptThread == null) {
-            acceptThread = new AcceptThread();
-            acceptThread.start();
-        }
-    }
-
-    /**
-     * AcceptThread starts and sits waiting for a connection.
-     * Then ConnectThread starts and attempts to make a connection with the other devices AcceptThread.
-     **/
-
-    public void startClient(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
-        start();
-        Log.d(TAG, "startClient: Started.");
-        connectionStatus.setValue(0);
-        connectThread = new ConnectThread(device, deviceUUIDs);
-        connectThread.start();
     }
 
     /**
@@ -292,38 +322,5 @@ public class BluetoothConnectionService {
             } catch (IOException ignored) {
             }
         }
-    }
-
-    /**
-     * Starts the bluetooth connection with the given socket
-     * @param bluetoothSocket the socket to connect with
-     */
-    private void connected(BluetoothSocket bluetoothSocket) {
-        Log.d(TAG, "connected: Starting.");
-
-        // Start the thread to manage the connection and perform transmissions
-        connectedThread = new ConnectedThread(bluetoothSocket);
-        connectedThread.start();
-    }
-
-    /**
-     * Cancels the existing connection
-     */
-    public void cancel() {
-        Log.d(TAG, "cancel: Connection cancelled.");
-        connectedThread.cancel();
-    }
-
-    /**
-     * Write to the ConnectedThread in an unsynchronized manner
-     *
-     * @param out The bytes to write
-     * @see ConnectedThread#write(byte[])
-     */
-    public void write(byte[] out) {
-        // Synchronize a copy of the ConnectedThread
-        Log.d(TAG, "write: Write Called.");
-        //perform the write
-        connectedThread.write(out);
     }
 }

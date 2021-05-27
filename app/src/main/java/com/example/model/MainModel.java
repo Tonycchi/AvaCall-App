@@ -2,19 +2,17 @@ package com.example.model;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-
-import com.example.model.robotConnection.BluetoothModel;
-import com.example.model.robotConnection.Device;
-import com.example.model.robotConnection.RobotConnectionModel;
-
-import androidx.lifecycle.MutableLiveData;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.room.Room;
+
+import com.example.data.LocalDatabase;
+import com.example.data.URLFactory;
+import com.example.model.connection.BluetoothModel;
+import com.example.model.connection.Device;
+import com.example.model.connection.RobotConnectionModel;
 
 import java.util.ArrayList;
 

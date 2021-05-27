@@ -1,11 +1,6 @@
 package com.example.ui;
 
 import android.annotation.SuppressLint;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -29,15 +24,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.model.robotConnection.BluetoothConnectionService;
-import com.example.model.robotControls.Controller;
-import com.example.rcvc.R;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.example.data.URLFactory;
 import com.example.model.SessionData;
-import com.example.model.URLFactory;
 import com.example.model.WebClient;
+import com.example.model.connection.BluetoothConnectionService;
+import com.example.model.controls.Controller;
+import com.example.rcvc.R;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
-
 
 import java.net.URI;
 import java.net.URISyntaxException;

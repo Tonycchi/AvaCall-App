@@ -1,4 +1,4 @@
-package com.example.ui.robotConnection;
+package com.example.ui.connection;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.MainViewModel;
-import com.example.model.robotConnection.Device;
+import com.example.model.connection.Device;
 import com.example.rcvc.R;
 import com.example.ui.HostedFragment;
 
