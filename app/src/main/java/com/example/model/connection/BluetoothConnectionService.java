@@ -11,6 +11,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.data.ConnectedDevice;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -182,6 +184,9 @@ public class BluetoothConnectionService {
 
         public void run() {
             Log.d(TAG, "number of UUIDs: " + deviceUUIDs.length);
+
+            boolean isConnected = false;
+
             for (ParcelUuid mDeviceUUID : deviceUUIDs) {
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
@@ -193,6 +198,7 @@ public class BluetoothConnectionService {
 
                 try {
                     bluetoothSocket.connect();
+                    isConnected = true;
                     break;
                 } catch (IOException e) {
                     // Close the socket
@@ -205,7 +211,12 @@ public class BluetoothConnectionService {
                     Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + mDeviceUUID.getUuid());
                 }
             }
-            connected(bluetoothSocket);
+
+            if(isConnected) {
+                connected(bluetoothSocket);
+            }else{
+                connectionStatus.postValue(2);
+            }
         }
 
         /**
