@@ -259,7 +259,6 @@ public class BluetoothConnectionService {
 
             //TODO: only do this if its an ev3!
             connectionStatus.postValue(1);
-            writeToDatabase();
 
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
@@ -289,13 +288,6 @@ public class BluetoothConnectionService {
                     break;
                 }
             }
-        }
-
-        private void writeToDatabase(){
-            String address = bluetoothDevice.getAddress();
-            long currentTime = System.currentTimeMillis();
-            ConnectedDevice connectedDevice = new ConnectedDevice(address, currentTime);
-            Log.d(TAG, "writeToDatabase: Address:"+address+" currentTime:"+currentTime);
         }
 
         /**
