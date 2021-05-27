@@ -211,12 +211,7 @@ public class BluetoothConnectionService {
                     Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + mDeviceUUID.getUuid());
                 }
             }
-
-            if(isConnected) {
-                connected(bluetoothSocket);
-            }else{
-                connectionStatus.postValue(2);
-            }
+            connected(bluetoothSocket);
         }
 
         /**
