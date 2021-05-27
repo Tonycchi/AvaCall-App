@@ -32,4 +32,11 @@ public class ConnectedDevice {
         return lastConnected;
     }
 
+    @Override
+    public String toString() {
+        return "ConnectedDevice{" +
+                "address='" + address + '\'' +
+                ", lastConnected=" + (lastConnected - 1622100000000L) +
+                '}';
+    }
 }

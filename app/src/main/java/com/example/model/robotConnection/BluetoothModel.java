@@ -6,12 +6,13 @@ import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.model.LocalDatabase;
-
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,49 +41,51 @@ public class BluetoothModel extends RobotConnectionModel{
 
     private void updatePairedDevice(){
         if(pairedDevices == null) {
-            pairedDevices = new MutableLiveData<ArrayList<Device>>();
+            pairedDevices = new MutableLiveData<>();
         }
 
-        //the devices that are stored from the system
-        Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+        // devices bonded to system
+        Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
 
-        //the devices that are stored in localDatabase are the Devices that where used by this app previously
-        List<ConnectedDevice> connectedDevices = connectedDeviceDAO.getSortedDevices();
+        // will be shown to user
+        ArrayList<Device> shownDevices = new ArrayList<>();
 
-        //the list that is shown to the user
-        ArrayList<Device> bluetoothDevices = new ArrayList<Device>();
+        if (bondedDevices.size() > 0) {
+            // previously connected addresses from database
+            List<String> dbAddresses = connectedDeviceDAO.getSortedAddresses();
 
-        if (devices.size() > 0) {
-            //add the previously used devices to the list and remove those from the set
-            for(ConnectedDevice connectedDevice : connectedDevices) {
-                for (BluetoothDevice device : devices) {
-                    if(device.getAddress().equals(connectedDevice.getAddress())){ //the address of a device in the set is equal to the connected device
-                        if(devices.remove(device)) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                bluetoothDevices.add(new Device(device, device.getAlias())); //alias is the local name of the device
-                            } else {
-                                bluetoothDevices.add(new Device(device, device.getName())); //the name of the device
-                            }
-                        }
-                    }
+            // easy access to bonded devices by address
+            HashMap<String, Device> devicesByAddress = new HashMap<>();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                for (BluetoothDevice d : bondedDevices) {
+                        devicesByAddress.put(d.getAddress(), new Device(d, d.getAlias()));
+                }
+            } else {
+                for (BluetoothDevice d : bondedDevices) {
+                    devicesByAddress.put(d.getAddress(), new Device(d, d.getName()));
                 }
             }
-            // add all remaining devices to the list
-            for (BluetoothDevice device : devices) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    bluetoothDevices.add(new Device(device, device.getAlias())); //alias is the local name of the device
-                }else{
-                    bluetoothDevices.add(new Device(device, device.getName())); //the name of the device
+
+            // addresses that are both in db and system are added in order of last connection
+            // see ConnectedDevice.getSortedAddresses Query
+            for (String address : dbAddresses) {
+                Device d;
+                if ((d = devicesByAddress.remove(address)) != null) {
+                    shownDevices.add(d);
                 }
-                Log.d(TAG,"Device name: "+device.getName()+" type: "+device.getType()+" class: "+device.getClass()+" bondstage: "+device.getBondState());
             }
 
+            // other bonded devices from system
+            shownDevices.addAll(devicesByAddress.values());
+
+            // RecyclerView shows them in reverse order so ??????
+            Collections.reverse(shownDevices);
         } else {
             // TODO: something
             Log.d(TAG,"No Device found!");
         }
 
-        pairedDevices.setValue(bluetoothDevices);
+        pairedDevices.setValue(shownDevices);
     }
 
     @Override
@@ -99,8 +102,11 @@ public class BluetoothModel extends RobotConnectionModel{
 
     @Override
     public void startConnection(Device device) {
-        BluetoothDevice bluetoothDevice = (BluetoothDevice)device.getParcelable();
+        BluetoothDevice bluetoothDevice = (BluetoothDevice) device.getParcelable();
         ParcelUuid[] uuids = bluetoothDevice.getUuids();
+
+        Log.d(TAG, "connect: " + bluetoothDevice.getAddress());
+        connectedDeviceDAO.insertAll(new ConnectedDevice(bluetoothDevice.getAddress(), System.currentTimeMillis()));
 
         bluetoothConnectionService.startClient(bluetoothDevice, uuids);
     }
