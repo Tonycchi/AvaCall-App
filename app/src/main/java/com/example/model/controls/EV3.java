@@ -4,28 +4,24 @@ import android.content.Context;
 
 import com.example.model.connection.BluetoothConnectionService;
 
-public class Controller {
+public class EV3 implements RobotInterface {
 
     private final DirectCommander COMMANDER;
 
-    public Controller(Context context, BluetoothConnectionService b) {
+    public EV3(Context context, BluetoothConnectionService b) {
         COMMANDER = new DirectCommander(context, b);
     }
 
-    /**
-     * sends the correct powers for the motors to the DirectCommander
-     * @param angle the angle of they joystick
-     * @param strength the deflection of the joystick
-     */
-    public void sendPowers(int angle, int strength) {
-        int str = strength;
+    @Override
+    public void send(int... input) { // 0 angle, 1 strength
+        int str = input[1];
         if (str > 100) {
             str = 100;
         } else if (str < 0) {
             str = 0;
         }
         //0 is r, 1 is l
-        float[] outputs = computePowers(angle, str);
+        float[] outputs = computePowers(input[0], str);
         COMMANDER.send(outputs[0], outputs[1]);
     }
 
