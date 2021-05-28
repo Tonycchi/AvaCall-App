@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 //is a Device that was previously connected with this app
-@Entity
+@Entity(tableName = "ConnectedDevice")
 public class ConnectedDevice {
 
     @NonNull
