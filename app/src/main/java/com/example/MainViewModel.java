@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.data.URLSettings;
 import com.example.model.MainModel;
 import com.example.model.SessionData;
 import com.example.model.connection.Device;
@@ -37,6 +38,14 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return model.getPairedDevices();
+    }
+
+    public URLSettings.Triple getCurrentURLs() {
+        return model.getVideoConnectionModel().getCurrentURLs();
+    }
+
+    public void saveURLs(URLSettings.Triple urls) {
+        model.saveURLs(urls);
     }
 
     public MutableLiveData<Integer> getConnectionStatus(){

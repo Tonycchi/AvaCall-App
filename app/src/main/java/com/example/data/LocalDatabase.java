@@ -6,4 +6,5 @@ import androidx.room.RoomDatabase;
 @Database(entities = {ConnectedDevice.class, LocalPreference.class}, version = 1)
 public abstract class LocalDatabase extends RoomDatabase {
     public abstract ConnectedDeviceDAO connectedDeviceDAO();
+    public abstract LocalPreferenceDAO localPreferenceDAO();
 }

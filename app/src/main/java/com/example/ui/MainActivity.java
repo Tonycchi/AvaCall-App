@@ -28,7 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.data.URLFactory;
+import com.example.data.URLSettings;
 import com.example.model.SessionData;
 import com.example.model.WebClient;
 import com.example.model.connection.BluetoothConnectionService;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
     private Toast toast;
 
     // web & jitsi
-    private URLFactory urlFactory;
+    private URLSettings urlSettings;
     private WebClient wc;
     private SessionData session;
 
@@ -345,9 +345,9 @@ public class MainActivity extends AppCompatActivity{
         //first create room
         boolean connectionError = false;
         if (session == null) {
-            String jitsi = urlFactory.getJitsi_https();
+            String jitsi = urlSettings.getJitsi_https();
             try {
-                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), controller);
+                wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), controller);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity{
 
             if (!connectionError) {
                 String id = wc.getId();
-                session = new SessionData(jitsi, urlFactory.getHost_https(), id);
+                session = new SessionData(jitsi, urlSettings.getHost_https(), id);
                 textViewServerConnectionStatus.setText(String.format(getResources().getString(R.string.server_connection_status_true), session.getID()));
                 buttonSwitchToRoom.setEnabled(true);
             } else {

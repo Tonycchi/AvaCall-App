@@ -4,7 +4,8 @@ import android.content.SharedPreferences;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.data.URLFactory;
+import com.example.data.LocalPreferenceDAO;
+import com.example.data.URLSettings;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,12 +17,12 @@ public class VideoConnectionModel {
     // observed by VideoConnectionFragment
     private final MutableLiveData<String> inviteLink = new MutableLiveData<>();
 
-    private URLFactory urlFactory;
+    private URLSettings urlSettings;
     private WebClient wc;
     private SessionData session;
 
-    public VideoConnectionModel(SharedPreferences sharedPreferences) {
-        urlFactory = new URLFactory(sharedPreferences);
+    public VideoConnectionModel(LocalPreferenceDAO db) {
+        urlSettings = new URLSettings(db);
     }
 
     /**
@@ -30,11 +31,11 @@ public class VideoConnectionModel {
     public void invitePartner() {
         boolean connectionError = false;
         if (session == null) {
-            String jitsi = urlFactory.getJitsi_https();
+            String jitsi = urlSettings.getJitsi_https();
 //            TODO: hardcode nur zum testen
 //            String jitsi = "https://meet.jit.si";
             try {
-                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), null);
+                wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), null);
 //                TODO: harcode nur zum testen
 //                wc = new WebClient(new URI("wss://avatar.mintclub.org:22222"), "meet.jit.si", null);
             } catch (URISyntaxException e) {
@@ -56,7 +57,7 @@ public class VideoConnectionModel {
 
             if (!connectionError) {
                 String id = wc.getId();
-                session = new SessionData(jitsi, urlFactory.getHost_https(), id);
+                session = new SessionData(jitsi, urlSettings.getHost_https(), id);
 //                TODO: hardcode nur zum testen
 //                session = new SessionData(jitsi, "https://avatar.mintclub.org", id);
                 inviteLink.setValue(session.getShareURL());
@@ -65,6 +66,14 @@ public class VideoConnectionModel {
                 // TODO: Fehlernachricht anzeigen
             }
         }
+    }
+
+    public URLSettings.Triple getCurrentURLs() {
+        return urlSettings.getAll();
+    }
+
+    public void saveURLs(URLSettings.Triple urls) {
+        urlSettings.saveURLs(urls);
     }
 
     public MutableLiveData<String> getInviteLink() {

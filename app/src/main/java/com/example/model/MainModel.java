@@ -9,7 +9,7 @@ import androidx.preference.PreferenceManager;
 import androidx.room.Room;
 
 import com.example.data.LocalDatabase;
-import com.example.data.URLFactory;
+import com.example.data.URLSettings;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.RobotConnectionModel;
@@ -31,7 +31,7 @@ public class MainModel {
     // TODO Liste von eigener controller klasse???????
 
     // Model for VideoConnectionFragment
-    private URLFactory urlFactory;
+    private URLSettings urlSettings;
     private WebClient wc;
     private SessionData session;
     private LocalDatabase localDatabase;
@@ -40,7 +40,7 @@ public class MainModel {
     public MainModel(@NonNull Application application) {
         localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database").allowMainThreadQueries().build();
 
-        videoConnectionModel = new VideoConnectionModel(PreferenceManager.getDefaultSharedPreferences(application));
+        videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());
     }
 
@@ -50,6 +50,10 @@ public class MainModel {
 
     public MutableLiveData<Integer> getConnectionStatus() {
         return robotConnectionModel.getConnectionStatus();
+    }
+
+    public void saveURLs(URLSettings.Triple urls) {
+        videoConnectionModel.saveURLs(urls);
     }
 
     public void startConnection(Device device) {
