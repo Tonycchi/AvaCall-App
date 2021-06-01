@@ -31,7 +31,7 @@ public class MainViewModel extends AndroidViewModel {
     private MutableLiveData<List<String>> robotModelList;
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
 
-    public MainViewModel(@NonNull Application application){
+    public MainViewModel(@NonNull Application application) {
         super(application);
         model = new MainModel(application);
     }
@@ -48,7 +48,7 @@ public class MainViewModel extends AndroidViewModel {
         model.saveURLs(urls);
     }
 
-    public MutableLiveData<Integer> getConnectionStatus(){
+    public MutableLiveData<Integer> getConnectionStatus() {
         return model.getConnectionStatus();
     }
 

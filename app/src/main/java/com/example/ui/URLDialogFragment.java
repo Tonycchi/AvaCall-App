@@ -2,7 +2,6 @@ package com.example.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.preference.PreferenceManager;
 
 import com.example.MainViewModel;
 import com.example.data.URLSettings;
@@ -24,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class URLDialogFragment extends DialogFragment {
 
+    public static final String TAG = "URLDialogFragment";
     MainViewModel viewModel;
 
     @NotNull
@@ -51,9 +50,9 @@ public class URLDialogFragment extends DialogFragment {
                 .setNegativeButton(getResources().getString(R.string.cancel), (dialog, which) -> dialog.dismiss());
         // define what happens on press ok (save strings)
         builder.setPositiveButton(getResources().getString(R.string.ok), (dialog, which) -> {
-            String webURL = trimURL(editWebURL.getText().toString());
-            String jitsiURL = trimURL(editJitsiURL.getText().toString());
-            String webPort = trimURL(editWebPort.getText().toString());
+            String webURL = editWebURL.getText().toString();
+            String jitsiURL = editJitsiURL.getText().toString();
+            String webPort = editWebPort.getText().toString();
 
             viewModel.saveURLs(new URLSettings.Triple(webURL, jitsiURL, webPort));
         });
@@ -92,19 +91,4 @@ public class URLDialogFragment extends DialogFragment {
 
         return alertDialog;
     }
-
-    /**
-     * trim url, ie remove protocols, last /, etc
-     * @param url url
-     * @return trimmed url
-     */
-    private String trimURL(String url) {
-        String r = url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
-        if (r.length() > 0 && r.charAt(r.length() - 1) == '/') {
-            r = r.substring(0, r.length() - 1);
-        }
-        return r;
-    }
-
-    public static final String TAG = "URLDialogFragment";
 }

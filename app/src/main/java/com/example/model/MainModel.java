@@ -5,7 +5,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
 import androidx.room.Room;
 
 import com.example.data.LocalDatabase;

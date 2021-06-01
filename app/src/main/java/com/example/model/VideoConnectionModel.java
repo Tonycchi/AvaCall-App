@@ -1,7 +1,5 @@
 package com.example.model;
 
-import android.content.SharedPreferences;
-
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.LocalPreferenceDAO;

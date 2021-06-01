@@ -1,25 +1,5 @@
 package com.example.data;
 
-/*
-public class URLFactory {
-
-    public final String HOST_PLAIN, HOST_HTTPS, JITSI_PLAIN, JITSI_HTTPS, PORT, HOST_WSS;
-
-    public URLFactory(Context context) {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-
-        HOST_PLAIN = pref.getString("host_url", "avatar.mintclub.org");
-        HOST_HTTPS = "https://" + HOST_PLAIN;
-
-        JITSI_PLAIN = pref.getString("jitsi_url", "meet.jit.si");
-        JITSI_HTTPS = "https://" + JITSI_PLAIN;
-
-        PORT = pref.getString("host_port", "22222");
-        HOST_WSS = "wss://" + HOST_PLAIN + ":" + PORT;
-    }
-}
-*/
-
 public class URLSettings {
 
     private final static String HOSTURLKEY = "host_url",
@@ -36,9 +16,9 @@ public class URLSettings {
 
     public void saveURLs(Triple urls) {
         db.insertAll(
-                new LocalPreference(HOSTURLKEY, urls.getHostURL()),
-                new LocalPreference(JITSIURLKEY, urls.getJitsiURL()),
-                new LocalPreference(HOSTPORTKEY, urls.getPort())
+                new LocalPreference(HOSTURLKEY, trimURL(urls.getHostURL())),
+                new LocalPreference(JITSIURLKEY, trimURL(urls.getJitsiURL())),
+                new LocalPreference(HOSTPORTKEY, trimURL(urls.getPort()))
         );
     }
 
@@ -70,10 +50,22 @@ public class URLSettings {
         return WSS + db.get(HOSTURLKEY) + ":" + db.get(HOSTPORTKEY);
     }
 
+    /**
+     * trim url, ie remove protocols, last /, etc
+     *
+     * @param url url
+     * @return trimmed url
+     */
+    private String trimURL(String url) {
+        String r = url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
+        if (r.length() > 0 && r.charAt(r.length() - 1) == '/') {
+            r = r.substring(0, r.length() - 1);
+        }
+        return r;
+    }
+
     public static class Triple {
-        private String hostURL;
-        private String jitsiURL;
-        private String port;
+        private final String hostURL, jitsiURL, port;
 
         public Triple(String hostURL, String jitsiURL, String port) {
             this.hostURL = hostURL;
