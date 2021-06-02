@@ -12,7 +12,7 @@ public interface RobotModelDAO {
     String getSpecs(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(ConnectedDevice... connectedDevices);
+    void insertAll(RobotModel... robotModels);
 
     @Query("DELETE FROM RobotModel WHERE id = :id")
     void deleteByID(int id);

@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity{
         if (session == null) {
             String jitsi = urlFactory.getJitsi_https();
             try {
-                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), controller);
+                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), null /*TODO war mal "controller"*/);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }

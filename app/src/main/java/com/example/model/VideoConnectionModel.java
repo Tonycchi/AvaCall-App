@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.URLFactory;
+import com.example.model.robot.Controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,6 +20,8 @@ public class VideoConnectionModel {
     private URLFactory urlFactory;
     private WebClient wc;
     private SessionData session;
+
+    private Controller controller;
 
     public VideoConnectionModel(SharedPreferences sharedPreferences) {
         urlFactory = new URLFactory(sharedPreferences);
@@ -65,6 +68,10 @@ public class VideoConnectionModel {
                 // TODO: Fehlernachricht anzeigen
             }
         }
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     public MutableLiveData<String> getInviteLink() {
