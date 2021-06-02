@@ -83,9 +83,17 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
         // Checks the orientation of the screen
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            getActivity().setContentView(R.layout.bluetooth_connection);
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            getActivity().setContentView(R.layout.bluetooth_connection);
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
         }
     }
 

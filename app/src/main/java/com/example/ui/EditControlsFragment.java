@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
@@ -54,6 +55,26 @@ public class EditControlsFragment extends HostedFragment {
                 .setReorderingAllowed(true)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 
     private void onClickButtonEditModelBack(View v){
