@@ -29,7 +29,7 @@
     <android.widget.Button
         android:id="@+id/button_access_videocall"
         style="@style/button_next"
-        android:layout_width="@dimen/standard_button_width"
+        android:layout_width="0dp"
         android:layout_height="@dimen/standard_button_height"
         android:layout_marginStart="@dimen/margin_horizontal_small_land"
         android:layout_marginEnd="@dimen/margin_bottom_land"
@@ -42,7 +42,7 @@
     <android.widget.Button
         android:id="@+id/button_test_controls"
         style="@style/button_back"
-        android:layout_width="@dimen/standard_button_width"
+        android:layout_width="0dp"
         android:layout_marginStart="@dimen/margin_side_land"
         android:layout_marginEnd="@dimen/margin_horizontal_small_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
