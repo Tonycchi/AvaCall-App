@@ -57,7 +57,7 @@
         android:layout_marginStart="@dimen/margin_vertical_small_land"
         android:layout_marginEnd="@dimen/margin_side_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
-        android:layout_marginKeft="@dimen/margin_side_land"
+        android:layout_marginLeft="@dimen/margin_side_land"
         android:text="@string/edit_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
