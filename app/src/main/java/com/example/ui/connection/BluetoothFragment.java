@@ -5,9 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -24,7 +27,6 @@ import java.util.ArrayList;
 public class BluetoothFragment extends RobotConnectionFragment {
 
     private static final String TAG = "BluetoothFragment";
-
 
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection
     private final BroadcastReceiver bluetoothStateChangeReceiver = new BroadcastReceiver() {
@@ -73,6 +75,18 @@ public class BluetoothFragment extends RobotConnectionFragment {
         });
 
         getActivity().setTitle(R.string.title_bluetooth);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getActivity().setContentView(R.layout.bluetooth_connection);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            getActivity().setContentView(R.layout.bluetooth_connection);
+        }
     }
 
     @Override
