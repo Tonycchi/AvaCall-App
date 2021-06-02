@@ -7,7 +7,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.model.connection.BluetoothConnectionService;
 
-public class DirectCommander {
+class DirectCommander {
 
     private final BluetoothConnectionService BLUETOOTH;
 

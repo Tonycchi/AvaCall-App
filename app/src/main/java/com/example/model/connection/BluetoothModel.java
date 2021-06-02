@@ -39,7 +39,6 @@ public class BluetoothModel extends RobotConnectionModel {
         this.connectedDeviceDAO = connectedDeviceDAO;
     }
 
-
     private void updatePairedDevice() {
         if (pairedDevices == null) {
             pairedDevices = new MutableLiveData<>();

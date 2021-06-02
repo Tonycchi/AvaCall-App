@@ -32,7 +32,7 @@ import com.example.data.URLFactory;
 import com.example.model.SessionData;
 import com.example.model.WebClient;
 import com.example.model.connection.BluetoothConnectionService;
-import com.example.model.controls.Controller;
+import com.example.model.controls.EV3;
 import com.example.rcvc.R;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity{
     // All paired devices
     private ArrayList<BluetoothDevice> pairedDevices = new ArrayList<>();
     // Connected robot
-    private Controller controller;
+    private EV3 controller;
 
 
     // lifecycle methods
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
 //        urlFactory = new URLFactory(this);
-        controller = new Controller(this, bluetoothConnection);
+        controller = new EV3(this, bluetoothConnection);
     }
 
     /**
@@ -166,15 +166,15 @@ public class MainActivity extends AppCompatActivity{
         IntentFilter negativeButtonFilter = new IntentFilter(getString(R.string.action_negative_button));
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverNegativeButton, negativeButtonFilter);
 
-        joystick.setOnMoveListener((angle, strength) -> controller.sendPowers(angle, strength));
+        joystick.setOnMoveListener((angle, strength) -> controller.send(angle, strength));
 
         buttonMoveForward.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving forward is send to ev3
-                controller.sendPowers(90, 100);
+                controller.send(90, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                controller.sendPowers(0, 0);
+                controller.send(0, 0);
             }
 
             return true;
@@ -183,10 +183,10 @@ public class MainActivity extends AppCompatActivity{
         buttonMoveBackward.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct command for moving backward is send to ev3
-                controller.sendPowers(270, 100);
+                controller.send(270, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                controller.sendPowers(0, 0);
+                controller.send(0, 0);
             }
 
             return true;
@@ -195,10 +195,10 @@ public class MainActivity extends AppCompatActivity{
         buttonTurnRight.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the right are send to ev3
-                controller.sendPowers(0, 100);
+                controller.send(0, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                controller.sendPowers(0, 0);
+                controller.send(0, 0);
             }
 
             return true;
@@ -207,10 +207,10 @@ public class MainActivity extends AppCompatActivity{
         buttonTurnLeft.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 //when button is being pressed down, direct commands for turning to the left are send to ev3
-                controller.sendPowers(180, 100);
+                controller.send(180, 100);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 //when button is being released, direct command for stopping is send to ev3
-                controller.sendPowers(0, 0);
+                controller.send(0, 0);
             }
 
             return true;
@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity{
         //Log.d(TAG, "startBTConnection: Initializing RFCOM Bluetooth Connection.");
         bluetoothConnection.startClient(device, uuid);
         startedConnection = true;
-        controller = new Controller(this, bluetoothConnection);
+        controller = new EV3(this, bluetoothConnection);
     }
 
     /**
@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity{
      */
     public void onConnection() {
         if (controller != null) {
-            controller.sendPowers(0, 0);
+            controller.send(0, 0);
         }
         //REPLACED:
         //switch (bluetoothConnection.getConnectionStatus()) {
@@ -511,7 +511,7 @@ public class MainActivity extends AppCompatActivity{
         if (startedConnection) {
             startedConnection = false;
             //stops the EV3 if connection gets lost
-            controller.sendPowers(0, 0);
+            controller.send(0, 0);
             bluetoothIsConnected = false;
             bluetoothConnection.cancel();
             selectedDevice = null;
