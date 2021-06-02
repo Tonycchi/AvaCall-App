@@ -64,9 +64,9 @@ public class MainModel {
         videoConnectionModel.invitePartner();
     }
 
-    public MutableLiveData<String> getInviteLink() {
-        return videoConnectionModel.getInviteLink();
-    }
+//    public MutableLiveData<String> getInviteLink() {
+//        return videoConnectionModel.getInviteLink();
+//    }
 
     public SessionData getSession() {
         return videoConnectionModel.getSession();

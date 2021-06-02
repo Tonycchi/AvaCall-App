@@ -14,7 +14,7 @@ public class VideoConnectionModel {
     private final String TAG = "VideoConnection";
 
     // observed by VideoConnectionFragment
-    private final MutableLiveData<String> inviteLink = new MutableLiveData<>();
+//    private final MutableLiveData<String> inviteLink = new MutableLiveData<>();
 
     private URLFactory urlFactory;
     private WebClient wc;
@@ -59,7 +59,7 @@ public class VideoConnectionModel {
                 session = new SessionData(jitsi, urlFactory.getHost_https(), id);
 //                TODO: hardcode nur zum testen
 //                session = new SessionData(jitsi, "https://avatar.mintclub.org", id);
-                inviteLink.setValue(session.getShareURL());
+//                inviteLink.setValue(session.getShareURL());
                 // TODO: Zum Videocall hier auf visible setzen!
             } else {
                 // TODO: Fehlernachricht anzeigen
@@ -67,9 +67,9 @@ public class VideoConnectionModel {
         }
     }
 
-    public MutableLiveData<String> getInviteLink() {
-        return this.inviteLink;
-    }
+//    public MutableLiveData<String> getInviteLink() {
+//        return this.inviteLink;
+//    }
 
     public SessionData getSession() {
         return this.session;

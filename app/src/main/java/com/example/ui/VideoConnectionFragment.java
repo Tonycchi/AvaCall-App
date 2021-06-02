@@ -31,6 +31,26 @@ public class VideoConnectionFragment extends HostedFragment {
         super(R.layout.video_connection);
     }
 
+    //TODO: Observer für Link teilen vllt anpassen. Momentan hat man nur einen Versuch den Link zu
+    // teilen, da sich der Link bei erneutem Knopfdruck nicht ändert.
+//    @SuppressLint("ObsoleteSdkInt")
+//    Observer<String> sharedLinkObserver = link -> {
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+//            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+//            ClipData clip = ClipData.newPlainText(getString(R.string.room_link), link);
+//            clipboard.setPrimaryClip(clip);
+//            ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
+//        } else {
+//            Intent sendIntent = new Intent();
+//            sendIntent.setAction(Intent.ACTION_SEND);
+//            sendIntent.putExtra(Intent.EXTRA_TEXT, link);
+//            sendIntent.setType("text/plain");
+//
+//            Intent shareIntent = Intent.createChooser(sendIntent, null);
+//            startActivity(shareIntent);
+//        }
+//    };
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,25 +83,25 @@ public class VideoConnectionFragment extends HostedFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        @SuppressLint("ObsoleteSdkInt")
-        Observer<String> sharedLinkObserver = link -> {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.room_link), link);
-                clipboard.setPrimaryClip(clip);
-                ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
-            } else {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, link);
-                sendIntent.setType("text/plain");
+//        @SuppressLint("ObsoleteSdkInt")
+//        Observer<String> sharedLinkObserver = link -> {
+//            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+//                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+//                ClipData clip = ClipData.newPlainText(getString(R.string.room_link), link);
+//                clipboard.setPrimaryClip(clip);
+//                ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
+//            } else {
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//                sendIntent.putExtra(Intent.EXTRA_TEXT, link);
+//                sendIntent.setType("text/plain");
+//
+//                Intent shareIntent = Intent.createChooser(sendIntent, null);
+//                startActivity(shareIntent);
+//            }
+//        };
 
-                Intent shareIntent = Intent.createChooser(sendIntent, null);
-                startActivity(shareIntent);
-            }
-        };
-
-        viewModel.getInviteLink().observe(requireActivity(), sharedLinkObserver);
+//        viewModel.getInviteLink().observe(requireActivity(), sharedLinkObserver);
 
         Button buttonURLsettings = view.findViewById(R.id.button_url_settings);
         Button buttonInvitePartner = view.findViewById(R.id.button_invite_partner);
@@ -106,8 +126,24 @@ public class VideoConnectionFragment extends HostedFragment {
         fragmentManager.popBackStack();
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private void onClickInvitePartner(View v) {
+//        viewModel.getInviteLink().observe(requireActivity(), sharedLinkObserver);
         viewModel.invitePartner();
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getSession().getShareURL());
+            clipboard.setPrimaryClip(clip);
+            ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
+        } else {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getSession().getShareURL());
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
+        }
     }
 
     private void onClickSwitchToVideoCall(View v) {

@@ -51,9 +51,9 @@ public class MainViewModel extends AndroidViewModel {
         model.invitePartner();
     }
 
-    public MutableLiveData<String> getInviteLink() {
-        return model.getInviteLink();
-    }
+//    public MutableLiveData<String> getInviteLink() {
+//        return model.getInviteLink();
+//    }
 
     public SessionData getSession() {
         return model.getSession();
