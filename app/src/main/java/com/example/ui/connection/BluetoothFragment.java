@@ -171,13 +171,9 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     private void onClickFirstBluetoothConnection(){
-        //TODO: uncomment
-        /*Intent intentOpenBluetoothSettings = new Intent();
+       Intent intentOpenBluetoothSettings = new Intent();
         intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-        startActivity(intentOpenBluetoothSettings);*/
-
-        //TODO: delete
-        switchToNextFragment();
+        startActivity(intentOpenBluetoothSettings);
     }
 
 }
