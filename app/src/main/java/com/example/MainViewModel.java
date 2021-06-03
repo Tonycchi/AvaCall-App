@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.model.MainModel;
 import com.example.model.SessionData;
+import com.example.model.WebClient;
 import com.example.model.connection.Device;
 
 import java.util.ArrayList;
@@ -62,4 +63,6 @@ public class MainViewModel extends AndroidViewModel {
     public void connectingCanceled() {
         model.connectingCanceled();
     }
+
+    public WebClient getWebClient() {return model.getWebClient();}
 }

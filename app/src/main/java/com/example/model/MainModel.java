@@ -50,7 +50,7 @@ public class MainModel {
 
         robot = new EV3(localDatabase.robotModelDAO());
 
-        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "A;D"));
+        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "1;8"));
 
         videoConnectionModel = new VideoConnectionModel(PreferenceManager.getDefaultSharedPreferences(application));
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());
@@ -89,4 +89,6 @@ public class MainModel {
     public void connectingCanceled() {
         robotConnectionModel.connectingCanceled();
     }
+
+    public WebClient getWebClient() {return videoConnectionModel.getWebClient();}
 }

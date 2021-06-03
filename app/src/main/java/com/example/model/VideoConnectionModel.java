@@ -81,4 +81,6 @@ public class VideoConnectionModel {
     public SessionData getSession() {
         return this.session;
     }
+
+    public WebClient getWebClient() {return this.wc;}
 }
