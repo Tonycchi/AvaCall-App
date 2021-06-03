@@ -74,8 +74,8 @@ public class MainModel {
     }
 
     public void invitePartner() {
-        videoConnectionModel.invitePartner();
         videoConnectionModel.setController(controller);
+        videoConnectionModel.invitePartner();
     }
 
     public MutableLiveData<String> getInviteLink() {

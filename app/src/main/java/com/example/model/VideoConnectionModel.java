@@ -37,7 +37,7 @@ public class VideoConnectionModel {
 //            TODO: hardcode nur zum testen
 //            String jitsi = "https://meet.jit.si";
             try {
-                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), null);
+                wc = new WebClient(new URI(urlFactory.getHost_wss()), urlFactory.getJitsi_plain(), controller);
 //                TODO: harcode nur zum testen
 //                wc = new WebClient(new URI("wss://avatar.mintclub.org:22222"), "meet.jit.si", null);
             } catch (URISyntaxException e) {
