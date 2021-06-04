@@ -112,13 +112,13 @@ public class VideoConnectionFragment extends HostedFragment {
         viewModel.invitePartner();
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getSession().getShareURL());
+            ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getShareURL());
             clipboard.setPrimaryClip(clip);
             ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
         } else {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getSession().getShareURL());
+            sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getShareURL());
             sendIntent.setType("text/plain");
 
             Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -128,7 +128,7 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private void onClickSwitchToVideoCall(View v) {
         // TODO setReceiveCommands kommt hier noch hin
-        JitsiMeetActivity.launch(requireContext(), viewModel.getSession().getOptions());
+        JitsiMeetActivity.launch(requireContext(), viewModel.getOptions());
     }
 
     @Override

@@ -14,6 +14,8 @@ import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.RobotConnectionModel;
 
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
 import java.util.ArrayList;
 
 public class MainModel {
@@ -68,8 +70,16 @@ public class MainModel {
 //        return videoConnectionModel.getInviteLink();
 //    }
 
-    public SessionData getSession() {
-        return videoConnectionModel.getSession();
+    public String getShareURL() {
+        return videoConnectionModel.getShareURL();
+    }
+
+    public JitsiMeetConferenceOptions getOptions() {
+        return videoConnectionModel.getOptions();
+    }
+
+    public void setReceiveCommands() {
+        videoConnectionModel.setReceiveCommands();
     }
 
     public void connectingCanceled() {

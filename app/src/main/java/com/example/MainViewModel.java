@@ -10,6 +10,8 @@ import com.example.model.MainModel;
 import com.example.model.SessionData;
 import com.example.model.connection.Device;
 
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +57,16 @@ public class MainViewModel extends AndroidViewModel {
 //        return model.getInviteLink();
 //    }
 
-    public SessionData getSession() {
-        return model.getSession();
+    public String getShareURL() {
+        return model.getShareURL();
+    }
+
+    public JitsiMeetConferenceOptions getOptions() {
+        return model.getOptions();
+    }
+
+    public void setReceiveCommands() {
+        model.setReceiveCommands();
     }
 
     public void connectingCanceled() {

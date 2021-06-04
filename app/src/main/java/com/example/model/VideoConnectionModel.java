@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.URLFactory;
 
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -71,7 +73,16 @@ public class VideoConnectionModel {
 //        return this.inviteLink;
 //    }
 
-    public SessionData getSession() {
-        return this.session;
+    public String getShareURL() {
+        return session.getShareURL();
     }
+
+    public JitsiMeetConferenceOptions getOptions() {
+        return session.getOptions();
+    }
+
+    public void setReceiveCommands() {
+        wc.setReceiveCommands();
+    }
+
 }
