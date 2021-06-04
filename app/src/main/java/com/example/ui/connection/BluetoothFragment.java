@@ -78,26 +78,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
