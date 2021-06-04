@@ -57,26 +57,6 @@ public class EditControlsFragment extends HostedFragment {
                 .commit();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            getParentFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        }
-    }
-
     private void onClickButtonEditModelBack(View v){
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.popBackStack();
