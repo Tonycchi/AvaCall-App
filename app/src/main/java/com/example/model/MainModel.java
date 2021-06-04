@@ -90,5 +90,5 @@ public class MainModel {
         robotConnectionModel.connectingCanceled();
     }
 
-    public WebClient getWebClient() {return videoConnectionModel.getWebClient();}
+    public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
 }
