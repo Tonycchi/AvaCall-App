@@ -4,7 +4,8 @@ public interface Controller {
 
     /**
      * uses given controller input to send command to robot
-     * @param controllerInput input
+     *
+     * @param input input
      */
     void sendInput(ControllerInput input);
 

@@ -24,18 +24,32 @@ public class EV3Controller implements Controller {
         createElements(specs);
     }
 
+    @Override
+    public void sendInput(ControllerInput input) {
+        service.write(createCommand(input));
+    }
+
+    /**
+     * creates EV3ControlElement objects according to specifications
+     *
+     * @param specs string specifying control element to port mapping
+     */
     private void createElements(String specs) {
-        /* TODO document
-        joystick:50;1,8|slider:30;4|button:20;2;2000
+        /* TODO document outside of code
+        we get:
+        $entry$|$entry|...
          */
         controlElements = new ArrayList<>();
 
+        // split into $entry$ = $element$:$attributes$
         String[] tmp = specs.split("\\|");
+        // put into map with key = $element$, value = $attributes$
         HashMap<String, String> elements = new HashMap<>();
         for (String t : tmp) {
             String[] a = t.split(":");
             elements.put(a[0], a[1]);
         }
+        // now translate each $attributes$ into corresponding Objects:
         for (String k : elements.keySet()) {
             String[] attrs = elements.get(k).split(";");
             int maxPower = Integer.parseInt(attrs[0]);
@@ -60,12 +74,11 @@ public class EV3Controller implements Controller {
 
     }
 
-    @Override
-    public void sendInput(ControllerInput input) {
-        service.write(createCommand(input));
-    }
-
-    public byte[] createCommand(ControllerInput input) {
+    /**
+     * @param input controlling input
+     * @return direct command for EV3
+     */
+    private byte[] createCommand(ControllerInput input) {
         //0x|14:00|2A:00|80|00:00|A4|00|01|81:RP|A4|00|08|81:LP|A6|00|09
         //   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19
         // 00: length 20
@@ -82,9 +95,7 @@ public class EV3Controller implements Controller {
         byte[] t;
         for (EV3ControlElement e : controlElements) {
             t = commandPart(e.port, e.getMotorPower(input));
-            for (int k = 0; k < t.length; k++) {
-                directCommand[i + k] = t[k];
-            }
+            System.arraycopy(t, 0, directCommand, i, t.length);
             i += t.length;
         }
 
@@ -114,6 +125,11 @@ public class EV3Controller implements Controller {
         return directCommand;
     }
 
+    /**
+     * @param port  ev3 motor port
+     * @param power evr motor power
+     * @return part of direct command for given port
+     */
     private byte[] commandPart(int port, int power) {
         byte[] r = new byte[5];
         r[0] = (byte) 0xA4; // command type: output power

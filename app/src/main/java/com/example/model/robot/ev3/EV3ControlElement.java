@@ -4,15 +4,19 @@ import com.example.model.robot.ControllerInput;
 
 abstract class EV3ControlElement {
 
-    final int MAX_POWER;
+    final int maxPower;
     final int port;
 
     protected EV3ControlElement(int port, int maxPower) {
-        this.MAX_POWER = maxPower;
+        this.maxPower = maxPower;
         this.port = port;
     }
 
-    protected abstract byte getMotorPower(ControllerInput in);
+    /**
+     * @param input controlling input
+     * @return power for use in ev3 direct command
+     */
+    protected abstract byte getMotorPower(ControllerInput input);
 
     protected static class JoystickRight extends EV3ControlElement {
 
@@ -21,25 +25,25 @@ abstract class EV3ControlElement {
         }
 
         @Override
-        public byte getMotorPower(ControllerInput in) {
+        protected byte getMotorPower(ControllerInput input) {
             float right = 0.0f;
 
-            if (in.angle >= 0 && in.angle < 90) { //0°-89°
-                right = -100 + in.angle * 20 / 9.0f; //-100 to 100
+            if (input.angle >= 0 && input.angle < 90) { //0°-89°
+                right = -100 + input.angle * 20 / 9.0f; //-100 to 100
 
-            } else if (in.angle >= 90 && in.angle < 180) { //90°-179°
+            } else if (input.angle >= 90 && input.angle < 180) { //90°-179°
                 right = 100; //100 to 100
 
-            } else if (in.angle >= 180 && in.angle < 270) { //180°-269°
-                right = 100 - (in.angle - 180) * 20 / 9.0f; //50 to -100
+            } else if (input.angle >= 180 && input.angle < 270) { //180°-269°
+                right = 100 - (input.angle - 180) * 20 / 9.0f; //50 to -100
 
-            } else if (in.angle >= 270 && in.angle <= 360) {//270°-359°
+            } else if (input.angle >= 270 && input.angle <= 360) {//270°-359°
                 right = -100; //-100 to -100
             }
 
-            right = right * in.strength / 10000;
+            right = right * input.strength / 10000;
 
-            return (byte) (right * MAX_POWER);
+            return (byte) (right * maxPower);
         }
     }
 
@@ -50,25 +54,25 @@ abstract class EV3ControlElement {
         }
 
         @Override
-        public byte getMotorPower(ControllerInput in) {
+        protected byte getMotorPower(ControllerInput input) {
             float left = 0.0f;
 
-            if (in.angle >= 0 && in.angle < 90) { //0°-89°
+            if (input.angle >= 0 && input.angle < 90) { //0°-89°
                 left = 100; //100 to 100
 
-            } else if (in.angle >= 90 && in.angle < 180) { //90°-179°
-                left = 100 - (in.angle - 90) * 20 / 9.0f; //100 to -100
+            } else if (input.angle >= 90 && input.angle < 180) { //90°-179°
+                left = 100 - (input.angle - 90) * 20 / 9.0f; //100 to -100
 
-            } else if (in.angle >= 180 && in.angle < 270) { //180°-269°
+            } else if (input.angle >= 180 && input.angle < 270) { //180°-269°
                 left = -100; //-100 to -100
 
-            } else if (in.angle >= 270 && in.angle <= 360) {//270°-359°
-                left = -100 + (in.angle - 270) * 20 / 9.0f; //-100 to 100
+            } else if (input.angle >= 270 && input.angle <= 360) {//270°-359°
+                left = -100 + (input.angle - 270) * 20 / 9.0f; //-100 to 100
             }
 
-            left = left * in.strength / 10000;
+            left = left * input.strength / 10000;
 
-            return (byte) (left * MAX_POWER);
+            return (byte) (left * maxPower);
         }
     }
 
@@ -79,7 +83,7 @@ abstract class EV3ControlElement {
         }
 
         @Override
-        public byte getMotorPower(ControllerInput in) {
+        protected byte getMotorPower(ControllerInput input) {
             return (byte) 0; //TODO implement
         }
     }
@@ -91,7 +95,7 @@ abstract class EV3ControlElement {
         }
 
         @Override
-        public byte getMotorPower(ControllerInput in) {
+        protected byte getMotorPower(ControllerInput input) {
             return (byte) 0; //TODO implement
         }
     }
