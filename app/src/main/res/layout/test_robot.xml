@@ -73,6 +73,7 @@
         android:layout_width="@dimen/joystick_size"
         android:layout_height="@dimen/joystick_size"
         android:layout_marginEnd="@dimen/margin_side"
+        android:background="@android:color/transparent"
         android:progress="50"
         android:progressDrawable="@drawable/slider_progressbar"
         android:thumb="@drawable/slider_thumb"
