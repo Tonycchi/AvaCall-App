@@ -6,6 +6,6 @@
     <solid
         android:color="@color/joystick_button" />
     <size
-        android:width="25dp"
-        android:height="75dp" />
+        android:width="@dimen/_10sdp"
+        android:height="@dimen/_30sdp" />
 </shape>
