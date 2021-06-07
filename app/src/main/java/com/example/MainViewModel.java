@@ -64,5 +64,5 @@ public class MainViewModel extends AndroidViewModel {
         model.connectingCanceled();
     }
 
-    public WebClient getWebClient() {return model.getWebClient();}
+    public void setReceiveCommands() { model.setReceiveCommands(); }
 }

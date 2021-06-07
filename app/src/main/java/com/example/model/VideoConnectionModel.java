@@ -82,5 +82,5 @@ public class VideoConnectionModel {
         return this.session;
     }
 
-    public WebClient getWebClient() {return this.wc;}
+    public void setReceiveCommands() { wc.setReceiveCommands(); }
 }
