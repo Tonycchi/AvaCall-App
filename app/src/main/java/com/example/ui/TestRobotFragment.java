@@ -55,10 +55,10 @@ public class TestRobotFragment extends HostedFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        Log.d(TAG, "Tony stinkt nach: " + 1);
+                        Log.d(TAG, "Button activity: " + 1);
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.d(TAG, "Tony stinkt nach: " + 0);
+                        Log.d(TAG, "Button activity: " + 0);
                         break;
                 }
                 return true;
@@ -66,13 +66,13 @@ public class TestRobotFragment extends HostedFragment {
         });
 
         joystick.setOnMoveListener((angle, strength) -> {
-            Log.d(TAG, "Tony hdf angle;strength: " + angle + ";" + strength);
+            Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
         });
 
         slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d(TAG, "Tony hdf strength: " + String.valueOf(progress));
+                Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
             }
 
             @Override
