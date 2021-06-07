@@ -91,7 +91,9 @@ public class BluetoothConnectionService {
         new TimeOutTask(connectedThread);
         connectedThread.start();
         Log.d(TAG, "handshake send");
-        connectedThread.write(byteArrayHandshake.getSyn());
+        for(byte[] command : byteArrayHandshake.getSyn()) {
+            connectedThread.write(command);
+        }
     }
 
     /**
