@@ -1,16 +1,40 @@
 package com.example.model.robot.ev3;
 
-import com.example.model.connection.BluetoothConnectionService;
+import android.util.Log;
+
+import com.example.model.connection.ConnectionService;
 import com.example.model.robot.Controller;
 import com.example.model.robot.ControllerInput;
 
+import java.util.HashMap;
+
 public class EV3Controller implements Controller {
+
+    private final String TAG = "EV3Controller";
 
     private DirectCommander directCommander;
 
-    public EV3Controller(String specs, BluetoothConnectionService bluetoothConnectionService) {
-        String[] s = specs.split(";");
-        directCommander = new DirectCommander(bluetoothConnectionService, Integer.parseInt(s[0]), Integer.parseInt(s[1]));
+    public EV3Controller(String specs, ConnectionService service) {
+        String[] s = {"1", "8"};
+
+        Log.d(TAG, specs);
+
+        /*
+        joystick:50;1,8|slider:30;4|button:20;2;2000
+         */
+        String[] tmp = specs.split("\\|");
+        HashMap<String, String> elements = new HashMap<>();
+        for (String t : tmp) {
+            String[] a = t.split(":");
+            elements.put(a[0], a[1]);
+        }
+        String[] ports = new String[2];
+        if (elements.containsKey("joystick"))
+            ports = elements.get("joystick").split(";")[1].split(",");
+
+        Log.d(TAG, ports[0] + " " + ports[1]);
+
+        directCommander = new DirectCommander(service, Integer.parseInt(ports[0]), Integer.parseInt(ports[1]));
     }
 
     @Override

@@ -50,7 +50,7 @@ public class MainModel {
 
         robot = new EV3(localDatabase.robotModelDAO());
 
-        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "1;8"));
+        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;2000"));
 
         videoConnectionModel = new VideoConnectionModel(PreferenceManager.getDefaultSharedPreferences(application));
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());

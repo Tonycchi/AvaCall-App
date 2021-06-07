@@ -1,14 +1,9 @@
 package com.example.model.robot.ev3;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import androidx.preference.PreferenceManager;
-
-import com.example.model.connection.BluetoothConnectionService;
+import com.example.model.connection.ConnectionService;
 
 class DirectCommander {
-    private final BluetoothConnectionService BLUETOOTH;
+    private final ConnectionService BLUETOOTH;
 
     //definitions will probably be able to be set in settings
     //should probably make library of ev3 command parts
@@ -16,7 +11,7 @@ class DirectCommander {
 
     private final int MAX_POWER;
 
-    public DirectCommander(BluetoothConnectionService service, int right, int left) {
+    public DirectCommander(ConnectionService service, int right, int left) {
         PORT_RIGHT = (byte) right;
         PORT_LEFT = (byte) left;
         MAX_POWER = 50; //TODO
