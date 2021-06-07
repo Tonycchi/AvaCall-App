@@ -114,7 +114,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     @Override
     public void connectionStatusChanged(Integer newConnectionStatus){
-        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
         switch(newConnectionStatus){
             case 0:
                 Log.d(TAG, "Case 0: Not tested!");
@@ -124,8 +124,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
             case 1:
                 Log.d(TAG, "Case 1: Is connected!");
                 hideProgessDialog();
-                viewModel.deviceAccepted();
-                switchToNextFragment();
                 break;
 
             case 2:
@@ -137,6 +135,15 @@ public class BluetoothFragment extends RobotConnectionFragment {
             case 3:
                 Log.d(TAG, "Case 3: Connection lost!");
                 ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
+                break;
+
+            case 4:
+                viewModel.deviceAccepted();
+                switchToNextFragment();
+                break;
+
+            case 5:
+                ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_wrong_device));
                 break;
 
             default:

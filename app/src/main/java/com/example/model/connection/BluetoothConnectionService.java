@@ -30,7 +30,7 @@ public class BluetoothConnectionService {
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
-    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
     private MutableLiveData<Integer> connectionStatus;
     private AcceptThread acceptThread;
     private ConnectThread connectThread;

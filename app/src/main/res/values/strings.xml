@@ -26,6 +26,7 @@
         <string name="connecting_bluetooth_wait">Bitte warten...</string>
         <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
         <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
+        <string name="bluetooth_connection_wrong_device">Das verbundene Gerät entspricht nicht den Anforderungen.</string>
 
         <!-- Test Robot -->
         <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>
