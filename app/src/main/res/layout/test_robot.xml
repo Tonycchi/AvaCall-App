@@ -77,7 +77,7 @@
         android:progress="50"
         android:progressDrawable="@drawable/slider_progressbar"
         android:thumb="@drawable/slider_thumb"
-        android:rotation="90"
+        android:rotation="270"
         app:layout_constraintBottom_toTopOf="@+id/text_control_question"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/joystick"
