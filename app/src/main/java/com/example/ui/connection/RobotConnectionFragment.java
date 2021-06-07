@@ -77,12 +77,17 @@ public abstract class RobotConnectionFragment extends HostedFragment {
                 getResources().getString(R.string.connecting_bluetooth_wait), false, true, new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        viewModel.connectingCanceled();
+                        viewModel.cancelConnection();
                     }
                 });
     }
 
-    protected void hideProgessDialog(){
+    protected void changeProgressDialog(){
+        Log.d(TAG, "change ProgressDialog");
+        progressDialog.setTitle(getResources().getString(R.string.bluetooth_connection_check_device));
+    }
+
+    protected void hideProgressDialog(){
         try {
             progressDialog.dismiss();
         } catch (NullPointerException e) {

@@ -16,6 +16,11 @@ import com.example.data.ConnectedDevice;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.Charset;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -30,7 +35,7 @@ public class BluetoothConnectionService {
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
-    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
+    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device type, 5 connection is not accepted = wrong device type
     private MutableLiveData<Integer> connectionStatus;
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
@@ -44,11 +49,6 @@ public class BluetoothConnectionService {
 
     public MutableLiveData<Integer> getConnectionStatus() {
         return connectionStatus;
-    }
-
-    public void connectingCanceled() {
-        if (connectThread != null)
-            connectThread.cancel();
     }
 
     /**
@@ -92,6 +92,7 @@ public class BluetoothConnectionService {
 
         // Start the thread to manage the connection and perform transmissions
         connectedThread = new ConnectedThread(bluetoothSocket);
+        new TimeOutTask(connectedThread);
         connectedThread.start();
     }
 
@@ -99,8 +100,21 @@ public class BluetoothConnectionService {
      * Cancels the existing connection
      */
     public void cancel() {
-        Log.d(TAG, "cancel: Connection cancelled.");
-        connectedThread.cancel();
+        Log.d(TAG, "cancel: Connection gets manually cancelled.");
+        if(BLUETOOTH_ADAPTER.isDiscovering())
+            BLUETOOTH_ADAPTER.cancelDiscovery();
+        if(connectedThread!=null) {
+            connectedThread.cancel();
+            connectedThread = null;
+        }
+        if(connectThread != null){
+            connectThread.cancel();
+            connectThread = null;
+        }
+        if(acceptThread != null){
+            acceptThread.interrupt();
+            acceptThread = null;
+        }
     }
 
     /**
@@ -114,6 +128,25 @@ public class BluetoothConnectionService {
         Log.d(TAG, "write: Write Called.");
         //perform the write
         connectedThread.write(out);
+    }
+
+    public void handshake() {
+        Log.d(TAG, "handshake send");
+
+        //TODO: clear
+        byte length = 8;
+        byte[] directCommand = new byte[length];
+
+        directCommand[0] = (byte) (length - 2);     //length
+        directCommand[1] = (byte) (0);              //length
+        directCommand[2] = 0x2a;                    //first message
+        directCommand[3] = 0x00;                    //first message
+        directCommand[4] = (byte) 0x00;             // Direct command, reply required
+        directCommand[5] = 0x00;                    //global variables
+        directCommand[6] = 0x00;                    //global and local variables
+        directCommand[7] = 0x01;                    //opcode
+
+        connectedThread.write(directCommand);
     }
 
     /**
@@ -191,10 +224,12 @@ public class BluetoothConnectionService {
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Could not build bluetoothSocket " + e.getMessage());
                     continue;
                 }
-                BLUETOOTH_ADAPTER.cancelDiscovery();
+
+                if(BLUETOOTH_ADAPTER.isDiscovering())
+                    BLUETOOTH_ADAPTER.cancelDiscovery();
 
                 try {
                     bluetoothSocket.connect();
@@ -233,6 +268,27 @@ public class BluetoothConnectionService {
         }
     }
 
+    //thread that stops the handshake after specific time
+    private class TimeOutTask extends TimerTask {
+        private final ConnectedThread connectedThread;
+        private final Timer handshakeTimer;
+
+        TimeOutTask(ConnectedThread connectedThread){
+            this.connectedThread = connectedThread;
+            handshakeTimer = new Timer();
+            handshakeTimer.schedule(this, 5000);
+        }
+
+        @Override
+        public void run() {
+            if (connectedThread != null && connectedThread.isAlive()) {
+                handshakeTimer.cancel();
+                if(connectionStatus.getValue()!=4) //only interrupt if handshake wasn't successful
+                    connectedThread.cancel();
+            }
+        }
+    }
+
     /**
      * Finally the ConnectedThread which is responsible for maintaining the BTConnection, Sending the data, and
      * receiving incoming data through input/output streams respectively.
@@ -262,34 +318,56 @@ public class BluetoothConnectionService {
 
         public void run() {
             Log.d(TAG, "connectedThread running");
-
-            //TODO: only do this if its an ev3!
             connectionStatus.postValue(1);
 
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
-            int bytes; // bytes returned from read()
+            // Read from the InputStream
+            try {
+                //wait for handshake
+                INPUT_STREAM.read(buffer);
+                int replySize = (buffer[1]*16+buffer[0]);
+
+                Log.d(TAG,"handshake received:"+Helpers.bytesToHex(buffer, replySize+2)+" length:"+replySize);
+
+                if(buffer[4]==0x02) {
+                    connectionStatus.postValue(4);
+                    listen();
+                }else{
+                    connectionStatus.postValue(5);
+                }
+
+            } catch (Exception e) {
+                // could not connect, so connection status gets set to 2
+                if (connectionStatus.getValue() == 0) {
+                    connectionStatus.postValue(2);
+                }
+                // could not connect, because wrong device type, so connection status gets set to 5
+                if (connectionStatus.getValue() == 1) {
+                    connectionStatus.postValue(5);
+                }
+                Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
+
+            }
+
+        }
+
+        private void listen(){
+            Log.d(TAG, "connectedThread listening");
+
+            byte[] buffer = new byte[1024];  // buffer store for the stream
 
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 // Read from the InputStream
                 try {
-                    bytes = INPUT_STREAM.read(buffer);
-                    String incomingMessage = new String(buffer, 0, bytes);
-                    Log.d(TAG, "InputStream: " + incomingMessage);
+                    INPUT_STREAM.read(buffer);
+                    int replySize = (buffer[1]*16+buffer[0]);
 
-                    Intent incomingMessageIntent = new Intent("incomingMessage");
-                    incomingMessageIntent.putExtra("theMessage", incomingMessage);
-
+                    Log.d(TAG,"received:"+Helpers.bytesToHex(buffer, replySize+2)+" length:"+replySize);
                 } catch (IOException e) {
-                    // could not connect, so connection status gets set to 2
-                    if (connectionStatus.getValue() == 0) {
-                        connectionStatus.postValue(2);
-                    }
                     // connection got lost, so status gets set to 3
-                    if (connectionStatus.getValue() == 1) {
-                        connectionStatus.postValue(3);
-                    }
+                    connectionStatus.postValue(3);
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
                     break;
                 }
@@ -303,8 +381,7 @@ public class BluetoothConnectionService {
          * @param bytes the bytes to be send
          */
         public void write(byte[] bytes) {
-            //String text = new String(bytes, Charset.defaultCharset());
-            //Log.d(TAG, "write: Writing to outputstream: " + text);
+            Log.d(TAG, "write: Writing to outputstream: " + Helpers.bytesToHex(bytes, bytes.length)+" length:"+(bytes.length-2));
             try {
                 OUTPUT_STREAM.write(bytes);
             } catch (IOException e) {
@@ -331,6 +408,8 @@ public class BluetoothConnectionService {
         public void cancel() {
             try {
                 BLUETOOTH_SOCKET.close();
+                INPUT_STREAM.close();
+                OUTPUT_STREAM.close();
             } catch (IOException ignored) {
             }
         }

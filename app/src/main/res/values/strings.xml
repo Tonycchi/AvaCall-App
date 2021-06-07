@@ -15,6 +15,7 @@
 
         <!--  Connection      -->
         <string name="connecting_title">Verbindung wird hergestellt</string>
+        <string name="bluetooth_connection_check_device">Gerättyp wird geprüft</string>
 
         <!-- Bluetooth -->
         <string name="text_connected_bluetooth_devices">Zuletzt verbundene Geräte:</string>
@@ -27,6 +28,7 @@
         <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
         <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
         <string name="bluetooth_connection_wrong_device">Das verbundene Gerät entspricht nicht den Anforderungen.</string>
+
 
         <!-- Test Robot -->
         <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>

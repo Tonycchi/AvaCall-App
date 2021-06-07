@@ -72,11 +72,15 @@ public class MainModel {
         return videoConnectionModel.getSession();
     }
 
-    public void connectingCanceled() {
-        robotConnectionModel.connectingCanceled();
+    public void cancelConnection() {
+        robotConnectionModel.cancelConnection();
     }
 
     public void deviceAccepted() {
         robotConnectionModel.deviceAccepted();
+    }
+
+    public void acceptDevice() {
+        robotConnectionModel.acceptDevice();
     }
 }

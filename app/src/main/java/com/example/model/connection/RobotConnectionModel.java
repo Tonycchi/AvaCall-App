@@ -17,5 +17,7 @@ public abstract class RobotConnectionModel {
 
     public abstract void deviceAccepted();
 
-    public abstract void connectingCanceled();
+    public abstract void cancelConnection();
+
+    public abstract void acceptDevice();
 }

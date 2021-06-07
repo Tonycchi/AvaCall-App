@@ -123,26 +123,32 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
             case 1:
                 Log.d(TAG, "Case 1: Is connected!");
-                hideProgessDialog();
+                changeProgressDialog();
+                viewModel.acceptDevice();
                 break;
 
             case 2:
                 Log.d(TAG, "Case 2: Could not connect!");
+                hideProgressDialog();
                 ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
-                hideProgessDialog();
                 break;
 
             case 3:
                 Log.d(TAG, "Case 3: Connection lost!");
+                hideProgressDialog();
                 ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
                 break;
 
             case 4:
+                Log.d(TAG, "Case 4: Device is accepted!");
+                hideProgressDialog();
                 viewModel.deviceAccepted();
                 switchToNextFragment();
                 break;
 
             case 5:
+                Log.d(TAG, "Case 5: Device is not accepted!");
+                hideProgressDialog();
                 ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_wrong_device));
                 break;
 
