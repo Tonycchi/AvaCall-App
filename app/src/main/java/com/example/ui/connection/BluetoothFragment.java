@@ -25,7 +25,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     private static final String TAG = "BluetoothFragment";
 
-
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection
     private final BroadcastReceiver bluetoothStateChangeReceiver = new BroadcastReceiver() {
         @Override
@@ -125,6 +124,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
             case 1:
                 Log.d(TAG, "Case 1: Is connected!");
                 hideProgessDialog();
+                viewModel.deviceAccepted();
                 switchToNextFragment();
                 break;
 

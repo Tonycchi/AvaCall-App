@@ -62,4 +62,8 @@ public class MainViewModel extends AndroidViewModel {
     public void connectingCanceled() {
         model.connectingCanceled();
     }
+
+    public void deviceAccepted() {
+        model.deviceAccepted();
+    }
 }

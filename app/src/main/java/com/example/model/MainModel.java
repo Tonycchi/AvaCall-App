@@ -75,4 +75,8 @@ public class MainModel {
     public void connectingCanceled() {
         robotConnectionModel.connectingCanceled();
     }
+
+    public void deviceAccepted() {
+        robotConnectionModel.deviceAccepted();
+    }
 }
