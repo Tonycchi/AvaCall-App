@@ -12,6 +12,8 @@ import com.example.data.LocalDatabase;
 import com.example.data.URLFactory;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
+import com.example.model.connection.EV3BluetoothHandshake;
+import com.example.model.connection.Handshake;
 import com.example.model.connection.RobotConnectionModel;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class MainModel {
     private Context context;
 
     private RobotConnectionModel robotConnectionModel;
-
+    private Handshake handshake;
     private VideoConnectionModel videoConnectionModel;
 
     // Model for ModelSelectionFragment
@@ -40,8 +42,9 @@ public class MainModel {
     public MainModel(@NonNull Application application) {
         localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database").allowMainThreadQueries().build();
 
+        handshake = new EV3BluetoothHandshake();
+        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
         videoConnectionModel = new VideoConnectionModel(PreferenceManager.getDefaultSharedPreferences(application));
-        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());
     }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
@@ -78,9 +81,5 @@ public class MainModel {
 
     public void deviceAccepted() {
         robotConnectionModel.deviceAccepted();
-    }
-
-    public void acceptDevice() {
-        robotConnectionModel.acceptDevice();
     }
 }

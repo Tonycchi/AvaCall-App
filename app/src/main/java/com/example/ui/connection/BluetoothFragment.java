@@ -77,6 +77,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onResume() {
         super.onResume();
+        viewModel.cancelConnection();
 
         //bluetooth is disabled
         if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
@@ -124,7 +125,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
             case 1:
                 Log.d(TAG, "Case 1: Is connected!");
                 changeProgressDialog();
-                viewModel.acceptDevice();
                 break;
 
             case 2:

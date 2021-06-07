@@ -31,9 +31,9 @@ public class BluetoothModel extends RobotConnectionModel {
 
     private ConnectedDeviceDAO connectedDeviceDAO;
 
-    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO) {
+    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO, Handshake byteArrayHandshake) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothConnectionService = new BluetoothConnectionService();
+        bluetoothConnectionService = new BluetoothConnectionService((ByteArrayHandshake)byteArrayHandshake);
         this.connectedDeviceDAO = connectedDeviceDAO;
     }
 
@@ -115,10 +115,4 @@ public class BluetoothModel extends RobotConnectionModel {
     public void cancelConnection() {
         bluetoothConnectionService.cancel();
     }
-
-    @Override
-    public void acceptDevice() {
-        bluetoothConnectionService.handshake();
-    }
-
 }

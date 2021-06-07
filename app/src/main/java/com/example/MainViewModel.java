@@ -66,8 +66,4 @@ public class MainViewModel extends AndroidViewModel {
     public void deviceAccepted() {
         model.deviceAccepted();
     }
-
-    public void acceptDevice() {
-        model.acceptDevice();
-    }
 }

@@ -18,6 +18,4 @@ public abstract class RobotConnectionModel {
     public abstract void deviceAccepted();
 
     public abstract void cancelConnection();
-
-    public abstract void acceptDevice();
 }

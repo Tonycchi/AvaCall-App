@@ -5,20 +5,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.os.ParcelUuid;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.data.ConnectedDevice;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.charset.Charset;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -41,10 +35,12 @@ public class BluetoothConnectionService {
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
     private BluetoothDevice bluetoothDevice;
+    private ByteArrayHandshake byteArrayHandshake;
 
-    public BluetoothConnectionService() {
+    public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake) {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<Integer>();
+        this.byteArrayHandshake = byteArrayHandshake;
     }
 
     public MutableLiveData<Integer> getConnectionStatus() {
@@ -94,6 +90,8 @@ public class BluetoothConnectionService {
         connectedThread = new ConnectedThread(bluetoothSocket);
         new TimeOutTask(connectedThread);
         connectedThread.start();
+        Log.d(TAG, "handshake send");
+        connectedThread.write(byteArrayHandshake.getSyn());
     }
 
     /**
@@ -128,25 +126,6 @@ public class BluetoothConnectionService {
         Log.d(TAG, "write: Write Called.");
         //perform the write
         connectedThread.write(out);
-    }
-
-    public void handshake() {
-        Log.d(TAG, "handshake send");
-
-        //TODO: clear
-        byte length = 8;
-        byte[] directCommand = new byte[length];
-
-        directCommand[0] = (byte) (length - 2);     //length
-        directCommand[1] = (byte) (0);              //length
-        directCommand[2] = 0x2a;                    //first message
-        directCommand[3] = 0x00;                    //first message
-        directCommand[4] = (byte) 0x00;             // Direct command, reply required
-        directCommand[5] = 0x00;                    //global variables
-        directCommand[6] = 0x00;                    //global and local variables
-        directCommand[7] = 0x01;                    //opcode
-
-        connectedThread.write(directCommand);
     }
 
     /**
@@ -208,11 +187,13 @@ public class BluetoothConnectionService {
     private class ConnectThread extends Thread {
         private BluetoothSocket bluetoothSocket;
         private ParcelUuid[] deviceUUIDs;
+        private boolean stopConnecting;
 
         public ConnectThread(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
             Log.d(TAG, "ConnectThread: started.");
             bluetoothDevice = device;
             this.deviceUUIDs = deviceUUIDs;
+            stopConnecting = false;
         }
 
         public void run() {
@@ -221,6 +202,9 @@ public class BluetoothConnectionService {
             boolean isConnected = false;
 
             for (ParcelUuid mDeviceUUID : deviceUUIDs) {
+                if(stopConnecting)
+                    break;
+
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
                 } catch (IOException e) {
@@ -236,7 +220,7 @@ public class BluetoothConnectionService {
                     isConnected = true;
                     break;
                 } catch (IOException e) {
-                    // Close the socket
+                    //Close the socket
                     try {
                         bluetoothSocket.close();
                         Log.d(TAG, "run: Closed Socket.");
@@ -262,6 +246,7 @@ public class BluetoothConnectionService {
             try {
                 Log.d(TAG, "cancel: Closing Client Socket.");
                 bluetoothSocket.close();
+                stopConnecting = true;
             } catch (IOException e) {
                 Log.e(TAG, "cancel: close() of bluetoothSocket in Connectthread failed. " + e.getMessage());
             }
@@ -318,7 +303,9 @@ public class BluetoothConnectionService {
 
         public void run() {
             Log.d(TAG, "connectedThread running");
-            connectionStatus.postValue(1);
+
+            if(connectionStatus.getValue() == 0)
+                connectionStatus.postValue(1);
 
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
@@ -330,7 +317,7 @@ public class BluetoothConnectionService {
 
                 Log.d(TAG,"handshake received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
 
-                if(buffer[4]==0x02) {
+                if(byteArrayHandshake.isAckCorrect(buffer)) {
                     connectionStatus.postValue(4);
                     listen();
                 }else{
