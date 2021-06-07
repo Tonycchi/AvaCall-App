@@ -33,7 +33,7 @@ public class BluetoothConnectionService {
 
     private static final String APP_NAME = "AvaCall";
 
-    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final UUID MY_UUID = UUID.randomUUID();
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device type, 5 connection is not accepted = wrong device type
     private MutableLiveData<Integer> connectionStatus;
@@ -328,7 +328,7 @@ public class BluetoothConnectionService {
                 INPUT_STREAM.read(buffer);
                 int replySize = (buffer[1]*16+buffer[0]);
 
-                Log.d(TAG,"handshake received:"+Helpers.bytesToHex(buffer, replySize+2)+" length:"+replySize);
+                Log.d(TAG,"handshake received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
 
                 if(buffer[4]==0x02) {
                     connectionStatus.postValue(4);
@@ -364,7 +364,7 @@ public class BluetoothConnectionService {
                     INPUT_STREAM.read(buffer);
                     int replySize = (buffer[1]*16+buffer[0]);
 
-                    Log.d(TAG,"received:"+Helpers.bytesToHex(buffer, replySize+2)+" length:"+replySize);
+                    Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
                 } catch (IOException e) {
                     // connection got lost, so status gets set to 3
                     connectionStatus.postValue(3);
@@ -381,7 +381,7 @@ public class BluetoothConnectionService {
          * @param bytes the bytes to be send
          */
         public void write(byte[] bytes) {
-            Log.d(TAG, "write: Writing to outputstream: " + Helpers.bytesToHex(bytes, bytes.length)+" length:"+(bytes.length-2));
+            Log.d(TAG, "write: Writing to outputstream: " + bytesToHex(bytes, bytes.length)+" length:"+(bytes.length-2));
             try {
                 OUTPUT_STREAM.write(bytes);
             } catch (IOException e) {
@@ -413,5 +413,21 @@ public class BluetoothConnectionService {
             } catch (IOException ignored) {
             }
         }
+    }
+
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    private static String bytesToHex(byte[] bytes, int length){
+        char[] hexArray = new char[length * 3];
+        for (int j = 0; j < length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexArray[j * 3] = HEX_ARRAY[v >>> 4];
+            hexArray[j * 3 + 1] = HEX_ARRAY[v & 0x0F];
+            if(j%2==0)
+                hexArray[j * 3 + 2] = ':';
+            else
+                hexArray[j * 3 + 2] = '|';
+        }
+
+        return "0x|"+new String(hexArray);
     }
 }
