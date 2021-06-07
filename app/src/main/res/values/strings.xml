@@ -31,6 +31,8 @@
         <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>
         <string name="button_robot_control_good">Ja</string>
         <string name="button_robot_control_bad">Nein</string>
+        <string name="button_fire">Feuer</string>
+
 
         <!-- Model Selection -->
         <string name="model_picture">Picture of the currently selected model</string>

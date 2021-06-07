@@ -13,6 +13,10 @@
                     <dimen name="standard_button_border_width">@dimen/_1sdp</dimen>
                     <dimen name="navigation_button_height">@dimen/_40sdp</dimen>
 
+                <!-- Control Elements -->
+                    <dimen name="joystick_size">@dimen/_150sdp</dimen>
+                    <dimen name="joystick_border_width">@dimen/_32sdp</dimen>
+
                 <!-- Margins -->
                     <dimen name="margin_top">@dimen/_16sdp</dimen>
                     <dimen name="margin_side">@dimen/_16sdp</dimen>
@@ -64,8 +68,6 @@
     <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
     <dimen name="control_button_width">@dimen/_100sdp</dimen>
     <dimen name="paired_devices_width">@dimen/_300sdp</dimen>
-    <dimen name="joystick_size">@dimen/_125sdp</dimen>
-    <dimen name="joystick_border_width">@dimen/_32sdp</dimen>
     <dimen name="margin_top_between_buttons">@dimen/_8sdp</dimen>
     <dimen name="margin_connection_status">@dimen/_8sdp</dimen>
     <dimen name="margin_bottom_between">@dimen/_4sdp</dimen>
