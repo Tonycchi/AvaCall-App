@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;

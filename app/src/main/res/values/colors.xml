@@ -25,8 +25,8 @@
 
     <!-- joystick -->
     <color name="joystick_background">#FF838383</color>
-    <color name="joystick_border">#FF000000</color>
-    <color name="joystick_button">#FFFF0000</color>
+    <color name="joystick_border">#ebebeb</color>
+    <color name="joystick_button">#BCFF1F1F</color>
 
     <!-- buttons -->
     <color name="button_next_inner">#D230EA10</color>

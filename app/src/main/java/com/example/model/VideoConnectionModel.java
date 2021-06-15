@@ -8,15 +8,14 @@ import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
 
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class VideoConnectionModel {
 
     private final String TAG = "VideoConnection";
-
-    // observed by VideoConnectionFragment
-    private final MutableLiveData<String> inviteLink = new MutableLiveData<>();
 
     private URLSettings urlSettings;
     private WebClient wc;
@@ -61,9 +60,6 @@ public class VideoConnectionModel {
             if (!connectionError) {
                 String id = wc.getId();
                 session = new SessionData(jitsi, urlSettings.getHost_https(), id);
-//                TODO: hardcode nur zum testen
-//                session = new SessionData(jitsi, "https://avatar.mintclub.org", id);
-                inviteLink.setValue(session.getShareURL());
                 // TODO: Zum Videocall hier auf visible setzen!
             } else {
                 // TODO: Fehlernachricht anzeigen
@@ -83,13 +79,15 @@ public class VideoConnectionModel {
         this.controller = controller;
     }
 
-    public MutableLiveData<String> getInviteLink() {
-        return this.inviteLink;
+    public String getShareURL() {
+        return session.getShareURL();
     }
 
-    public SessionData getSession() {
-        return this.session;
+    public JitsiMeetConferenceOptions getOptions() {
+        return session.getOptions();
     }
 
-    public void setReceiveCommands() { wc.setReceiveCommands(); }
+    public void setReceiveCommands(){
+        wc.setReceiveCommands();
+    }
 }

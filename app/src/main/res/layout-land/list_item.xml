@@ -1,14 +1,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/paired_devices_height"
-    android:layout_marginLeft="@dimen/margin_side"
-    android:layout_marginRight="@dimen/margin_side"
+    android:layout_height="@dimen/paired_devices_height_land"
+    android:layout_marginLeft="@dimen/margin_side_land"
+    android:layout_marginRight="@dimen/margin_side_land"
     android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <android.widget.Button
+        android:id="@+id/button_bluetooth_device"
+        style="@style/button_neutral"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_horizontal_small"
         android:text="@string/placeholder"
-        android:layout_gravity="center_vertical"/>
+        />
 </FrameLayout>

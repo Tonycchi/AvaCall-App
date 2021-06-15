@@ -12,6 +12,8 @@ import com.example.model.SessionData;
 import com.example.model.WebClient;
 import com.example.model.connection.Device;
 
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,12 +63,16 @@ public class MainViewModel extends AndroidViewModel {
         model.invitePartner();
     }
 
-    public MutableLiveData<String> getInviteLink() {
-        return model.getInviteLink();
+//    public MutableLiveData<String> getInviteLink() {
+//        return model.getInviteLink();
+//    }
+
+    public String getShareURL() {
+        return model.getShareURL();
     }
 
-    public SessionData getSession() {
-        return model.getSession();
+    public JitsiMeetConferenceOptions getOptions() {
+        return model.getOptions();
     }
 
     public void cancelConnection() {

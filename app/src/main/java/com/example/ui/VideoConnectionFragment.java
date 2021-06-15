@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -42,25 +43,6 @@ public class VideoConnectionFragment extends HostedFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-        @SuppressLint("ObsoleteSdkInt")
-        Observer<String> sharedLinkObserver = link -> {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.room_link), link);
-                clipboard.setPrimaryClip(clip);
-                ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
-            } else {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, link);
-                sendIntent.setType("text/plain");
-
-                Intent shareIntent = Intent.createChooser(sendIntent, null);
-                startActivity(shareIntent);
-            }
-        };
-
-        viewModel.getInviteLink().observe(requireActivity(), sharedLinkObserver);
 
         Button buttonURLsettings = view.findViewById(R.id.button_url_settings);
         Button buttonInvitePartner = view.findViewById(R.id.button_invite_partner);
@@ -85,14 +67,29 @@ public class VideoConnectionFragment extends HostedFragment {
         fragmentManager.popBackStack();
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private void onClickInvitePartner(View v) {
         viewModel.invitePartner();
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getShareURL());
+            clipboard.setPrimaryClip(clip);
+            ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
+        } else {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getShareURL());
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, null);
+            startActivity(shareIntent);
+        }
     }
 
     private void onClickSwitchToVideoCall(View v) {
         // TODO setReceiveCommands kommt hier noch hin
+        JitsiMeetActivity.launch(requireContext(), viewModel.getOptions());
         viewModel.setReceiveCommands();
-        JitsiMeetActivity.launch(requireContext(), viewModel.getSession().getOptions());
     }
 
     @Override

@@ -21,6 +21,8 @@ import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 import com.example.model.robot.ev3.EV3;
 
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
 import java.util.ArrayList;
 
 public class MainModel {
@@ -87,12 +89,16 @@ public class MainModel {
         videoConnectionModel.invitePartner();
     }
 
-    public MutableLiveData<String> getInviteLink() {
-        return videoConnectionModel.getInviteLink();
+//    public MutableLiveData<String> getInviteLink() {
+//        return videoConnectionModel.getInviteLink();
+//    }
+
+    public String getShareURL() {
+        return videoConnectionModel.getShareURL();
     }
 
-    public SessionData getSession() {
-        return videoConnectionModel.getSession();
+    public JitsiMeetConferenceOptions getOptions() {
+        return videoConnectionModel.getOptions();
     }
 
     public void cancelConnection() {

@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.widget.Button
+        android:id="@+id/button_yes"
+        style="@style/button_next"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_side_land"
+        android:layout_marginEnd="@dimen/margin_horizontal_small_land"
+        android:layout_marginBottom="@dimen/margin_bottom_land"
+        android:text="@string/button_robot_control_good"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_no"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/button_no"
+        style="@style/button_back"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_horizontal_small_land"
+        android:layout_marginEnd="@dimen/margin_side_land"
+        android:layout_marginBottom="@dimen/margin_bottom_land"
+        android:text="@string/button_robot_control_bad"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_yes" />
+
+    <TextView
+        android:id="@+id/text_control_question"
+        style="@style/text_standard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_vertical_small_land"
+        android:text="@string/text_robot_control_question"
+        app:layout_constraintBottom_toTopOf="@+id/button_yes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/joystick"
+        android:layout_width="@dimen/joystick_size"
+        android:layout_height="@dimen/joystick_size"
+        app:JV_autoReCenterButton="true"
+        app:JV_backgroundColor="@color/joystick_background"
+        app:JV_backgroundSizeRatio="50%"
+        app:JV_borderColor="@color/joystick_border"
+        app:JV_borderWidth="@dimen/joystick_border_width"
+        app:JV_buttonColor="@color/joystick_button"
+        app:JV_buttonSizeRatio="30%"
+        app:JV_fixedCenter="false"
+        app:layout_constraintBottom_toTopOf="@+id/text_control_question"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/button_fire"
+        style="@style/button_neutral"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_horizontal_small_land"
+        android:layout_marginEnd="@dimen/margin_horizontal_small_land"
+        android:text="@string/button_fire"
+        app:layout_constraintBottom_toTopOf="@+id/text_control_question"
+        app:layout_constraintEnd_toStartOf="@+id/slider"
+        app:layout_constraintStart_toEndOf="@+id/joystick"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/slider"
+        android:layout_width="@dimen/joystick_size"
+        android:layout_height="@dimen/joystick_size"
+        android:progress="50"
+        android:progressDrawable="@drawable/slider_progressbar"
+        android:thumb="@drawable/slider_thumb"
+        android:rotation="270"
+        app:layout_constraintBottom_toTopOf="@+id/text_control_question"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
