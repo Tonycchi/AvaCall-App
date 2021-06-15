@@ -1,6 +1,7 @@
 package com.example.model;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -34,12 +35,8 @@ public class VideoConnectionModel {
         boolean connectionError = false;
         if (session == null) {
             String jitsi = urlSettings.getJitsi_https();
-//            TODO: hardcode nur zum testen
-//            String jitsi = "https://meet.jit.si";
             try {
                 wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), null);
-//                TODO: harcode nur zum testen
-//                wc = new WebClient(new URI("wss://avatar.mintclub.org:22222"), "meet.jit.si", null);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -53,6 +50,7 @@ public class VideoConnectionModel {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
                     connectionError = true;
+                    Log.e(TAG, "connection timeout: jist:"+jitsi+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
                     break;
                 }
             }
@@ -62,7 +60,8 @@ public class VideoConnectionModel {
                 session = new SessionData(jitsi, urlSettings.getHost_https(), id);
                 // TODO: Zum Videocall hier auf visible setzen!
             } else {
-                // TODO: Fehlernachricht anzeigen
+               Log.e(TAG, "connectionError on: jist:"+jitsi+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
+                // TODO: Passende fehlermedlung in app anzeigen
             }
         }
     }

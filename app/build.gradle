@@ -52,4 +52,5 @@ dependencies {
     //Guava support for Room, including Optional and ListenableFuture
     implementation "androidx.room:room-guava:$room_version"
 
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
 }

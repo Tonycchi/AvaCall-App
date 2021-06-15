@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -24,6 +25,8 @@ import com.example.rcvc.R;
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 
 public class VideoConnectionFragment extends HostedFragment {
+
+    private static final String TAG = "VideoConnectionFragment";
 
     private MainViewModel viewModel;
 
@@ -69,13 +72,16 @@ public class VideoConnectionFragment extends HostedFragment {
 
     @SuppressLint("ObsoleteSdkInt")
     private void onClickInvitePartner(View v) {
+        Log.d(TAG, "onClickInvitePartner");
         viewModel.invitePartner();
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+            Log.d(TAG, "OLD Android Version!! -> no share Link pop-up shown");
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getShareURL());
             clipboard.setPrimaryClip(clip);
             ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
         } else {
+            Log.d(TAG, "New Android Version!");
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getShareURL());

@@ -1,5 +1,7 @@
 package com.example.model;
 
+import android.util.Log;
+
 import com.example.model.robot.Controller;
 import com.example.model.robot.ControllerInput;
 
@@ -24,6 +26,7 @@ public class WebClient extends WebSocketClient {
         this.jitsi = jitsi;
         this.ready = false;
         receiveCommands = false;
+        Log.d(TAG, "serverURI:"+serverURI.toASCIIString());
     }
 
     /**
