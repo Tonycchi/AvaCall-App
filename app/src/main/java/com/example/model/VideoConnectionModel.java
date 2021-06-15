@@ -32,11 +32,12 @@ public class VideoConnectionModel {
      * creates connection w/ WebSocket, fetches share link and saves in inviteLink
      */
     public void invitePartner() {
+        //TODO: return wheter an connectionError occured or throw error! because when connectionError occurs the whole app crashes
         boolean connectionError = false;
         if (session == null) {
             String jitsi = urlSettings.getJitsi_https();
             try {
-                wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), null);
+                wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), controller);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -46,7 +47,7 @@ public class VideoConnectionModel {
 
             long startTime = System.currentTimeMillis();
             //check if a timeout occurs while connecting to server
-            while (!wc.isReady()) {
+            while (!wc.isReady()) { //TODO: when error occurs in wc, stop waiting and directly throw error
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
                     connectionError = true;

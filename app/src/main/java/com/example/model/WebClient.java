@@ -42,7 +42,7 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        //Log.d(TAG,"closed with exit code " + code + " additional info: " + reason);
+        Log.d(TAG,"closed with exit code " + code + " additional info: " + reason);
         ready = false;
     }
 
@@ -80,7 +80,7 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onError(Exception ex) {
-        //Log.e(TAG,"an error occurred:" + ex);
+        Log.e(TAG,"an error occurred:" + ex);
     }
 
     public String getId() {
