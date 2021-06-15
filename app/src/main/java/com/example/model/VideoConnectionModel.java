@@ -42,9 +42,9 @@ public class VideoConnectionModel {
                 e.printStackTrace();
             }
 
-            wc.connect();
-            //continue with share link when ws is connected
+            wc.connect();//TODO: when error occurs in wc, stop waiting and directly throw error
 
+            //continue with share link when ws is connected
             long startTime = System.currentTimeMillis();
             //check if a timeout occurs while connecting to server
             while (!wc.isReady()) { //TODO: when error occurs in wc, stop waiting and directly throw error
