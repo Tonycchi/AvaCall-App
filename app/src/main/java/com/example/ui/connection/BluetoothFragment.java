@@ -25,7 +25,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     private static final String TAG = "BluetoothFragment";
 
-
     // Broadcastreceiver to detect whether bluetooth was turned on or off and do code on detection
     private final BroadcastReceiver bluetoothStateChangeReceiver = new BroadcastReceiver() {
         @Override
@@ -78,6 +77,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onResume() {
         super.onResume();
+        viewModel.cancelConnection();
 
         //bluetooth is disabled
         if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
@@ -115,7 +115,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
     @Override
     public void connectionStatusChanged(Integer newConnectionStatus){
-        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
         switch(newConnectionStatus){
             case 0:
                 Log.d(TAG, "Case 0: Not tested!");
@@ -124,19 +124,32 @@ public class BluetoothFragment extends RobotConnectionFragment {
 
             case 1:
                 Log.d(TAG, "Case 1: Is connected!");
-                hideProgessDialog();
-                switchToNextFragment();
+                changeProgressDialog();
                 break;
 
             case 2:
                 Log.d(TAG, "Case 2: Could not connect!");
+                hideProgressDialog();
                 ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
-                hideProgessDialog();
                 break;
 
             case 3:
                 Log.d(TAG, "Case 3: Connection lost!");
+                hideProgressDialog();
                 ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
+                break;
+
+            case 4:
+                Log.d(TAG, "Case 4: Device is accepted!");
+                hideProgressDialog();
+                viewModel.deviceAccepted();
+                switchToNextFragment();
+                break;
+
+            case 5:
+                Log.d(TAG, "Case 5: Device is not accepted!");
+                hideProgressDialog();
+                ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_wrong_device));
                 break;
 
             default:

@@ -69,8 +69,12 @@ public class MainViewModel extends AndroidViewModel {
         return model.getSession();
     }
 
-    public void connectingCanceled() {
-        model.connectingCanceled();
+    public void cancelConnection() {
+        model.cancelConnection();
+    }
+
+    public void deviceAccepted() {
+        model.deviceAccepted();
     }
 
     public void setReceiveCommands() { model.setReceiveCommands(); }

@@ -25,17 +25,15 @@ public class BluetoothModel extends RobotConnectionModel {
     // Bluetooth adapter of our device
     private BluetoothAdapter bluetoothAdapter;
     // Device we want to connect with
-    private BluetoothDevice selectedDevice;
-    // The UUIDs of the device we want to connect with
-    private ParcelUuid[] deviceUUIDs;
+    private BluetoothDevice bluetoothDevice;
     //bluetooth
     private BluetoothConnectionService bluetoothConnectionService;
 
     private ConnectedDeviceDAO connectedDeviceDAO;
 
-    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO) {
+    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO, Handshake byteArrayHandshake) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothConnectionService = new BluetoothConnectionService();
+        bluetoothConnectionService = new BluetoothConnectionService((ByteArrayHandshake)byteArrayHandshake);
         this.connectedDeviceDAO = connectedDeviceDAO;
     }
 
@@ -100,11 +98,10 @@ public class BluetoothModel extends RobotConnectionModel {
 
     @Override
     public void startConnection(Device device) {
-        BluetoothDevice bluetoothDevice = (BluetoothDevice) device.getParcelable();
+        bluetoothDevice = (BluetoothDevice) device.getParcelable();
         ParcelUuid[] uuids = bluetoothDevice.getUuids();
 
         Log.d(TAG, "connect: " + bluetoothDevice.getAddress());
-        connectedDeviceDAO.insertAll(new ConnectedDevice(bluetoothDevice.getAddress(), System.currentTimeMillis()));
 
         bluetoothConnectionService.startClient(bluetoothDevice, uuids);
     }
@@ -114,8 +111,12 @@ public class BluetoothModel extends RobotConnectionModel {
     }
 
     @Override
-    public void connectingCanceled() {
-        bluetoothConnectionService.connectingCanceled();
+    public void deviceAccepted() {
+        connectedDeviceDAO.insertAll(new ConnectedDevice(bluetoothDevice.getAddress(), System.currentTimeMillis()));
     }
 
+    @Override
+    public void cancelConnection() {
+        bluetoothConnectionService.cancel();
+    }
 }

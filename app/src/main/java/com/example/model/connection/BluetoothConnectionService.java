@@ -5,17 +5,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.os.ParcelUuid;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.data.ConnectedDevice;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 /**
@@ -28,27 +27,24 @@ public class BluetoothConnectionService implements ConnectionService {
 
     private static final String APP_NAME = "AvaCall";
 
-    private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final UUID MY_UUID = UUID.randomUUID();
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
-    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+    //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device type, 5 connection is not accepted = wrong device type
     private MutableLiveData<Integer> connectionStatus;
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
     private BluetoothDevice bluetoothDevice;
+    private ByteArrayHandshake byteArrayHandshake;
 
-    public BluetoothConnectionService() {
+    public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake) {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<Integer>();
+        this.byteArrayHandshake = byteArrayHandshake;
     }
 
     public MutableLiveData<Integer> getConnectionStatus() {
         return connectionStatus;
-    }
-
-    public void connectingCanceled() {
-        if (connectThread != null)
-            connectThread.cancel();
     }
 
     /**
@@ -92,15 +88,33 @@ public class BluetoothConnectionService implements ConnectionService {
 
         // Start the thread to manage the connection and perform transmissions
         connectedThread = new ConnectedThread(bluetoothSocket);
+        new TimeOutTask(connectedThread);
         connectedThread.start();
+        Log.d(TAG, "handshake send");
+        for(byte[] command : byteArrayHandshake.getSyn()) {
+            connectedThread.write(command);
+        }
     }
 
     /**
      * Cancels the existing connection
      */
     public void cancel() {
-        Log.d(TAG, "cancel: Connection cancelled.");
-        connectedThread.cancel();
+        Log.d(TAG, "cancel: Connection gets manually cancelled.");
+        if(BLUETOOTH_ADAPTER.isDiscovering())
+            BLUETOOTH_ADAPTER.cancelDiscovery();
+        if(connectedThread!=null) {
+            connectedThread.cancel();
+            connectedThread = null;
+        }
+        if(connectThread != null){
+            connectThread.cancel();
+            connectThread = null;
+        }
+        if(acceptThread != null){
+            acceptThread.interrupt();
+            acceptThread = null;
+        }
     }
 
     /**
@@ -175,11 +189,13 @@ public class BluetoothConnectionService implements ConnectionService {
     private class ConnectThread extends Thread {
         private BluetoothSocket bluetoothSocket;
         private ParcelUuid[] deviceUUIDs;
+        private boolean stopConnecting;
 
         public ConnectThread(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
             Log.d(TAG, "ConnectThread: started.");
             bluetoothDevice = device;
             this.deviceUUIDs = deviceUUIDs;
+            stopConnecting = false;
         }
 
         public void run() {
@@ -188,20 +204,25 @@ public class BluetoothConnectionService implements ConnectionService {
             boolean isConnected = false;
 
             for (ParcelUuid mDeviceUUID : deviceUUIDs) {
+                if(stopConnecting)
+                    break;
+
                 try {
                     bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(mDeviceUUID.getUuid());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Could not build bluetoothSocket " + e.getMessage());
                     continue;
                 }
-                BLUETOOTH_ADAPTER.cancelDiscovery();
+
+                if(BLUETOOTH_ADAPTER.isDiscovering())
+                    BLUETOOTH_ADAPTER.cancelDiscovery();
 
                 try {
                     bluetoothSocket.connect();
                     isConnected = true;
                     break;
                 } catch (IOException e) {
-                    // Close the socket
+                    //Close the socket
                     try {
                         bluetoothSocket.close();
                         Log.d(TAG, "run: Closed Socket.");
@@ -227,8 +248,30 @@ public class BluetoothConnectionService implements ConnectionService {
             try {
                 Log.d(TAG, "cancel: Closing Client Socket.");
                 bluetoothSocket.close();
+                stopConnecting = true;
             } catch (IOException e) {
                 Log.e(TAG, "cancel: close() of bluetoothSocket in Connectthread failed. " + e.getMessage());
+            }
+        }
+    }
+
+    //thread that stops the handshake after specific time
+    private class TimeOutTask extends TimerTask {
+        private final ConnectedThread connectedThread;
+        private final Timer handshakeTimer;
+
+        TimeOutTask(ConnectedThread connectedThread){
+            this.connectedThread = connectedThread;
+            handshakeTimer = new Timer();
+            handshakeTimer.schedule(this, 5000);
+        }
+
+        @Override
+        public void run() {
+            if (connectedThread != null && connectedThread.isAlive()) {
+                handshakeTimer.cancel();
+                if(connectionStatus.getValue()!=4) //only interrupt if handshake wasn't successful
+                    connectedThread.cancel();
             }
         }
     }
@@ -263,33 +306,57 @@ public class BluetoothConnectionService implements ConnectionService {
         public void run() {
             Log.d(TAG, "connectedThread running");
 
-            //TODO: only do this if its an ev3!
-            connectionStatus.postValue(1);
+            if(connectionStatus.getValue() == 0)
+                connectionStatus.postValue(1);
 
             byte[] buffer = new byte[1024];  // buffer store for the stream
 
-            int bytes; // bytes returned from read()
+            // Read from the InputStream
+            try {
+                //wait for handshake
+                INPUT_STREAM.read(buffer);
+                int replySize = (buffer[1]*16+buffer[0]);
+
+                Log.d(TAG,"handshake received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
+
+                if(byteArrayHandshake.isAckCorrect(buffer)) {
+                    connectionStatus.postValue(4);
+                    listen();
+                }else{
+                    connectionStatus.postValue(5);
+                }
+
+            } catch (Exception e) {
+                // could not connect, so connection status gets set to 2
+                if (connectionStatus.getValue() == 0) {
+                    connectionStatus.postValue(2);
+                }
+                // could not connect, because wrong device type, so connection status gets set to 5
+                if (connectionStatus.getValue() == 1) {
+                    connectionStatus.postValue(5);
+                }
+                Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
+
+            }
+
+        }
+
+        private void listen(){
+            Log.d(TAG, "connectedThread listening");
+
+            byte[] buffer = new byte[1024];  // buffer store for the stream
 
             // Keep listening to the InputStream until an exception occurs
             while (true) {
                 // Read from the InputStream
                 try {
-                    bytes = INPUT_STREAM.read(buffer);
-                    String incomingMessage = new String(buffer, 0, bytes);
-                    Log.d(TAG, "InputStream: " + incomingMessage);
+                    INPUT_STREAM.read(buffer);
+                    int replySize = (buffer[1]*16+buffer[0]);
 
-                    Intent incomingMessageIntent = new Intent("incomingMessage");
-                    incomingMessageIntent.putExtra("theMessage", incomingMessage);
-
+                    Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
                 } catch (IOException e) {
-                    // could not connect, so connection status gets set to 2
-                    if (connectionStatus.getValue() == 0) {
-                        connectionStatus.postValue(2);
-                    }
                     // connection got lost, so status gets set to 3
-                    if (connectionStatus.getValue() == 1) {
-                        connectionStatus.postValue(3);
-                    }
+                    connectionStatus.postValue(3);
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage());
                     break;
                 }
@@ -303,8 +370,7 @@ public class BluetoothConnectionService implements ConnectionService {
          * @param bytes the bytes to be send
          */
         public void write(byte[] bytes) {
-            //String text = new String(bytes, Charset.defaultCharset());
-            //Log.d(TAG, "write: Writing to outputstream: " + text);
+            Log.d(TAG, "write: Writing to outputstream: " + bytesToHex(bytes, bytes.length)+" length:"+(bytes.length-2));
             try {
                 OUTPUT_STREAM.write(bytes);
             } catch (IOException e) {
@@ -331,8 +397,26 @@ public class BluetoothConnectionService implements ConnectionService {
         public void cancel() {
             try {
                 BLUETOOTH_SOCKET.close();
+                INPUT_STREAM.close();
+                OUTPUT_STREAM.close();
             } catch (IOException ignored) {
             }
         }
+    }
+
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+    private static String bytesToHex(byte[] bytes, int length){
+        char[] hexArray = new char[length * 3];
+        for (int j = 0; j < length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexArray[j * 3] = HEX_ARRAY[v >>> 4];
+            hexArray[j * 3 + 1] = HEX_ARRAY[v & 0x0F];
+            if(j%2==0)
+                hexArray[j * 3 + 2] = ':';
+            else
+                hexArray[j * 3 + 2] = '|';
+        }
+
+        return "0x|"+new String(hexArray);
     }
 }

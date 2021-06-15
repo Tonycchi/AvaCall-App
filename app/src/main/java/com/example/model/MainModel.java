@@ -14,6 +14,8 @@ import com.example.data.URLSettings;
 import com.example.data.RobotModel;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
+import com.example.model.connection.EV3BluetoothHandshake;
+import com.example.model.connection.Handshake;
 import com.example.model.connection.RobotConnectionModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
@@ -26,7 +28,7 @@ public class MainModel {
     private Context context;
 
     private RobotConnectionModel robotConnectionModel;
-
+    private Handshake handshake;
     private VideoConnectionModel videoConnectionModel;
 
     private Robot robot;
@@ -54,7 +56,9 @@ public class MainModel {
         localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;2000"));
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
-        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());
+        handshake = new EV3BluetoothHandshake();
+        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
+        videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
@@ -91,8 +95,12 @@ public class MainModel {
         return videoConnectionModel.getSession();
     }
 
-    public void connectingCanceled() {
-        robotConnectionModel.connectingCanceled();
+    public void cancelConnection() {
+        robotConnectionModel.cancelConnection();
+    }
+
+    public void deviceAccepted() {
+        robotConnectionModel.deviceAccepted();
     }
 
     public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
