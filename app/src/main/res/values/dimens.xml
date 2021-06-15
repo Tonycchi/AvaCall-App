@@ -60,24 +60,4 @@
 
             <!-- Bluetooth -->
             <dimen name="paired_devices_height_land">@dimen/_60sdp</dimen>
-
-
-    <!-- OLD IS DELETED LATER -->
-    <!-- Main Activity -->
-    <dimen name="show_controller_width">@dimen/_170sdp</dimen>
-    <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
-    <dimen name="control_button_width">@dimen/_100sdp</dimen>
-    <dimen name="paired_devices_width">@dimen/_300sdp</dimen>
-    <dimen name="margin_top_between_buttons">@dimen/_8sdp</dimen>
-    <dimen name="margin_connection_status">@dimen/_8sdp</dimen>
-    <dimen name="margin_bottom_between">@dimen/_4sdp</dimen>
-    <dimen name="control_button_margin">@dimen/_55sdp</dimen>
-
-    <!--extra dimensions for landscape mode -->
-    <dimen name="landscape_margin_top">@dimen/_8sdp</dimen>
-    <dimen name="landscape_margin_side">@dimen/_20sdp</dimen>
-    <dimen name="landscape_standard_button_width">@dimen/_230sdp</dimen>
-    <dimen name="landscape_margin_top_between_buttons">@dimen/_8sdp</dimen>
-    <dimen name="landscape_paired_devices_width">@dimen/_210sdp</dimen>
-    <dimen name="landscape_paired_devices_height">@dimen/_200sdp</dimen>
 </resources>
