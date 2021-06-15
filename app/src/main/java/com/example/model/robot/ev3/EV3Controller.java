@@ -37,11 +37,11 @@ public class EV3Controller implements Controller {
     private void createElements(String specs) {
         /* TODO document outside of code
         we get:
-        -$entry$|$entry|...
+        -$controlElement$|$controlElement$|...
          */
         controlElements = new ArrayList<>();
 
-        // split into $entry$ = $element$:$attributes$
+        // split into $controlElement$ = $element$:$attributes$
         String[] tmp = specs.split("\\|");
         // put into map with key = $element$, value = $attributes$
         HashMap<String, String> elements = new HashMap<>();
