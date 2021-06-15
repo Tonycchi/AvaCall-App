@@ -1,6 +1,5 @@
 package com.example.model;
 
-import com.example.model.controls.EV3;
 import com.example.model.robot.Controller;
 import com.example.model.robot.ControllerInput;
 
@@ -58,7 +57,7 @@ public class WebClient extends WebSocketClient {
                 String[] values;
                 if (message.contains(";")) {
                     values = message.split(";", 2);
-                    controller.sendInput(new ControllerInput(Integer.parseInt(values[0]), Integer.parseInt(values[1])));
+                    controller.sendInput(new ControllerInput(Integer.parseInt(values[0]), Integer.parseInt(values[1]), 0, 0));
                     //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
                 }
             }
