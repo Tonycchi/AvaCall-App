@@ -313,19 +313,23 @@ public class BluetoothConnectionService implements ConnectionService {
 
             // Read from the InputStream
             try {
-                //wait for handshake
-                INPUT_STREAM.read(buffer);
-                int replySize = (buffer[1]*16+buffer[0]);
-
-                Log.d(TAG,"handshake received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
-
-                if(byteArrayHandshake.isAckCorrect(buffer)) {
+                if(byteArrayHandshake.isAckCorrect(buffer)) { //first try, if handshake does not need a reply
                     connectionStatus.postValue(4);
                     listen();
-                }else{
-                    connectionStatus.postValue(5);
-                }
+                }else {                                     //second try, waiting for handshake reply
+                    //wait for handshake
+                    INPUT_STREAM.read(buffer);
+                    int replySize = (buffer[1] * 16 + buffer[0]);
 
+                    Log.d(TAG, "handshake received:" + bytesToHex(buffer, replySize + 2) + " length:" + replySize);
+
+                    if (byteArrayHandshake.isAckCorrect(buffer)) {
+                        connectionStatus.postValue(4);
+                        listen();
+                    } else {
+                        connectionStatus.postValue(5);
+                    }
+                }
             } catch (Exception e) {
                 // could not connect, so connection status gets set to 2
                 if (connectionStatus.getValue() == 0) {

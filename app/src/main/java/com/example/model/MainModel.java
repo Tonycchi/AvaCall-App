@@ -12,6 +12,7 @@ import com.example.data.ConnectedDevice;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
 import com.example.data.RobotModel;
+import com.example.model.connection.AcceptAllHandshake;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.EV3BluetoothHandshake;
@@ -59,6 +60,7 @@ public class MainModel {
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
+        handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
