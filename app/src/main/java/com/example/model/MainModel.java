@@ -5,13 +5,19 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 import androidx.room.Room;
 
+import com.example.data.ConnectedDevice;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
+import com.example.data.RobotModel;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.RobotConnectionModel;
+import com.example.model.robot.Controller;
+import com.example.model.robot.Robot;
+import com.example.model.robot.ev3.EV3;
 
 import java.util.ArrayList;
 
@@ -22,6 +28,9 @@ public class MainModel {
     private RobotConnectionModel robotConnectionModel;
 
     private VideoConnectionModel videoConnectionModel;
+
+    private Robot robot;
+    private Controller controller;
 
     // Model for ModelSelectionFragment
     // TODO modelle abspeichern?
@@ -38,6 +47,11 @@ public class MainModel {
 
     public MainModel(@NonNull Application application) {
         localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database").allowMainThreadQueries().build();
+
+        videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
+        robot = new EV3(localDatabase.robotModelDAO());
+
+        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;2000"));
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO());
@@ -57,6 +71,7 @@ public class MainModel {
 
     public void startConnection(Device device) {
         robotConnectionModel.startConnection(device);
+        controller = robot.getController(99, ((BluetoothModel) robotConnectionModel).getService());
     }
 
     public VideoConnectionModel getVideoConnectionModel() {
@@ -64,6 +79,7 @@ public class MainModel {
     }
 
     public void invitePartner() {
+        videoConnectionModel.setController(controller);
         videoConnectionModel.invitePartner();
     }
 
@@ -78,4 +94,6 @@ public class MainModel {
     public void connectingCanceled() {
         robotConnectionModel.connectingCanceled();
     }
+
+    public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
 }

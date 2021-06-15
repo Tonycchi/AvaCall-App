@@ -91,6 +91,7 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private void onClickSwitchToVideoCall(View v) {
         // TODO setReceiveCommands kommt hier noch hin
+        viewModel.setReceiveCommands();
         JitsiMeetActivity.launch(requireContext(), viewModel.getSession().getOptions());
     }
 

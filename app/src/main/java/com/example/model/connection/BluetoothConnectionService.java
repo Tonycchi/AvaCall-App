@@ -23,7 +23,7 @@ import java.util.UUID;
  */
 
 @SuppressLint("LogNotTimber")
-public class BluetoothConnectionService {
+public class BluetoothConnectionService implements ConnectionService {
     private static final String TAG = "BluetoothConnectionServ";
 
     private static final String APP_NAME = "AvaCall";

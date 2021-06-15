@@ -1,6 +1,7 @@
 package com.example.model;
 
-import com.example.model.controls.EV3;
+import com.example.model.robot.Controller;
+import com.example.model.robot.ControllerInput;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -11,13 +12,13 @@ import java.nio.ByteBuffer;
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
-    private EV3 controller;
+    private Controller controller;
     private String id;
     private final String jitsi;
     private boolean receiveCommands;
     private boolean ready;
 
-    public WebClient(URI serverURI, String jitsi, EV3 controller) {
+    public WebClient(URI serverURI, String jitsi, Controller controller) {
         super(serverURI);
         this.controller = controller;
         this.jitsi = jitsi;
@@ -56,7 +57,8 @@ public class WebClient extends WebSocketClient {
                 String[] values;
                 if (message.contains(";")) {
                     values = message.split(";", 2);
-                    controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
+                    controller.sendInput(new ControllerInput(Integer.parseInt(values[0]), Integer.parseInt(values[1]), 0, 0));
+                    //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
                 }
             }
         }

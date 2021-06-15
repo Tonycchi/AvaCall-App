@@ -1,9 +1,12 @@
 package com.example.model;
 
+import android.content.SharedPreferences;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
+import com.example.model.robot.Controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,6 +21,8 @@ public class VideoConnectionModel {
     private URLSettings urlSettings;
     private WebClient wc;
     private SessionData session;
+
+    private Controller controller;
 
     public VideoConnectionModel(LocalPreferenceDAO db) {
         urlSettings = new URLSettings(db);
@@ -74,6 +79,10 @@ public class VideoConnectionModel {
         urlSettings.saveURLs(urls);
     }
 
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
     public MutableLiveData<String> getInviteLink() {
         return this.inviteLink;
     }
@@ -81,4 +90,6 @@ public class VideoConnectionModel {
     public SessionData getSession() {
         return this.session;
     }
+
+    public void setReceiveCommands() { wc.setReceiveCommands(); }
 }
