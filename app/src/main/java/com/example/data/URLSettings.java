@@ -12,6 +12,13 @@ public class URLSettings {
 
     public URLSettings(LocalPreferenceDAO db) {
         this.db = db;
+        if (db.get(HOSTPORTKEY) == null) {
+            db.insertAll(
+                    new LocalPreference(HOSTURLKEY, "avatar.mintclub.org"),
+                    new LocalPreference(JITSIURLKEY, "meet.jit.si"),
+                    new LocalPreference(HOSTPORTKEY, "22222")
+            );
+        }
     }
 
     public void saveURLs(Triple urls) {
