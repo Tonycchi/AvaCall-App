@@ -5,12 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Annotation;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -38,18 +36,18 @@ public class BluetoothFragment extends RobotConnectionFragment {
                 // state is either bluetooth turned on or off
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 // if state is bluetooth turned off
-                if(state == BluetoothAdapter.STATE_OFF) {
+                if (state == BluetoothAdapter.STATE_OFF) {
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
                     showEnableBluetooth();
 
                     // if state equals Bluetooth turned on
-                } else if(state == BluetoothAdapter.STATE_ON){
+                } else if (state == BluetoothAdapter.STATE_ON) {
                     Log.d(TAG, "Bluetooth state_on");
                     // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
                     MutableLiveData<ArrayList<Device>> pairedDevices = viewModel.getPairedDevices();
 
                     //if there is no device -> add placeholder into list
-                    if(pairedDevices.getValue().size() == 0) {
+                    if (pairedDevices.getValue().size() == 0) {
                         setPlaceholder();
                     }
                 }
@@ -83,7 +81,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         viewModel.cancelConnection();
 
         //bluetooth is disabled
-        if(!BluetoothAdapter.getDefaultAdapter().isEnabled()){
+        if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
             showEnableBluetooth();
         }
 
@@ -96,30 +94,35 @@ public class BluetoothFragment extends RobotConnectionFragment {
         pairedDevices.observe(getViewLifecycleOwner(), devicesObserver);
 
         //if there is no device -> add placeholder into list
-        if(pairedDevices.getValue().size() == 0) {
+        if (pairedDevices.getValue().size() == 0) {
             setPlaceholder();
         }
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
 
     @Override
-    public void onClickDevice(Device device){
-        if(device.getParcelable() != null) {
+    public void onClickDevice(Device device) {
+        if (device.getParcelable() != null) {
             viewModel.startConnection(device);
-        }else{
+
+            // in case of dummy device skip testing for connection status
+            if (device.getParcelable() instanceof Annotation) {
+                switchToNextFragment();
+            }
+        } else {
             onClickFirstBluetoothConnection();
         }
     }
 
     @Override
-    public void connectionStatusChanged(Integer newConnectionStatus){
+    public void connectionStatusChanged(Integer newConnectionStatus) {
         //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
-        switch(newConnectionStatus){
+        switch (newConnectionStatus) {
             case 0:
                 Log.d(TAG, "Case 0: Not tested!");
                 showProgressDialog();
@@ -133,13 +136,13 @@ public class BluetoothFragment extends RobotConnectionFragment {
             case 2:
                 Log.d(TAG, "Case 2: Could not connect!");
                 hideProgressDialog();
-                ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
+                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
                 break;
 
             case 3:
                 Log.d(TAG, "Case 3: Connection lost!");
                 hideProgressDialog();
-                ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
+                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
                 break;
 
             case 4:
@@ -152,7 +155,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
             case 5:
                 Log.d(TAG, "Case 5: Device is not accepted!");
                 hideProgressDialog();
-                ((HostActivity)getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_wrong_device));
+                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_wrong_device));
                 break;
 
             default:
@@ -163,13 +166,13 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
 
-    private void showEnableBluetooth(){
+    private void showEnableBluetooth() {
         Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivity(enableBluetoothIntent);
-        Log.d(TAG,"Bluetooth is disabled!");
+        Log.d(TAG, "Bluetooth is disabled!");
     }
 
-    private void setPlaceholder(){
+    private void setPlaceholder() {
         ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
         String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
         noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
@@ -177,7 +180,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         viewModel.getPairedDevices().setValue(noDevicePlaceholder);
     }
 
-    private void switchToNextFragment(){
+    private void switchToNextFragment() {
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
@@ -186,8 +189,8 @@ public class BluetoothFragment extends RobotConnectionFragment {
                 .commit();
     }
 
-    private void onClickFirstBluetoothConnection(){
-       Intent intentOpenBluetoothSettings = new Intent();
+    private void onClickFirstBluetoothConnection() {
+        Intent intentOpenBluetoothSettings = new Intent();
         intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
         startActivity(intentOpenBluetoothSettings);
     }

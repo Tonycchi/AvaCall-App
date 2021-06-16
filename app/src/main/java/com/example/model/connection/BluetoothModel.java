@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Build;
 import android.os.ParcelUuid;
+import android.text.Annotation;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -12,7 +13,6 @@ import com.example.data.ConnectedDevice;
 import com.example.data.ConnectedDeviceDAO;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +20,9 @@ import java.util.Set;
 public class BluetoothModel extends RobotConnectionModel {
 
     private static final String TAG = "BluetoothModel";
+
+    // adds dummy device TODO: set false in user versions
+    private static final boolean ADD_DUMMY = true;
 
     // Model for BluetoothFragment
     // Bluetooth adapter of our device
@@ -31,9 +34,11 @@ public class BluetoothModel extends RobotConnectionModel {
 
     private ConnectedDeviceDAO connectedDeviceDAO;
 
+    private ConnectionService testService;
+
     public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO, Handshake byteArrayHandshake) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothConnectionService = new BluetoothConnectionService((ByteArrayHandshake)byteArrayHandshake);
+        bluetoothConnectionService = new BluetoothConnectionService((ByteArrayHandshake) byteArrayHandshake);
         this.connectedDeviceDAO = connectedDeviceDAO;
     }
 
@@ -76,6 +81,10 @@ public class BluetoothModel extends RobotConnectionModel {
             // other bonded devices from system
             shownDevices.addAll(devicesByAddress.values());
 
+            // add dummy device that does nothing (skip bluetooth connection)
+            if (ADD_DUMMY)
+                shownDevices.add(new Device(new Annotation("test", "test"), "SKIP BLUETOOTH"));
+
         } else {
             // TODO: something
             Log.d(TAG, "No Device found!");
@@ -98,6 +107,14 @@ public class BluetoothModel extends RobotConnectionModel {
 
     @Override
     public void startConnection(Device device) {
+        // DUMMY was picked
+        if (device.getParcelable() instanceof Annotation) {
+            testService = bytes -> {
+                // do nothing
+            };
+            return;
+        }
+
         bluetoothDevice = (BluetoothDevice) device.getParcelable();
         ParcelUuid[] uuids = bluetoothDevice.getUuids();
 
@@ -106,7 +123,12 @@ public class BluetoothModel extends RobotConnectionModel {
         bluetoothConnectionService.startClient(bluetoothDevice, uuids);
     }
 
-    public BluetoothConnectionService getService() {
+    public ConnectionService getService() {
+        // DUMMY was picked
+        if (testService != null) {
+            return testService;
+        }
+
         return bluetoothConnectionService;
     }
 

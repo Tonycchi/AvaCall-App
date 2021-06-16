@@ -60,7 +60,7 @@ public class MainModel {
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
-        handshake = new AcceptAllHandshake();
+        //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }

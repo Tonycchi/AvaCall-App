@@ -6,8 +6,8 @@ import java.util.List;
 public class EV3BluetoothHandshake implements ByteArrayHandshake {
     @Override
     public List<byte[]> getSyn() {
-        List<byte[]> directCommands = new ArrayList<byte[]>();
-        
+        List<byte[]> directCommands = new ArrayList<>();
+
         byte[] noOp = new byte[8];
         noOp[0] = 0x06;                     //length
         noOp[1] = 0x00;                    //length
@@ -44,34 +44,34 @@ public class EV3BluetoothHandshake implements ByteArrayHandshake {
         playSound[8] = (byte) 0x02;             //command
         playSound[9] = (byte) 0x81;             //string starts
         playSound[10] = (byte) 0x64;            //byte representation of ascii
-        playSound[11] = (byte) 0x84;             
-        playSound[12] = (byte) 0x2E;             
-        playSound[13] = (byte) 0x2F;             
-        playSound[14] = (byte) 0x75;             
-        playSound[15] = (byte) 0x69;             
-        playSound[16] = (byte) 0x2F;             
-        playSound[17] = (byte) 0x44;             
-        playSound[18] = (byte) 0x6F;             
-        playSound[19] = (byte) 0x77;             
-        playSound[20] = (byte) 0x6E;             
-        playSound[21] = (byte) 0x6C;             
-        playSound[22] = (byte) 0x6F;             
-        playSound[23] = (byte) 0x61;             
-        playSound[24] = (byte) 0x64;             
-        playSound[25] = (byte) 0x53;             
-        playSound[26] = (byte) 0x75;             
-        playSound[27] = (byte) 0x63;             
-        playSound[28] = (byte) 0x63;             
-        playSound[29] = (byte) 0x65;             
-        playSound[30] = (byte) 0x73;             
+        playSound[11] = (byte) 0x84;
+        playSound[12] = (byte) 0x2E;
+        playSound[13] = (byte) 0x2F;
+        playSound[14] = (byte) 0x75;
+        playSound[15] = (byte) 0x69;
+        playSound[16] = (byte) 0x2F;
+        playSound[17] = (byte) 0x44;
+        playSound[18] = (byte) 0x6F;
+        playSound[19] = (byte) 0x77;
+        playSound[20] = (byte) 0x6E;
+        playSound[21] = (byte) 0x6C;
+        playSound[22] = (byte) 0x6F;
+        playSound[23] = (byte) 0x61;
+        playSound[24] = (byte) 0x64;
+        playSound[25] = (byte) 0x53;
+        playSound[26] = (byte) 0x75;
+        playSound[27] = (byte) 0x63;
+        playSound[28] = (byte) 0x63;
+        playSound[29] = (byte) 0x65;
+        playSound[30] = (byte) 0x73;
         playSound[31] = (byte) 0x00;            //string end
         directCommands.add(playSound);
-        
+
         return directCommands;
     }
 
     @Override
     public boolean isAckCorrect(byte[] ack) {
-        return ack[2]==0x00 && ack[4]==0x02;
+        return ack[2] == 0x00 && ack[4] == 0x02;
     }
 }
