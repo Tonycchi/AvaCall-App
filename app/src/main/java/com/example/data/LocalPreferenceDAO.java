@@ -13,4 +13,7 @@ public interface LocalPreferenceDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(LocalPreference... localPreferences);
+
+    @Insert()
+    void insertFirst(LocalPreference... localPreferences);
 }

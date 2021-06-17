@@ -7,6 +7,6 @@ public interface Controller {
      *
      * @param input input
      */
-    void sendInput(ControllerInput input);
+    void sendInput(String input);
 
 }

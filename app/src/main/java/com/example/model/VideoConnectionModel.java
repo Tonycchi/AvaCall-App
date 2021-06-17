@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
+import com.example.model.robot.ev3.EV3Controller;
 
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
@@ -32,17 +33,22 @@ public class VideoConnectionModel {
      * creates connection w/ WebSocket, fetches share link and saves in inviteLink
      */
     public void invitePartner() {
+        Log.d(TAG, "invite");
         //TODO: return wheter an connectionError occured or throw error! because when connectionError occurs the whole app crashes
         boolean connectionError = false;
         if (session == null) {
             String jitsi = urlSettings.getJitsi_https();
             try {
+                Log.d(TAG, "service " + ((EV3Controller)controller).service.toString());
                 wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), controller);
             } catch (URISyntaxException e) {
+                Log.d(TAG, "e");
                 e.printStackTrace();
             }
 
+            Log.d(TAG, "wc? " + (wc != null));
             wc.connect();//TODO: when error occurs in wc, stop waiting and directly throw error
+
 
             //continue with share link when ws is connected
             long startTime = System.currentTimeMillis();

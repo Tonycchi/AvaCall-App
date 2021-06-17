@@ -1,102 +1,90 @@
 package com.example.model.robot.ev3;
 
-import com.example.model.robot.ControllerInput;
+import android.util.Log;
 
 abstract class EV3ControlElement {
 
     final int maxPower;
-    final int port;
+    final int[] port;
 
-    protected EV3ControlElement(int port, int maxPower) {
+    protected EV3ControlElement(int[] ports, int maxPower) {
         this.maxPower = maxPower;
-        this.port = port;
+        this.port = ports;
     }
 
     /**
      * @param input controlling input
      * @return power for use in ev3 direct command
      */
-    protected abstract byte getMotorPower(ControllerInput input);
+    protected abstract byte[] getMotorPower(String input);
 
-    protected static class JoystickRight extends EV3ControlElement {
+    protected static class Joystick extends EV3ControlElement {
 
-        JoystickRight(int port, int maxPower) {
-            super(port, maxPower);
+        Joystick(int[] ports, int maxPower) {
+            super(ports, maxPower);
         }
 
         @Override
-        protected byte getMotorPower(ControllerInput input) {
+        protected byte[] getMotorPower(String input) {
+            Log.d("Joystick", input);
             float right = 0.0f;
-
-            if (input.angle >= 0 && input.angle < 90) { //0°-89°
-                right = -100 + input.angle * 20 / 9.0f; //-100 to 100
-
-            } else if (input.angle >= 90 && input.angle < 180) { //90°-179°
-                right = 100; //100 to 100
-
-            } else if (input.angle >= 180 && input.angle < 270) { //180°-269°
-                right = 100 - (input.angle - 180) * 20 / 9.0f; //50 to -100
-
-            } else if (input.angle >= 270 && input.angle <= 360) {//270°-359°
-                right = -100; //-100 to -100
-            }
-
-            right = right * input.strength / 10000;
-
-            return (byte) (right * maxPower);
-        }
-    }
-
-    protected static class JoystickLeft extends EV3ControlElement {
-
-        JoystickLeft(int port, int maxPower) {
-            super(port, maxPower);
-        }
-
-        @Override
-        protected byte getMotorPower(ControllerInput input) {
             float left = 0.0f;
 
-            if (input.angle >= 0 && input.angle < 90) { //0°-89°
+            String[] t = input.split(";");
+            int angle = Integer.parseInt(t[0]), strength = Integer.parseInt(t[1]);
+
+            if (angle >= 0 &&
+                    angle < 90) { //0°-89°
+                right = -100 + angle * 20 / 9.0f; //-100 to 100
                 left = 100; //100 to 100
 
-            } else if (input.angle >= 90 && input.angle < 180) { //90°-179°
-                left = 100 - (input.angle - 90) * 20 / 9.0f; //100 to -100
+            } else if (angle >= 90 &&
+                    angle < 180) { //90°-179°
+                right = 100; //100 to 100
+                left = 100 - (angle - 90) * 20 / 9.0f; //100 to -100
 
-            } else if (input.angle >= 180 && input.angle < 270) { //180°-269°
+            } else if (angle >= 180 &&
+                    angle < 270) { //180°-269°
+                right = 100 - (angle - 180) * 20 / 9.0f; //50 to -100
                 left = -100; //-100 to -100
 
-            } else if (input.angle >= 270 && input.angle <= 360) {//270°-359°
-                left = -100 + (input.angle - 270) * 20 / 9.0f; //-100 to 100
+            } else if (angle >= 270 &&
+                    angle <= 360) {//270°-359°
+                right = -100; //-100 to -100
+                left = -100 + (angle - 270) * 20 / 9.0f; //-100 to 100
             }
 
-            left = left * input.strength / 10000;
+            byte[] r = new byte[2];
 
-            return (byte) (left * maxPower);
+            r[0] = (byte) (right * strength / 10000);
+            r[1] = (byte) (left * strength / 10000);
+
+            return r;
         }
     }
+
 
     protected static class Slider extends EV3ControlElement {
 
-        Slider(int port, int maxPower) {
-            super(port, maxPower);
+        Slider(int[] ports, int maxPower) {
+            super(ports, maxPower);
         }
 
         @Override
-        protected byte getMotorPower(ControllerInput input) {
-            return (byte) 0; //TODO implement
+        protected byte[] getMotorPower(String input) {
+            return new byte[]{0}; //TODO implement
         }
     }
 
     protected static class Button extends EV3ControlElement {
 
-        Button(int port, int maxPower) {
-            super(port, maxPower);
+        Button(int[] ports, int maxPower) {
+            super(ports, maxPower);
         }
 
         @Override
-        protected byte getMotorPower(ControllerInput input) {
-            return (byte) 0; //TODO implement
+        protected byte[] getMotorPower(String input) {
+            return new byte[]{0}; //TODO implement
         }
     }
 }

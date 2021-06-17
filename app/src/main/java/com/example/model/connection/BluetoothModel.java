@@ -110,7 +110,11 @@ public class BluetoothModel extends RobotConnectionModel {
         // DUMMY was picked
         if (device.getParcelable() instanceof Annotation) {
             testService = bytes -> {
-                // do nothing
+                StringBuilder sb = new StringBuilder();
+                for (byte b : bytes) {
+                    sb.append(String.format("%02X ", b));
+                }
+                Log.d("INPUTS", sb.toString());
             };
             return;
         }
