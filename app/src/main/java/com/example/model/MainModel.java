@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.preference.PreferenceManager;
 import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.data.ConnectedDevice;
 import com.example.data.LocalDatabase;
@@ -51,7 +53,20 @@ public class MainModel {
 
 
     public MainModel(@NonNull Application application) {
-        localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database").allowMainThreadQueries().build();
+        /*localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database")
+                .allowMainThreadQueries()
+                .addCallback(new RoomDatabase.Callback() {
+                    @Override
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                        super.onCreate(db);
+
+                    }
+                })
+                .build();
+
+         */
+
+        localDatabase = LocalDatabase.getInstance(application);
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         robot = new EV3(localDatabase.robotModelDAO());

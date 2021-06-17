@@ -2,7 +2,7 @@ package com.example.data;
 
 public class URLSettings {
 
-    private final static String HOSTURLKEY = "host_url",
+    public final static String HOSTURLKEY = "host_url",
             JITSIURLKEY = "jitsi_url",
             HOSTPORTKEY = "host_port",
             HTTPS = "https://",
@@ -12,11 +12,6 @@ public class URLSettings {
 
     public URLSettings(LocalPreferenceDAO db) {
         this.db = db;
-        db.insertFirst(
-                new LocalPreference(HOSTURLKEY, "avatar.mintclub.org"),
-                new LocalPreference(JITSIURLKEY, "meet.jit.si"),
-                new LocalPreference(HOSTPORTKEY, "22222")
-        );
     }
 
     public void saveURLs(Triple urls) {
