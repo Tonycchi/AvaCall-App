@@ -34,7 +34,8 @@ public class WebClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         //Log.println(Log.DEBUG, TAG, "oopen");
-        send("app:" + jitsi);
+        send("app:" + jitsi + ":joystick|slider|button");
+
     }
 
     /**
