@@ -34,9 +34,9 @@ public abstract class LocalDatabase extends RoomDatabase {
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
                         Executors.newSingleThreadExecutor().execute(() -> getInstance(context).localPreferenceDAO().insertAll(
-                                new LocalPreference(URLSettings.HOSTURLKEY, "avatar.mintclub.org"),
-                                new LocalPreference(URLSettings.JITSIURLKEY, "meet.jit.si"),
-                                new LocalPreference(URLSettings.HOSTPORTKEY, "22222")));
+                                new LocalPreference(URLSettings.HOSTURLKEY, URLSettings.DEFAULT_TEST_HOST),
+                                new LocalPreference(URLSettings.JITSIURLKEY, URLSettings.DEFAULT_TEST_JITSI),
+                                new LocalPreference(URLSettings.HOSTPORTKEY, URLSettings.DEFAULT_TEST_PORT)));
                     }
                 })
                 .allowMainThreadQueries()

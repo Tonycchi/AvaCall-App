@@ -6,7 +6,10 @@ public class URLSettings {
             JITSIURLKEY = "jitsi_url",
             HOSTPORTKEY = "host_port",
             HTTPS = "https://",
-            WSS = "wss://";
+            WSS = "wss://",
+            DEFAULT_TEST_HOST = "test.avatar.mintclub.org",
+            DEFAULT_TEST_JITSI = "meet.jit.si",
+            DEFAULT_TEST_PORT = "22223";
 
     public LocalPreferenceDAO db;
 
