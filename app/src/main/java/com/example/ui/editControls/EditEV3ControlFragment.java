@@ -1,4 +1,4 @@
-package com.example.ui;
+package com.example.ui.editControls;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
