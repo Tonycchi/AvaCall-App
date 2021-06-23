@@ -56,8 +56,8 @@ abstract class EV3ControlElement {
 
             byte[] r = new byte[2];
 
-            r[0] = (byte) (right * strength / 10000);
-            r[1] = (byte) (left * strength / 10000);
+            r[0] = scalePower(right * strength / 10000);
+            r[1] = scalePower(left * strength / 10000);
 
             return r;
         }
@@ -86,5 +86,9 @@ abstract class EV3ControlElement {
         protected byte[] getMotorPower(String input) {
             return new byte[]{0}; //TODO implement
         }
+    }
+
+    final byte scalePower(float x) {
+        return (byte) (x * maxPower);
     }
 }

@@ -71,7 +71,7 @@ public class MainModel {
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         robot = new EV3(localDatabase.robotModelDAO());
 
-        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;2000"));
+        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();

@@ -6,6 +6,7 @@ import com.example.model.connection.ConnectionService;
 import com.example.model.robot.Controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class EV3Controller implements Controller {
@@ -83,8 +84,14 @@ public class EV3Controller implements Controller {
             }
         }
 
-        for (int i = 0; i < controlElements.size(); i++)
-            Log.d(TAG, i + ": " + controlElements.get(i).getClass().getCanonicalName());
+        String s = "";
+        for (int i = 0; i < controlElements.size(); i++) {
+            EV3ControlElement e = controlElements.get(i);
+            s += i + ": ";
+            s += e.getClass().getName() + " ports: ";
+            s += Arrays.toString(e.port) + "\n";
+        }
+        Log.d(TAG, s);
 
     }
 
@@ -93,10 +100,14 @@ public class EV3Controller implements Controller {
      * @return direct command for EV3
      */
     private byte[] createCommand(String input) {
-        //0x|14:00|2A:00|80|00:00|A4|00|01|81:RP|A4|00|08|81:LP|A6|00|09
-        //   0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19
-        // 00: length 20
-        // 11 & 16: right and left motor speeds respectively
+        //0x|14:00|2A:00|80|00:00|A4|00|0p|81:po|...|A6|00|0P
+        //   0  1  2  3  4  5  6  7  8  9  10 11
+        // 0 length of command minus 2
+        // 2-6 predefined
+        // 7-11 command for one motor (see commandPart)
+        // last 3 bytes: A6 opcode for start output
+        //               00 filler
+        //               0P = sum of used ports
 
         String[] tmp = input.split(":");
         int id = Integer.parseInt(tmp[0]);              // get id of input
@@ -104,6 +115,7 @@ public class EV3Controller implements Controller {
         byte[] output = e.getMotorPower(tmp[1]);         // and compute output power
 
         int length = 10 + output.length * 5;            // e.g. joystick may return two values
+        int lastCommand = 8 + output.length * 5;
         byte[] directCommand = new byte[length];        // this will be the command
 
         directCommand[0] = (byte) (length - 2);         // pre defined parts of direct command
@@ -112,14 +124,16 @@ public class EV3Controller implements Controller {
 
         int i = 7;                                      // position of first output power command
         byte[] t;
+        byte portSum = 0;
         for (int k = 0; k < output.length; k++) {
+            portSum += e.port[k];
             t = commandPart(e.port[k], output[k]);      // get output power command & copy 2 direct command
             System.arraycopy(t, 0, directCommand, i, t.length);
             i += t.length;
         }
 
-        directCommand[17] = (byte) 0xa6;                // end of direct command
-        directCommand[19] = (byte) 0x0f;
+        directCommand[lastCommand] = (byte) 0xa6;                // end of direct command
+        directCommand[lastCommand + 1] = portSum;
 
         /*
         byte length = 20;
@@ -150,12 +164,20 @@ public class EV3Controller implements Controller {
      * @return part of direct command for given port
      */
     private byte[] commandPart(int port, int power) {
+        // A4|00|0p|81:po
+        //  0  1  2  3  4
+        // 0 opcode for output power
+        // 1 filler
+        // 2 p = port
+        // 3 predefined prefix
+        // 4 po = power
+
         byte[] r = new byte[5];
-        r[0] = (byte) 0xA4; // command type: output power
-        r[1] = (byte) 0x00; // filler
-        r[2] = (byte) port; // which port
-        r[3] = (byte) 0x81; // power prefix
-        r[4] = (byte) power;// what power
+        r[0] = (byte) 0xA4;
+        r[1] = (byte) 0x00;
+        r[2] = (byte) port;
+        r[3] = (byte) 0x81;
+        r[4] = (byte) power;
         return r;
     }
 }
