@@ -1,6 +1,5 @@
 package com.example.ui;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.rcvc.R;
+import com.example.ui.editControls.EditControlsFragment;
 
 public class ModelSelectionFragment extends HostedFragment {
 

@@ -1,6 +1,5 @@
 package com.example.ui;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.rcvc.R;
+import com.example.ui.editControls.EditControlsFragment;
 
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 

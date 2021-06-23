@@ -1,4 +1,4 @@
-package com.example.ui;
+package com.example.ui.editControls;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,6 +13,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.rcvc.R;
+import com.example.ui.HostActivity;
+import com.example.ui.HostedFragment;
+import com.example.ui.TestRobotFragment;
 
 public class EditControlsFragment extends HostedFragment {
 
