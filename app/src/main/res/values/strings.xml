@@ -18,6 +18,7 @@
         <!--  Connection      -->
         <string name="connecting_title">Verbindung wird hergestellt</string>
         <string name="bluetooth_connection_check_device">Gerättyp wird geprüft</string>
+        <string name="connection_lost">Verbindung wurde getrennt</string>
 
         <!-- Bluetooth -->
         <string name="text_connected_bluetooth_devices">Zuletzt verbundene Geräte:</string>

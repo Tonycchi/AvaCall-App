@@ -2,6 +2,7 @@ package com.example.ui;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -89,7 +90,17 @@ public class ModelSelectionFragment extends HostedFragment {
 
     @Override
     public void connectionStatusChanged(Integer newConnectionStatus) {
-        //TODO: implement
-        ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
+         //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
+        switch (newConnectionStatus) {
+            case 3:
+                Log.d(TAG, "Case 3: Connection lost!");
+                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.connection_lost));
+                break;
+
+            default:
+                Log.d(TAG, "Default: Something strange or nothing(Case -1) happend with the connection.");
+                break;
+        }
+
     }
 }
