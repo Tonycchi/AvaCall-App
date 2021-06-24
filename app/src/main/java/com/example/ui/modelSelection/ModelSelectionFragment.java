@@ -5,7 +5,6 @@ import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.NumberPicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +19,8 @@ import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.TestRobotFragment;
 import com.example.ui.editControls.EditControlsFragment;
+
+import net.simonvt.numberpicker.NumberPicker;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +68,7 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicker.setMinValue(0);
         modelPicker.setWrapSelectorWheel(true);
         modelPicker.setDisplayedValues(allRobotNames);
+
 
         getActivity().setTitle(R.string.title_model_selection);
     }

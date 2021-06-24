@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <NumberPicker
+    <net.simonvt.numberpicker.NumberPicker
         android:id="@+id/model_picker"
         android:layout_width="0dp"
         android:layout_height="0dp"
