@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.NumberPicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import com.example.ui.editControls.EditControlsFragment;
 public class ModelSelectionFragment extends HostedFragment {
 
     private static final String TAG = "ModelSelectionFragment";
+    private NumberPicker modelPicker;
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
@@ -39,6 +41,15 @@ public class ModelSelectionFragment extends HostedFragment {
         useModel.setOnClickListener(this::onClickUseModel);
 
         editModel.setOnClickListener(this::onClickEditModel);
+
+        modelPicker = view.findViewById(R.id.model_picker);
+        String[] test = {"Kettenroboter", "Kettenroboter mit Greifarm", "Tony stinkt nach maggi", "mit Ei"};
+        modelPicker.setMaxValue(test.length-1);
+        modelPicker.setMinValue(0);
+        modelPicker.setWrapSelectorWheel(true);
+        modelPicker.setDisplayedValues(test);
+
+
 
         getActivity().setTitle(R.string.title_model_selection);
     }
