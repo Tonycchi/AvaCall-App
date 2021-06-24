@@ -21,6 +21,7 @@ import com.example.model.robot.ev3.EV3;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainModel {
 
@@ -124,7 +125,7 @@ public class MainModel {
 
     public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
 
-    public RobotModel[] getAllRobots() {
+    public List<RobotModel> getAllRobots() {
         return modelSelectionModel.getAllRobots();
     }
 }

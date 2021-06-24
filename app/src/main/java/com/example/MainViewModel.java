@@ -88,12 +88,13 @@ public class MainViewModel extends AndroidViewModel {
     public void setReceiveCommands() { model.setReceiveCommands(); }
 
     public robotItem[] getAllRobots() {
-        RobotModel[] allDBRobots = model.getAllRobots();
-        int numberOfRobots = allDBRobots.length;
+        List<RobotModel> allDBRobots = model.getAllRobots();
+        int numberOfRobots = allDBRobots.size();
         robotItem[] allUIRobots = new robotItem[numberOfRobots];
 
         for(int i=0; i<numberOfRobots; i++){
-            allUIRobots[i] = new robotItem(allDBRobots[i].id, allDBRobots[i].name);
+            RobotModel temp = allDBRobots.get(i);
+            allUIRobots[i] = new robotItem(temp.id, temp.name);
         }
 
         return allUIRobots;

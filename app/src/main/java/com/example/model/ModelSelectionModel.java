@@ -15,7 +15,7 @@ public class ModelSelectionModel {
         this.robotType = robotType;
     }
 
-    public RobotModel[] getAllRobots() {
-        return (RobotModel[])robotModelDAO.getAllModelsOfType(robotType).toArray();
+    public List<RobotModel> getAllRobots() {
+        return robotModelDAO.getAllModelsOfType(robotType);
     }
 }
