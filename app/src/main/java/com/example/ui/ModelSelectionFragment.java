@@ -10,16 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.data.RobotModel;
+import com.example.data.RobotModelDAO;
 import com.example.rcvc.R;
 import com.example.ui.editControls.EditControlsFragment;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModelSelectionFragment extends HostedFragment {
 
     private static final String TAG = "ModelSelectionFragment";
     private NumberPicker modelPicker;
+    private RobotModelDAO robotModelDAO;
+    private String robotType;
 
-    public ModelSelectionFragment() {
+    public ModelSelectionFragment(RobotModelDAO robotModelDAO, String robotType) {
         super(R.layout.model_selection);
+        this.robotModelDAO = robotModelDAO;
+        this.robotType = robotType;
     }
 
     @Override
@@ -43,13 +52,16 @@ public class ModelSelectionFragment extends HostedFragment {
         editModel.setOnClickListener(this::onClickEditModel);
 
         modelPicker = view.findViewById(R.id.model_picker);
-        String[] test = {"Kettenroboter", "Kettenroboter mit Greifarm", "Tony stinkt nach maggi", "mit Ei"};
-        modelPicker.setMaxValue(test.length-1);
+        List<RobotModel> allRobots = robotModelDAO.getAllModelsOfType(robotType);
+        int numberOfRobots = allRobots.size();
+        String[] allRobotNames = new String[numberOfRobots];
+        for(int i=0; i<numberOfRobots; i++){
+            allRobotNames[i] = allRobots.get(i).getName();
+        }
+        modelPicker.setMaxValue(numberOfRobots-1);
         modelPicker.setMinValue(0);
         modelPicker.setWrapSelectorWheel(true);
-        modelPicker.setDisplayedValues(test);
-
-
+        modelPicker.setDisplayedValues(allRobotNames);
 
         getActivity().setTitle(R.string.title_model_selection);
     }

@@ -23,6 +23,7 @@ import com.example.model.connection.RobotConnectionModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 import com.example.model.robot.ev3.EV3;
+import com.example.ui.ModelSelectionFragment;
 
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
@@ -40,7 +41,7 @@ public class MainModel {
     private Controller controller;
 
     // Model for ModelSelectionFragment
-    // TODO modelle abspeichern?
+    private ModelSelectionFragment modelSelectionFragment;
 
     // Model for EditControlsFragment
     // TODO Liste von eigener controller klasse???????
@@ -77,6 +78,8 @@ public class MainModel {
         handshake = new EV3BluetoothHandshake();
         //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
+        //TODO: don't hard code robotType
+        modelSelectionFragment = new ModelSelectionFragment(localDatabase.robotModelDAO(), "EV3");
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
 
