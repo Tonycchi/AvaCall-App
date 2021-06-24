@@ -9,6 +9,9 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class WebClient extends WebSocketClient {
 
@@ -61,7 +64,12 @@ public class WebClient extends WebSocketClient {
         } else {
             if (true) {
                 if (message.contains(";")) {
-                    controller.sendInput(message);
+                    List<String> t1 = Arrays.asList(message.split(";|:"));
+                    int[] t2 = new int[t1.size()];
+                    for (int i = 0; i < t2.length; i++)
+                        t2[i] = Integer.parseInt(t1.get(i));
+
+                    controller.sendInput(t2);
                     //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
                 }
             }

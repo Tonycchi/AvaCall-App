@@ -8,6 +8,7 @@ import com.example.model.robot.Controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class EV3Controller implements Controller {
 
@@ -17,19 +18,27 @@ public class EV3Controller implements Controller {
 
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
+    private List<Integer> controlCounts;
 
     public EV3Controller(String specs, ConnectionService service) {
         this.service = service;
 
         this.s = specs;
 
+        this.controlCounts = Arrays.asList(0, 0, 0);
+
         Log.d(TAG, specs);
         createElements(specs);
     }
 
     @Override
-    public void sendInput(String input) {
+    public void sendInput(int... input) {
         service.write(createCommand(input));
+    }
+
+    @Override
+    public List<Integer> getControlCounts() {
+        return controlCounts;
     }
 
     /**
@@ -67,18 +76,21 @@ public class EV3Controller implements Controller {
                     ports[0] = Integer.parseInt(portsString[0]);
                     ports[1] = Integer.parseInt(portsString[1]);
                     controlElements.add(new EV3ControlElement.Joystick(ports, maxPower));
+                    incrCounts(0);
                     break;
                 case "slider":
                     // $maxPower$;$port$
                     ports = new int[1];
                     ports[0] = Integer.parseInt(attrs[1]);
                     controlElements.add(new EV3ControlElement.Slider(ports, maxPower));
+                    incrCounts(1);
                     break;
                 case "button":
                     // $maxPower$;$port$;$duration$
                     ports = new int[1];
                     ports[0] = Integer.parseInt(attrs[1]);
                     controlElements.add(new EV3ControlElement.Button(ports, maxPower));
+                    incrCounts(2);
                     break;
                 default:
             }
@@ -96,10 +108,10 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     * @param input controlling input
+     * @param input [id, value, ...]
      * @return direct command for EV3
      */
-    private byte[] createCommand(String input) {
+    private byte[] createCommand(int... input) {
         //0x|14:00|2A:00|80|00:00|A4|00|0p|81:po|...|A6|00|0P
         //   0  1  2  3  4  5  6  7  8  9  10 11
         // 0 length of command minus 2
@@ -109,10 +121,9 @@ public class EV3Controller implements Controller {
         //               00 filler
         //               0P = sum of used ports
 
-        String[] tmp = input.split(":");
-        int id = Integer.parseInt(tmp[0]);              // get id of input
+        int id = input[0];              // get id of input
         EV3ControlElement e = controlElements.get(id);  // for this
-        byte[] output = e.getMotorPower(tmp[1]);         // and compute output power
+        byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
 
         int length = 10 + output.length * 5;            // e.g. joystick may return two values
         int lastCommand = 8 + output.length * 5;
@@ -179,5 +190,9 @@ public class EV3Controller implements Controller {
         r[3] = (byte) 0x81;
         r[4] = (byte) power;
         return r;
+    }
+
+    private void incrCounts(int id) {
+        controlCounts.set(id, controlCounts.get(id) + 1);
     }
 }

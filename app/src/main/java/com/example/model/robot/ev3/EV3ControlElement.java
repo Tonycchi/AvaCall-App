@@ -16,7 +16,7 @@ abstract class EV3ControlElement {
      * @param input controlling input
      * @return power for use in ev3 direct command
      */
-    protected abstract byte[] getMotorPower(String input);
+    protected abstract byte[] getMotorPower(int... input);
 
     protected static class Joystick extends EV3ControlElement {
 
@@ -25,13 +25,12 @@ abstract class EV3ControlElement {
         }
 
         @Override
-        protected byte[] getMotorPower(String input) {
-            Log.d("Joystick", input);
+        protected byte[] getMotorPower(int... input) {
+            Log.d("Joystick", String.valueOf(input));
             float right = 0.0f;
             float left = 0.0f;
 
-            String[] t = input.split(";");
-            int angle = Integer.parseInt(t[0]), strength = Integer.parseInt(t[1]);
+            int angle = input[0], strength = input[1];
 
             if (angle >= 0 &&
                     angle < 90) { //0°-89°
@@ -71,7 +70,7 @@ abstract class EV3ControlElement {
         }
 
         @Override
-        protected byte[] getMotorPower(String input) {
+        protected byte[] getMotorPower(int... input) {
             return new byte[]{0}; //TODO implement
         }
     }
@@ -83,7 +82,7 @@ abstract class EV3ControlElement {
         }
 
         @Override
-        protected byte[] getMotorPower(String input) {
+        protected byte[] getMotorPower(int... input) {
             return new byte[]{0}; //TODO implement
         }
     }

@@ -1,5 +1,7 @@
 package com.example.model.robot;
 
+import java.util.List;
+
 public interface Controller {
 
     /**
@@ -7,6 +9,8 @@ public interface Controller {
      *
      * @param input input
      */
-    void sendInput(String input);
+    void sendInput(int... input);
+
+    List<Integer> getControlCounts();
 
 }
