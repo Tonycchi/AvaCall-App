@@ -12,13 +12,10 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.model.connection.Device;
 import com.example.rcvc.R;
-import com.example.ui.HostActivity;
-import com.example.ui.ModelSelectionFragment;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.ui;
+package com.example.ui.modelSelection;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -10,10 +10,15 @@ import android.widget.NumberPicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.MainViewModel;
 import com.example.data.RobotModel;
 import com.example.data.RobotModelDAO;
 import com.example.rcvc.R;
+import com.example.ui.HostActivity;
+import com.example.ui.HostedFragment;
+import com.example.ui.TestRobotFragment;
 import com.example.ui.editControls.EditControlsFragment;
 
 import java.util.List;
@@ -23,18 +28,17 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private static final String TAG = "ModelSelectionFragment";
     private NumberPicker modelPicker;
-    private RobotModelDAO robotModelDAO;
-    private String robotType;
+    private MainViewModel viewModel;
 
-    public ModelSelectionFragment(RobotModelDAO robotModelDAO, String robotType) {
+    public ModelSelectionFragment() {
         super(R.layout.model_selection);
-        this.robotModelDAO = robotModelDAO;
-        this.robotType = robotType;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -53,11 +57,11 @@ public class ModelSelectionFragment extends HostedFragment {
         editModel.setOnClickListener(this::onClickEditModel);
 
         modelPicker = view.findViewById(R.id.model_picker);
-        List<RobotModel> allRobots = robotModelDAO.getAllModelsOfType(robotType);
-        int numberOfRobots = allRobots.size();
+        robotItem[] allRobots = viewModel.getAllRobots();
+        int numberOfRobots = allRobots.length;
         String[] allRobotNames = new String[numberOfRobots];
         for(int i=0; i<numberOfRobots; i++){
-            allRobotNames[i] = allRobots.get(i).getName();
+            allRobotNames[i] = allRobots[i].getName();
         }
         modelPicker.setMaxValue(numberOfRobots-1);
         modelPicker.setMinValue(0);

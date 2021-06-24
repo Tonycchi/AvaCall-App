@@ -5,16 +5,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.data.ConnectedDevice;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
 import com.example.data.RobotModel;
-import com.example.model.connection.AcceptAllHandshake;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.EV3BluetoothHandshake;
@@ -23,7 +17,6 @@ import com.example.model.connection.RobotConnectionModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 import com.example.model.robot.ev3.EV3;
-import com.example.ui.ModelSelectionFragment;
 
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
@@ -41,7 +34,7 @@ public class MainModel {
     private Controller controller;
 
     // Model for ModelSelectionFragment
-    private ModelSelectionFragment modelSelectionFragment;
+    private ModelSelectionModel modelSelectionModel;
 
     // Model for EditControlsFragment
     // TODO Liste von eigener controller klasse???????
@@ -79,7 +72,7 @@ public class MainModel {
         //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
         //TODO: don't hard code robotType
-        modelSelectionFragment = new ModelSelectionFragment(localDatabase.robotModelDAO(), "EV3");
+        modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), "EV3");
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
 
@@ -130,4 +123,8 @@ public class MainModel {
     }
 
     public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
+
+    public RobotModel[] getAllRobots() {
+        return modelSelectionModel.getAllRobots();
+    }
 }

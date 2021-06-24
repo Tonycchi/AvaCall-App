@@ -26,8 +26,4 @@ public class RobotModel {
         this.specs = specs;
     }
 
-    public String getName(){
-        return name;
-    }
-
 }

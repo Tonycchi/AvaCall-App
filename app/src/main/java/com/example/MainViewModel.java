@@ -6,11 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.data.RobotModel;
 import com.example.data.URLSettings;
 import com.example.model.MainModel;
 import com.example.model.SessionData;
 import com.example.model.WebClient;
 import com.example.model.connection.Device;
+import com.example.ui.modelSelection.robotItem;
 
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
@@ -84,4 +86,16 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void setReceiveCommands() { model.setReceiveCommands(); }
+
+    public robotItem[] getAllRobots() {
+        RobotModel[] allDBRobots = model.getAllRobots();
+        int numberOfRobots = allDBRobots.length;
+        robotItem[] allUIRobots = new robotItem[numberOfRobots];
+
+        for(int i=0; i<numberOfRobots; i++){
+            allUIRobots[i] = new robotItem(allDBRobots[i].id, allDBRobots[i].name);
+        }
+
+        return allUIRobots;
+    }
 }
