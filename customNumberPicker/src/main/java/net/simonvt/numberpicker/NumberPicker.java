@@ -16,6 +16,7 @@
 
 package net.simonvt.numberpicker;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -2230,6 +2231,7 @@ public class NumberPicker extends LinearLayout {
     /**
      * Class for managing virtual view tree rooted at this picker.
      */
+    @SuppressLint("NewApi")
     class AccessibilityNodeProviderImpl extends AccessibilityNodeProvider {
         private static final int UNDEFINED = Integer.MIN_VALUE;
 
@@ -2296,6 +2298,8 @@ public class NumberPicker extends LinearLayout {
             return super.findAccessibilityNodeInfosByText(searched, virtualViewId);
         }
 
+
+        @SuppressLint("NewApi")
         @Override
         public boolean performAction(int virtualViewId, int action, Bundle arguments) {
             switch (virtualViewId) {
@@ -2463,6 +2467,7 @@ public class NumberPicker extends LinearLayout {
             }
         }
 
+        @SuppressLint("NewApi")
         private void sendAccessibilityEventForVirtualText(int eventType) {
             if (((AccessibilityManager) getContext().getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled()) {
                 AccessibilityEvent event = AccessibilityEvent.obtain(eventType);
@@ -2474,6 +2479,7 @@ public class NumberPicker extends LinearLayout {
         }
 
 
+        @SuppressLint("NewApi")
         private void sendAccessibilityEventForVirtualButton(int virtualViewId, int eventType,
                                                             String text) {
             if (((AccessibilityManager) getContext().getSystemService(Context.ACCESSIBILITY_SERVICE)).isEnabled()) {
@@ -2521,6 +2527,7 @@ public class NumberPicker extends LinearLayout {
             }
         }
 
+        @SuppressLint("NewApi")
         private AccessibilityNodeInfo createAccessibiltyNodeInfoForInputText() {
             AccessibilityNodeInfo info = mInputText.createAccessibilityNodeInfo();
             info.setSource(NumberPicker.this, VIRTUAL_VIEW_ID_INPUT);
@@ -2533,8 +2540,9 @@ public class NumberPicker extends LinearLayout {
             return info;
         }
 
+        @SuppressLint("NewApi")
         private AccessibilityNodeInfo createAccessibilityNodeInfoForVirtualButton(int virtualViewId,
-                String text, int left, int top, int right, int bottom) {
+                                                                                  String text, int left, int top, int right, int bottom) {
             AccessibilityNodeInfo info = AccessibilityNodeInfo.obtain();
             info.setClassName(Button.class.getName());
             info.setPackageName(getContext().getPackageName());
@@ -2567,8 +2575,9 @@ public class NumberPicker extends LinearLayout {
             return info;
         }
 
+        @SuppressLint("NewApi")
         private AccessibilityNodeInfo createAccessibilityNodeInfoForNumberPicker(int left, int top,
-                int right, int bottom) {
+                                                                                 int right, int bottom) {
             AccessibilityNodeInfo info = AccessibilityNodeInfo.obtain();
             info.setClassName(NumberPicker.class.getName());
             info.setPackageName(getContext().getPackageName());
