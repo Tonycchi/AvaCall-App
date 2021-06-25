@@ -8,10 +8,14 @@
 
     <ImageView
         android:id="@+id/model_picture"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
         android:contentDescription="@string/model_picture"
+        app:layout_constraintBottom_toTopOf="@+id/model_picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,15 +25,13 @@
     <net.simonvt.numberpicker.NumberPicker
         android:id="@+id/model_picker"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/big_element_height"
         android:layout_marginStart="@dimen/margin_side"
-        android:layout_marginTop="@dimen/margin_vertical_big"
         android:layout_marginEnd="@dimen/margin_side"
-        android:layout_marginBottom="@dimen/margin_vertical_big"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
         app:layout_constraintBottom_toTopOf="@+id/button_edit_model"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/model_picture" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.widget.Button
         android:id="@+id/button_use_model"
