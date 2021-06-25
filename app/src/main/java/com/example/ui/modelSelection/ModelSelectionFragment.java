@@ -58,19 +58,20 @@ public class ModelSelectionFragment extends HostedFragment {
         editModel.setOnClickListener(this::onClickEditModel);
 
         modelPicker = view.findViewById(R.id.model_picker);
-        robotItem[] allRobots = viewModel.getAllRobots();
-        int numberOfRobots = allRobots.length;
-        String[] allRobotNames = new String[numberOfRobots];
-        for(int i=0; i<numberOfRobots; i++){
-            allRobotNames[i] = allRobots[i].getName();
-        }
-        modelPicker.setMaxValue(numberOfRobots-1);
+
+        String[] allRobotNames = viewModel.getAllRobotNames();
+        modelPicker.setMaxValue(allRobotNames.length-1);
         modelPicker.setMinValue(0);
         modelPicker.setWrapSelectorWheel(true);
         modelPicker.setDisplayedValues(allRobotNames);
-
+        modelPicker.setOnValueChangedListener(this::onSelectedModelChanged);
 
         getActivity().setTitle(R.string.title_model_selection);
+    }
+
+    private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
+        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        Log.d(TAG, "Model at Position "+modelPicker.getValue()+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
     }
 
     private void onClickEditModel(View v) {

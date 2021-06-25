@@ -18,4 +18,8 @@ public class ModelSelectionModel {
     public List<RobotModel> getAllRobots() {
         return robotModelDAO.getAllModelsOfType(robotType);
     }
+
+    public RobotModel getRobotModel(int id) {
+        return robotModelDAO.getRobotModel(id);
+    }
 }

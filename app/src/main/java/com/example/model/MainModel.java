@@ -63,11 +63,11 @@ public class MainModel {
 
         localDatabase = LocalDatabase.getInstance(application);
 
+        //TODO: only do when the app is installed
+        createDefaultDatabaseEntriesForRobotModels();
+
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         robot = new EV3(localDatabase.robotModelDAO());
-
-        //TODO: only do when the app is installed
-        createDefaultDatabankEntriesForRobotModels();
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
@@ -92,7 +92,7 @@ public class MainModel {
 
     public void startConnection(Device device) {
         robotConnectionModel.startConnection(device);
-        controller = robot.getController(99, ((BluetoothModel) robotConnectionModel).getService());
+        //controller = robot.getController(0, ((BluetoothModel) robotConnectionModel).getService());
     }
 
     public VideoConnectionModel getVideoConnectionModel() {
@@ -130,11 +130,17 @@ public class MainModel {
         return modelSelectionModel.getAllRobots();
     }
 
-    private void createDefaultDatabankEntriesForRobotModels(){
-        localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
-        localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
-        localDatabase.robotModelDAO().insertAll(new RobotModel("Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
-        localDatabase.robotModelDAO().insertAll(new RobotModel("Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
-        localDatabase.robotModelDAO().insertAll(new RobotModel("Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2"));
+    private void createDefaultDatabaseEntriesForRobotModels(){
+        if(localDatabase.robotModelDAO().getNumberOfRobotModels()<4) {
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2"));
+        }
+    }
+
+    public RobotModel getRobotModel(int id) {
+        return modelSelectionModel.getRobotModel(id);
     }
 }
