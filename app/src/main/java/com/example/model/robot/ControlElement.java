@@ -11,11 +11,19 @@ enum ControlElement {
         this.name = name;
     }
 
-    static int getNr(String s) {
+    static int getNr(String name) {
         for (ControlElement i: values()) {
-            if (s.equals(i.name))
+            if (name.equals(i.name))
                 return i.id;
         }
         return -1;
+    }
+
+    static String getName(int id) {
+        for (ControlElement i: values()) {
+            if (id == i.id)
+                return i.name;
+        }
+        return "";
     }
 }

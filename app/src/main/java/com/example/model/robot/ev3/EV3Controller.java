@@ -8,7 +8,7 @@ import com.example.model.robot.Controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class EV3Controller implements Controller {
 
@@ -18,14 +18,15 @@ public class EV3Controller implements Controller {
 
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
-    private List<Integer> controlCounts;
+    //private List<Integer> controlCounts;
+    private HashMap<String, Integer> controlCounts;
 
     public EV3Controller(String specs, ConnectionService service) {
         this.service = service;
 
         this.s = specs;
 
-        this.controlCounts = Arrays.asList(0, 0, 0);
+        this.controlCounts = new HashMap<>();
 
         Log.d(TAG, specs);
         createElements(specs);
@@ -37,7 +38,7 @@ public class EV3Controller implements Controller {
     }
 
     @Override
-    public List<Integer> getControlCounts() {
+    public Map<String, Integer> getControlCounts() {
         return controlCounts;
     }
 
@@ -76,21 +77,21 @@ public class EV3Controller implements Controller {
                     ports[0] = Integer.parseInt(portsString[0]);
                     ports[1] = Integer.parseInt(portsString[1]);
                     controlElements.add(new EV3ControlElement.Joystick(ports, maxPower));
-                    incrCounts(0);
+                    incrCounts("joystick");
                     break;
                 case "slider":
                     // $maxPower$;$port$
                     ports = new int[1];
                     ports[0] = Integer.parseInt(attrs[1]);
                     controlElements.add(new EV3ControlElement.Slider(ports, maxPower));
-                    incrCounts(1);
+                    incrCounts("slider");
                     break;
                 case "button":
                     // $maxPower$;$port$;$duration$
                     ports = new int[1];
                     ports[0] = Integer.parseInt(attrs[1]);
                     controlElements.add(new EV3ControlElement.Button(ports, maxPower));
-                    incrCounts(2);
+                    incrCounts("button");
                     break;
                 default:
             }
@@ -192,7 +193,11 @@ public class EV3Controller implements Controller {
         return r;
     }
 
-    private void incrCounts(int id) {
-        controlCounts.set(id, controlCounts.get(id) + 1);
+    private void incrCounts(String name) {
+        if (controlCounts.containsKey(name)) {
+            controlCounts.put(name, controlCounts.get(name) + 1);
+        } else {
+            controlCounts.put(name, 1);
+        }
     }
 }
