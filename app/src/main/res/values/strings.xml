@@ -44,6 +44,7 @@
         <string name="model_picture">Picture of the currently selected model</string>
         <string name="use_model">Modell verwenden</string>
         <string name="edit_model">Steuerung des Roboters bearbeiten</string>
+        <string name="no_model_selected">Kein Modell gewählt</string>
 
         <!-- Video Connection -->
         <string name="url_settings">URL-Einstellungen</string>

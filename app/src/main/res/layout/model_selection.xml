@@ -61,10 +61,13 @@
 
     <TextView
         android:id="@+id/model_description_text"
-        android:layout_width="wrap_content"
+        style="@style/text_standard"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_vertical_small"
-        android:text="TextView"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:text="@string/no_model_selected"
+        android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/model_picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

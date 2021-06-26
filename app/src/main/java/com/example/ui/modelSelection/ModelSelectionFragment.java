@@ -5,6 +5,8 @@ import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +32,8 @@ public class ModelSelectionFragment extends HostedFragment {
     private static final String TAG = "ModelSelectionFragment";
     private NumberPicker modelPicker;
     private MainViewModel viewModel;
+    private TextView modelDescription;
+    private ImageView modelPicture;
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
@@ -66,11 +70,22 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicker.setDisplayedValues(allRobotNames);
         modelPicker.setOnValueChangedListener(this::onSelectedModelChanged);
 
+        modelDescription = view.findViewById(R.id.model_description_text);
+        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        modelDescription.setText(robotModel.name+": "+robotModel.specs);
+
+        //TODO: other picture
+        modelPicture = view.findViewById(R.id.model_picture);
+        modelPicture.setImageResource(R.drawable.no_image_available);
+
         getActivity().setTitle(R.string.title_model_selection);
     }
 
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        modelDescription.setText(robotModel.name+": "+robotModel.specs);
+        //TODO: other picture
+        modelPicture.setImageResource(R.drawable.no_image_available);
         Log.d(TAG, "Model at Position "+modelPicker.getValue()+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
     }
 
