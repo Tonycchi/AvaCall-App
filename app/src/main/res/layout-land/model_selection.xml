@@ -27,15 +27,15 @@
         android:id="@+id/model_picker"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="@dimen/margin_side_land"
         android:layout_marginStart="@dimen/margin_vertical_small_land"
+        android:layout_marginTop="@dimen/margin_vertical_small_land"
+        android:layout_marginEnd="@dimen/margin_side_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
-        android:layout_marginTop="@dimen/margin_top_land"
         app:layout_constraintBottom_toTopOf="@+id/button_edit_model"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/model_picture"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="1.0" />
 
     <android.widget.Button
@@ -62,5 +62,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_use_model" />
+
+    <TextView
+        android:id="@+id/model_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_side_land"
+        android:layout_marginTop="@dimen/margin_top_land"
+        android:layout_marginEnd="@dimen/margin_side_land"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/model_picture"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

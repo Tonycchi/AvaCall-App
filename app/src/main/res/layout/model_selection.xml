@@ -15,7 +15,7 @@
         android:layout_marginEnd="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_vertical_small"
         android:contentDescription="@string/model_picture"
-        app:layout_constraintBottom_toTopOf="@+id/model_picker"
+        app:layout_constraintBottom_toTopOf="@+id/model_description_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,5 +58,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_use_model" />
+
+    <TextView
+        android:id="@+id/model_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/model_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
