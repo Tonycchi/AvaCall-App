@@ -66,8 +66,8 @@ public class ModelSelectionFragment extends HostedFragment {
         String[] allRobotNames = viewModel.getAllRobotNames();
         modelPicker.setMaxValue(allRobotNames.length-1);
         modelPicker.setMinValue(0);
-        modelPicker.setWrapSelectorWheel(true);
         modelPicker.setDisplayedValues(allRobotNames);
+
         modelPicker.setOnValueChangedListener(this::onSelectedModelChanged);
 
         modelDescription = view.findViewById(R.id.model_description_text);
