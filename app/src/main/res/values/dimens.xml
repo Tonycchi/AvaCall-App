@@ -9,7 +9,7 @@
                     <dimen name="standard_button_height">@dimen/_45sdp</dimen>
 
                     <dimen name="big_button_height">@dimen/_70sdp</dimen>
-
+                    <dimen name="big_element_height">@dimen/_140sdp</dimen>
                     <dimen name="standard_button_border_width">@dimen/_1sdp</dimen>
                     <dimen name="navigation_button_height">@dimen/_40sdp</dimen>
 
@@ -41,7 +41,7 @@
                     <dimen name="standard_button_height_land">@dimen/_45sdp</dimen>
 
                     <dimen name="big_button_height_land">@dimen/_70sdp</dimen>
-
+                    <dimen name="big_element_height_land">@dimen/_140sdp</dimen>
                     <dimen name="standard_button_border_width_land">@dimen/_1sdp</dimen>
                     <dimen name="navigation_button_height_land">@dimen/_40sdp</dimen>
 

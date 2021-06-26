@@ -22,4 +22,10 @@ public interface RobotModelDAO {
 
     @Query("DELETE FROM RobotModel WHERE id = :id")
     void deleteByID(int id);
+
+    @Query("SELECT * FROM RobotModel WHERE id = :id")
+    RobotModel getRobotModel(int id);
+
+    @Query("SELECT COUNT(id) FROM RobotModel")
+    int getNumberOfRobotModels();
 }

@@ -12,13 +12,10 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.model.connection.Device;
 import com.example.rcvc.R;
-import com.example.ui.HostActivity;
-import com.example.ui.ModelSelectionFragment;
 
 import java.util.ArrayList;
 
@@ -119,53 +116,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
         }
     }
 
-    @Override
-    public void connectionStatusChanged(Integer newConnectionStatus) {
-        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
-        switch (newConnectionStatus) {
-            case 0:
-                Log.d(TAG, "Case 0: Not tested!");
-                showProgressDialog();
-                break;
-
-            case 1:
-                Log.d(TAG, "Case 1: Is connected!");
-                changeProgressDialog();
-                break;
-
-            case 2:
-                Log.d(TAG, "Case 2: Could not connect!");
-                hideProgressDialog();
-                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_init_error));
-                break;
-
-            case 3:
-                Log.d(TAG, "Case 3: Connection lost!");
-                hideProgressDialog();
-                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_lost));
-                break;
-
-            case 4:
-                Log.d(TAG, "Case 4: Device is accepted!");
-                hideProgressDialog();
-                viewModel.deviceAccepted();
-                switchToNextFragment();
-                break;
-
-            case 5:
-                Log.d(TAG, "Case 5: Device is not accepted!");
-                hideProgressDialog();
-                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.bluetooth_connection_wrong_device));
-                break;
-
-            default:
-                Log.d(TAG, "Default: Something strange or nothing(Case -1)");
-                showProgressDialog();
-                break;
-        }
-    }
-
-
     private void showEnableBluetooth() {
         Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivity(enableBluetoothIntent);
@@ -178,15 +128,6 @@ public class BluetoothFragment extends RobotConnectionFragment {
         noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
         Log.d(TAG, "setPlaceholder");
         viewModel.getPairedDevices().setValue(noDevicePlaceholder);
-    }
-
-    private void switchToNextFragment() {
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, ModelSelectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
     }
 
     private void onClickFirstBluetoothConnection() {

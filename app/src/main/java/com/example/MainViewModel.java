@@ -6,10 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.data.RobotModel;
 import com.example.data.URLSettings;
 import com.example.model.MainModel;
-import com.example.model.SessionData;
-import com.example.model.WebClient;
 import com.example.model.connection.Device;
 
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
@@ -33,6 +32,8 @@ public class MainViewModel extends AndroidViewModel {
     private MutableLiveData<String> selectedModelName;
     private MutableLiveData<List<String>> robotModelList;
     private MutableLiveData<Boolean> controllerSettings; //TODO eigene Klasse für die Controllerauswahl erstellen
+
+    private int[] modelPositionToId;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -84,4 +85,29 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void setReceiveCommands() { model.setReceiveCommands(); }
+
+    public String[] getAllRobotNames() {
+        List<RobotModel> allDBRobots = model.getAllRobots();
+        int numberOfRobots = allDBRobots.size();
+
+        String[] allRobotNames = new String[numberOfRobots];
+        modelPositionToId = new int[numberOfRobots];
+
+        for(int i=0; i<numberOfRobots; i++){
+            RobotModel temp = allDBRobots.get(i);
+            allRobotNames[i] = temp.name;
+            modelPositionToId[i] = temp.id;
+        }
+
+        return allRobotNames;
+    }
+
+
+    public RobotModel getRobotModel(int modelPosition) {
+        return model.getRobotModel(modelPositionToId[modelPosition]);
+    }
+
+    public void modelSelected(int modelPosition) {
+        model.modelSelected(modelPositionToId[modelPosition]);
+    }
 }

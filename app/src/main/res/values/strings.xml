@@ -18,6 +18,7 @@
         <!--  Connection      -->
         <string name="connecting_title">Verbindung wird hergestellt</string>
         <string name="bluetooth_connection_check_device">Gerättyp wird geprüft</string>
+        <string name="connection_lost">Verbindung wurde getrennt</string>
 
         <!-- Bluetooth -->
         <string name="text_connected_bluetooth_devices">Zuletzt verbundene Geräte:</string>
@@ -43,6 +44,7 @@
         <string name="model_picture">Picture of the currently selected model</string>
         <string name="use_model">Modell verwenden</string>
         <string name="edit_model">Steuerung des Roboters bearbeiten</string>
+        <string name="no_model_selected">Kein Modell gewählt</string>
 
         <!-- Video Connection -->
         <string name="url_settings">URL-Einstellungen</string>

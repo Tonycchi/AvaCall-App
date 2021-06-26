@@ -27,6 +27,7 @@ import com.example.model.robot.ev3.EV3;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainModel {
 
@@ -40,7 +41,7 @@ public class MainModel {
     private Controller controller;
 
     // Model for ModelSelectionFragment
-    // TODO modelle abspeichern?
+    private ModelSelectionModel modelSelectionModel;
 
     // Model for EditControlsFragment
     // TODO Liste von eigener controller klasse???????
@@ -68,15 +69,18 @@ public class MainModel {
 
         localDatabase = LocalDatabase.getInstance(application);
 
+        //TODO: only do when the app is installed
+        createDefaultDatabaseEntriesForRobotModels();
+
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         robot = new EV3(localDatabase.robotModelDAO());
-
-        localDatabase.robotModelDAO().insertAll(new RobotModel(99,"test", "EV3", "joystick:50;1,8|slider:30;4"));
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
         //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
+        //TODO: don't hard code robotType
+        modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), "EV3");
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
 
@@ -94,7 +98,7 @@ public class MainModel {
 
     public void startConnection(Device device) {
         robotConnectionModel.startConnection(device);
-        controller = robot.getController(99, ((BluetoothModel) robotConnectionModel).getService());
+        //controller = robot.getController(0, ((BluetoothModel) robotConnectionModel).getService());
     }
 
     public VideoConnectionModel getVideoConnectionModel() {
@@ -127,4 +131,27 @@ public class MainModel {
     }
 
     public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
+
+    public List<RobotModel> getAllRobots() {
+        return modelSelectionModel.getAllRobots();
+    }
+
+    private void createDefaultDatabaseEntriesForRobotModels(){
+        if(localDatabase.robotModelDAO().getNumberOfRobotModels()<4) {
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter", "EV3", "joystick:50;1,8"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2slider:30;4|slider:30;4"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2"));
+        }
+    }
+
+    public RobotModel getRobotModel(int id) {
+        return modelSelectionModel.getRobotModel(id);
+    }
+
+    public void modelSelected(int id) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
+        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
+        //TODO: create robot
+    }
 }
