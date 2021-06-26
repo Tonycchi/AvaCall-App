@@ -106,4 +106,8 @@ public class MainViewModel extends AndroidViewModel {
     public RobotModel getRobotModel(int modelPosition) {
         return model.getRobotModel(modelPositionToId[modelPosition]);
     }
+
+    public void modelSelected(int modelPosition) {
+        model.modelSelected(modelPositionToId[modelPosition]);
+    }
 }

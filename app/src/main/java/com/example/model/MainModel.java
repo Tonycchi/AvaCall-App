@@ -132,15 +132,20 @@ public class MainModel {
 
     private void createDefaultDatabaseEntriesForRobotModels(){
         if(localDatabase.robotModelDAO().getNumberOfRobotModels()<4) {
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter", "EV3", "joystick:50;1,8"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2slider:30;4|slider:30;4"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2"));
         }
     }
 
     public RobotModel getRobotModel(int id) {
         return modelSelectionModel.getRobotModel(id);
+    }
+
+    public void modelSelected(int id) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
+        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
+        //TODO: create robot
     }
 }
