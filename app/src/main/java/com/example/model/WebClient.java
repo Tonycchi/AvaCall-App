@@ -37,21 +37,9 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onOpen(ServerHandshake handshakeData) {;
-        String t = controllerString(controller.getControlCounts());
+        String t = controller.getControlElementString();
         send("app:" + jitsi + t);
         Log.d(TAG, t);
-    }
-
-    private String controllerString(Map<String, Integer> map) {
-        StringBuilder sb = new StringBuilder(":");
-        for (String k : map.keySet()) {
-            int c = map.get(k);
-            for (int i = 0; i < c; i++) {
-                sb.append(k).append("|");
-            }
-        }
-        String r = sb.substring(0, sb.length() - 1);
-        return r;
     }
 
     /**

@@ -11,6 +11,6 @@ public interface Controller {
      */
     void sendInput(int... input);
 
-    Map<String, Integer> getControlCounts();
+    String getControlElementString();
 
 }
