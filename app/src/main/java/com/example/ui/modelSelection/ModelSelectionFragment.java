@@ -90,6 +90,8 @@ public class ModelSelectionFragment extends HostedFragment {
     }
 
     private void onClickEditModel(View v) {
+        viewModel.modelSelected(modelPicker.getValue());
+
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, EditControlsFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
