@@ -9,6 +9,10 @@ public interface Controller {
      */
     void sendInput(int... input);
 
+    /**
+     * 
+     * @return String specifying which control elements to show on website
+     */
     String getControlElementString();
 
 }

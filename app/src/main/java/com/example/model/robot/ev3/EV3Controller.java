@@ -18,7 +18,6 @@ public class EV3Controller implements Controller {
 
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
-    //private List<Integer> controlCounts;
     private String controlElementString = ":";
 
     public EV3Controller(String specs, ConnectionService service) {
@@ -38,12 +37,6 @@ public class EV3Controller implements Controller {
 
     public String getControlElementString() {
         return controlElementString;
-    }
-
-    private void addToString(String element) {
-        if (!controlElementString.equals(":"))
-            controlElementString += "|";
-        controlElementString += element;
     }
 
     /**
@@ -170,7 +163,7 @@ public class EV3Controller implements Controller {
         directCommand[12] = (byte) 0xa4;
         directCommand[15] = (byte) 0x81;
         directCommand[17] = (byte) 0xa6;
-        directCommand[19] = (byte) 0x0f; // TODO
+        directCommand[19] = (byte) 0x0f;
 
         directCommand[9] = PORT_RIGHT;    // PORT right motor
         directCommand[11] = rightPower;  // POWER right motor
@@ -202,5 +195,15 @@ public class EV3Controller implements Controller {
         r[3] = (byte) 0x81;
         r[4] = (byte) power;
         return r;
+    }
+
+    /**
+     *
+     * @param element string to be added to controlElementString
+     */
+    private void addToString(String element) {
+        if (!controlElementString.equals(":"))
+            controlElementString += "|";
+        controlElementString += element;
     }
 }

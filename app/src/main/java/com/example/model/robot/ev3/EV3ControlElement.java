@@ -12,6 +12,11 @@ abstract class EV3ControlElement {
         this.port = ports;
     }
 
+    /**
+     *
+     * @param value an int
+     * @return int as byte array
+     */
     static byte[] toByteArray(int value) {
         return new byte[]{
                 (byte) (value >> 24),
@@ -20,6 +25,11 @@ abstract class EV3ControlElement {
                 (byte) value};
     }
 
+    /**
+     *
+     * @param value param value
+     * @return parameter for direct command as byte array
+     */
     static byte[] LCX(int value) {
         byte[] r;
         byte[] t = toByteArray(value);
@@ -41,14 +51,29 @@ abstract class EV3ControlElement {
      */
     protected abstract byte[] getMotorPower(int... input);
 
+    /**
+     *
+     * @param input controlling input
+     * @return part of direct command
+     */
     protected abstract byte[] getCommand(int... input);
 
+    /**
+     *
+     * @param x value in [0,1], percentage of maxPower
+     * @return scaled power
+     */
     final byte scalePower(float x) {
         return (byte) (x * maxPower);
     }
 
     protected static class Joystick extends EV3ControlElement {
 
+        /**
+         *
+         * @param ports 2 ports
+         * @param maxPower
+         */
         Joystick(int[] ports, int maxPower) {
             super(ports, maxPower);
         }
@@ -119,13 +144,18 @@ abstract class EV3ControlElement {
 
     protected static class Slider extends EV3ControlElement {
 
+        /**
+         *
+         * @param ports 1 port
+         * @param maxPower
+         */
         Slider(int[] ports, int maxPower) {
             super(ports, maxPower);
         }
 
         @Override
         protected byte[] getMotorPower(int... input) {
-            int tmp = (input[0] - 50) * 2;
+            int tmp = (input[0] - 50) / 50;
             return new byte[]{
                     scalePower(tmp)
             };
@@ -153,6 +183,12 @@ abstract class EV3ControlElement {
         private int duration;
         private final byte[] t;
 
+        /**
+         *
+         * @param ports 1 port
+         * @param maxPower
+         * @param duration in ms
+         */
         Button(int[] ports, int maxPower, int duration) {
             super(ports, maxPower);
             this.duration = duration;
