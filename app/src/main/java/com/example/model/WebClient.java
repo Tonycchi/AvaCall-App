@@ -65,15 +65,13 @@ public class WebClient extends WebSocketClient {
             ready = true;
         } else {
             if (true) {
-                if (message.contains(";")) {
-                    List<String> t1 = Arrays.asList(message.split(";|:"));
-                    int[] t2 = new int[t1.size()];
-                    for (int i = 0; i < t2.length; i++)
-                        t2[i] = Integer.parseInt(t1.get(i));
+                List<String> t1 = Arrays.asList(message.split(";|:"));
+                int[] t2 = new int[t1.size()];
+                for (int i = 0; i < t2.length; i++)
+                    t2[i] = Integer.parseInt(t1.get(i));
 
-                    controller.sendInput(t2);
-                    //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
-                }
+                controller.sendInput(t2);
+                //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
             }
         }
     }

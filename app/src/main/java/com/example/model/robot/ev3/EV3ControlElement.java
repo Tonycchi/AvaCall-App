@@ -14,9 +14,9 @@ abstract class EV3ControlElement {
 
     static byte[] toByteArray(int value) {
         return new byte[]{
-                (byte) (value >>> 24),
-                (byte) (value >>> 16),
-                (byte) (value >>> 8),
+                (byte) (value >> 24),
+                (byte) (value >> 16),
+                (byte) (value >> 8),
                 (byte) value};
     }
 
@@ -25,11 +25,11 @@ abstract class EV3ControlElement {
         byte[] t = toByteArray(value);
         if (-32767 <= value && value <= 32767) {
             r = new byte[]{
-                    (byte) 0x81, t[3], t[4]
+                    (byte) 0x82, t[2], t[3]
             };
         } else {
             r = new byte[]{
-                    (byte) 0x81, t[1], t[2], t[3], t[4]
+                    (byte) 0x83, t[0], t[1], t[2], t[3]
             };
         }
         return r;
@@ -125,14 +125,18 @@ abstract class EV3ControlElement {
 
         @Override
         protected byte[] getMotorPower(int... input) {
-            return new byte[]{0}; //TODO implement
+            int tmp = (input[0] - 50) * 2;
+            return new byte[]{
+                    scalePower(tmp)
+            };
         }
 
         @Override
         protected byte[] getCommand(int... input) {
+            Log.d("slider", input[0] + "");
             byte[] power = getMotorPower(input);
 
-            byte[] r = new byte[10];
+            byte[] r = new byte[5];
             r[0] = (byte) 0xA4;
             r[1] = (byte) 0x00;
             r[2] = (byte) port[0];
@@ -145,42 +149,44 @@ abstract class EV3ControlElement {
 
     protected static class Button extends EV3ControlElement {
 
-        private long pressed = -1;
+        private long pressedT = -1;
         private int duration;
+        private final byte[] t;
 
         Button(int[] ports, int maxPower, int duration) {
             super(ports, maxPower);
             this.duration = duration;
+            t = LCX(duration - 100);
         }
 
         @Override
         protected byte[] getMotorPower(int... input) {
-            return new byte[]{0}; //TODO implement
+            return new byte[]{0};
         }
 
         @Override
         protected byte[] getCommand(int... input) {
             long current = System.currentTimeMillis();
-            if (input[0] == 1 && (pressed == -1 || current - pressed >= duration)) {
-                byte[] r = new byte[20];
+            if (input[0] == 1 && (current - pressedT >= duration)) {
+                pressedT = current;
+
+                byte[] r = new byte[8 + t.length];
 
                 r[0] = (byte) 0xAC;
                 r[1] = (byte) 0x00;
                 r[2] = (byte) port[0];
                 r[3] = (byte) 0x81;
                 r[4] = (byte) maxPower;
-                r[5] = (byte) 10;
-                byte[] t = LCX(duration - 10);
-                System.arraycopy(t, 0, r, 6 , t.length);
-                r[6 + t.length] = 0;
-
-
-                // TODO finish
+                r[5] = (byte) 0x81;
+                r[6] = 100;
+                System.arraycopy(t, 0, r, 7 , t.length);
+                r[7 + t.length] = 0;
 
                 return r;
             }
-            // TODO return nop command
-            return new byte[0];
+            return new byte[]{
+                    0x01 // nop
+            };
         }
     }
 }

@@ -32,6 +32,7 @@ public class EV3Controller implements Controller {
 
     @Override
     public void sendInput(int... input) {
+        Log.d(TAG, Arrays.toString(input));
         service.write(createCommand(input));
     }
 
@@ -128,28 +129,34 @@ public class EV3Controller implements Controller {
 
         int id = input[0];              // get id of input
         EV3ControlElement e = controlElements.get(id);  // for this
-        byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
+        //byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
+        byte[] output = e.getCommand(Arrays.copyOfRange(input, 1, input.length));
 
-        int length = 10 + output.length * 5;            // e.g. joystick may return two values
-        int lastCommand = 8 + output.length * 5;
+        int length = 10 + output.length;            // e.g. joystick may return two values
+        int lastCommand = 7 + output.length;
         byte[] directCommand = new byte[length];        // this will be the command
 
         directCommand[0] = (byte) (length - 2);         // pre defined parts of direct command
         directCommand[2] = 0x2a;
         directCommand[4] = (byte) 0x80;
 
-        int i = 7;                                      // position of first output power command
+        int commandPos = 7;                                      // position of first output power command
         byte[] t;
         byte portSum = 0;
+        System.arraycopy(output, 0, directCommand, commandPos, output.length);
+        /*
         for (int k = 0; k < output.length; k++) {
             portSum += e.port[k];
             t = commandPart(e.port[k], output[k]);      // get output power command & copy 2 direct command
             System.arraycopy(t, 0, directCommand, i, t.length);
             i += t.length;
         }
+         */
+        for (int p : e.port)
+            portSum += p;
 
         directCommand[lastCommand] = (byte) 0xa6;                // end of direct command
-        directCommand[lastCommand + 1] = portSum;
+        directCommand[lastCommand + 2] = portSum;
 
         /*
         byte length = 20;
