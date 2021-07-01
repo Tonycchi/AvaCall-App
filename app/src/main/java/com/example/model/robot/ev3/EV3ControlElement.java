@@ -12,40 +12,11 @@ abstract class EV3ControlElement {
         this.port = ports;
     }
 
-    static byte[] toByteArray(int value) {
-        return new byte[]{
-                (byte) (value >>> 24),
-                (byte) (value >>> 16),
-                (byte) (value >>> 8),
-                (byte) value};
-    }
-
-    static byte[] LCX(int value) {
-        byte[] r;
-        byte[] t = toByteArray(value);
-        if (-32767 <= value && value <= 32767) {
-            r = new byte[]{
-                    (byte) 0x81, t[3], t[4]
-            };
-        } else {
-            r = new byte[]{
-                    (byte) 0x81, t[1], t[2], t[3], t[4]
-            };
-        }
-        return r;
-    }
-
     /**
      * @param input controlling input
      * @return power for use in ev3 direct command
      */
     protected abstract byte[] getMotorPower(int... input);
-
-    protected abstract byte[] getCommand(int... input);
-
-    final byte scalePower(float x) {
-        return (byte) (x * maxPower);
-    }
 
     protected static class Joystick extends EV3ControlElement {
 
@@ -89,33 +60,8 @@ abstract class EV3ControlElement {
 
             return r;
         }
-
-        @Override
-        protected byte[] getCommand(int... input) {
-            // A4|00|0p|81:po
-            //  0  1  2  3  4
-            // 0 opcode for output power
-            // 1 filler
-            // 2 p = port
-            // 3 predefined prefix
-            // 4 po = power
-
-            byte[] power = getMotorPower(input);
-
-            byte[] r = new byte[10];
-            r[0] = (byte) 0xA4;
-            r[1] = (byte) 0x00;
-            r[2] = (byte) port[0];
-            r[3] = (byte) 0x81;
-            r[4] = power[0];
-            r[5] = (byte) 0xA4;
-            r[6] = (byte) 0x00;
-            r[7] = (byte) port[1];
-            r[8] = (byte) 0x81;
-            r[9] = power[1];
-            return r;
-        }
     }
+
 
     protected static class Slider extends EV3ControlElement {
 
@@ -127,60 +73,21 @@ abstract class EV3ControlElement {
         protected byte[] getMotorPower(int... input) {
             return new byte[]{0}; //TODO implement
         }
-
-        @Override
-        protected byte[] getCommand(int... input) {
-            byte[] power = getMotorPower(input);
-
-            byte[] r = new byte[10];
-            r[0] = (byte) 0xA4;
-            r[1] = (byte) 0x00;
-            r[2] = (byte) port[0];
-            r[3] = (byte) 0x81;
-            r[4] = power[0];
-
-            return r;
-        }
     }
 
     protected static class Button extends EV3ControlElement {
 
-        private long pressed = -1;
-        private int duration;
-
-        Button(int[] ports, int maxPower, int duration) {
+        Button(int[] ports, int maxPower) {
             super(ports, maxPower);
-            this.duration = duration;
         }
 
         @Override
         protected byte[] getMotorPower(int... input) {
             return new byte[]{0}; //TODO implement
         }
+    }
 
-        @Override
-        protected byte[] getCommand(int... input) {
-            long current = System.currentTimeMillis();
-            if (input[0] == 1 && (pressed == -1 || current - pressed >= duration)) {
-                byte[] r = new byte[20];
-
-                r[0] = (byte) 0xAC;
-                r[1] = (byte) 0x00;
-                r[2] = (byte) port[0];
-                r[3] = (byte) 0x81;
-                r[4] = (byte) maxPower;
-                r[5] = (byte) 10;
-                byte[] t = LCX(duration - 10);
-                System.arraycopy(t, 0, r, 6 , t.length);
-                r[6 + t.length] = 0;
-
-
-                // TODO finish
-
-                return r;
-            }
-            // TODO return nop command
-            return new byte[0];
-        }
+    final byte scalePower(float x) {
+        return (byte) (x * maxPower);
     }
 }
