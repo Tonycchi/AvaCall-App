@@ -155,7 +155,7 @@ abstract class EV3ControlElement {
 
         @Override
         protected byte[] getMotorPower(int... input) {
-            int tmp = (input[0] - 50) / 50;
+            float tmp = (input[0] - 50) / 50.0f;
             return new byte[]{
                     scalePower(tmp)
             };
