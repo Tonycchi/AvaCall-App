@@ -30,11 +30,11 @@ public class MainViewModel extends AndroidViewModel {
         return model.getPairedDevices();
     }
 
-    public URLSettings.Triple getCurrentURLs() {
+    public URLSettings.stringTriple getCurrentURLs() {
         return model.getVideoConnectionModel().getCurrentURLs();
     }
 
-    public void saveURLs(URLSettings.Triple urls) {
+    public void saveURLs(URLSettings.stringTriple urls) {
         model.saveURLs(urls);
     }
 

@@ -5,16 +5,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.PreferenceManager;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.data.ConnectedDevice;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
 import com.example.data.RobotModel;
-import com.example.model.connection.AcceptAllHandshake;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.EV3BluetoothHandshake;
@@ -46,12 +40,7 @@ public class MainModel {
     // Model for EditControlsFragment
     // TODO Liste von eigener controller klasse???????
 
-    // Model for VideoConnectionFragment
-    private URLSettings urlSettings;
-    private WebClient wc;
-    private SessionData session;
     private LocalDatabase localDatabase;
-
 
     public MainModel(@NonNull Application application) {
         /*localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database")
@@ -92,7 +81,7 @@ public class MainModel {
         return robotConnectionModel.getConnectionStatus();
     }
 
-    public void saveURLs(URLSettings.Triple urls) {
+    public void saveURLs(URLSettings.stringTriple urls) {
         videoConnectionModel.saveURLs(urls);
     }
 

@@ -7,19 +7,19 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class SessionData {
+public class JitsiSessionData {
 
     private static final String TAG = "SessionData";
 
-    private JitsiMeetConferenceOptions options;
+    private JitsiMeetConferenceOptions jitsiOptions;
     private final String SHARE_URL;
     private final String ID;
 
-    public SessionData(String jitsi, String host, String id) {
+    public JitsiSessionData(String jitsi, String host, String id) {
         Log.d(TAG, "jitsi:"+jitsi+" host:"+host+" id:"+id);
         this.ID = id;
         try {
-            options = new JitsiMeetConferenceOptions.Builder()
+            jitsiOptions = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL(jitsi))
                     .setRoom(id)
                     .build();
@@ -31,7 +31,7 @@ public class SessionData {
     }
 
     public JitsiMeetConferenceOptions getOptions() {
-        return this.options;
+        return this.jitsiOptions;
     }
 
     public String getShareURL() {return this.SHARE_URL; }

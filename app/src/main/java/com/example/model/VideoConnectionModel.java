@@ -1,14 +1,10 @@
 package com.example.model;
 
-import android.content.SharedPreferences;
 import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
-import com.example.model.robot.ev3.EV3Controller;
 
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
@@ -20,8 +16,8 @@ public class VideoConnectionModel {
     private final String TAG = "VideoConnection";
 
     private URLSettings urlSettings;
-    private WebClient wc;
-    private SessionData session;
+    private WebClient webClient;
+    private JitsiSessionData jitsiSessionData;
 
     private Controller controller;
 
@@ -36,24 +32,24 @@ public class VideoConnectionModel {
         Log.d(TAG, "invite");
         //TODO: return wheter an connectionError occured or throw error! because when connectionError occurs the whole app crashes
         boolean connectionError = false;
-        if (session == null) {
+        if (jitsiSessionData == null) {
             String jitsi = urlSettings.getJitsi_https();
             try {
                 //Log.d(TAG, "service " + ((EV3Controller)controller).service.toString());
-                wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), controller);
+                webClient = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), controller);
             } catch (URISyntaxException e) {
                 Log.d(TAG, "e");
                 e.printStackTrace();
             }
 
-            Log.d(TAG, "wc? " + (wc != null));
-            wc.connect();//TODO: when error occurs in wc, stop waiting and directly throw error
+            Log.d(TAG, "wc? " + (webClient != null));
+            webClient.connect();//TODO: when error occurs in wc, stop waiting and directly throw error
 
 
             //continue with share link when ws is connected
             long startTime = System.currentTimeMillis();
             //check if a timeout occurs while connecting to server
-            while (!wc.isReady()) { //TODO: when error occurs in wc, stop waiting and directly throw error
+            while (!webClient.isReady()) { //TODO: when error occurs in wc, stop waiting and directly throw error
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
                     connectionError = true;
@@ -63,8 +59,8 @@ public class VideoConnectionModel {
             }
 
             if (!connectionError) {
-                String id = wc.getId();
-                session = new SessionData(jitsi, urlSettings.getHost_https(), id);
+                String id = webClient.getId();
+                jitsiSessionData = new JitsiSessionData(jitsi, urlSettings.getHost_https(), id);
                 // TODO: Zum Videocall hier auf visible setzen!
             } else {
                Log.e(TAG, "connectionError on: jist:"+jitsi+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
@@ -73,11 +69,11 @@ public class VideoConnectionModel {
         }
     }
 
-    public URLSettings.Triple getCurrentURLs() {
+    public URLSettings.stringTriple getCurrentURLs() {
         return urlSettings.getAll();
     }
 
-    public void saveURLs(URLSettings.Triple urls) {
+    public void saveURLs(URLSettings.stringTriple urls) {
         urlSettings.saveURLs(urls);
     }
 
@@ -86,14 +82,14 @@ public class VideoConnectionModel {
     }
 
     public String getShareURL() {
-        return session.getShareURL();
+        return jitsiSessionData.getShareURL();
     }
 
     public JitsiMeetConferenceOptions getOptions() {
-        return session.getOptions();
+        return jitsiSessionData.getOptions();
     }
 
     public void setReceiveCommands(){
-        wc.setReceiveCommands();
+        webClient.setReceiveCommands();
     }
 }

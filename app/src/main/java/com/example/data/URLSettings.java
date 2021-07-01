@@ -7,50 +7,50 @@ public class URLSettings {
             HOSTPORTKEY = "host_port",
             HTTPS = "https://",
             WSS = "wss://",
-            DEFAULT_TEST_HOST = "test.avatar.mintclub.org",
+            DEFAULT_TEST_HOST = "test.avatar.mintclub.org", //TODO: make non test entries
             DEFAULT_TEST_JITSI = "meet.jit.si",
             DEFAULT_TEST_PORT = "22223";
 
-    public LocalPreferenceDAO db;
+    public LocalPreferenceDAO localPreferenceDAO;
 
-    public URLSettings(LocalPreferenceDAO db) {
-        this.db = db;
+    public URLSettings(LocalPreferenceDAO localPreferenceDAO) {
+        this.localPreferenceDAO = localPreferenceDAO;
     }
 
-    public void saveURLs(Triple urls) {
-        db.insertAll(
+    public void saveURLs(stringTriple urls) {
+        localPreferenceDAO.insertAll(
                 new LocalPreference(HOSTURLKEY, trimURL(urls.getHostURL())),
                 new LocalPreference(JITSIURLKEY, trimURL(urls.getJitsiURL())),
                 new LocalPreference(HOSTPORTKEY, trimURL(urls.getPort()))
         );
     }
 
-    public Triple getAll() {
-        return new Triple(db.get(HOSTURLKEY), db.get(JITSIURLKEY), db.get(HOSTPORTKEY));
+    public stringTriple getAll() {
+        return new stringTriple(localPreferenceDAO.get(HOSTURLKEY), localPreferenceDAO.get(JITSIURLKEY), localPreferenceDAO.get(HOSTPORTKEY));
     }
 
     public String getHost_plain() {
-        return db.get(HOSTURLKEY);
+        return localPreferenceDAO.get(HOSTURLKEY);
     }
 
     public String getHost_https() {
-        return HTTPS + db.get(HOSTURLKEY);
+        return HTTPS + localPreferenceDAO.get(HOSTURLKEY);
     }
 
     public String getJitsi_plain() {
-        return db.get(JITSIURLKEY);
+        return localPreferenceDAO.get(JITSIURLKEY);
     }
 
     public String getJitsi_https() {
-        return HTTPS + db.get(JITSIURLKEY);
+        return HTTPS + localPreferenceDAO.get(JITSIURLKEY);
     }
 
     public String getPort() {
-        return db.get(HOSTPORTKEY);
+        return localPreferenceDAO.get(HOSTPORTKEY);
     }
 
     public String getHost_wss() {
-        return WSS + db.get(HOSTURLKEY) + ":" + db.get(HOSTPORTKEY);
+        return WSS + localPreferenceDAO.get(HOSTURLKEY) + ":" + localPreferenceDAO.get(HOSTPORTKEY);
     }
 
     /**
@@ -60,17 +60,17 @@ public class URLSettings {
      * @return trimmed url
      */
     private String trimURL(String url) {
-        String r = url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
-        if (r.length() > 0 && r.charAt(r.length() - 1) == '/') {
-            r = r.substring(0, r.length() - 1);
+        String trimmedURL = url.replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)", "");
+        if (trimmedURL.length() > 0 && trimmedURL.charAt(trimmedURL.length() - 1) == '/') {
+            trimmedURL = trimmedURL.substring(0, trimmedURL.length() - 1);
         }
-        return r;
+        return trimmedURL;
     }
 
-    public static class Triple {
+    public static class stringTriple {
         private final String hostURL, jitsiURL, port;
 
-        public Triple(String hostURL, String jitsiURL, String port) {
+        public stringTriple(String hostURL, String jitsiURL, String port) {
             this.hostURL = hostURL;
             this.jitsiURL = jitsiURL;
             this.port = port;
