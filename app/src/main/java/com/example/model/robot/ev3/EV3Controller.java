@@ -18,7 +18,7 @@ public class EV3Controller implements Controller {
 
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
-    private String controlElementString = ":";
+    private String controlElementString = "";
 
     public EV3Controller(String specs, ConnectionService service) {
         this.service = service;
@@ -202,7 +202,7 @@ public class EV3Controller implements Controller {
      * @param element string to be added to controlElementString
      */
     private void addToString(String element) {
-        if (!controlElementString.equals(":"))
+        if (!controlElementString.equals(""))
             controlElementString += "|";
         controlElementString += element;
     }

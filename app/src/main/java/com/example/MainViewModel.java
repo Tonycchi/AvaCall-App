@@ -110,4 +110,12 @@ public class MainViewModel extends AndroidViewModel {
     public void modelSelected(int modelPosition) {
         model.modelSelected(modelPositionToId[modelPosition]);
     }
+
+    public void sendControlInput(int... input) {
+        model.sendControlInputs(input);
+    }
+
+    public String getSelectedModelElements() {
+        return model.getSelectedModelElements();
+    }
 }

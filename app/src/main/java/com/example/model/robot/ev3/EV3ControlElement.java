@@ -206,9 +206,9 @@ abstract class EV3ControlElement {
             if (input[0] == 1 && (current - pressedT >= duration)) {
                 pressedT = current;
 
-                byte[] r = new byte[8 + t.length];
+                byte[] r = new byte[9 + t.length];
 
-                r[0] = (byte) 0xAC;
+                r[0] = (byte) 0xAD;
                 r[1] = (byte) 0x00;
                 r[2] = (byte) port[0];
                 r[3] = (byte) 0x81;
@@ -217,6 +217,7 @@ abstract class EV3ControlElement {
                 r[6] = 100;
                 System.arraycopy(t, 0, r, 7 , t.length);
                 r[7 + t.length] = 0;
+                r[8 + t.length] = 1;
 
                 return r;
             }

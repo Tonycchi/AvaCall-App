@@ -156,4 +156,12 @@ public class MainModel {
         //TODO: create robot
         controller = robot.getController(id, robotConnectionModel.getService());
     }
+
+    public void sendControlInputs(int... input) {
+        controller.sendInput(input);
+    }
+
+    public String getSelectedModelElements() {
+        return controller.getControlElementString();
+    }
 }

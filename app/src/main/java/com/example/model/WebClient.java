@@ -38,7 +38,7 @@ public class WebClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         String t = controller.getControlElementString();
-        send("app:" + jitsi + t);
+        send("app:" + jitsi + ":" + t);
         Log.d(TAG, "open, control elements: " + t);
     }
 

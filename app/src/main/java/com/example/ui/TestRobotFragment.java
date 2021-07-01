@@ -11,7 +11,11 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.MainViewModel;
+import com.example.model.robot.Controller;
+import com.example.model.robot.ev3.EV3Controller;
 import com.example.rcvc.R;
 import com.example.ui.editControls.EditControlsFragment;
 
@@ -23,6 +27,8 @@ public class TestRobotFragment extends HostedFragment {
 
     //true if this fragment was started directly from model selection
     private boolean cameFromModelSelection;
+
+    private MainViewModel viewModel;
 
     public TestRobotFragment(){super(R.layout.test_robot);}
 
@@ -42,50 +48,83 @@ public class TestRobotFragment extends HostedFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+
+        //joystick|button|slider|button
+        String t = viewModel.getSelectedModelElements();
+        String[] controlElements = t.split("\\|");
+
+        JoystickView joystick;
+        SeekBar slider;
+        Button buttonFire;
+
+        for (int i=0; i< controlElements.length; i++) {
+            Log.d(TAG, "controlElement: " + controlElements[i]);
+            int id = i;
+            switch (controlElements[i]) {
+                case "joystick":
+                    joystick = view.findViewById(R.id.joystick);
+                    joystick.setVisibility(View.VISIBLE);
+
+                    joystick.setOnMoveListener((angle, strength) -> {
+                        viewModel.sendControlInput(id, angle, strength);
+//                        Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
+                    });
+                    break;
+                case "slider":
+                    slider = view.findViewById(R.id.slider);
+                    slider.setVisibility(View.VISIBLE);
+
+                    slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            viewModel.sendControlInput(id, progress);
+//                            Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            viewModel.sendControlInput(id, 50);
+                            seekBar.setProgress(50);
+                        }
+                    });
+                    break;
+                case "button":
+                    Log.d(TAG, "dreckiger Button");
+                    buttonFire = view.findViewById(R.id.button_fire);
+                    buttonFire.setVisibility(View.VISIBLE);
+
+                    buttonFire.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch(event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    viewModel.sendControlInput(id, 1);
+//                                    Log.d(TAG, "Button activity: " + 1);
+                                    break;
+                                case MotionEvent.ACTION_UP:
+//                                    Log.d(TAG, "Button activity: " + 0);
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                    break;
+            }
+        }
+
         Button buttonYes = view.findViewById(R.id.button_yes);
         Button buttonNo = view.findViewById(R.id.button_no);
-        Button buttonFire = view.findViewById(R.id.button_fire);
-        JoystickView joystick = view.findViewById(R.id.joystick);
-        SeekBar slider = view.findViewById(R.id.slider);
 
         buttonYes.setOnClickListener(this::onClickYes);
         buttonNo.setOnClickListener(this::onClickNo);
-        buttonFire.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch(event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        Log.d(TAG, "Button activity: " + 1);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        Log.d(TAG, "Button activity: " + 0);
-                        break;
-                }
-                return true;
-            }
-        });
 
-        joystick.setOnMoveListener((angle, strength) -> {
-            Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
-        });
-
-        slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                slider.setProgress(50);
-            }
-        });
-                getActivity().setTitle(R.string.title_test_robot);
+        getActivity().setTitle(R.string.title_test_robot);
     }
 
     private void onClickYes(View v){
