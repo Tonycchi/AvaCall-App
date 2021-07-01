@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="reference" name="numberPickerStyle"/>
+    <color name="transparent">#00000000</color>
+    <item name="np__decrement" type="id"/>
+    <item name="np__increment" type="id"/>
+    <style name="NPWidget">
+        <item name="android:textAppearance">?android:attr/textAppearance</item>
+    </style>
+    <style name="NPWidget.Holo.Light.NumberPicker" parent="NPWidget.Holo.NumberPicker">
+        <item name="virtualButtonPressedDrawable">@drawable/item_background_holo_light</item>
+    </style>
+    <style name="NPWidget.Holo.NumberPicker" parent="NPWidget.NumberPicker">
+        <item name="solidColor">@android:color/transparent</item>
+        <item name="selectionDivider">@drawable/np_numberpicker_selection_divider</item>
+        <item name="selectionDividerHeight">2dip</item>
+        <item name="internalLayout">@layout/number_picker_with_selector_wheel</item>
+        <item name="internalMinWidth">64dip</item>
+        <item name="internalMaxHeight">180dip</item>
+        <item name="virtualButtonPressedDrawable">@drawable/item_background_holo_dark</item>
+    </style>
+    <style name="NPWidget.NumberPicker">
+        <item name="android:orientation">vertical</item>
+        <item name="android:fadingEdge">vertical</item>
+        <item name="android:fadingEdgeLength">50dip</item>
+    </style>
+    <declare-styleable name="NumberPicker">
+        <!-- @hide Color for the solid color background if such for optimized rendering. -->
+        <attr format="color|reference" name="solidColor"/>
+        <!-- @hide The divider for making the selection area. -->
+        <attr format="reference" name="selectionDivider"/>
+        <!-- @hide The height of the selection divider. -->
+        <attr format="dimension" name="selectionDividerHeight"/>
+        <!-- @hide The distance between the two selection dividers. -->
+        <attr format="dimension" name="selectionDividersDistance"/>
+        <!-- @hide The min height of the NumberPicker. -->
+        <attr format="dimension" name="internalMinHeight"/>
+        <!-- @hide The max height of the NumberPicker. -->
+        <attr format="dimension" name="internalMaxHeight"/>
+        <!-- @hide The min width of the NumberPicker. -->
+        <attr format="dimension" name="internalMinWidth"/>
+        <!-- @hide The max width of the NumberPicker. -->
+        <attr format="dimension" name="internalMaxWidth"/>
+        <!-- @hide The layout of the number picker. -->
+        <attr format="reference" name="internalLayout"/>
+        <!-- @hide The drawable for pressed virtual (increment/decrement) buttons. -->
+        <attr format="reference" name="virtualButtonPressedDrawable"/>
+    </declare-styleable>
+</resources>

@@ -1,7 +1,5 @@
 package com.example.model.robot;
 
-import java.util.Map;
-
 public interface Controller {
 
     /**
@@ -11,6 +9,6 @@ public interface Controller {
      */
     void sendInput(int... input);
 
-    Map<String, Integer> getControlCounts();
+    String getControlElementString();
 
 }

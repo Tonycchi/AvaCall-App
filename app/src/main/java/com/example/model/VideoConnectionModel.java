@@ -39,7 +39,7 @@ public class VideoConnectionModel {
         if (session == null) {
             String jitsi = urlSettings.getJitsi_https();
             try {
-                Log.d(TAG, "service " + ((EV3Controller)controller).service.toString());
+                //Log.d(TAG, "service " + ((EV3Controller)controller).service.toString());
                 wc = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getJitsi_plain(), controller);
             } catch (URISyntaxException e) {
                 Log.d(TAG, "e");
