@@ -19,8 +19,6 @@ public class RobotModel {
     @ColumnInfo(name = "specs")
     public String specs; //the specs of the robot, translated to a string
 
-
-
     public RobotModel(String name, String type, String specs) {
         this.name = name;
         this.type = type;
