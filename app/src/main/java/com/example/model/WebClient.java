@@ -11,22 +11,20 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
-    private final String jitsi;
+    private final String videoURL;
     private Controller controller;
     private String id;
     private boolean receiveCommands;
     private boolean ready;
 
-    public WebClient(URI serverURI, String jitsi, Controller controller) {
+    public WebClient(URI serverURI, String videoURL, Controller controller) {
         super(serverURI);
         this.controller = controller;
-        this.jitsi = jitsi;
+        this.videoURL = videoURL;
         this.ready = false;
         receiveCommands = false;
         Log.d(TAG, "serverURI:" + serverURI.toASCIIString());
@@ -38,7 +36,7 @@ public class WebClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakeData) {
         String t = controller.getControlElementString();
-        send("app:" + jitsi + ":" + t);
+        send("app:" + videoURL + ":" + t);
         Log.d(TAG, "open, control elements: " + t);
     }
 

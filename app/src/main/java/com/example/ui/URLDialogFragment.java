@@ -38,7 +38,7 @@ public class URLDialogFragment extends DialogFragment {
         // set editText texts = current values
         URLSettings.stringTriple t = viewModel.getCurrentURLs();
         String currentWebURL = t.getHostURL(),
-                currentJitsiURL = t.getJitsiURL(),
+                currentJitsiURL = t.getVideoURL(),
                 currentWebPort = t.getPort();
         editWebURL.setText(currentWebURL);
         editJitsiURL.setText(currentJitsiURL);

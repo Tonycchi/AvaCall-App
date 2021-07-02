@@ -58,7 +58,7 @@ public class MainViewModel extends AndroidViewModel {
         return model.getShareURL();
     }
 
-    public JitsiMeetConferenceOptions getOptions() {
+    public Object getOptions() {
         return model.getOptions();
     }
 

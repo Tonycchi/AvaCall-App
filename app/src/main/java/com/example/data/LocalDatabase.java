@@ -35,7 +35,7 @@ public abstract class LocalDatabase extends RoomDatabase {
                         super.onCreate(db);
                         Executors.newSingleThreadExecutor().execute(() -> getInstance(context).localPreferenceDAO().insertAll(
                                 new LocalPreference(URLSettings.HOSTURLKEY, URLSettings.DEFAULT_TEST_HOST),
-                                new LocalPreference(URLSettings.JITSIURLKEY, URLSettings.DEFAULT_TEST_JITSI),
+                                new LocalPreference(URLSettings.VIDEOURLKEY, URLSettings.DEFAULT_TEST_JITSI),
                                 new LocalPreference(URLSettings.HOSTPORTKEY, URLSettings.DEFAULT_TEST_PORT)));
                     }
                 })

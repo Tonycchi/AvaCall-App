@@ -107,7 +107,7 @@ public class MainModel {
         return videoConnectionModel.getShareURL();
     }
 
-    public JitsiMeetConferenceOptions getOptions() {
+    public Object getOptions() {
         return videoConnectionModel.getOptions();
     }
 

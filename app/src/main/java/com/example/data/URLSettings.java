@@ -3,7 +3,7 @@ package com.example.data;
 public class URLSettings {
 
     public final static String HOSTURLKEY = "host_url",
-            JITSIURLKEY = "jitsi_url",
+            VIDEOURLKEY = "jitsi_url",
             HOSTPORTKEY = "host_port",
             HTTPS = "https://",
             WSS = "wss://",
@@ -20,13 +20,13 @@ public class URLSettings {
     public void saveURLs(stringTriple urls) {
         localPreferenceDAO.insertAll(
                 new LocalPreference(HOSTURLKEY, trimURL(urls.getHostURL())),
-                new LocalPreference(JITSIURLKEY, trimURL(urls.getJitsiURL())),
+                new LocalPreference(VIDEOURLKEY, trimURL(urls.getVideoURL())),
                 new LocalPreference(HOSTPORTKEY, trimURL(urls.getPort()))
         );
     }
 
     public stringTriple getAll() {
-        return new stringTriple(localPreferenceDAO.get(HOSTURLKEY), localPreferenceDAO.get(JITSIURLKEY), localPreferenceDAO.get(HOSTPORTKEY));
+        return new stringTriple(localPreferenceDAO.get(HOSTURLKEY), localPreferenceDAO.get(VIDEOURLKEY), localPreferenceDAO.get(HOSTPORTKEY));
     }
 
     public String getHost_plain() {
@@ -37,12 +37,12 @@ public class URLSettings {
         return HTTPS + localPreferenceDAO.get(HOSTURLKEY);
     }
 
-    public String getJitsi_plain() {
-        return localPreferenceDAO.get(JITSIURLKEY);
+    public String getVideoURL_plain() {
+        return localPreferenceDAO.get(VIDEOURLKEY);
     }
 
-    public String getJitsi_https() {
-        return HTTPS + localPreferenceDAO.get(JITSIURLKEY);
+    public String getVideoURL_https() {
+        return HTTPS + localPreferenceDAO.get(VIDEOURLKEY);
     }
 
     public String getPort() {
@@ -68,11 +68,11 @@ public class URLSettings {
     }
 
     public static class stringTriple {
-        private final String hostURL, jitsiURL, port;
+        private final String hostURL, videoURL, port;
 
-        public stringTriple(String hostURL, String jitsiURL, String port) {
+        public stringTriple(String hostURL, String videoURL, String port) {
             this.hostURL = hostURL;
-            this.jitsiURL = jitsiURL;
+            this.videoURL = videoURL;
             this.port = port;
         }
 
@@ -80,8 +80,8 @@ public class URLSettings {
             return hostURL;
         }
 
-        public String getJitsiURL() {
-            return jitsiURL;
+        public String getVideoURL() {
+            return videoURL;
         }
 
         public String getPort() {
