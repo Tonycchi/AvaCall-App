@@ -126,12 +126,13 @@ public class MainModel {
     }
 
     private void createDefaultDatabaseEntriesForRobotModels(){
-        if(localDatabase.robotModelDAO().getNumberOfRobotModels()<4) {
+        if(localDatabase.robotModelDAO().getNumberOfRobotModels()<7) {
             localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter", "EV3", "joystick:50;1,8"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000|slider:30;4|button:20;4;5000"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Gensearsch", "EV3", "button:20;1;5000|button:20;2;5000|button:20;4;5000|button:20;8;5000"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("NUR GREIFARM", "EV3", "slider:30;4"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2;5000"));
         }
     }
