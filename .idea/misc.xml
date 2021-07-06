@@ -4,6 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/bluetooth_connection.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/edit_controls.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/ev3_button.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/ev3_create_model/ev3_joystick.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/ev3_joystick.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/ev3_slider.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
