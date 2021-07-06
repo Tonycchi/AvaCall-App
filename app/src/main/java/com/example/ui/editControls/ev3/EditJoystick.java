@@ -11,6 +11,10 @@ import com.example.rcvc.R;
 
 public class EditJoystick extends EditControlElement {
 
+    public EditJoystick() {
+        super(R.layout.ev3_joystick);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle saveInstanceState) {
         return inflater.inflate(R.layout.ev3_joystick, parent, false);

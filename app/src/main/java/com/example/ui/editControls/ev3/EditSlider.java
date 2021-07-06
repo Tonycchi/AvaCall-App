@@ -11,6 +11,10 @@ import com.example.rcvc.R;
 
 public class EditSlider extends EditControlElement {
 
+    public EditSlider() {
+        super(R.layout.ev3_slider);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle saveInstanceState) {
         return inflater.inflate(R.layout.ev3_slider, parent, false);

@@ -11,6 +11,10 @@ import com.example.rcvc.R;
 
 public class EditButton extends EditControlElement {
 
+    public EditButton() {
+        super(R.layout.ev3_button);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle saveInstanceState) {
         return inflater.inflate(R.layout.ev3_button, parent, false);
