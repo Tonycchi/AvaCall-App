@@ -53,44 +53,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_edit_model_back" />
 
-    <FrameLayout
-        android:id="@+id/element1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/element2"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_edit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginTop="@dimen/margin_vertical_small"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:layout_marginBottom="@dimen/margin_vertical_big"
+        app:layout_constraintBottom_toTopOf="@+id/button_edit_model_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_model_spinner" />
-
-    <FrameLayout
-        android:id="@+id/element2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/element3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/element1" />
-
-    <FrameLayout
-        android:id="@+id/element3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/element4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/element2" />
-
-    <FrameLayout
-        android:id="@+id/element4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/button_edit_model_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/element3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

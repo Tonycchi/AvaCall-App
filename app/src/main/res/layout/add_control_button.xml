@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/paired_devices_height">
+
+    <android.widget.Button
+        android:id="@+id/button_bluetooth_device"
+        style="@style/button_neutral"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_horizontal_small"
+        android:text="Steuerelement hinzufügen"
+        />
+</FrameLayout>

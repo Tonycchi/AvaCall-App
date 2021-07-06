@@ -14,18 +14,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.TestRobotFragment;
+import com.example.ui.editControls.ev3.Adapter;
 import com.example.ui.editControls.ev3.EditJoystick;
 
 import java.util.ArrayList;
 
 public class EditControlsFragment extends HostedFragment {
 
-    private ArrayList<Integer> FrameLayoutIDs;
+    private Adapter adapter;
+    private RecyclerView optionsList;
 
     public EditControlsFragment() {
         super(R.layout.edit_controls);
@@ -34,6 +38,8 @@ public class EditControlsFragment extends HostedFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        adapter = new Adapter();
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -45,11 +51,11 @@ public class EditControlsFragment extends HostedFragment {
         Button buttonEditModelNext = view.findViewById(R.id.button_edit_model_next);
         Button buttonEditModelBack = view.findViewById(R.id.button_edit_model_back);
 
-        Fragment joystick = new EditJoystick();
-        getParentFragmentManager().beginTransaction()
-                .add(R.id.element1, joystick).commit();
-
         Spinner spinner = view.findViewById(R.id.edit_model_spinner);
+
+        optionsList = view.findViewById(R.id.list_edit);
+        optionsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        optionsList.setAdapter(adapter);
 
         ArrayAdapter<CharSequence> adapter =
                 ArrayAdapter.createFromResource(getContext(), R.array.rotob_model_types,
