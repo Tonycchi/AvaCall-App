@@ -4,7 +4,7 @@
     android:layout_height="@dimen/paired_devices_height">
 
     <android.widget.Button
-        android:id="@+id/button_bluetooth_device"
+        android:id="@+id/add_control"
         style="@style/button_neutral"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -3,11 +3,18 @@ package com.example.ui.editControls.ev3;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rcvc.R;
+import com.example.ui.URLDialogFragment;
+import com.example.ui.editControls.AddControlElementFrgmt;
+import com.example.ui.editControls.EditControlsFragment;
 
 public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -17,6 +24,13 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             SLIDER = 2,
             BUTTON = 3;
     private int itemCount = 2;
+    private FragmentActivity activity;
+
+    private Adapter() {}
+
+    public Adapter(FragmentActivity activity) {
+        this.activity = activity;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -64,6 +78,12 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public AddOption(@NonNull View itemView) {
             super(itemView);
+            Button b = itemView.findViewById(R.id.add_control);
+
+            b.setOnClickListener((v -> {
+                new AddControlElementFrgmt().show(
+                        activity.getSupportFragmentManager(), AddControlElementFrgmt.TAG);
+            }));
         }
     }
 

@@ -3,4 +3,9 @@
     <string-array name="rotob_model_types">
         <item>LEGO® MINDSTORMS® EV3</item>
     </string-array>
+    <string-array name="control_elements_names">
+        <item>Joystick</item>
+        <item>Slider</item>
+        <item>Button</item>
+    </string-array>
 </resources>

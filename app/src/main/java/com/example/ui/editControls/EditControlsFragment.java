@@ -39,7 +39,7 @@ public class EditControlsFragment extends HostedFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new Adapter();
+        adapter = new Adapter(getActivity());
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
