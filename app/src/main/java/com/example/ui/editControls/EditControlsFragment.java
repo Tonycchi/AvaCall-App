@@ -2,17 +2,13 @@ package com.example.ui.editControls;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,14 +17,11 @@ import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.TestRobotFragment;
-import com.example.ui.editControls.ev3.Adapter;
-import com.example.ui.editControls.ev3.EditJoystick;
-
-import java.util.ArrayList;
+import com.example.ui.editControls.ev3.ControlAdapter;
 
 public class EditControlsFragment extends HostedFragment {
 
-    private Adapter adapter;
+    private ControlAdapter controlAdapter;
     private RecyclerView optionsList;
 
     public EditControlsFragment() {
@@ -39,7 +32,7 @@ public class EditControlsFragment extends HostedFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new Adapter(getActivity());
+        controlAdapter = new ControlAdapter(getActivity());
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -55,7 +48,7 @@ public class EditControlsFragment extends HostedFragment {
 
         optionsList = view.findViewById(R.id.list_edit);
         optionsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        optionsList.setAdapter(adapter);
+        optionsList.setAdapter(controlAdapter);
 
         ArrayAdapter<CharSequence> adapter =
                 ArrayAdapter.createFromResource(getContext(), R.array.rotob_model_types,

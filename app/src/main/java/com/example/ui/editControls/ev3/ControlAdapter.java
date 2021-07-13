@@ -6,36 +6,47 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rcvc.R;
-import com.example.ui.URLDialogFragment;
 import com.example.ui.editControls.AddControlElementFrgmt;
-import com.example.ui.editControls.EditControlsFragment;
 
-public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+import java.util.ArrayList;
 
-    private static final int
+public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    static final int
             ADD = 0,
             JOYSTICK = 1,
             SLIDER = 2,
             BUTTON = 3;
-    private int itemCount = 2;
+    private int itemCount = 1;
     private FragmentActivity activity;
+    private ArrayList<Integer> elements;
 
-    private Adapter() {}
-
-    public Adapter(FragmentActivity activity) {
+    public ControlAdapter(FragmentActivity activity) {
         this.activity = activity;
+        this.elements = new ArrayList<>();
+    }
+
+    public void addElement(int element) {
+        elements.add(element);
+        itemCount++;
+    }
+
+    public void removeElement(int position) {
+        if (position < elements.size()) {
+            elements.remove(position);
+            itemCount--;
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) return JOYSTICK;
-        return ADD;
+        if (position >= elements.size())
+            return ADD;
+        return elements.get(position);
     }
 
     @NonNull
@@ -59,7 +70,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_control_button, parent, false);
-                viewHolder = new AddOption(view);
+                viewHolder = new AddOption(view, this);
         }
         return viewHolder;
     }
@@ -76,12 +87,12 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class AddOption extends RecyclerView.ViewHolder {
 
-        public AddOption(@NonNull View itemView) {
+        public AddOption(@NonNull View itemView, ControlAdapter adapter) {
             super(itemView);
             Button b = itemView.findViewById(R.id.add_control);
 
             b.setOnClickListener((v -> {
-                new AddControlElementFrgmt().show(
+                new AddControlElementFrgmt(adapter).show(
                         activity.getSupportFragmentManager(), AddControlElementFrgmt.TAG);
             }));
         }
