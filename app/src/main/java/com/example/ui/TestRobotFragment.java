@@ -3,13 +3,18 @@ package com.example.ui;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -50,73 +55,103 @@ public class TestRobotFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        //joystick|button|slider|button
-        String t = viewModel.getSelectedModelElements();
-        String[] controlElements = t.split("\\|");
+        ConstraintLayout constraintLayout = (ConstraintLayout) view.findViewById(R.id.test_robot_fragment);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(constraintLayout);
 
-        JoystickView joystick;
-        SeekBar slider;
-        Button buttonFire;
+        ContextThemeWrapper newContext = new ContextThemeWrapper(getContext(), R.style.button_neutral);
 
-        for (int i=0; i< controlElements.length; i++) {
-            Log.d(TAG, "controlElement: " + controlElements[i]);
-            int id = i;
-            switch (controlElements[i]) {
-                case "joystick":
-                    joystick = view.findViewById(R.id.joystick);
-                    joystick.setVisibility(View.VISIBLE);
+        Button button0 = new Button(newContext);
+        Button button1 = new Button(newContext);
 
-                    joystick.setOnMoveListener((angle, strength) -> {
-                        viewModel.sendControlInput(id, angle, strength);
-//                        Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
-                    });
-                    break;
-                case "slider":
-                    slider = view.findViewById(R.id.slider);
-                    slider.setVisibility(View.VISIBLE);
+        button0.setText("KEKW");
+        button0.setId(View.generateViewId());
+        button0.setBackgroundResource(R.drawable.standard_button);
+        constraintLayout.addView(button0);
 
-                    slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            viewModel.sendControlInput(id, progress);
-//                            Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
-                        }
+        button1.setText("Gaynse");
+        button1.setId(View.generateViewId());
+        button1.setBackgroundResource(R.drawable.standard_button);
+        constraintLayout.addView(button1);
 
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
+        set.connect(button0.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
+        set.connect(button0.getId(), ConstraintSet.RIGHT, button1.getId(), ConstraintSet.LEFT, 21);
+        set.connect(button0.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
+        set.constrainHeight(button0.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
 
-                        }
+        set.connect(button1.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 42);
+        set.connect(button1.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 42);
+        set.connect(button1.getId(), ConstraintSet.LEFT, button0.getId(), ConstraintSet.RIGHT, 21);
+        set.constrainHeight(button1.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
+        set.applyTo(constraintLayout);
 
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-                            viewModel.sendControlInput(id, 50);
-                            seekBar.setProgress(50);
-                        }
-                    });
-                    break;
-                case "button":
-                    Log.d(TAG, "dreckiger Button");
-                    buttonFire = view.findViewById(R.id.button_fire);
-                    buttonFire.setVisibility(View.VISIBLE);
-
-                    buttonFire.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            switch(event.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                    viewModel.sendControlInput(id, 1);
-//                                    Log.d(TAG, "Button activity: " + 1);
-                                    break;
-                                case MotionEvent.ACTION_UP:
-//                                    Log.d(TAG, "Button activity: " + 0);
-                                    break;
-                            }
-                            return true;
-                        }
-                    });
-                    break;
-            }
-        }
+//        //joystick|button|slider|button
+//        String t = viewModel.getSelectedModelElements();
+//        String[] controlElements = t.split("\\|");
+//
+//        JoystickView joystick;
+//        SeekBar slider;
+//        Button buttonFire;
+//
+//        for (int i=0; i< controlElements.length; i++) {
+//            Log.d(TAG, "controlElement: " + controlElements[i]);
+//            int id = i;
+//            switch (controlElements[i]) {
+//                case "joystick":
+//                    joystick = view.findViewById(R.id.joystick);
+//                    joystick.setVisibility(View.VISIBLE);
+//
+//                    joystick.setOnMoveListener((angle, strength) -> {
+//                        viewModel.sendControlInput(id, angle, strength);
+////                        Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
+//                    });
+//                    break;
+//                case "slider":
+//                    slider = view.findViewById(R.id.slider);
+//                    slider.setVisibility(View.VISIBLE);
+//
+//                    slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//                        @Override
+//                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                            viewModel.sendControlInput(id, progress);
+////                            Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
+//                        }
+//
+//                        @Override
+//                        public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onStopTrackingTouch(SeekBar seekBar) {
+//                            viewModel.sendControlInput(id, 50);
+//                            seekBar.setProgress(50);
+//                        }
+//                    });
+//                    break;
+//                case "button":
+//                    Log.d(TAG, "dreckiger Button");
+//                    buttonFire = view.findViewById(R.id.button_fire);
+//                    buttonFire.setVisibility(View.VISIBLE);
+//
+//                    buttonFire.setOnTouchListener(new View.OnTouchListener() {
+//                        @Override
+//                        public boolean onTouch(View v, MotionEvent event) {
+//                            switch(event.getAction()) {
+//                                case MotionEvent.ACTION_DOWN:
+//                                    viewModel.sendControlInput(id, 1);
+////                                    Log.d(TAG, "Button activity: " + 1);
+//                                    break;
+//                                case MotionEvent.ACTION_UP:
+////                                    Log.d(TAG, "Button activity: " + 0);
+//                                    break;
+//                            }
+//                            return true;
+//                        }
+//                    });
+//                    break;
+//            }
+//        }
 
         Button buttonYes = view.findViewById(R.id.button_yes);
         Button buttonNo = view.findViewById(R.id.button_no);
