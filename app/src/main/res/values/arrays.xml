@@ -4,8 +4,8 @@
         <item>LEGO® MINDSTORMS® EV3</item>
     </string-array>
     <string-array name="control_elements_names">
-        <item>Joystick</item>
-        <item>Slider</item>
-        <item>Button</item>
+        <item>Joystick (2 Motoren)</item>
+        <item>Slider (1 Motor)</item>
+        <item>Button (1 Motor)</item>
     </string-array>
 </resources>

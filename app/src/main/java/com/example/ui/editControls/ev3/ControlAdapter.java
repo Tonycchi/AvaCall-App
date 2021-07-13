@@ -4,6 +4,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.Space;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -17,13 +20,15 @@ import java.util.ArrayList;
 public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static final int
+            EMPTY = -1,
             ADD = 0,
             JOYSTICK = 1,
             SLIDER = 2,
             BUTTON = 3;
-    private int itemCount = 1;
-    private FragmentActivity activity;
-    private ArrayList<Integer> elements;
+    private final FragmentActivity activity;
+    private final ArrayList<Integer> elements;
+    private int itemCount = 1,
+            motorCount = 0;
 
     public ControlAdapter(FragmentActivity activity) {
         this.activity = activity;
@@ -31,21 +36,32 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void addElement(int element) {
-        elements.add(element);
-        itemCount++;
+        int incr = (element == JOYSTICK) ? 2 : 1;
+        if (motorCount + incr <= 4) {
+            elements.add(element);
+            itemCount++;
+            motorCount += incr;
+            notifyItemInserted(elements.size() - 1);
+        } else {
+            Toast.makeText(activity, R.string.edit_controls_motor_alert, Toast.LENGTH_LONG).show();
+        }
     }
 
     public void removeElement(int position) {
         if (position < elements.size()) {
-            elements.remove(position);
+            int element = elements.remove(position);
             itemCount--;
+            motorCount -= (element == JOYSTICK) ? 2 : 1;
+            notifyItemRemoved(position);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position >= elements.size())
+        if (position >= elements.size() && motorCount < 4)
             return ADD;
+        else if (position >= elements.size())
+            return EMPTY;
         return elements.get(position);
     }
 
@@ -67,6 +83,10 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case BUTTON:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ev3_button, parent, false);
                 viewHolder = new ButtonHolder(view);
+                break;
+            case EMPTY:
+                view = new Space(parent.getContext());
+                viewHolder = new EmptyHolder(view);
                 break;
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_control_button, parent, false);
@@ -115,6 +135,13 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     class ButtonHolder extends RecyclerView.ViewHolder {
 
         public ButtonHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+    class EmptyHolder extends  RecyclerView.ViewHolder {
+
+        public EmptyHolder(@NonNull View itemView) {
             super(itemView);
         }
     }

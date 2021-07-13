@@ -36,7 +36,6 @@ public class AddControlElementFrgmt extends DialogFragment {
 
         l.setOnItemClickListener((AdapterView<?> arg0, View arg1, int position, long arg3) -> {
             adapter.addElement(position + 1);
-            adapter.notifyDataSetChanged();
             this.dismiss();
         });
 

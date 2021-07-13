@@ -62,5 +62,6 @@
         <string name="host_url">avatar.mintclub.org</string>
         <string name="jitsi_url">meet.jit.si</string>
         <string name="host_port">22222</string>
+    <string name="edit_controls_motor_alert">Es können maximal 4 Motoren belegt werden.</string>
 
 </resources>
