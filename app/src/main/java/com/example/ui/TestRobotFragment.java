@@ -75,13 +75,15 @@ public class TestRobotFragment extends HostedFragment {
         constraintLayout.addView(button1);
 
         set.connect(button0.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
-        set.connect(button0.getId(), ConstraintSet.RIGHT, button1.getId(), ConstraintSet.LEFT, 21);
-        set.connect(button0.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
+        set.connect(button0.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_side));
+        set.connect(button0.getId(), ConstraintSet.LEFT, button1.getId(), ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+        set.connect(button0.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
         set.constrainHeight(button0.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
 
-        set.connect(button1.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 42);
-        set.connect(button1.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 42);
-        set.connect(button1.getId(), ConstraintSet.LEFT, button0.getId(), ConstraintSet.RIGHT, 21);
+        set.connect(button1.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
+        set.connect(button1.getId(), ConstraintSet.RIGHT, button0.getId(), ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+        set.connect(button1.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
+        set.connect(button1.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
         set.constrainHeight(button1.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
         set.applyTo(constraintLayout);
 
