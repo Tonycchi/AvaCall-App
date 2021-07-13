@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Space;
 import android.widget.Toast;
 
@@ -118,21 +119,32 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    class JoystickHolder extends RecyclerView.ViewHolder {
+    abstract class DeletableHolder extends RecyclerView.ViewHolder {
+
+        public DeletableHolder(@NonNull View itemView) {
+            super(itemView);
+            ImageButton delete = itemView.findViewById(R.id.delete);
+            delete.setOnClickListener((v -> {
+                removeElement(getAdapterPosition());
+            }));
+        }
+    }
+
+    class JoystickHolder extends DeletableHolder {
 
         public JoystickHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
 
-    class SliderHolder extends RecyclerView.ViewHolder {
+    class SliderHolder extends DeletableHolder {
 
         public SliderHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
 
-    class ButtonHolder extends RecyclerView.ViewHolder {
+    class ButtonHolder extends DeletableHolder {
 
         public ButtonHolder(@NonNull View itemView) {
             super(itemView);
