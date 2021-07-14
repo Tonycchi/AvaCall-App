@@ -38,9 +38,6 @@ public class MainModel {
     private ModelSelectionModel modelSelectionModel;
     private int[] modelPositionToId;
 
-    // Model for EditControlsFragment
-    // TODO Liste von eigener controller klasse???????
-
     private LocalDatabase localDatabase;
 
     public MainModel(@NonNull Application application) {

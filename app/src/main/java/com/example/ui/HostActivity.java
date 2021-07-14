@@ -65,4 +65,8 @@ public class HostActivity extends AppCompatActivity {
         toast.show();
     }
 
+    public void showToast(int messageId){
+        showToast(getResources().getString(messageId));
+    }
+
 }

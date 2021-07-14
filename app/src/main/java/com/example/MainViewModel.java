@@ -49,10 +49,6 @@ public class MainViewModel extends AndroidViewModel {
         model.invitePartner();
     }
 
-//    public MutableLiveData<String> getInviteLink() {
-//        return model.getInviteLink();
-//    }
-
     public String getShareURL() {
         return model.getShareURL();
     }
@@ -74,7 +70,6 @@ public class MainViewModel extends AndroidViewModel {
     public String[] getAllRobotNames() {
         return model.getAllRobotNames();
     }
-
 
     public RobotModel getRobotModel(int modelPosition) {
         return model.getRobotModel(modelPosition);

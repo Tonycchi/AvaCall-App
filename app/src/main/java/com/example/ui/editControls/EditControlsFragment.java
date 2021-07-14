@@ -2,6 +2,7 @@ package com.example.ui.editControls;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,14 +22,15 @@ import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.TestRobotFragment;
-import com.example.ui.editControls.ev3.EV3ControlAdapter;
 
 public class EditControlsFragment extends HostedFragment {
 
-    private EV3ControlAdapter EV3ControlAdapter;
-    private RecyclerView optionsList;
+    private final String TAG = "EditControlsFragment";
+
+    private ControlAdapter controlAdapter;
+    private RecyclerView editControlsList;
     private MainViewModel viewModel;
-    private RobotModel model;
+    private RobotModel robotModel;
 
     public EditControlsFragment() {
         super(R.layout.edit_controls);
@@ -40,8 +42,15 @@ public class EditControlsFragment extends HostedFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        model = viewModel.getSelectedRobotModel();
-        EV3ControlAdapter = new EV3ControlAdapter(getActivity(), model);
+        robotModel = viewModel.getSelectedRobotModel();
+
+        switch(robotModel.type) {
+            case "EV3": //TODO: dont hard code string
+                controlAdapter = new EV3ControlAdapter((HostActivity)getActivity(), robotModel);
+
+            default:
+                Log.e(TAG, "ModelType not available for edit model");
+        }
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -53,22 +62,28 @@ public class EditControlsFragment extends HostedFragment {
         Button buttonEditModelNext = view.findViewById(R.id.button_edit_model_next);
         Button buttonEditModelBack = view.findViewById(R.id.button_edit_model_back);
 
-        if (model != null) {
+        if (robotModel != null) {
             EditText t = view.findViewById(R.id.edit_model_name);
-            t.setText(model.name);
+            t.setText(robotModel.name);
+        }else{
+            Log.e(TAG, "robotModel == null");
         }
 
-        Spinner spinner = view.findViewById(R.id.edit_model_spinner);
+        if(controlAdapter != null) {
+            Spinner spinner = view.findViewById(R.id.edit_model_spinner);
 
-        optionsList = view.findViewById(R.id.list_edit);
-        optionsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        optionsList.setAdapter(EV3ControlAdapter);
+            editControlsList = view.findViewById(R.id.list_edit);
+            editControlsList.setLayoutManager(new LinearLayoutManager(getContext()));
+            editControlsList.setAdapter(controlAdapter);
 
-        ArrayAdapter<CharSequence> adapter =
-                ArrayAdapter.createFromResource(getContext(), R.array.rotob_model_types,
-                        android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+            ArrayAdapter<CharSequence> adapter =
+                    ArrayAdapter.createFromResource(getContext(), R.array.rotob_model_types,
+                            android.R.layout.simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+        }else{
+            Log.e(TAG, "controlAdapter == null");
+        }
 
         buttonEditModelNext.setOnClickListener(this::onClickButtonEditModelNext);
         buttonEditModelBack.setOnClickListener(this::onClickButtonEditModelBack);

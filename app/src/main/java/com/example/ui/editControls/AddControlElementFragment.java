@@ -1,4 +1,4 @@
-package com.example.ui.editControls.ev3;
+package com.example.ui.editControls;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,14 +15,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.rcvc.R;
-import com.example.ui.editControls.ev3.EV3ControlAdapter;
 
-public class AddEV3ControlElementFragment extends DialogFragment {
+public class AddControlElementFragment extends DialogFragment {
 
     public static final String TAG = "AddControlElementFragment";
-    private EV3ControlAdapter adapter;
+    private ControlAdapter adapter;
 
-    public AddEV3ControlElementFragment(EV3ControlAdapter adapter) {
+    public AddControlElementFragment(ControlAdapter adapter) {
         this.adapter = adapter;
     }
 
