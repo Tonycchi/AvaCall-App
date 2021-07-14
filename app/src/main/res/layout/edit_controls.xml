@@ -15,7 +15,7 @@
         android:ems="10"
         android:gravity="center"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +39,7 @@
         android:layout_marginEnd="@dimen/margin_horizontal_small"
         android:layout_marginBottom="@dimen/margin_bottom"
         android:layout_weight="1"
-        android:text="Anderes Modell"
+        android:text="@string/different_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_edit_model_next"
         app:layout_constraintStart_toStartOf="parent" />
@@ -52,7 +52,7 @@
         android:layout_marginEnd="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_bottom"
         android:layout_weight="1"
-        android:text="Steuerung testen"
+        android:text="@string/use_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_edit_model_back" />
