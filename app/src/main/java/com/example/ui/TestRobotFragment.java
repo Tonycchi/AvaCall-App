@@ -61,108 +61,14 @@ public class TestRobotFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        ConstraintLayout constraintLayout = (ConstraintLayout) view.findViewById(R.id.test_robot_fragment);
+        ConstraintLayout constraintLayout = view.findViewById(R.id.test_robot_fragment);
         ConstraintSet set = new ConstraintSet();
         set.clone(constraintLayout);
 
-//        ContextThemeWrapper newContext = new ContextThemeWrapper(getContext(), R.style.button_neutral);
-//
-//        Button button0 = new Button(newContext);
-//        Button button1 = new Button(newContext);
-//
-//        button0.setText("KEKW");
-//        button0.setId(View.generateViewId());
-//        button0.setBackgroundResource(R.drawable.standard_button);
-//        constraintLayout.addView(button0);
-//
-//        button1.setText("Gaynse");
-//        button1.setId(View.generateViewId());
-//        button1.setBackgroundResource(R.drawable.standard_button);
-//        constraintLayout.addView(button1);
-
-//        set.connect(button0.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
-//        set.connect(button0.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_side));
-//        set.connect(button0.getId(), ConstraintSet.LEFT, button1.getId(), ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
-//        set.connect(button0.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
-//        set.constrainHeight(button0.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
-//
-//        set.connect(button1.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
-//        set.connect(button1.getId(), ConstraintSet.RIGHT, button0.getId(), ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
-//        set.connect(button1.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
-//        set.connect(button1.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
-//        set.constrainHeight(button1.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
-//        set.applyTo(constraintLayout);
-
         //joystick|button|slider|button
-       String t = viewModel.getSelectedModelElements();
-       String[] order = rankOrder(t);
-      // Object[] controlElements = createControlElements(order, constraintLayout);
+        String t = viewModel.getSelectedModelElements();
+        String[] order = rankOrder(t);
         createControlElements(order, constraintLayout);
-       //String[] controlElements = t.split("\\|");
-//
-        JoystickView joystick;
-        SeekBar slider;
-        Button buttonFire;
-//
-//        for (int i=0; i< controlElements.length; i++) {
-//            Log.d(TAG, "controlElement: " + controlElements[i]);
-//            int id = i;
-//            switch (controlElements[i]) {
-//                case "joystick":
-//                    joystick = view.findViewById(R.id.joystick);
-//                    joystick.setVisibility(View.VISIBLE);
-//
-//                    joystick.setOnMoveListener((angle, strength) -> {
-//                        viewModel.sendControlInput(id, angle, strength);
-////                        Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
-//                    });
-//                    break;
-//                case "slider":
-//                    slider = view.findViewById(R.id.slider);
-//                    slider.setVisibility(View.VISIBLE);
-//
-//                    slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                        @Override
-//                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                            viewModel.sendControlInput(id, progress);
-////                            Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
-//                        }
-//
-//                        @Override
-//                        public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onStopTrackingTouch(SeekBar seekBar) {
-//                            viewModel.sendControlInput(id, 50);
-//                            seekBar.setProgress(50);
-//                        }
-//                    });
-//                    break;
-//                case "button":
-//                    Log.d(TAG, "dreckiger Button");
-//                    buttonFire = view.findViewById(R.id.button_fire);
-//                    buttonFire.setVisibility(View.VISIBLE);
-//
-//                    buttonFire.setOnTouchListener(new View.OnTouchListener() {
-//                        @Override
-//                        public boolean onTouch(View v, MotionEvent event) {
-//                            switch(event.getAction()) {
-//                                case MotionEvent.ACTION_DOWN:
-//                                    viewModel.sendControlInput(id, 1);
-////                                    Log.d(TAG, "Button activity: " + 1);
-//                                    break;
-//                                case MotionEvent.ACTION_UP:
-////                                    Log.d(TAG, "Button activity: " + 0);
-//                                    break;
-//                            }
-//                            return true;
-//                        }
-//                    });
-//                    break;
-//            }
-//        }
 
         Button buttonYes = view.findViewById(R.id.button_yes);
         Button buttonNo = view.findViewById(R.id.button_no);
@@ -205,11 +111,8 @@ public class TestRobotFragment extends HostedFragment {
         String[] cases = {"joystick", "slider", "button"};
         List<String> temp = new ArrayList<String>();
         int lastIndex = 0;
-        int count = 0;
-        int i = 0;
         for (String s : cases) {
             lastIndex = 0;
-            count = 0;
             while (lastIndex != -1) {
                 lastIndex = input.indexOf(s, lastIndex);
                 if (lastIndex != -1) {
@@ -217,8 +120,6 @@ public class TestRobotFragment extends HostedFragment {
                     lastIndex += s.length();
                 }
             }
-            //result[i] = count;
-            i++;
         }
         Log.d(TAG, "Reihenfolge" + temp);
         String result[] = new String[temp.size()];
@@ -261,21 +162,21 @@ public class TestRobotFragment extends HostedFragment {
                     slider.setProgress(50);
                     slider.setThumb(ContextCompat.getDrawable(getContext(), R.drawable.slider_thumb));
                     slider.setProgressDrawable(ContextCompat.getDrawable(getContext(), R.drawable.slider_progressbar));
+                    slider.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
                     slider.setLayoutParams(new ViewGroup.LayoutParams((int) getResources().getDimension(R.dimen.joystick_size), (int) getResources().getDimension(R.dimen.joystick_size)));
-                    slider.setRotationX(0.9f);
                     constraintLayout.addView(slider);
-
 
                     set = createConstraintSet(i, slider.getId(), controlElements);
                     set.constrainHeight(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.applyTo(constraintLayout);
+                    slider.setRotation(270.0f);
 
                     slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                             viewModel.sendControlInput(id, progress);
-//                            Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
+                            Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
                         }
 
                         @Override
