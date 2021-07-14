@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Space;
 import android.widget.Toast;
@@ -14,7 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rcvc.R;
-import com.example.ui.editControls.AddControlElementFrgmt;
+import com.example.ui.editControls.AddControlElementFragment;
 
 import java.util.ArrayList;
 
@@ -113,8 +112,8 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Button b = itemView.findViewById(R.id.add_control);
 
             b.setOnClickListener((v -> {
-                new AddControlElementFrgmt(adapter).show(
-                        activity.getSupportFragmentManager(), AddControlElementFrgmt.TAG);
+                new AddControlElementFragment(adapter).show(
+                        activity.getSupportFragmentManager(), AddControlElementFragment.TAG);
             }));
         }
     }
