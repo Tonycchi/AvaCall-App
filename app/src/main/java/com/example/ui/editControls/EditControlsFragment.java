@@ -40,7 +40,7 @@ public class EditControlsFragment extends HostedFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        model = viewModel.getCurrentRobotModel();
+        model = viewModel.getSelectedRobotModel();
         controlAdapter = new ControlAdapter(getActivity(), model);
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());

@@ -127,7 +127,6 @@ public class MainModel {
     }
 
     public void modelSelected(int id) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
-        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
         //TODO: create robot
         controller = robot.getController(id, robotConnectionModel.getService());
     }
@@ -144,8 +143,9 @@ public class MainModel {
      *
      * @return currently selected model, null if none selected
      */
-    public RobotModel getCurrentRobotModel() {
-        if (controller != null) return controller.getCurrentModel();
+    public RobotModel getSelectedRobotModel() {
+        if (controller != null)
+            return controller.getCurrentModel();
         return null;
     }
 }

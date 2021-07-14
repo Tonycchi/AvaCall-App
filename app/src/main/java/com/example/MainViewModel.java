@@ -105,7 +105,7 @@ public class MainViewModel extends AndroidViewModel {
         return model.getSelectedModelElements();
     }
 
-    public RobotModel getCurrentRobotModel() {
-        return model.getCurrentRobotModel();
+    public RobotModel getSelectedRobotModel() {
+        return model.getSelectedRobotModel();
     }
 }

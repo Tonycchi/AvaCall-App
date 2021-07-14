@@ -34,7 +34,7 @@ public class AddControlElementFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Context c = getContext();
         ListView l = new ListView(c);
-        //TODO: make for land
+        //TODO: make for land (big_element_width_land)
         l.setLayoutParams(new ListView.LayoutParams((int)getResources().getDimension(R.dimen.big_element_width), ListView.LayoutParams.MATCH_PARENT));
         l.setAdapter(ArrayAdapter.createFromResource(c, R.array.ev3_control_elements_names, R.layout.simple_list_item));
 
