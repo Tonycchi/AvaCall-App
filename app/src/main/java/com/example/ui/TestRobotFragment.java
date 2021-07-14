@@ -227,7 +227,7 @@ public class TestRobotFragment extends HostedFragment {
     }
     //TODO ConstraintSets Variabel, Buttons implementieren, Slider rotation fixen, Joystick Color fixen,
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
-        int[] controlElements = new int[4];
+        int[] controlElements = new int[order.length];
         for (int i = 0; i < order.length; i++) {
             ConstraintSet set;
             // Log.d(TAG, "controlElement: " + controlElements[i]);
@@ -245,6 +245,7 @@ public class TestRobotFragment extends HostedFragment {
                     constraintLayout.addView(joystick);
                     set = createConstraintSet(i, joystick.getId(), controlElements);
                     set.constrainHeight(joystick.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    set.constrainWidth(joystick.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.applyTo(constraintLayout);
 
                     joystick.setOnMoveListener((angle, strength) -> {
@@ -290,27 +291,36 @@ public class TestRobotFragment extends HostedFragment {
                     });
                     controlElements[i] = slider.getId();
                     break;
-//                case "button":
-//                    Log.d(TAG, "dreckiger Button");
-//                    buttonFire = view.findViewById(R.id.button_fire);
-//                    buttonFire.setVisibility(View.VISIBLE);
-//
-//                    buttonFire.setOnTouchListener(new View.OnTouchListener() {
-//                        @Override
-//                        public boolean onTouch(View v, MotionEvent event) {
-//                            switch(event.getAction()) {
-//                                case MotionEvent.ACTION_DOWN:
-//                                    viewModel.sendControlInput(id, 1);
-//                                    Log.d(TAG, "Button activity: " + 1);
-//                                    break;
-//                                case MotionEvent.ACTION_UP:
-//                                    Log.d(TAG, "Button activity: " + 0);
-//                                    break;
-//                            }
-//                            return true;
-//                        }
-//                    });
-//                    break;
+                case "button":
+                    ContextThemeWrapper newContext = new ContextThemeWrapper(getContext(), R.style.button_control_element);
+                    Button button = new Button(newContext);
+                    button.setId(View.generateViewId());
+                    button.setText("Feuer");
+                    button.setBackgroundResource(R.drawable.standard_button);
+                    constraintLayout.addView(button);
+
+                    set = createConstraintSet(i, button.getId(), controlElements);
+                    set.constrainHeight(button.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
+                    set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    set.applyTo(constraintLayout);
+
+                    button.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch(event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    viewModel.sendControlInput(id, 1);
+                                    Log.d(TAG, "Button activity: " + 1);
+                                    break;
+                                case MotionEvent.ACTION_UP:
+                                    Log.d(TAG, "Button activity: " + 0);
+                                    break;
+                            }
+                            return true;
+                        }
+                    });
+                    controlElements[i] = button.getId();
+                    break;
 //            }
 //        }
             }
@@ -323,7 +333,6 @@ public class TestRobotFragment extends HostedFragment {
             case 0:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
                 set.connect(controlElementid, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_side));
-//                set.connect(controlElementid, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
                 break;
             case 1:
