@@ -2,31 +2,32 @@ package com.example.model.robot.ev3;
 
 import android.util.Log;
 
+import com.example.data.RobotModel;
 import com.example.model.connection.ConnectionService;
 import com.example.model.robot.Controller;
+import com.example.model.robot.Robot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 public class EV3Controller implements Controller {
 
     private final String TAG = "EV3Controller";
 
-    public String s;
+    private RobotModel model;
 
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
 
-    public EV3Controller(String specs, ConnectionService service) {
+    public EV3Controller(RobotModel model, ConnectionService service) {
         this.service = service;
 
-        this.s = specs;
+        this.model = model;
 
-        Log.d(TAG, specs);
-        createElements(specs);
+        Log.d(TAG, model.specs);
+        createElements(model.specs);
     }
 
     @Override
@@ -37,6 +38,10 @@ public class EV3Controller implements Controller {
 
     public String getControlElementString() {
         return controlElementString;
+    }
+
+    public RobotModel getCurrentModel() {
+        return model;
     }
 
     /**
@@ -53,20 +58,18 @@ public class EV3Controller implements Controller {
 
         // split into $controlElement$ = $element$:$attributes$
         String[] tmp = specs.split("\\|");
-        // put into map with key = $element$, value = $attributes$
-        HashMap<String, String> elements = new HashMap<>();
-        ArrayList<String> keys = new ArrayList<>();
+        // put into list with [0] = $element$, [1] = $attributes$
+        ArrayList<String[]> list = new ArrayList<>();
         for (String t : tmp) {
             String[] a = t.split(":");
-            elements.put(a[0], a[1]);
-            keys.add(a[0]);
+            list.add(t.split(":"));
         }
         // now translate each $attributes$ into corresponding Objects:
-        for (String k : keys) {
-            String[] attrs = elements.get(k).split(";");
+        for (String[] k : list) {
+            String[] attrs = k[1].split(";");
             int maxPower = Integer.parseInt(attrs[0]);
             int[] ports;
-            switch (k) {
+            switch (k[0]) {
                 case "joystick":
                     // $maxPower$;$right$,$left$
                     String[] portsString = attrs[1].split(",");

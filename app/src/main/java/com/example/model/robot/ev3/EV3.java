@@ -18,7 +18,7 @@ public class EV3 implements Robot {
 
     @Override
     public Controller getController(int id, ConnectionService service) {
-        return new EV3Controller(db.getSpecs(id), service);
+        return new EV3Controller(db.getRobotModel(id), service);
     }
 
     /*private List<List<Integer>> specsToArray(String specs) {
