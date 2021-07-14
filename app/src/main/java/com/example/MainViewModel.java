@@ -19,7 +19,6 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
 
     private final MainModel model;
-    private int[] modelPositionToId;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -73,28 +72,16 @@ public class MainViewModel extends AndroidViewModel {
     public void setReceiveCommands() { model.setReceiveCommands(); }
 
     public String[] getAllRobotNames() {
-        List<RobotModel> allDBRobots = model.getAllRobots();
-        int numberOfRobots = allDBRobots.size();
-
-        String[] allRobotNames = new String[numberOfRobots];
-        modelPositionToId = new int[numberOfRobots];
-
-        for(int i=0; i<numberOfRobots; i++){
-            RobotModel temp = allDBRobots.get(i);
-            allRobotNames[i] = temp.name;
-            modelPositionToId[i] = temp.id;
-        }
-
-        return allRobotNames;
+        return model.getAllRobotNames();
     }
 
 
     public RobotModel getRobotModel(int modelPosition) {
-        return model.getRobotModel(modelPositionToId[modelPosition]);
+        return model.getRobotModel(modelPosition);
     }
 
     public void modelSelected(int modelPosition) {
-        model.modelSelected(modelPositionToId[modelPosition]);
+        model.modelSelected(modelPosition);
     }
 
     public void sendControlInput(int... input) {
@@ -107,5 +94,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public RobotModel getSelectedRobotModel() {
         return model.getSelectedRobotModel();
+    }
+
+    public int getSelectedModelPosition() {
+        return model.getSelectedModelPosition();
     }
 }

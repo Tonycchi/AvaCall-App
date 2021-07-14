@@ -21,11 +21,11 @@ import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.TestRobotFragment;
-import com.example.ui.editControls.ev3.ControlAdapter;
+import com.example.ui.editControls.ev3.EV3ControlAdapter;
 
 public class EditControlsFragment extends HostedFragment {
 
-    private ControlAdapter controlAdapter;
+    private EV3ControlAdapter EV3ControlAdapter;
     private RecyclerView optionsList;
     private MainViewModel viewModel;
     private RobotModel model;
@@ -41,7 +41,7 @@ public class EditControlsFragment extends HostedFragment {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
         model = viewModel.getSelectedRobotModel();
-        controlAdapter = new ControlAdapter(getActivity(), model);
+        EV3ControlAdapter = new EV3ControlAdapter(getActivity(), model);
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -62,7 +62,7 @@ public class EditControlsFragment extends HostedFragment {
 
         optionsList = view.findViewById(R.id.list_edit);
         optionsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        optionsList.setAdapter(controlAdapter);
+        optionsList.setAdapter(EV3ControlAdapter);
 
         ArrayAdapter<CharSequence> adapter =
                 ArrayAdapter.createFromResource(getContext(), R.array.rotob_model_types,

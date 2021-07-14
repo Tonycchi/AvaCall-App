@@ -1,12 +1,10 @@
-package com.example.ui.editControls;
+package com.example.ui.editControls.ev3;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
@@ -17,14 +15,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.rcvc.R;
-import com.example.ui.editControls.ev3.ControlAdapter;
+import com.example.ui.editControls.ev3.EV3ControlAdapter;
 
-public class AddControlElementFragment extends DialogFragment {
+public class AddEV3ControlElementFragment extends DialogFragment {
 
     public static final String TAG = "AddControlElementFragment";
-    private ControlAdapter adapter;
+    private EV3ControlAdapter adapter;
 
-    public AddControlElementFragment(ControlAdapter adapter) {
+    public AddEV3ControlElementFragment(EV3ControlAdapter adapter) {
         this.adapter = adapter;
     }
 

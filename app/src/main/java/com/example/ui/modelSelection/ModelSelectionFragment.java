@@ -67,6 +67,7 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicker.setMaxValue(allRobotNames.length-1);
         modelPicker.setMinValue(0);
         modelPicker.setDisplayedValues(allRobotNames);
+        modelPicker.setValue(0);
 
         modelPicker.setOnValueChangedListener(this::onSelectedModelChanged);
 
@@ -79,6 +80,13 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicture.setImageResource(R.drawable.no_image_available);
 
         getActivity().setTitle(R.string.title_model_selection);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "Position: "+viewModel.getSelectedModelPosition());
+        modelPicker.setValue(viewModel.getSelectedModelPosition());
     }
 
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {

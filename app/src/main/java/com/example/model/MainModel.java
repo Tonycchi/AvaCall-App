@@ -36,6 +36,7 @@ public class MainModel {
 
     // Model for ModelSelectionFragment
     private ModelSelectionModel modelSelectionModel;
+    private int[] modelPositionToId;
 
     // Model for EditControlsFragment
     // TODO Liste von eigener controller klasse???????
@@ -118,17 +119,14 @@ public class MainModel {
 
     public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
 
-    public List<RobotModel> getAllRobots() {
-        return modelSelectionModel.getAllRobots();
+    public RobotModel getRobotModel(int modelPosition) {
+        return modelSelectionModel.getRobotModel(modelPositionToId[modelPosition]);
     }
 
-    public RobotModel getRobotModel(int id) {
-        return modelSelectionModel.getRobotModel(id);
-    }
-
-    public void modelSelected(int id) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
+    public void modelSelected(int modelPosition) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
         //TODO: create robot
-        controller = robot.getController(id, robotConnectionModel.getService());
+        modelSelectionModel.setSelectedModelPosition(modelPosition);
+        controller = robot.getController(modelPositionToId[modelPosition], robotConnectionModel.getService());
     }
 
     public void sendControlInputs(int... input) {
@@ -147,5 +145,25 @@ public class MainModel {
         if (controller != null)
             return controller.getCurrentModel();
         return null;
+    }
+
+    public int getSelectedModelPosition() {
+        return modelSelectionModel.getSelectedModelPosition();
+    }
+
+    public String[] getAllRobotNames() {
+        List<RobotModel> allDBRobots = modelSelectionModel.getAllRobots();
+        int numberOfRobots = allDBRobots.size();
+
+        String[] allRobotNames = new String[numberOfRobots];
+        modelPositionToId = new int[numberOfRobots];
+
+        for(int i=0; i<numberOfRobots; i++){
+            RobotModel temp = allDBRobots.get(i);
+            allRobotNames[i] = temp.name;
+            modelPositionToId[i] = temp.id;
+        }
+
+        return allRobotNames;
     }
 }

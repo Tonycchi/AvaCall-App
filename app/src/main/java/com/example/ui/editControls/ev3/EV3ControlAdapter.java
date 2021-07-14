@@ -17,12 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.data.RobotModel;
 import com.example.rcvc.R;
-import com.example.ui.editControls.AddControlElementFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EV3ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static final int
             EMPTY = 69,
@@ -36,12 +34,12 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             motorCount = 0;
     private boolean done = false;
 
-    public ControlAdapter(FragmentActivity activity) {
+    public EV3ControlAdapter(FragmentActivity activity) {
         this.activity = activity;
         this.elements = new ArrayList<>();
     }
 
-    public ControlAdapter(FragmentActivity activity, RobotModel model) {
+    public EV3ControlAdapter(FragmentActivity activity, RobotModel model) {
         this.activity = activity;
         this.elements = new ArrayList<>();
         if (model != null) {
@@ -189,12 +187,12 @@ public class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     class AddOption extends RecyclerView.ViewHolder {
 
-        public AddOption(@NonNull View itemView, ControlAdapter adapter) {
+        public AddOption(@NonNull View itemView, EV3ControlAdapter adapter) {
             super(itemView);
             Button b = itemView.findViewById(R.id.add_control);
 
-            b.setOnClickListener((v -> new AddControlElementFragment(adapter).show(
-                    activity.getSupportFragmentManager(), AddControlElementFragment.TAG)));
+            b.setOnClickListener((v -> new AddEV3ControlElementFragment(adapter).show(
+                    activity.getSupportFragmentManager(), AddEV3ControlElementFragment.TAG)));
         }
     }
 
