@@ -1,5 +1,6 @@
 package com.example.ui;
 
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,9 +62,13 @@ public class TestRobotFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        ConstraintLayout constraintLayout = view.findViewById(R.id.test_robot_fragment);
-        ConstraintSet set = new ConstraintSet();
-        set.clone(constraintLayout);
+        ConstraintLayout constraintLayout;
+
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            constraintLayout = view.findViewById(R.id.test_robot_fragment);
+        } else {
+            constraintLayout = view.findViewById(R.id.test_robot_fragment_landscape);
+        }
 
         //joystick|button|slider|button
         String t = viewModel.getSelectedModelElements();
@@ -212,18 +217,17 @@ public class TestRobotFragment extends HostedFragment {
                                 case MotionEvent.ACTION_DOWN:
                                     viewModel.sendControlInput(id, 1);
                                     Log.d(TAG, "Button activity: " + 1);
-                                    break;
+                                    return false;
                                 case MotionEvent.ACTION_UP:
+                                case MotionEvent.ACTION_CANCEL:
                                     Log.d(TAG, "Button activity: " + 0);
-                                    break;
+                                    return false;
                             }
                             return true;
                         }
                     });
                     controlElements[i] = button.getId();
                     break;
-//            }
-//        }
             }
         }
     }

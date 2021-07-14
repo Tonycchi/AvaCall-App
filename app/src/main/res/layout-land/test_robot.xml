@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/test_robot_fragment_landscape"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.widget.Button
@@ -39,46 +40,5 @@
         app:layout_constraintBottom_toTopOf="@+id/button_yes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <io.github.controlwear.virtual.joystick.android.JoystickView
-        android:id="@+id/joystick"
-        android:layout_width="@dimen/joystick_size"
-        android:layout_height="@dimen/joystick_size"
-        app:JV_autoReCenterButton="true"
-        app:JV_backgroundColor="@color/joystick_background"
-        app:JV_backgroundSizeRatio="50%"
-        app:JV_borderColor="@color/joystick_border"
-        app:JV_borderWidth="@dimen/joystick_border_width"
-        app:JV_buttonColor="@color/joystick_button"
-        app:JV_buttonSizeRatio="30%"
-        app:JV_fixedCenter="false"
-        app:layout_constraintBottom_toTopOf="@+id/text_control_question"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <android.widget.Button
-        android:id="@+id/button_fire"
-        style="@style/button_neutral"
-        android:layout_width="0dp"
-        android:layout_marginStart="@dimen/margin_horizontal_small_land"
-        android:layout_marginEnd="@dimen/margin_horizontal_small_land"
-        android:text="@string/button_fire"
-        app:layout_constraintBottom_toTopOf="@+id/text_control_question"
-        app:layout_constraintEnd_toStartOf="@+id/slider"
-        app:layout_constraintStart_toEndOf="@+id/joystick"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <SeekBar
-        android:id="@+id/slider"
-        android:layout_width="@dimen/joystick_size"
-        android:layout_height="@dimen/joystick_size"
-        android:progress="50"
-        android:progressDrawable="@drawable/slider_progressbar"
-        android:thumb="@drawable/slider_thumb"
-        android:rotation="270"
-        app:layout_constraintBottom_toTopOf="@+id/text_control_question"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
