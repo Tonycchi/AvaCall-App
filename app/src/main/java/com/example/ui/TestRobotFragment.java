@@ -1,6 +1,7 @@
 package com.example.ui;
 
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -234,12 +236,12 @@ public class TestRobotFragment extends HostedFragment {
                 case "joystick":
                     JoystickView joystick = new JoystickView(getContext());
                     joystick.setId(View.generateViewId());
-                    joystick.setBorderColor(getResources().getColor(R.color.joystick_border));
-                    joystick.setButtonColor(getResources().getColor(R.color.joystick_button));
-                    joystick.setBackgroundColor(getResources().getColor(R.color.joystick_background));
-                    joystick.setButtonSizeRatio(30);
-                    joystick.setBackgroundSizeRatio(50);
-
+                    joystick.setBorderWidth((int) getResources().getDimension(R.dimen.joystick_border_width));
+                    joystick.setBackgroundSizeRatio(0.5f);
+                    joystick.setButtonSizeRatio(0.3f);
+                    joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                    joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
+                    joystick.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.joystick_background));
                     constraintLayout.addView(joystick);
                     set = createConstraintSet(i, joystick.getId(), controlElements);
                     set.constrainHeight(joystick.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
@@ -256,13 +258,16 @@ public class TestRobotFragment extends HostedFragment {
                     SeekBar slider = new SeekBar(getContext());
                     slider.setId(View.generateViewId());
                     slider.setProgress(50);
-                    slider.setThumb(getContext().getDrawable(R.drawable.slider_thumb));
-                    slider.setProgressDrawable(getContext().getDrawable(R.drawable.slider_progressbar));
+                    slider.setThumb(ContextCompat.getDrawable(getContext(), R.drawable.slider_thumb));
+                    slider.setProgressDrawable(ContextCompat.getDrawable(getContext(), R.drawable.slider_progressbar));
+                    slider.setLayoutParams(new ViewGroup.LayoutParams((int) getResources().getDimension(R.dimen.joystick_size), (int) getResources().getDimension(R.dimen.joystick_size)));
+                    slider.setRotationX(0.9f);
                     constraintLayout.addView(slider);
-                    slider.setRotation(-90);
+
 
                     set = createConstraintSet(i, slider.getId(), controlElements);
                     set.constrainHeight(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.applyTo(constraintLayout);
 
                     slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -314,10 +319,11 @@ public class TestRobotFragment extends HostedFragment {
 
     public ConstraintSet createConstraintSet(int i, int controlElementid, int[] controlElements){
         ConstraintSet set = new ConstraintSet();
-        switch(i){
+        switch(i) {
             case 0:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
                 set.connect(controlElementid, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_side));
+//                set.connect(controlElementid, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
                 break;
             case 1:
