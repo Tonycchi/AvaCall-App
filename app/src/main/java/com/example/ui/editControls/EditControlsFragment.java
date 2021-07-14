@@ -5,14 +5,18 @@ import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.MainViewModel;
+import com.example.data.RobotModel;
 import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
@@ -23,6 +27,8 @@ public class EditControlsFragment extends HostedFragment {
 
     private ControlAdapter controlAdapter;
     private RecyclerView optionsList;
+    private MainViewModel viewModel;
+    private RobotModel model;
 
     public EditControlsFragment() {
         super(R.layout.edit_controls);
@@ -32,7 +38,10 @@ public class EditControlsFragment extends HostedFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        controlAdapter = new ControlAdapter(getActivity());
+        viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+
+        model = viewModel.getCurrentRobotModel();
+        controlAdapter = new ControlAdapter(getActivity(), model);
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
@@ -43,6 +52,11 @@ public class EditControlsFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Button buttonEditModelNext = view.findViewById(R.id.button_edit_model_next);
         Button buttonEditModelBack = view.findViewById(R.id.button_edit_model_back);
+
+        if (model != null) {
+            EditText t = view.findViewById(R.id.edit_model_name);
+            t.setText(model.name);
+        }
 
         Spinner spinner = view.findViewById(R.id.edit_model_spinner);
 

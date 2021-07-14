@@ -58,9 +58,6 @@ public class MainModel {
 
         localDatabase = LocalDatabase.getInstance(application);
 
-        //TODO: only do when the app is installed
-        createDefaultDatabaseEntriesForRobotModels();
-
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         robot = new EV3(localDatabase.robotModelDAO());
 
@@ -125,18 +122,6 @@ public class MainModel {
         return modelSelectionModel.getAllRobots();
     }
 
-    private void createDefaultDatabaseEntriesForRobotModels(){
-        if(localDatabase.robotModelDAO().getNumberOfRobotModels()<7) {
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter", "EV3", "joystick:50;1,8"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000|slider:30;4|button:20;4;5000"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Gensearsch", "EV3", "button:20;1;5000|button:20;2;5000|button:20;4;5000|button:20;8;5000"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("NUR GREIFARM", "EV3", "slider:30;4"));
-            localDatabase.robotModelDAO().insertAll(new RobotModel("Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2;5000"));
-        }
-    }
-
     public RobotModel getRobotModel(int id) {
         return modelSelectionModel.getRobotModel(id);
     }
@@ -153,5 +138,14 @@ public class MainModel {
 
     public String getSelectedModelElements() {
         return controller.getControlElementString();
+    }
+
+    /**
+     *
+     * @return currently selected model, null if none selected
+     */
+    public RobotModel getCurrentRobotModel() {
+        if (controller != null) return controller.getCurrentModel();
+        return null;
     }
 }
