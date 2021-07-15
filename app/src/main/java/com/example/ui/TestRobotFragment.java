@@ -149,7 +149,7 @@ public class TestRobotFragment extends HostedFragment {
                     joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
                     joystick.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.joystick_background));
                     constraintLayout.addView(joystick);
-                    set = createConstraintSet(i, joystick.getId(), controlElements);
+                    set = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? createConstraintSet(i, joystick.getId(), controlElements) : createConstraintSetLandscape(i, joystick.getId(), controlElements);
                     set.constrainHeight(joystick.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.constrainWidth(joystick.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.applyTo(constraintLayout);
@@ -171,7 +171,7 @@ public class TestRobotFragment extends HostedFragment {
                     slider.setLayoutParams(new ViewGroup.LayoutParams((int) getResources().getDimension(R.dimen.joystick_size), (int) getResources().getDimension(R.dimen.joystick_size)));
                     constraintLayout.addView(slider);
 
-                    set = createConstraintSet(i, slider.getId(), controlElements);
+                    set = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? createConstraintSet(i, slider.getId(), controlElements) : createConstraintSetLandscape(i, slider.getId(), controlElements);
                     set.constrainHeight(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
                     set.applyTo(constraintLayout);
@@ -205,9 +205,11 @@ public class TestRobotFragment extends HostedFragment {
                     button.setBackgroundResource(R.drawable.standard_button);
                     constraintLayout.addView(button);
 
-                    set = createConstraintSet(i, button.getId(), controlElements);
+                    set = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? createConstraintSet(i, button.getId(), controlElements) : createConstraintSetLandscape(i, button.getId(), controlElements);
                     set.constrainHeight(button.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
-                    set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    }
                     set.applyTo(constraintLayout);
 
                     button.setOnTouchListener(new View.OnTouchListener() {
@@ -256,6 +258,35 @@ public class TestRobotFragment extends HostedFragment {
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[2], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, controlElements[1], ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
+                break;
+        }
+        return set;
+    }
+
+    public ConstraintSet createConstraintSetLandscape(int i, int controlElementid, int[] controlElements){
+        ConstraintSet set = new ConstraintSet();
+        switch(i) {
+            case 0:
+                set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
+                set.connect(controlElementid, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_side));
+                set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
+                break;
+            case 1:
+                set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
+             //   set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[0], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+                set.connect(controlElementid, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
+                set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
+                break;
+            case 2:
+                set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
+                set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[0], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+                set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
+                break;
+            case 3:
+                set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
+                set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[2], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+                set.connect(controlElementid, ConstraintSet.LEFT, controlElements[1], ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+                set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
                 break;
         }
         return set;
