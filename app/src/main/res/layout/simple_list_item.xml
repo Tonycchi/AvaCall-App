@@ -8,4 +8,4 @@
     android:paddingLeft="@dimen/_3sdp"
     android:paddingRight="@dimen/_3sdp"
     android:paddingBottom="@dimen/_3sdp"
-    android:textSize="@dimen/small_text_size" />
+    android:textSize="@dimen/standard_text_size" />
