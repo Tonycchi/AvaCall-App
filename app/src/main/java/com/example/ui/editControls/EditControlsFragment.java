@@ -70,17 +70,9 @@ public class EditControlsFragment extends HostedFragment {
         }
 
         if(controlAdapter != null) {
-            Spinner spinner = view.findViewById(R.id.edit_model_spinner);
-
             editControlsList = view.findViewById(R.id.list_edit);
             editControlsList.setLayoutManager(new LinearLayoutManager(getContext()));
             editControlsList.setAdapter(controlAdapter);
-
-            ArrayAdapter<CharSequence> adapter =
-                    ArrayAdapter.createFromResource(getContext(), R.array.rotob_model_types,
-                            android.R.layout.simple_spinner_dropdown_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
         }else{
             Log.e(TAG, "controlAdapter == null");
         }

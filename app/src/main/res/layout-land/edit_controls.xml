@@ -19,17 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/edit_model_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_side_land"
-        android:layout_marginTop="@dimen/margin_vertical_big_land"
-        android:layout_marginEnd="@dimen/margin_side_land"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_model_name" />
-
     <!--    <fragment-->
     <!--        android:id="@+id/edit_model_settings_fragment"-->
     <!--        android:name="com.example.view.EditEV3ControlFragment"-->

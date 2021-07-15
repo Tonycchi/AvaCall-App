@@ -20,17 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/edit_model_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_side"
-        android:layout_marginTop="@dimen/margin_vertical_big"
-        android:layout_marginEnd="@dimen/margin_side"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_model_name" />
-
     <android.widget.Button
         android:id="@+id/button_edit_model_back"
         style="@style/button_back"
@@ -62,13 +51,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/margin_side"
-        android:layout_marginTop="@dimen/margin_vertical_small"
+        android:layout_marginTop="@dimen/margin_vertical_big"
         android:layout_marginEnd="@dimen/margin_side"
         android:layout_marginBottom="@dimen/margin_vertical_big"
         app:layout_constraintBottom_toTopOf="@+id/button_edit_model_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_model_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_model_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
