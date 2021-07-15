@@ -1,8 +1,6 @@
 package com.example.ui;
 
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -11,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -23,8 +20,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
-import com.example.model.robot.Controller;
-import com.example.model.robot.ev3.EV3Controller;
 import com.example.rcvc.R;
 import com.example.ui.editControls.EditControlsFragment;
 
@@ -62,13 +57,9 @@ public class TestRobotFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        ConstraintLayout constraintLayout;
-
-        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            constraintLayout = view.findViewById(R.id.test_robot_fragment);
-        } else {
-            constraintLayout = view.findViewById(R.id.test_robot_fragment_landscape);
-        }
+        ConstraintLayout constraintLayout = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                ? view.findViewById(R.id.test_robot_fragment)
+                : view.findViewById(R.id.test_robot_fragment_landscape);
 
         //joystick|button|slider|button
         String t = viewModel.getSelectedModelElements();
@@ -134,9 +125,8 @@ public class TestRobotFragment extends HostedFragment {
     //TODO ConstraintSets Variabel, Buttons implementieren, Slider rotation fixen, Joystick Color fixen,
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
         int[] controlElements = new int[order.length];
+        ConstraintSet set = new ConstraintSet();
         for (int i = 0; i < order.length; i++) {
-            ConstraintSet set;
-            // Log.d(TAG, "controlElement: " + controlElements[i]);
             int id = i;
             switch (order[i]) {
                 case "joystick":
@@ -149,9 +139,14 @@ public class TestRobotFragment extends HostedFragment {
                     joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
                     joystick.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.joystick_background));
                     constraintLayout.addView(joystick);
-                    set = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? createConstraintSet(i, joystick.getId(), controlElements) : createConstraintSetLandscape(i, joystick.getId(), controlElements);
-                    set.constrainHeight(joystick.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
-                    set.constrainWidth(joystick.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    set.constrainHeight(joystick.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
+                    if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
+                        updateConstraintSet(i, joystick.getId(), controlElements, set);
+                        set.constrainWidth(joystick.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
+                    } else {
+                        updateConstraintSetLandscape(i, joystick.getId(), controlElements, set);
+                        set.constrainWidth(joystick.getId(), (int) getResources().getDimension(R.dimen.control_element_size_landscape));
+                    }
                     set.applyTo(constraintLayout);
 
                     joystick.setOnMoveListener((angle, strength) -> {
@@ -168,12 +163,17 @@ public class TestRobotFragment extends HostedFragment {
                     slider.setThumb(ContextCompat.getDrawable(getContext(), R.drawable.slider_thumb));
                     slider.setProgressDrawable(ContextCompat.getDrawable(getContext(), R.drawable.slider_progressbar));
                     slider.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
-                    slider.setLayoutParams(new ViewGroup.LayoutParams((int) getResources().getDimension(R.dimen.joystick_size), (int) getResources().getDimension(R.dimen.joystick_size)));
                     constraintLayout.addView(slider);
 
-                    set = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? createConstraintSet(i, slider.getId(), controlElements) : createConstraintSetLandscape(i, slider.getId(), controlElements);
-                    set.constrainHeight(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
-                    set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    set.constrainHeight(slider.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
+                    if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
+                        updateConstraintSet(i, slider.getId(), controlElements, set);
+                        set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
+                    } else {
+                        updateConstraintSetLandscape(i, slider.getId(), controlElements, set);
+                        set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.control_element_size_landscape));
+                    }
+
                     set.applyTo(constraintLayout);
                     slider.setRotation(270.0f);
 
@@ -205,9 +205,14 @@ public class TestRobotFragment extends HostedFragment {
                     button.setBackgroundResource(R.drawable.standard_button);
                     constraintLayout.addView(button);
 
-                    set = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? createConstraintSet(i, button.getId(), controlElements) : createConstraintSetLandscape(i, button.getId(), controlElements);
                     set.constrainHeight(button.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
-                    set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.joystick_size));
+                    if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
+                        updateConstraintSet(i, button.getId(), controlElements, set);
+                        set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
+                    } else {
+                        updateConstraintSetLandscape(i, button.getId(), controlElements, set);
+                        set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.control_element_size_landscape));
+                    }
                     set.applyTo(constraintLayout);
 
                     button.setOnTouchListener(new View.OnTouchListener() {
@@ -232,8 +237,7 @@ public class TestRobotFragment extends HostedFragment {
         }
     }
 
-    public ConstraintSet createConstraintSet(int i, int controlElementid, int[] controlElements){
-        ConstraintSet set = new ConstraintSet();
+    public void updateConstraintSet(int i, int controlElementid, int[] controlElements, ConstraintSet set){
         switch(i) {
             case 0:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
@@ -245,6 +249,7 @@ public class TestRobotFragment extends HostedFragment {
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[0], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, (int) getResources().getDimension(R.dimen.margin_bottom));
+                set.connect(controlElements[0], ConstraintSet.LEFT, controlElementid, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 break;
             case 2:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
@@ -256,13 +261,12 @@ public class TestRobotFragment extends HostedFragment {
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[2], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, controlElements[1], ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
+                set.connect(controlElements[2], ConstraintSet.LEFT, controlElementid, ConstraintSet.RIGHT,(int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 break;
         }
-        return set;
     }
 
-    public ConstraintSet createConstraintSetLandscape(int i, int controlElementid, int[] controlElements){
-        ConstraintSet set = new ConstraintSet();
+    public void updateConstraintSetLandscape(int i, int controlElementid, int[] controlElements, ConstraintSet set){
         switch(i) {
             case 0:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
@@ -271,7 +275,6 @@ public class TestRobotFragment extends HostedFragment {
                 break;
             case 1:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
-             //   set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[0], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_side));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
                 break;
@@ -279,15 +282,17 @@ public class TestRobotFragment extends HostedFragment {
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[0], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
+                set.connect(controlElements[0], ConstraintSet.LEFT, controlElementid, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 break;
             case 3:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[2], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.LEFT, controlElements[1], ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
+                set.connect(controlElements[1], ConstraintSet.RIGHT, controlElementid, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+                set.connect(controlElements[2], ConstraintSet.LEFT, controlElementid, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 break;
         }
-        return set;
     }
 
 }

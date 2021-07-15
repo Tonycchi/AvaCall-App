@@ -14,7 +14,8 @@
                     <dimen name="navigation_button_height">@dimen/_40sdp</dimen>
 
                 <!-- Control Elements -->
-                    <dimen name="joystick_size">@dimen/_130sdp</dimen>
+                    <dimen name="control_element_size">@dimen/_130sdp</dimen>
+                    <dimen name="control_element_size_landscape">@dimen/_105sdp</dimen>
                     <dimen name="joystick_border_width">@dimen/_32sdp</dimen>
 
                 <!-- Margins -->
