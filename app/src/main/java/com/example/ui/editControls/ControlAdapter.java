@@ -19,14 +19,13 @@ import java.util.ArrayList;
 
 public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = "ControlAdapter";
-
     static final int
             EMPTY = 69,
             ADD = 0,
             JOYSTICK = 1,
             SLIDER = 2,
             BUTTON = 3;
+    private static final String TAG = "ControlAdapter";
     protected final HostActivity hostActivity;
     protected final ArrayList<Integer[]> elements;
     protected int itemCount = 1;
@@ -76,9 +75,13 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         return viewHolder;
     }
 
-    public void addElement(int elementType){
+    /**
+     * adds an element according to elementType
+     * @param elementType type of element, see static constants in ControlAdapter.java
+     */
+    public void addElement(int elementType) {
         int numberOfMotorsAdded;
-        switch(elementType){
+        switch (elementType) {
             case JOYSTICK:
                 numberOfMotorsAdded = 2;
                 break;
@@ -91,9 +94,14 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         if (motorCount + numberOfMotorsAdded <= maxNumberOfMotors) {
+            // each element is represented by an array of attributes to be used in ui:
+            // joystick: [this.JOYSTICK, max power, right port, left port] -> length 3+1
+            // slider:   [this.SLIDER, max power, port] -> length 2+1
+            // button:   [this.BUTTON, power, port, duration] -> length 3+1
+
             Integer[] e;
-            if (elementType == SLIDER) e = new Integer[2+1];
-            else e = new Integer[3+1];
+            if (elementType == SLIDER) e = new Integer[2 + 1];
+            else e = new Integer[3 + 1];
             e[0] = elementType;
 
             elements.add(e);
@@ -105,14 +113,20 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    public void removeElement(int position){
+    /**
+     * removes element at position and changes itemCount accordingly
+     * @param position of element to remove
+     */
+    public void removeElement(int position) {
         if (position < elements.size()) {
             int element = elements.remove(position)[0];
             itemCount--;
             motorCount -= (element == JOYSTICK) ? 2 : 1;
             notifyItemRemoved(position);
         }
-    };
+    }
+
+    ;
 
     @Override
     public int getItemViewType(int position) {
@@ -124,12 +138,25 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) { }
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    }
 
     @Override
     public int getItemCount() {
         return itemCount;
     }
+
+    protected abstract JoystickHolder getJoystickHolder(View itemView, int pos);
+
+    protected abstract int getJoystickHolderLayout();
+
+    protected abstract SliderHolder getSliderHolder(View itemView, int pos);
+
+    protected abstract int getSliderHolderLayout();
+
+    protected abstract ButtonHolder getButtonHolder(View itemView, int pos);
+
+    protected abstract int getButtonHolderLayout();
 
     class AddControlElement extends RecyclerView.ViewHolder {
 
@@ -158,8 +185,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             super(itemView);
         }
     }
-    protected abstract JoystickHolder getJoystickHolder(View itemView, int pos);
-    protected abstract int getJoystickHolderLayout();
 
     abstract class SliderHolder extends DeletableHolder {
 
@@ -167,8 +192,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             super(itemView);
         }
     }
-    protected abstract SliderHolder getSliderHolder(View itemView, int pos);
-    protected abstract int getSliderHolderLayout();
 
     abstract class ButtonHolder extends DeletableHolder {
 
@@ -176,11 +199,8 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             super(itemView);
         }
     }
-    protected abstract ButtonHolder getButtonHolder(View itemView, int pos);
-    protected abstract int getButtonHolderLayout();
 
-
-    class EmptyHolder extends  RecyclerView.ViewHolder {
+    class EmptyHolder extends RecyclerView.ViewHolder {
 
         public EmptyHolder(@NonNull View itemView) {
             super(itemView);
