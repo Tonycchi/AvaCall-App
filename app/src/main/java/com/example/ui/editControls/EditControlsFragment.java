@@ -47,9 +47,10 @@ public class EditControlsFragment extends HostedFragment {
         switch(robotModel.type) {
             case "EV3": //TODO: dont hard code string
                 controlAdapter = new EV3ControlAdapter((HostActivity)getActivity(), robotModel);
-
+                break;
             default:
                 Log.e(TAG, "ModelType not available for edit model");
+                break;
         }
 
         TransitionInflater inflater = TransitionInflater.from(requireContext());
