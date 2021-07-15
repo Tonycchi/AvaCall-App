@@ -7,7 +7,6 @@ import java.util.List;
 public interface Robot {
 
     /**
-     *
      * @param id key of model settings in db
      * @return a controller using model settings specified by key
      */

@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.LocalDatabase;
-import com.example.data.URLSettings;
 import com.example.data.RobotModel;
+import com.example.data.URLSettings;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.EV3BluetoothHandshake;
@@ -112,7 +112,9 @@ public class MainModel {
         robotConnectionModel.deviceAccepted();
     }
 
-    public void setReceiveCommands() { videoConnectionModel.setReceiveCommands(); }
+    public void setReceiveCommands() {
+        videoConnectionModel.setReceiveCommands();
+    }
 
     public RobotModel getRobotModel(int modelPosition) {
         return modelSelectionModel.getRobotModel(modelPositionToId[modelPosition]);
@@ -133,7 +135,6 @@ public class MainModel {
     }
 
     /**
-     *
      * @return currently selected model, null if none selected
      */
     public RobotModel getSelectedRobotModel() {
@@ -153,7 +154,7 @@ public class MainModel {
         String[] allRobotNames = new String[numberOfRobots];
         modelPositionToId = new int[numberOfRobots];
 
-        for(int i=0; i<numberOfRobots; i++){
+        for (int i = 0; i < numberOfRobots; i++) {
             RobotModel temp = allDBRobots.get(i);
             allRobotNames[i] = temp.name;
             modelPositionToId[i] = temp.id;
@@ -164,5 +165,6 @@ public class MainModel {
 
     public void saveModel(int id, String name, String type, List<Integer[]> values) {
         robot.saveModel(id, name, type, values);
+        controller = robot.getController(id, robotConnectionModel.getService());
     }
 }

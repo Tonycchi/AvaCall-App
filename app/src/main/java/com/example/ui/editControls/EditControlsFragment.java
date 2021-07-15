@@ -44,9 +44,9 @@ public class EditControlsFragment extends HostedFragment {
 
         robotModel = viewModel.getSelectedRobotModel();
 
-        switch(robotModel.type) {
+        switch (robotModel.type) {
             case "EV3": //TODO: dont hard code string
-                controlAdapter = new EV3ControlAdapter((HostActivity)getActivity(), robotModel);
+                controlAdapter = new EV3ControlAdapter((HostActivity) getActivity(), robotModel);
                 break;
             default:
                 Log.e(TAG, "ModelType not available for edit model");
@@ -70,11 +70,11 @@ public class EditControlsFragment extends HostedFragment {
             Log.e(TAG, "robotModel == null");
         }
 
-        if(controlAdapter != null) {
+        if (controlAdapter != null) {
             editControlsList = view.findViewById(R.id.list_edit);
             editControlsList.setLayoutManager(new LinearLayoutManager(getContext()));
             editControlsList.setAdapter(controlAdapter);
-        }else{
+        } else {
             Log.e(TAG, "controlAdapter == null");
         }
 
@@ -84,7 +84,7 @@ public class EditControlsFragment extends HostedFragment {
         getActivity().setTitle(R.string.title_edit_controls);
     }
 
-    private void onClickButtonEditModelNext(View v){
+    private void onClickButtonEditModelNext(View v) {
         // Log.d(TAG, "" + (robotModel != null) +" "+ (controlAdapter != null) +" "+ (controlAdapter.isReadyToSave()) +" "+ (editName.getText().length() > 0));
 
         if (robotModel != null && controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
@@ -100,7 +100,7 @@ public class EditControlsFragment extends HostedFragment {
         }
     }
 
-    private void onClickButtonEditModelBack(View v){
+    private void onClickButtonEditModelBack(View v) {
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.popBackStack();
     }
@@ -108,6 +108,6 @@ public class EditControlsFragment extends HostedFragment {
     @Override
     public void connectionStatusChanged(Integer newConnectionStatus) {
         //TODO: implement
-        ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
+        ((HostActivity) getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
     }
 }

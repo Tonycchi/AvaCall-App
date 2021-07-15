@@ -11,8 +11,6 @@ import com.example.data.URLSettings;
 import com.example.model.MainModel;
 import com.example.model.connection.Device;
 
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +63,9 @@ public class MainViewModel extends AndroidViewModel {
         model.deviceAccepted();
     }
 
-    public void setReceiveCommands() { model.setReceiveCommands(); }
+    public void setReceiveCommands() {
+        model.setReceiveCommands();
+    }
 
     public String[] getAllRobotNames() {
         return model.getAllRobotNames();
