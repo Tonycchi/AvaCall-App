@@ -1,5 +1,7 @@
 package com.example.ui.editControls;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EV3ControlAdapter extends ControlAdapter {
 
@@ -22,13 +25,26 @@ public class EV3ControlAdapter extends ControlAdapter {
         super(activity, model);
         maxNumberOfMotors = 4;
 
-        // model is not null if called from "Modell Bearbeiten"
-        // and null if called from "Neues Modell"
+        // model is not null if called by "Modell Bearbeiten"
+        // and null if called by "Neues Modell"
         if (model != null) {
             initElements(model.specs);
         } else {
             Log.e(TAG, "model is null");
+            numberOfFields = 0;
+            fieldsFilled = 0;
         }
+        // true if all fields filled out (model != null ==> called by "Modell Bearbeiten")
+    }
+
+    @Override
+    boolean isReadyToSave() {
+        return fieldsFilled == numberOfFields;
+    }
+
+    @Override
+    List<Integer[]> getValues() {
+        return elementValues;
     }
 
     private void initElements(String specs) {
@@ -40,7 +56,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             list.add(t.split(":"));
         }
 
-        int motors = 0;
+        int motors = 0, fields = 0;
         // now translate each $attributes$ into corresponding array:
         for (String[] k : list) {
             String[] attrs = k[1].split(";");
@@ -55,8 +71,9 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports[0] = portToIndex(Integer.parseInt(portsString[0]));
                     ports[1] = portToIndex(Integer.parseInt(portsString[1]));
                     // and put into list:
-                    elements.add(new Integer[]{JOYSTICK, maxPower, ports[0], ports[1]});
+                    elementValues.add(new Integer[]{JOYSTICK, maxPower, ports[0], ports[1]});
                     motors += 2; // joystick uses 2 motors
+                    fields += 3;
                     break;
                 case "slider":
                     // get attributes out of string:
@@ -64,8 +81,9 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports = new int[1];
                     ports[0] = portToIndex(Integer.parseInt(attrs[1]));
                     // and put into list:
-                    elements.add(new Integer[]{SLIDER, maxPower, ports[0]});
+                    elementValues.add(new Integer[]{SLIDER, maxPower, ports[0]});
                     motors++;
+                    fields += 2;
                     break;
                 case "button":
                     // get attributes out of string:
@@ -74,8 +92,9 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports[0] = portToIndex(Integer.parseInt(attrs[1]));
                     int dur = Integer.parseInt(attrs[2]);
                     // and put into list:
-                    elements.add(new Integer[]{BUTTON, maxPower, ports[0], dur});
+                    elementValues.add(new Integer[]{BUTTON, maxPower, ports[0], dur});
                     motors++;
+                    fields += 3;
                     break;
                 default:
                     Log.e(TAG, "this control type is not available");
@@ -85,6 +104,8 @@ public class EV3ControlAdapter extends ControlAdapter {
         motorCount = motors;
         // add button isn't shown when all motors set:
         itemCount = (motorCount == 4) ? list.size() : list.size() + 1;
+        fieldsFilled = fields;
+        numberOfFields = fields;
     }
 
     /**
@@ -131,76 +152,162 @@ public class EV3ControlAdapter extends ControlAdapter {
     }
 
     // controlElements
-    class EV3JoystickHolder extends ControlAdapter.JoystickHolder {
+    private class EV3JoystickHolder extends ControlAdapter.JoystickHolder {
 
         public EV3JoystickHolder(@NonNull View itemView, int pos) {
             super(itemView);
-            Integer t;
 
-            t = elements.get(pos)[1];
+            EditText edit = itemView.findViewById(R.id.edit_max_power);
+            RadioGroup radioRight = itemView.findViewById(R.id.radio_port_right);
+            RadioGroup radioLeft = itemView.findViewById(R.id.radio_port_left);
+
+            edit.addTextChangedListener(new MotorPowerWatcher(pos));
+            radioRight.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
+            radioLeft.setOnCheckedChangeListener(new PortChangedListener(pos, 3));
+
+            Integer t;
+            t = elementValues.get(pos)[1];
             if (t != null) {
-                EditText edit = itemView.findViewById(R.id.edit_max_power);
                 edit.setText(t.toString());
             }
 
-            t = elements.get(pos)[2];
+            t = elementValues.get(pos)[2];
             if (t != null) {
-                RadioGroup radioRight = itemView.findViewById(R.id.radio_port_right);
                 ((RadioButton) (radioRight.getChildAt(t))).setChecked(true);
             }
 
-            t = elements.get(pos)[3];
+            t = elementValues.get(pos)[3];
             if (t != null) {
-                RadioGroup radioLeft = itemView.findViewById(R.id.radio_port_left);
                 ((RadioButton) (radioLeft.getChildAt(t))).setChecked(true);
             }
         }
     }
 
-    class EV3SliderHolder extends ControlAdapter.SliderHolder {
+    private class EV3SliderHolder extends ControlAdapter.SliderHolder {
 
         public EV3SliderHolder(@NonNull View itemView, int pos) {
             super(itemView);
-            Integer t;
 
-            t = elements.get(pos)[1];
+            EditText edit = itemView.findViewById(R.id.edit_max_power);
+            RadioGroup radio = itemView.findViewById(R.id.radio_port);
+
+            edit.addTextChangedListener(new MotorPowerWatcher(pos));
+            radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
+
+            Integer t;
+            t = elementValues.get(pos)[1];
             if (t != null) {
-                EditText edit = itemView.findViewById(R.id.edit_max_power);
                 edit.setText(t.toString());
             }
 
-            t = elements.get(pos)[2];
+            t = elementValues.get(pos)[2];
             if (t != null) {
-                RadioGroup radio = itemView.findViewById(R.id.radio_port);
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
             }
         }
     }
 
-    class EV3ButtonHolder extends ControlAdapter.ButtonHolder {
+    private class EV3ButtonHolder extends ControlAdapter.ButtonHolder {
 
         public EV3ButtonHolder(@NonNull View itemView, int pos) {
             super(itemView);
-            Integer t;
 
-            t = elements.get(pos)[1];
+            EditText edit = itemView.findViewById(R.id.edit_max_power);
+            RadioGroup radio = itemView.findViewById(R.id.radio_port);
+            EditText editDur = itemView.findViewById(R.id.edit_duration);
+
+            edit.addTextChangedListener(new MotorPowerWatcher(pos));
+            radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
+            editDur.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.length() > 0) {
+                        elementValues.get(pos)[3] = Integer.parseInt(s.toString());
+                    } else {
+                        elementValues.get(pos)[3] = null;
+                    }
+                }
+            });
+
+            Integer t;
+            t = elementValues.get(pos)[1];
             if (t != null) {
-                EditText edit = itemView.findViewById(R.id.edit_max_power);
                 edit.setText(t.toString());
             }
 
-            t = elements.get(pos)[2];
+            t = elementValues.get(pos)[2];
             if (t != null) {
-                RadioGroup radio = itemView.findViewById(R.id.radio_port);
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
             }
 
-            t = elements.get(pos)[3];
+            t = elementValues.get(pos)[3];
             if (t != null) {
-                EditText editDur = itemView.findViewById(R.id.edit_duration);
                 editDur.setText(t.toString());
             }
         }
     }
 
+    // caps power to <=100 and saves it in elements
+    private class MotorPowerWatcher implements TextWatcher {
+        private final int pos, index;
+
+        public MotorPowerWatcher(int pos) {
+            this.pos = pos;
+            this.index = 1;
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length() > 0) {
+                int value = Integer.parseInt(s.toString());
+                if (value > 100) { // cap at 100%, input type doesn't allow <0
+                    value = 100;
+                    s.replace(0, s.length(), Integer.toString(value));
+                }
+                elementValues.get(pos)[index] = value;
+                fieldsFilled++;
+            } else {
+                elementValues.get(pos)[index] = null;
+                fieldsFilled--;
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+    }
+
+    // saves index of selected port to elements
+    private class PortChangedListener implements RadioGroup.OnCheckedChangeListener {
+        private final int pos, index;
+
+        public PortChangedListener(int pos, int index) {
+            this.pos = pos;
+            this.index = index;
+        }
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            Integer checkedIndex = null;
+            for (int i = 0; i < 4; i++) {
+                if (group.findViewById(checkedId) == group.getChildAt(i))
+                    checkedIndex = i;
+            }
+            elementValues.get(pos)[index] = checkedIndex;
+            if (checkedIndex == null) fieldsFilled--;
+            else fieldsFilled++;
+        }
+    }
 }
