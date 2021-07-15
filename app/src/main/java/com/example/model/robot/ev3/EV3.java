@@ -1,5 +1,6 @@
 package com.example.model.robot.ev3;
 
+import com.example.data.RobotModel;
 import com.example.data.RobotModelDAO;
 import com.example.model.connection.ConnectionService;
 import com.example.model.robot.Controller;
@@ -19,6 +20,43 @@ public class EV3 implements Robot {
     @Override
     public Controller getController(int id, ConnectionService service) {
         return new EV3Controller(db.getRobotModel(id), service);
+    }
+
+    @Override
+    public void saveModel(int id, String name, String type, List<Integer[]> values) {
+        String specs = "";
+        for (Integer[] element : values) {
+            switch (element[0]) { // TODO define numbers centrally, maybe in Constants.java alongside robot type strings
+                case 1: //Joystick
+                    specs += "joystick:" + element[1]
+                            + ";" + indexToPort(element[2])
+                            + "," + indexToPort(element[3]) + "|";
+                    break;
+                case 2: //Slider
+                    specs += "slider:" + element[1]
+                            + ";" + indexToPort(element[2]) + "|";
+                    break;
+                case 3: //Button
+                    specs += "button:" + element[1]
+                            + ";" + indexToPort(element[2])
+                            + ";" + element[3] + "|";
+                    break;
+                default:
+            }
+        }
+        if (specs.length() > 0) {
+            specs = specs.substring(0, specs.length() - 1);
+            db.insertAll(new RobotModel(id, name, type, specs));
+        }
+    }
+
+    private int indexToPort(int index) {
+        int y = 1, i = index;
+        while (i > 0) {
+            y = y << 1;
+            i--;
+        }
+        return y;
     }
 
     /*private List<List<Integer>> specsToArray(String specs) {

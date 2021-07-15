@@ -161,4 +161,8 @@ public class MainModel {
 
         return allRobotNames;
     }
+
+    public void saveModel(int id, String name, String type, List<Integer[]> values) {
+        robot.saveModel(id, name, type, values);
+    }
 }

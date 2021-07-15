@@ -29,6 +29,7 @@ public class EditControlsFragment extends HostedFragment {
     private RecyclerView editControlsList;
     private MainViewModel viewModel;
     private RobotModel robotModel;
+    private EditText editName;
 
     public EditControlsFragment() {
         super(R.layout.edit_controls);
@@ -36,6 +37,7 @@ public class EditControlsFragment extends HostedFragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "A");
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
@@ -62,8 +64,8 @@ public class EditControlsFragment extends HostedFragment {
         Button buttonEditModelBack = view.findViewById(R.id.button_edit_model_back);
 
         if (robotModel != null) {
-            EditText t = view.findViewById(R.id.edit_model_name);
-            t.setText(robotModel.name);
+            editName = view.findViewById(R.id.edit_model_name);
+            editName.setText(robotModel.name);
         } else {
             Log.e(TAG, "robotModel == null");
         }
@@ -83,12 +85,19 @@ public class EditControlsFragment extends HostedFragment {
     }
 
     private void onClickButtonEditModelNext(View v){
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, TestRobotFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
+        // Log.d(TAG, "" + (robotModel != null) +" "+ (controlAdapter != null) +" "+ (controlAdapter.isReadyToSave()) +" "+ (editName.getText().length() > 0));
+
+        if (robotModel != null && controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
+            controlAdapter.resetFilled();
+            viewModel.saveModel(robotModel.id, editName.getText().toString(), robotModel.type, controlAdapter.getValues());
+
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, TestRobotFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     private void onClickButtonEditModelBack(View v){

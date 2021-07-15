@@ -34,11 +34,13 @@ public class EV3ControlAdapter extends ControlAdapter {
             numberOfFields = 0;
             fieldsFilled = 0;
         }
+        Log.d(TAG, "constructor: " + fieldsFilled);
         // true if all fields filled out (model != null ==> called by "Modell Bearbeiten")
     }
 
     @Override
     boolean isReadyToSave() {
+        Log.d(TAG, fieldsFilled + " " + numberOfFields);
         return fieldsFilled == numberOfFields;
     }
 
@@ -46,6 +48,8 @@ public class EV3ControlAdapter extends ControlAdapter {
     List<Integer[]> getValues() {
         return elementValues;
     }
+
+    // "joystick:50;1,8|slider:30;4|button:20;2;5000"
 
     private void initElements(String specs) {
         // split into $controlElement$ = $element$:$attributes$
@@ -104,13 +108,13 @@ public class EV3ControlAdapter extends ControlAdapter {
         motorCount = motors;
         // add button isn't shown when all motors set:
         itemCount = (motorCount == 4) ? list.size() : list.size() + 1;
-        fieldsFilled = fields;
+        //fieldsFilled = fields;
         numberOfFields = fields;
     }
 
     /**
      * @param port ev3 motor port number (powers of 2)
-     * @return corresponding index in radio group ( log_2(port) )
+     * @return corresponding index in radio group ( log_2(port) - 1 )
      */
     private int portToIndex(int port) {
         int y = 0, i = port;
@@ -219,6 +223,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             edit.addTextChangedListener(new MotorPowerWatcher(pos));
             radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
             editDur.addTextChangedListener(new TextWatcher() {
+                private int prevLength = 0;
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -231,9 +236,14 @@ public class EV3ControlAdapter extends ControlAdapter {
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
                         elementValues.get(pos)[3] = Integer.parseInt(s.toString());
+                        if (prevLength == 0)
+                            fieldsFilled++;
                     } else {
                         elementValues.get(pos)[3] = null;
+                        if (prevLength != 0)
+                            fieldsFilled--;
                     }
+                    prevLength = s.length();
                 }
             });
 
@@ -258,6 +268,7 @@ public class EV3ControlAdapter extends ControlAdapter {
     // caps power to <=100 and saves it in elements
     private class MotorPowerWatcher implements TextWatcher {
         private final int pos, index;
+        private int prevLength = 0;
 
         public MotorPowerWatcher(int pos) {
             this.pos = pos;
@@ -273,10 +284,16 @@ public class EV3ControlAdapter extends ControlAdapter {
                     s.replace(0, s.length(), Integer.toString(value));
                 }
                 elementValues.get(pos)[index] = value;
-                fieldsFilled++;
+                if (prevLength == 0)
+                    fieldsFilled++;
+                Log.d(TAG, "textWatcher >0: " + fieldsFilled);
+                prevLength = s.length();
             } else {
                 elementValues.get(pos)[index] = null;
-                fieldsFilled--;
+                if (prevLength != 0)
+                    fieldsFilled--;
+                Log.d(TAG, "textWatcher 0: " + fieldsFilled);
+                prevLength = 0;
             }
         }
 
@@ -292,6 +309,7 @@ public class EV3ControlAdapter extends ControlAdapter {
     // saves index of selected port to elements
     private class PortChangedListener implements RadioGroup.OnCheckedChangeListener {
         private final int pos, index;
+        private boolean prevState = false;
 
         public PortChangedListener(int pos, int index) {
             this.pos = pos;
@@ -306,8 +324,13 @@ public class EV3ControlAdapter extends ControlAdapter {
                     checkedIndex = i;
             }
             elementValues.get(pos)[index] = checkedIndex;
-            if (checkedIndex == null) fieldsFilled--;
-            else fieldsFilled++;
+            if (checkedIndex == null && prevState){
+                fieldsFilled--;
+            }
+            else if (!prevState) {
+                fieldsFilled++;
+            }
+            prevState = checkedIndex != null;
         }
     }
 }

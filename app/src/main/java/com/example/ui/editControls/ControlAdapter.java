@@ -33,14 +33,26 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     protected int motorCount = 0;
     protected int maxNumberOfMotors = 100;
     protected int fieldsFilled = 0, numberOfFields = 0;
+    protected int id;
 
     public ControlAdapter(HostActivity hostActivity, RobotModel model) {
         this.hostActivity = hostActivity;
         this.elementValues = new ArrayList<>();
+        if (model != null)
+            this.id = model.id;
+        else
+            this.id = 0;
     }
 
     abstract boolean isReadyToSave();
     abstract List<Integer[]> getValues();
+
+    public int getId() {
+        return id;
+    };
+    public void resetFilled() {
+        fieldsFilled = 0;
+    }
 
     @NonNull
     @Override
@@ -133,7 +145,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             int element = elementValues.remove(position)[0];
             itemCount--;
             motorCount -= (element == JOYSTICK) ? 2 : 1;
-            numberOfFields -= (element == SLIDER) ? 2 : 3;
+            fieldsFilled = numberOfFields -= (element == SLIDER) ? 2 : 3;
             notifyItemRemoved(position);
         }
     }
