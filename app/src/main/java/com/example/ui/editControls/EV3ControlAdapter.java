@@ -40,8 +40,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     @Override
     boolean isReadyToSave() {
-        Log.d(TAG, fieldsFilled + " " + numberOfFields);
-        return fieldsFilled == numberOfFields;
+        return fieldsFilled == numberOfFields && numberOfFields > 0;
     }
 
     @Override
