@@ -282,13 +282,13 @@ public class TestRobotFragment extends HostedFragment {
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[0], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
-                set.connect(controlElements[0], ConstraintSet.LEFT, controlElementid, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 break;
             case 3:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[2], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.LEFT, controlElements[1], ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
+                set.connect(controlElements[0], ConstraintSet.LEFT, controlElements[2], ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElements[1], ConstraintSet.RIGHT, controlElementid, ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElements[2], ConstraintSet.LEFT, controlElementid, ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 break;
