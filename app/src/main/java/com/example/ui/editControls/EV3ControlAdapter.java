@@ -1,19 +1,12 @@
 package com.example.ui.editControls;
 
-import android.service.controls.Control;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Space;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.data.RobotModel;
 import com.example.rcvc.R;
@@ -77,7 +70,7 @@ public class EV3ControlAdapter extends ControlAdapter{
             }
         }
         motorCount = motors;
-        itemCount = list.size();
+        itemCount = (motorCount == 4) ? list.size() : list.size() + 1;
     }
 
     private int portToIndex(int port) {
