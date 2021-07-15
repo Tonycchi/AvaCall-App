@@ -21,9 +21,14 @@ public class EV3ControlAdapter extends ControlAdapter{
     public EV3ControlAdapter(HostActivity activity, RobotModel model) {
         super(activity, model);
         maxNumberOfMotors = 4;
+        if (model != null) {
+            initElements(model.specs);
+        } else {
+            Log.e(TAG,"model is null");
+        }
     }
 
-    protected void initElements(String specs) {
+    private void initElements(String specs) {
         // split into $controlElement$ = $element$:$attributes$
         String[] tmp = specs.split("\\|");
         // put into list with [0] = $element$, [1] = $attributes$

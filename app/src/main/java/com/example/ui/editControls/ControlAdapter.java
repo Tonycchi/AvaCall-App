@@ -36,11 +36,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     public ControlAdapter(HostActivity hostActivity, RobotModel model) {
         this.hostActivity = hostActivity;
         this.elements = new ArrayList<>();
-        if (model != null) {
-            initElements(model.specs);
-        }else{
-            Log.e(TAG,"model is null");
-        }
     }
 
     @NonNull
@@ -80,8 +75,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
         return viewHolder;
     }
-
-    protected abstract void initElements(String specs);
 
     public void addElement(int elementType){
         int numberOfMotorsAdded;

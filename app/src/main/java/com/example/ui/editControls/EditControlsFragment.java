@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,7 +64,7 @@ public class EditControlsFragment extends HostedFragment {
         if (robotModel != null) {
             EditText t = view.findViewById(R.id.edit_model_name);
             t.setText(robotModel.name);
-        }else{
+        } else {
             Log.e(TAG, "robotModel == null");
         }
 
