@@ -134,6 +134,7 @@ public class MainModel {
             localDatabase.robotModelDAO().insertAll(new RobotModel("Gensearsch", "EV3", "slider:30;1|slider:30;2|slider:30;4|slider:30;8"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("NUR GREIFARM", "EV3", "slider:30;4"));
             localDatabase.robotModelDAO().insertAll(new RobotModel("Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2;5000"));
+            localDatabase.robotModelDAO().insertAll(new RobotModel("Test", "EV3", "slider:30;1|slider:30;2|slider:30;4"));
         }
     }
 

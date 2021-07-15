@@ -60,9 +60,8 @@ public class TestRobotFragment extends HostedFragment {
         ConstraintLayout constraintLayout = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 ? view.findViewById(R.id.test_robot_fragment)
                 : view.findViewById(R.id.test_robot_fragment_landscape);
-
-        //joystick|button|slider|button
-        String t = viewModel.getSelectedModelElements();
+        
+        String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
         String[] order = rankOrder(t);
         createControlElements(order, constraintLayout);
 
@@ -103,6 +102,11 @@ public class TestRobotFragment extends HostedFragment {
         ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
     }
 
+    /**
+     * Puts the control elements we have to create in a certain order 1.joystick 2.slider 3.button
+     * @param input string of control elements we need for the selected model
+     * @return String Array with the order we defined above
+     */
     public String[] rankOrder(String input) {
         String[] cases = {"joystick", "slider", "button"};
         List<String> temp = new ArrayList<String>();
@@ -122,11 +126,17 @@ public class TestRobotFragment extends HostedFragment {
         temp.toArray(result);
         return result;
     }
-    //TODO ConstraintSets Variabel, Buttons implementieren, Slider rotation fixen, Joystick Color fixen,
+
+    /**
+     * All control elements are created in this method
+     * @param order the order in which we create the control elements
+     * @param constraintLayout the current constraintLayout we are using
+     */
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
         int[] controlElements = new int[order.length];
         ConstraintSet set = new ConstraintSet();
         List<SeekBar> sliderList = new ArrayList<SeekBar>();
+        //iterate through the order Array
         for (int i = 0; i < order.length; i++) {
             int id = i;
             switch (order[i]) {
@@ -236,11 +246,19 @@ public class TestRobotFragment extends HostedFragment {
                     break;
             }
         }
+        //rotate all sliders so that they are vertical
         for (SeekBar slider: sliderList) {
             slider.setRotation(270);
         }
     }
 
+    /**
+     * sets the Constraints for each of the created control elements in portrait mode
+     * @param i index of the created element
+     * @param controlElementid id of the created element we want to give constraints
+     * @param controlElements Array of all currently created control elements
+     * @param set the current ConstraintSet we are using
+     */
     public void updateConstraintSet(int i, int controlElementid, int[] controlElements, ConstraintSet set){
         switch(i) {
             case 0:
@@ -270,6 +288,13 @@ public class TestRobotFragment extends HostedFragment {
         }
     }
 
+    /**
+     * sets the Constraints for each of the created control elements in landscape mode
+     * @param i index of the created element
+     * @param controlElementid id of the created element we want to give constraints
+     * @param controlElements Array of all currently created control elements
+     * @param set the current ConstraintSet we are using
+     */
     public void updateConstraintSetLandscape(int i, int controlElementid, int[] controlElements, ConstraintSet set){
         switch(i) {
             case 0:
