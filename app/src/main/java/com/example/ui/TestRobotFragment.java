@@ -126,6 +126,7 @@ public class TestRobotFragment extends HostedFragment {
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
         int[] controlElements = new int[order.length];
         ConstraintSet set = new ConstraintSet();
+        List<SeekBar> sliderList = new ArrayList<SeekBar>();
         for (int i = 0; i < order.length; i++) {
             int id = i;
             switch (order[i]) {
@@ -158,6 +159,7 @@ public class TestRobotFragment extends HostedFragment {
                     break;
                 case "slider":
                     SeekBar slider = new SeekBar(getContext());
+                    sliderList.add(slider);
                     slider.setId(View.generateViewId());
                     slider.setProgress(50);
                     slider.setThumb(ContextCompat.getDrawable(getContext(), R.drawable.slider_thumb));
@@ -175,7 +177,6 @@ public class TestRobotFragment extends HostedFragment {
                     }
 
                     set.applyTo(constraintLayout);
-                    slider.setRotation(270.0f);
 
                     slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
@@ -235,6 +236,9 @@ public class TestRobotFragment extends HostedFragment {
                     break;
             }
         }
+        for (SeekBar slider: sliderList) {
+            slider.setRotation(270);
+        }
     }
 
     public void updateConstraintSet(int i, int controlElementid, int[] controlElements, ConstraintSet set){
@@ -281,6 +285,7 @@ public class TestRobotFragment extends HostedFragment {
             case 2:
                 set.connect(controlElementid, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_top));
                 set.connect(controlElementid, ConstraintSet.RIGHT, controlElements[0], ConstraintSet.LEFT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
+                set.connect(controlElementid, ConstraintSet.LEFT, controlElements[1], ConstraintSet.RIGHT, (int) getResources().getDimension(R.dimen.margin_horizontal_small));
                 set.connect(controlElementid, ConstraintSet.BOTTOM, R.id.text_control_question, ConstraintSet.TOP, (int) getResources().getDimension(R.dimen.margin_bottom));
                 break;
             case 3:
@@ -294,5 +299,4 @@ public class TestRobotFragment extends HostedFragment {
                 break;
         }
     }
-
 }
