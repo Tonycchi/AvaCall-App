@@ -92,10 +92,6 @@ public class MainModel {
         videoConnectionModel.invitePartner();
     }
 
-//    public MutableLiveData<String> getInviteLink() {
-//        return videoConnectionModel.getInviteLink();
-//    }
-
     public String getShareURL() {
         return videoConnectionModel.getShareURL();
     }

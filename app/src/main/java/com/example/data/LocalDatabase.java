@@ -36,7 +36,7 @@ public abstract class LocalDatabase extends RoomDatabase {
                                     new LocalPreference(URLSettings.VIDEOURLKEY, URLSettings.DEFAULT_TEST_JITSI),
                                     new LocalPreference(URLSettings.HOSTPORTKEY, URLSettings.DEFAULT_TEST_PORT)
                             );
-                            // TODO remove for final version:
+                            //TODO remove for final version:
                             tmp.robotModelDAO().insertAll(
                                     new RobotModel(0, "Kettenroboter", "EV3", "joystick:50;1,8"),
                                     new RobotModel(0, "Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4"),

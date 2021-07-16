@@ -67,6 +67,42 @@ public class EV3BluetoothHandshake implements ByteArrayHandshake {
         playSound[31] = (byte) 0x00;            //string end
         directCommands.add(playSound);
 
+        byte[] typeAndMotor = new byte[13];
+        typeAndMotor[0] = 0x0B;                    //length
+        typeAndMotor[1] = 0x00;                    //length
+        typeAndMotor[2] = 0x2A;                    //message counter
+        typeAndMotor[3] = 0x00;                    //message counter
+        typeAndMotor[4] = 0x00;                    // Direct command, reply required
+        typeAndMotor[5] = 0x02;                    //global variables
+        typeAndMotor[6] = 0x00;                    //global and local variables
+        typeAndMotor[7] = (byte) 0x99;             //opcode
+        typeAndMotor[8] = (byte) 0x05;
+        typeAndMotor[9] = (byte) 0x00;
+        typeAndMotor[10] = (byte) 0x10;
+        typeAndMotor[11] = (byte) 0x60;
+        typeAndMotor[12] = (byte) 0x61;
+        directCommands.add(typeAndMotor);
+
+        byte[] changeMode = new byte[15];
+        changeMode[0] = 0x0D;                    //length
+        changeMode[1] = 0x00;                    //length
+        changeMode[2] = 0x2B;                    //message counter
+        changeMode[3] = 0x00;                    //message counter
+        changeMode[4] = 0x00;                    //Direct command, reply required
+        changeMode[5] = 0x04;                    //global variables
+        changeMode[6] = 0x00;                    //global and local variables
+        changeMode[7] = (byte) 0x99;             //opcode
+        changeMode[8] = (byte) 0x1C;
+        changeMode[9] = (byte) 0x00;
+        changeMode[10] = (byte) 0x10;
+        changeMode[11] = (byte) 0x08;
+        changeMode[12] = (byte) 0x02;           //typemode
+        changeMode[13] = (byte) 0x01;
+        changeMode[14] = (byte) 0x60;
+        directCommands.add(changeMode);
+
+        directCommands.add(typeAndMotor);
+
         return directCommands;
     }
 
