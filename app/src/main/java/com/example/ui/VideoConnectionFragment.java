@@ -12,6 +12,7 @@ import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,8 @@ public class VideoConnectionFragment extends HostedFragment {
     private static final String TAG = "VideoConnectionFragment";
 
     private MainViewModel viewModel;
+
+    private TextView meetingIdTextView;
 
     public VideoConnectionFragment() {
         super(R.layout.video_connection);
@@ -53,6 +56,8 @@ public class VideoConnectionFragment extends HostedFragment {
         Button buttonAccessVideoCall = view.findViewById(R.id.button_access_videocall);
         Button buttonTestControls = view.findViewById(R.id.button_test_controls);
 
+        meetingIdTextView = view.findViewById(R.id.text_meeting_id);
+
         buttonURLsettings.setOnClickListener(this::openURLSettings);
         buttonInvitePartner.setOnClickListener(this::onClickInvitePartner);
         buttonTestControls.setOnClickListener(this::onClickTestControls);
@@ -71,7 +76,7 @@ public class VideoConnectionFragment extends HostedFragment {
         fragmentManager.popBackStack();
     }
 
-    @SuppressLint("ObsoleteSdkInt")
+
     private void onClickInvitePartner(View v) {
         Log.d(TAG, "onClickInvitePartner");
         viewModel.invitePartner();
@@ -91,6 +96,8 @@ public class VideoConnectionFragment extends HostedFragment {
             Intent shareIntent = Intent.createChooser(sendIntent, null);
             startActivity(shareIntent);
         }
+
+        meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
     }
 
     private void onClickSwitchToVideoCall(View v) {

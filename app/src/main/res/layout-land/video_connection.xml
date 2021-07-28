@@ -51,4 +51,13 @@
         app:layout_constraintEnd_toStartOf="@+id/button_access_videocall"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/text_meeting_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_side_land"
+        android:layout_marginBottom="@dimen/margin_vertical_big_land"
+        app:layout_constraintBottom_toTopOf="@+id/button_test_controls"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

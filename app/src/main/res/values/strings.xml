@@ -58,6 +58,7 @@
         <string name="test_controls">Steuerung testen</string>
         <string name="room_link">Jitsi Room Link</string>
         <string name="toast_link_copied">Link kopiert</string>
+        <string name="meeting_id">Kennnummer:</string>
 
         <string name="title_web_url">URL zur Webanwendung</string>
         <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>

@@ -51,6 +51,10 @@ public class MainViewModel extends AndroidViewModel {
         return model.getShareURL();
     }
 
+    public String getID(){
+        return model.getID();
+    }
+
     public Object getOptions() {
         return model.getOptions();
     }
