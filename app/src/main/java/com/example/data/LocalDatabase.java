@@ -44,6 +44,7 @@ public abstract class LocalDatabase extends RoomDatabase {
                                     new RobotModel(0, "Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000|slider:30;4|button:20;4;5000"),
                                     new RobotModel(0, "Gensearsch", "EV3", "button:20;1;5000|button:20;2;5000|button:20;4;5000|button:20;8;5000"),
                                     new RobotModel(0, "NUR GREIFARM", "EV3", "slider:30;4"),
+                                    new RobotModel(0, "Painter", "EV3", "slider:30;4|slider:50;1"),
                                     new RobotModel(0, "Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2;5000")
                             );
                         });

@@ -15,8 +15,8 @@
         android:id="@+id/edit_web_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textUri"
-        android:importantForAutofill="no" />
+        android:importantForAutofill="no"
+        android:inputType="textUri" />
 
     <TextView
         android:text="@string/title_jitsi_url"
