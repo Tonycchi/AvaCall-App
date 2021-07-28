@@ -159,4 +159,8 @@ public class MainModel {
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
     }
+
+    public void setSelectedModelPosition(int position) {
+        modelSelectionModel.setSelectedModelPosition(position);
+    }
 }

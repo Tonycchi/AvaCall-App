@@ -73,6 +73,8 @@ public class VideoConnectionModel {
     }
 
     public String getID(){
+        if(sessionData==null)
+            return null;
         return sessionData.getID();
     }
 

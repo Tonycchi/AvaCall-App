@@ -63,6 +63,9 @@ public class VideoConnectionFragment extends HostedFragment {
         buttonTestControls.setOnClickListener(this::onClickTestControls);
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
 
+        if(viewModel.getID()!=null)
+            meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
+
         requireActivity().setTitle(R.string.title_video_connection);
     }
 

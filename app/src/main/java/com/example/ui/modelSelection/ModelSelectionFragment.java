@@ -67,7 +67,7 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicker.setMaxValue(allRobotNames.length-1);
         modelPicker.setMinValue(0);
         modelPicker.setDisplayedValues(allRobotNames);
-        modelPicker.setValue(0);
+        modelPicker.setValue(viewModel.getSelectedModelPosition());
 
         modelPicker.setOnValueChangedListener(this::onSelectedModelChanged);
 
@@ -90,6 +90,7 @@ public class ModelSelectionFragment extends HostedFragment {
     }
 
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
+        viewModel.setSelectedModelPosition(modelPicker.getValue());
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
         modelDescription.setText(robotModel.name+"("+robotModel.type+"): "+robotModel.specs);
         //TODO: other picture
