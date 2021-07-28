@@ -50,12 +50,12 @@ public class MainViewModel extends AndroidViewModel {
         model.invitePartner();
     }
 
-//    public MutableLiveData<String> getInviteLink() {
-//        return model.getInviteLink();
-//    }
-
     public String getShareURL() {
         return model.getShareURL();
+    }
+
+    public String getID(){
+        return model.getID();
     }
 
     public Object getOptions() {

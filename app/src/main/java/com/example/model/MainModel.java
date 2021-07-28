@@ -85,6 +85,10 @@ public class MainModel {
         videoConnectionModel.saveURLs(urls);
     }
 
+    public String getID(){
+        return videoConnectionModel.getID();
+    }
+
     public void startConnection(Device device) {
         robotConnectionModel.startConnection(device);
         //controller = robot.getController(0, ((BluetoothModel) robotConnectionModel).getService());

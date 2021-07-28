@@ -72,6 +72,10 @@ public class VideoConnectionModel {
         return urlSettings.getAll();
     }
 
+    public String getID(){
+        return sessionData.getID();
+    }
+
     public void saveURLs(URLSettings.stringTriple urls) {
         urlSettings.saveURLs(urls);
     }
