@@ -17,8 +17,8 @@ public class EV3 implements Robot {
     }
 
     @Override
-    public Controller getController(int id, ConnectionService service) {
-        return new EV3Controller(db.getRobotModel(id), service);
+    public Controller getController(RobotModel robotModel, ConnectionService service) {
+        return new EV3Controller(robotModel, service);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class MainModel {
         localDatabase = LocalDatabase.getInstance(application);
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
-        robot = new EV3(localDatabase.robotModelDAO());
+        robot = new EV3(localDatabase.robotModelDAO()); //TODO: dont hard code
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
@@ -102,14 +102,14 @@ public class MainModel {
         videoConnectionModel.setReceiveCommands();
     }
 
-    public RobotModel getRobotModel(int id) {
-        return modelSelectionModel.getRobotModel(id);
+    public RobotModel getRobotModel(int position) {
+        return modelSelectionModel.getRobotModel(modelPositionToId[position]);
     }
 
-    public void modelSelected(int id) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
-        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
-        //TODO: create robot
-        controller = robot.getController(id, robotConnectionModel.getService());
+    public void modelSelected(int position) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
+        modelSelectionModel.setSelectedModelPosition(position);
+        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
+        controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
     }
 
     public void sendControlInputs(int... input) {
@@ -149,8 +149,10 @@ public class MainModel {
         return allRobotNames;
     }
 
+
     public void saveModel(int id, String name, String type, List<Integer[]> values) {
         robot.saveModel(id, name, type, values);
-        controller = robot.getController(id, robotConnectionModel.getService());
+        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
+        controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
     }
 }
