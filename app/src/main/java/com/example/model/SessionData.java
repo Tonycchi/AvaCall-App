@@ -17,7 +17,7 @@ public abstract class SessionData<OptionType extends Object>{
     public SessionData(String host, String id) {
         Log.d(TAG, " host:"+host+" id:"+id);
         this.ID = id;
-        this.SHARE_URL = host + "/" + id;
+        this.SHARE_URL = host + "/?meetingId=" + id;
     }
 
     public String getShareURL() {return this.SHARE_URL; }
