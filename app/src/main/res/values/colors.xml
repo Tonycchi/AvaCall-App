@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--    OLD COLORS ARE DELETED LATER-->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -10,7 +11,7 @@
     <color name="primary_variant">#AA999999</color>
     <color name="secondary">#AAFF0000</color>
     <color name="secondary_variant">#55FF0000</color>
-    <color name="third">#AA0080FF</color>
+    <color name="third">#AA47C7F4</color>
     <color name="third_variant">#550080FF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -18,11 +19,22 @@
     <color name="font_primary">#AA000000</color>
     <color name="font_secondary">#AAFF0000</color>
 
+    <!--    NEW DESIGN COLORS -->
     <!-- main screen -->
     <color name="main_background">#FFFFFFFF</color>
 
     <!-- joystick -->
     <color name="joystick_background">#FF838383</color>
-    <color name="joystick_border">#FF000000</color>
-    <color name="joystick_button">#FFFF0000</color>
+    <color name="joystick_border">#ebebeb</color>
+    <color name="joystick_button">#BCFF1F1F</color>
+
+    <!-- buttons -->
+    <color name="button_next_inner">#D230EA10</color>
+    <color name="button_back_inner">#BCFF1F1F</color>
+    <color name="button_neutral_inner">#AA0047FF</color>
+
+    <!-- textcolor -->
+    <color name="text_button">#000000</color>
+    <color name="text_standard">#000000</color>
+
 </resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/test_robot_fragment_landscape"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.widget.Button
+        android:id="@+id/button_yes"
+        style="@style/button_next"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_side_land"
+        android:layout_marginEnd="@dimen/margin_horizontal_small_land"
+        android:layout_marginBottom="@dimen/margin_bottom_land"
+        android:text="@string/button_robot_control_good"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_no"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/button_no"
+        style="@style/button_back"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_horizontal_small_land"
+        android:layout_marginEnd="@dimen/margin_side_land"
+        android:layout_marginBottom="@dimen/margin_bottom_land"
+        android:text="@string/button_robot_control_bad"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_yes" />
+
+    <TextView
+        android:id="@+id/text_control_question"
+        style="@style/text_standard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_vertical_small_land"
+        android:text="@string/text_robot_control_question"
+        app:layout_constraintBottom_toTopOf="@+id/button_yes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

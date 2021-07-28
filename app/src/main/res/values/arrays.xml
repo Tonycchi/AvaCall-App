@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rotob_model_types">
+        <item>LEGO® MINDSTORMS® EV3</item>
+    </string-array>
+    <string-array name="ev3_control_elements_names">
+        <item>Joystick (2 Motoren)</item>
+        <item>Slider (1 Motor)</item>
+        <item>Button (1 Motor)</item>
+    </string-array>
+</resources>

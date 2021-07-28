@@ -1,30 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Main Activity -->
-    <dimen name="standard_button_width">@dimen/_230sdp</dimen>
-    <dimen name="standard_button_height">@dimen/_35sdp</dimen>
-    <dimen name="show_controller_width">@dimen/_170sdp</dimen>
-    <dimen name="toggle_controller_width">@dimen/_85sdp</dimen>
-    <dimen name="small_button_height">@dimen/_30sdp</dimen>
-    <dimen name="control_button_width">@dimen/_100sdp</dimen>
-    <dimen name="margin_top">@dimen/_16sdp</dimen>
-    <dimen name="margin_bot">@dimen/_32sdp</dimen>
-    <dimen name="paired_devices_width">@dimen/_300sdp</dimen>
-    <dimen name="paired_devices_height">@dimen/_125sdp</dimen>
-    <dimen name="joystick_size">@dimen/_125sdp</dimen>
-    <dimen name="joystick_border_width">@dimen/_32sdp</dimen>
-    <dimen name="margin_top_between_buttons">@dimen/_8sdp</dimen>
-    <dimen name="standard_text_size">@dimen/_12sdp</dimen>
-    <dimen name="small_text_size">@dimen/_10sdp</dimen>
-    <dimen name="margin_connection_status">@dimen/_8sdp</dimen>
-    <dimen name="margin_bottom_between">@dimen/_4sdp</dimen>
-    <dimen name="control_button_margin">@dimen/_55sdp</dimen>
+        <!--  portrait  -->
+            <!-- General -->
+                <!-- Buttons -->
+                    <dimen name="standard_button_width">@dimen/_230sdp</dimen>
+                    <dimen name="small_button_height">@dimen/_30sdp</dimen>
+                    <dimen name="standard_button_height">@dimen/_45sdp</dimen>
 
-    <!--extra dimensions for landscape mode -->
-    <dimen name="landscape_margin_top">@dimen/_8sdp</dimen>
-    <dimen name="landscape_margin_side">@dimen/_20sdp</dimen>
-    <dimen name="landscape_standard_button_width">@dimen/_230sdp</dimen>
-    <dimen name="landscape_margin_top_between_buttons">@dimen/_8sdp</dimen>
-    <dimen name="landscape_paired_devices_width">@dimen/_210sdp</dimen>
-    <dimen name="landscape_paired_devices_height">@dimen/_200sdp</dimen>
+                    <dimen name="big_button_height">@dimen/_70sdp</dimen>
+                    <dimen name="big_element_height">@dimen/_140sdp</dimen>
+                    <dimen name="big_element_width">@dimen/_200sdp</dimen>
+                    <dimen name="standard_button_border_width">@dimen/_1sdp</dimen>
+                    <dimen name="navigation_button_height">@dimen/_40sdp</dimen>
+
+                <!-- Control Elements -->
+                    <dimen name="control_element_size">@dimen/_130sdp</dimen>
+                    <dimen name="control_element_size_landscape">@dimen/_105sdp</dimen>
+                    <dimen name="joystick_border_width">@dimen/_32sdp</dimen>
+
+                <!-- Margins -->
+                    <dimen name="margin_top">@dimen/_16sdp</dimen>
+                    <dimen name="margin_side">@dimen/_16sdp</dimen>
+                    <dimen name="margin_horizontal_small">@dimen/_8sdp</dimen>
+                    <dimen name="margin_vertical_small">@dimen/_8sdp</dimen>
+                    <dimen name="margin_horizontal_big">@dimen/_16sdp</dimen>
+                    <dimen name="margin_vertical_big">@dimen/_16sdp</dimen>
+                    <dimen name="margin_bottom">@dimen/_16sdp</dimen>
+
+                <!-- Text -->
+                    <dimen name="standard_text_size">@dimen/_12sdp</dimen>
+                    <dimen name="small_text_size">@dimen/_10sdp</dimen>
+
+            <!-- Bluetooth -->
+            <dimen name="paired_devices_height">@dimen/_60sdp</dimen>
+
+        <!--    land    -->
+            <!-- General -->
+                <!-- Buttons -->
+                    <dimen name="standard_button_width_land">@dimen/_230sdp</dimen>
+                    <dimen name="small_button_height_land">@dimen/_30sdp</dimen>
+                    <dimen name="standard_button_height_land">@dimen/_45sdp</dimen>
+
+                    <dimen name="big_button_height_land">@dimen/_70sdp</dimen>
+                    <dimen name="big_element_height_land">@dimen/_140sdp</dimen>
+                    <dimen name="big_element_width_land">@dimen/_200sdp</dimen>
+                    <dimen name="standard_button_border_width_land">@dimen/_1sdp</dimen>
+                    <dimen name="navigation_button_height_land">@dimen/_40sdp</dimen>
+
+                <!-- Margins -->
+                    <dimen name="margin_top_land">@dimen/_16sdp</dimen>
+                    <dimen name="margin_side_land">@dimen/_16sdp</dimen>
+                    <dimen name="margin_horizontal_small_land">@dimen/_8sdp</dimen>
+                    <dimen name="margin_vertical_small_land">@dimen/_8sdp</dimen>
+                    <dimen name="margin_horizontal_big_land">@dimen/_16sdp</dimen>
+                    <dimen name="margin_vertical_big_land">@dimen/_16sdp</dimen>
+                    <dimen name="margin_bottom_land">@dimen/_16sdp</dimen>
+
+                <!-- Text -->
+                    <dimen name="standard_text_size_land">@dimen/_12sdp</dimen>
+                    <dimen name="small_text_size_land">@dimen/_10sdp</dimen>
+
+            <!-- Bluetooth -->
+            <dimen name="paired_devices_height_land">@dimen/_60sdp</dimen>
 </resources>

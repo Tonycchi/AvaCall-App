@@ -1,72 +1,73 @@
 <resources>
     <!-- General -->
     <string name="app_name">AvaCall</string>
-
-    <!-- General Menus -->
-    <string name="dialog_close">Schließen</string>
-
-    <!-- Main Activity Layout -->
-    <!--    Buttons -->
-    <string name="button_bluetooth_disconnected">Mit Bluetooth verbinden</string>
-    <string name="button_bluetooth_connected">Verbindung trennen</string>
-    <string name="button_share_link">Einladung teilen</string>
-    <string name="button_show_id">Kennnummer anzeigen</string>
-    <string name="button_switch_to_room">Konferenz starten</string>
-    <string name="button_switch_to_joystick">Joystick</string>
-    <string name="button_switch_to_buttons">Knöpfe</string>
-    <!--    Directional Buttons -->
-    <string name="direct_command_forward">Vorwärts </string>
-    <string name="direct_command_backward">Rückwärts </string>
-    <string name="direct_command_turn_right">Rechts </string>
-    <string name="direct_command_turn_left">Links </string>
-    <string name="direct_command_stop">Stoppen </string>
-    <!--    Toasts -->
-    <string name="toast_room_opened">Verbindung hergestellt</string>
-    <string name="toast_link_copied">Link kopiert</string>
-    <!--    Bluetooth Connection Status -->
-    <string name="connection_status_false">Keine Bluetooth-Verbindung</string>
-    <string name="connection_status_true">Verbunden mit: %s</string>
-
-    <!--    Server Connection Status -->
-    <string name="server_connection_status_false">Keine Verbindung zum Server</string>
-    <string name="server_connection_status_true">Kennnummer: %s</string>
-
-    <!-- Errors -->
-    <!--    Main Activity -->
-    <string name="error_no_paired_devices">Keine gekoppelten Geräte, koppel erst deinen EV3 über die Bluetoothoptionen.</string>
-    <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
-    <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
-    <string name="debug_tag">NetworkStatusExample </string>
-    <string name="error_malformed_url">Bitte eine formgerechte URL angeben.</string>
-    <string name="server_connection_error">Es konnte keine Verbindung zum Server hergestellt werden, versuche es später erneut.</string>
-
-    <!-- Misc -->
-    <string name="action_check_connection">com.example.rcvc.action.BLUETOOTH_INTENT</string>
-    <string name="action_negative_button">com.example-rcvc.action.NEGATIVE_BUTTON</string>
-    <string name="jitsi_room_link">Jitsi Room Link</string>
-    <string name="invalid_url">Invalid URL</string>
-
-    <!-- Settings Layout -->
-    <string name="settings">Einstellungen</string>
-    <!--    Category titles -->
-    <string name="settings_category_controls">Steuerung</string>
-    <string name="settings_category_network">Netzwerk</string>
-    <!--    Preference titles/summaries -->
-    <string name="settings_title_host_url">Webanwendung</string>
-    <string name="settings_summary_host_url">URL zur Webanwendung</string>
-    <string name="settings_title_jitsi_url">Jitsi-Instanz</string>
-    <string name="settings_summary_jitsi_url">URL zur Jitsi-Instanz</string>
-    <string name="settings_title_host_port">Port</string>
-    <string name="settings_summary_host_port">Port für Verbindung zum Server</string>
-    <string name="settings_title_max">Maximale Geschwindigkeit</string>
-    <string name="settings_summary_max">In Prozent</string>
-    <string name="settings_title_additional_motors">Zusätzliche Motoren</string>
-    <string name="settings_title_motor_ports">Motor Ports</string>
-    <string name="settings_summary_motor_ports">Einstellen der Ports für Motoren</string>
-    <string name="dialog_right_motor_port">Rechter Motor Port</string>
-    <string name="dialog_left_motor_port">Linker Motor Port</string>
-
     <string name="ok">Ok</string>
     <string name="cancel">Schließen</string>
+
+    <!-- New Design -->
+        <!-- Titles -->
+        <string name="title_bluetooth">AvaCall: Gerät verbinden</string>
+        <string name="title_model_selection">AvaCall: Roboter wählen</string>
+        <string name="title_edit_controls">AvaCall: Steuerung bearbeiten</string>
+        <string name="title_test_robot">AvaCall: Steuerung testen</string>
+        <string name="title_video_connection">AvaCall: Videoanruf starten</string>
+
+        <!--   TAGs     -->
+        <string name="fragment_tag_hosted">HOSTEDFRAGMENT</string>
+
+        <!--  Connection      -->
+        <string name="connecting_title">Verbindung wird hergestellt</string>
+        <string name="bluetooth_connection_check_device">Gerättyp wird geprüft</string>
+        <string name="connection_lost">Verbindung wurde getrennt</string>
+
+        <!-- Bluetooth -->
+        <string name="text_connected_bluetooth_devices">Zuletzt verbundene Geräte:</string>
+        <string name="text_roboter_shown_question">Der Roboter wird noch nicht in der Liste angezeigt?</string>
+        <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>
+        <string name="placeholder">Nothing to see here</string>
+        <string name="no_bluetooth_device">Kein Gerät verbunden. Mit Roboter koppeln!</string>
+
+        <string name="connecting_bluetooth_wait">Bitte warten...</string>
+        <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
+        <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
+        <string name="bluetooth_connection_wrong_device">Das verbundene Gerät entspricht nicht den Anforderungen.</string>
+
+
+        <!-- Test Robot -->
+        <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>
+        <string name="button_robot_control_good">Ja</string>
+        <string name="button_robot_control_bad">Nein</string>
+        <string name="button_fire">Feuer</string>
+
+
+        <!-- Model Selection -->
+        <string name="model_picture">Picture of the currently selected model</string>
+        <string name="use_model">Roboter verwenden</string>
+        <string name="edit_model">Steuerung des Roboters bearbeiten</string>
+        <string name="no_model_selected">Kein Modell gewählt</string>
+        <string name="different_model">Anderes Modell</string>
+        <string name="name">Name</string>
+
+        <!-- Edit Model -->
+        <string name="edit_controls_motor_alert">Es können maximal 4 Motoren belegt werden.</string>
+
+        <!-- Video Connection -->
+        <string name="url_settings">URL-Einstellungen</string>
+        <string name="invite_partner">Partner einladen</string>
+        <string name="access_videocall">Zum Videocall</string>
+        <string name="test_controls">Steuerung testen</string>
+        <string name="room_link">Jitsi Room Link</string>
+        <string name="toast_link_copied">Link kopiert</string>
+        <string name="meeting_id">Kennnummer:</string>
+
+        <string name="title_web_url">URL zur Webanwendung</string>
+        <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>
+        <string name="title_port_url">Port für Verbindung zum Server</string>
+
+        <!-- URLS -->
+        <string name="host_url">avatar.mintclub.org</string>
+        <string name="jitsi_url">meet.jit.si</string>
+        <string name="host_port">22222</string>
+
 
 </resources>

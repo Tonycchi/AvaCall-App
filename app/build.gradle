@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.example.rcvc"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
 
@@ -35,6 +35,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation project(path: ':customNumberPicker')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -42,4 +43,15 @@ dependencies {
     implementation 'io.github.controlwear:virtualjoystick:1.10.1'
     implementation "org.java-websocket:Java-WebSocket:1.5.1"
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
+    //for the database
+    def room_version = "2.3.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    //RxJava3 support for Room
+    implementation "androidx.room:room-rxjava3:$room_version"
+    //Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:$room_version"
+
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
 }

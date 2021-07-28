@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/model_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
+        android:contentDescription="@string/model_picture"
+        app:layout_constraintBottom_toTopOf="@+id/model_description_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/model_picker"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/big_element_height"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintBottom_toTopOf="@+id/button_edit_model"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/button_use_model"
+        style="@style/button_neutral"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_horizontal_small"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:text="@string/use_model"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_edit_model"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/model_picker"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <android.widget.Button
+        android:id="@+id/button_edit_model"
+        style="@style/button_neutral"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_vertical_small"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        android:text="@string/edit_model"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_use_model" />
+
+    <TextView
+        android:id="@+id/model_description_text"
+        style="@style/text_standard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:text="@string/no_model_selected"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/model_picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
