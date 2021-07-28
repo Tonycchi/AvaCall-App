@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.LocalDatabase;
+import com.example.data.URLSettings;
 import com.example.data.RobotModel;
 import com.example.data.URLSettings;
 import com.example.model.connection.BluetoothModel;
@@ -17,6 +18,8 @@ import com.example.model.connection.RobotConnectionModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 import com.example.model.robot.ev3.EV3;
+
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +42,6 @@ public class MainModel {
     private LocalDatabase localDatabase;
 
     public MainModel(@NonNull Application application) {
-        /*localDatabase = Room.databaseBuilder(application, LocalDatabase.class, "local_database")
-                .allowMainThreadQueries()
-                .addCallback(new RoomDatabase.Callback() {
-                    @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
-
-                    }
-                })
-                .build();
-
-         */
-
         localDatabase = LocalDatabase.getInstance(application);
 
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
@@ -112,14 +102,14 @@ public class MainModel {
         videoConnectionModel.setReceiveCommands();
     }
 
-    public RobotModel getRobotModel(int modelPosition) {
-        return modelSelectionModel.getRobotModel(modelPositionToId[modelPosition]);
+    public RobotModel getRobotModel(int id) {
+        return modelSelectionModel.getRobotModel(id);
     }
 
-    public void modelSelected(int modelPosition) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
+    public void modelSelected(int id) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
+        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
         //TODO: create robot
-        modelSelectionModel.setSelectedModelPosition(modelPosition);
-        controller = robot.getController(modelPositionToId[modelPosition], robotConnectionModel.getService());
+        controller = robot.getController(id, robotConnectionModel.getService());
     }
 
     public void sendControlInputs(int... input) {
