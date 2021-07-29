@@ -45,7 +45,7 @@ public class EV3 implements Robot {
         }
         if (specs.length() > 0) {
             specs = specs.substring(0, specs.length() - 1);
-            db.insertAll(new RobotModel(id, name, type, specs));
+            db.insertAll(new RobotModel(id, name, type, specs, null));
         }
     }
 

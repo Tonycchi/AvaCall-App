@@ -19,11 +19,15 @@ public class RobotModel {
     @ColumnInfo(name = "specs")
     public String specs; //the specs of the robot, translated to a string
 
-    public RobotModel(int id, String name, String type, String specs) {
+    @ColumnInfo(name = "description")
+    public String description; //the description of the robot, can be null. If null, in ui specs are shown
+
+    public RobotModel(int id, String name, String type, String specs,  String description) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.specs = specs;
+        this.description = description;
     }
 
 }
