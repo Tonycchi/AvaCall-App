@@ -188,19 +188,18 @@ public class EV3ControlAdapter extends ControlAdapter {
 
             t = elementValues.get(pos).get(2);
             if (t != null) {
+                radioRight.clearCheck();
                 ((RadioButton) (radioRight.getChildAt(t))).setChecked(true);
             } else {
-                for (int i = 0; i < 4; i++) {
-                    ((RadioButton) (radioRight.getChildAt(i))).setChecked(false);
-                }
+                radioRight.clearCheck();
             }
 
             t = elementValues.get(pos).get(3);
             if (t != null) {
+                radioLeft.clearCheck();
                 ((RadioButton) (radioLeft.getChildAt(t))).setChecked(true);
             } else {
-                for (int i = 0; i < 4; i++)
-                    ((RadioButton) (radioLeft.getChildAt(i))).setChecked(false);
+                radioLeft.clearCheck();
             }
         }
     }
@@ -234,10 +233,10 @@ public class EV3ControlAdapter extends ControlAdapter {
 
             t = elementValues.get(pos).get(2);
             if (t != null) {
+                radio.clearCheck();
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
             } else {
-                for (int i = 0; i < 4; i++)
-                    ((RadioButton) (radio.getChildAt(i))).setChecked(false);
+                radio.clearCheck();
             }
         }
     }
@@ -289,10 +288,10 @@ public class EV3ControlAdapter extends ControlAdapter {
 
             t = elementValues.get(pos).get(2);
             if (t != null) {
+                radio.clearCheck();
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
             } else {
-                for (int i = 0; i < 4; i++)
-                    ((RadioButton) (radio.getChildAt(i))).setChecked(false);
+                radio.clearCheck();
             }
 
             t = elementValues.get(pos).get(3);
@@ -322,10 +321,8 @@ public class EV3ControlAdapter extends ControlAdapter {
                     s.replace(0, s.length(), Integer.toString(value));
                 }
                 setElementValue(pos, index, value);
-                Log.d(TAG, "textWatcher >0: " + fieldsFilled);
             } else {
                 removeElementValue(pos, index);
-                Log.d(TAG, "textWatcher 0: " + fieldsFilled);
             }
         }
 
@@ -349,15 +346,17 @@ public class EV3ControlAdapter extends ControlAdapter {
 
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
-            Integer checkedIndex = null;
-            for (int i = 0; i < 4; i++) {
-                if (group.findViewById(checkedId) == group.getChildAt(i))
-                    checkedIndex = i;
-            }
-            if (checkedIndex != null)
-                setElementValue(pos, index, checkedIndex);
-            else
+            Log.d(TAG, checkedId + " checked");
+            if (checkedId == -1) {
                 removeElementValue(pos, index);
+            } else {
+                Integer checkedIndex = null;
+                for (int i = 0; i < 4; i++) {
+                    if (group.findViewById(checkedId).equals(group.getChildAt(i)))
+                        checkedIndex = i;
+                }
+                setElementValue(pos, index, checkedIndex);
+            }
         }
     }
 }

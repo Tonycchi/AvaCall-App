@@ -59,7 +59,11 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             fieldsFilled = 0;
     }
     void setElementValue(int position, int index, int value) {
-        if (elementValues.get(position).get(index) == null) fieldsFilled++;
+        Log.d(TAG, "addElVal " + value);
+        if (elementValues.get(position).get(index) == null) {
+            Log.d(TAG, "what");
+            fieldsFilled++;
+        }
         elementValues.get(position).set(index, value);
     }
     void removeElementValue(int position, int index) {
@@ -156,7 +160,9 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
      */
     public void removeElement(int position) {
         if (position < elementValues.size()) {
-            int element = elementValues.remove(position).get(0);
+            int element = elementValues.get(position).get(0);
+            elementValues.get(position).clear();
+            elementValues.remove(position);
             itemCount--;
             motorCount -= (element == JOYSTICK) ? 2 : 1;
             numberOfFields -= (element == SLIDER) ? 2 : 3;
