@@ -154,8 +154,8 @@ public class MainModel {
     }
 
 
-    public void saveModel(int id, String name, String type, List<Integer[]> values) {
-        robot.saveModel(id, name, type, values);
+    public void saveModel(int id, String name, String description, String type, List<Integer[]> values) {
+        robot.saveModel(id, name, description, type, values);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
     }

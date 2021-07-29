@@ -92,7 +92,7 @@ public class EditControlsFragment extends HostedFragment {
 
         if (robotModel != null && controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
             controlAdapter.resetFilled();
-            viewModel.saveModel(robotModel.id, editName.getText().toString(), robotModel.type, controlAdapter.getValues());
+            viewModel.saveModel(robotModel.id, editName.getText().toString(), editDescription.getText().toString(), robotModel.type, controlAdapter.getValues());
 
             FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.beginTransaction()

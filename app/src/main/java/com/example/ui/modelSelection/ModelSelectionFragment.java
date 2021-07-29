@@ -93,7 +93,7 @@ public class ModelSelectionFragment extends HostedFragment {
     private void setModelDescription(){
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
         String descriptionText = robotModel.description;
-        if(descriptionText==null || descriptionText=="" || descriptionText.isEmpty())
+        if(descriptionText==null || descriptionText.isEmpty())
             descriptionText = robotModel.specs;
         modelDescription.setText(robotModel.name+"("+robotModel.type+"): "+descriptionText);
 
