@@ -28,7 +28,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             BUTTON = 3;
     private static final String TAG = "ControlAdapter";
     protected final HostActivity hostActivity;
-    protected final ArrayList<Integer[]> elementValues;
+    protected final List<List<Integer>> elementValues;
     protected int itemCount = 1;
     protected int motorCount = 0;
     protected int maxNumberOfMotors = 100;
@@ -45,7 +45,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     abstract boolean isReadyToSave();
-    abstract List<Integer[]> getValues();
+    abstract List<List<Integer>> getValues();
 
     public int getId() {
         return id;
@@ -59,12 +59,12 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             fieldsFilled = 0;
     }
     void setElementValue(int position, int index, int value) {
-        if (elementValues.get(position)[index] == null) fieldsFilled++;
-        elementValues.get(position)[index] = value;
+        if (elementValues.get(position).get(index) == null) fieldsFilled++;
+        elementValues.get(position).set(index, value);
     }
     void removeElementValue(int position, int index) {
-        if (elementValues.get(position)[index] != null) fieldsFilled--;
-        elementValues.get(position)[index] = null;
+        if (elementValues.get(position).get(index) != null) fieldsFilled--;
+        elementValues.get(position).set(index, null);
     }
 
     @NonNull
@@ -135,15 +135,11 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             // slider:   [this.SLIDER, max power, port] -> length 2+1
             // button:   [this.BUTTON, power, port, duration] -> length 3+1
 
-            Integer[] e;
-            if (elementType == SLIDER) e = new Integer[2 + 1];
-            else e = new Integer[3 + 1];
-            e[0] = elementType;
-            for (int i = 1; i < e.length; i++) {
-                e[i] = null;
-            }
+            if (elementType == SLIDER)
+                elementValues.add(newList(elementType, null, null));
+            else
+                elementValues.add(newList(elementType, null, null, null));
 
-            elementValues.add(e);
             itemCount++;
             motorCount += newMotors;
             notifyItemInserted(elementValues.size() - 1);
@@ -160,7 +156,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
      */
     public void removeElement(int position) {
         if (position < elementValues.size()) {
-            int element = elementValues.remove(position)[0];
+            int element = elementValues.remove(position).get(0);
             itemCount--;
             motorCount -= (element == JOYSTICK) ? 2 : 1;
             numberOfFields -= (element == SLIDER) ? 2 : 3;
@@ -175,7 +171,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             return ADD;
         else if (position >= elementValues.size())
             return EMPTY;
-        return elementValues.get(position)[0] + (position << 16);
+        return elementValues.get(position).get(0) + (position << 16);
     }
 
     @Override
@@ -252,5 +248,13 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         public EmptyHolder(@NonNull View itemView) {
             super(itemView);
         }
+    }
+
+    protected List<Integer> newList(Integer... values) {
+        ArrayList<Integer> r = new ArrayList<>(values.length);
+        for (Integer v : values) {
+            r.add(v);
+        }
+        return r;
     }
 }

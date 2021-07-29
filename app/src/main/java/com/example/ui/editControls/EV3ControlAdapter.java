@@ -45,7 +45,7 @@ public class EV3ControlAdapter extends ControlAdapter {
     }
 
     @Override
-    List<Integer[]> getValues() {
+    List<List<Integer>> getValues() {
         return elementValues;
     }
 
@@ -75,7 +75,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports[0] = portToIndex(Integer.parseInt(portsString[0]));
                     ports[1] = portToIndex(Integer.parseInt(portsString[1]));
                     // and put into list:
-                    elementValues.add(new Integer[]{JOYSTICK, maxPower, ports[0], ports[1]});
+                    elementValues.add(newList(JOYSTICK, maxPower, ports[0], ports[1]));
                     motors += 2; // joystick uses 2 motors
                     fields += 3;
                     break;
@@ -85,7 +85,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports = new int[1];
                     ports[0] = portToIndex(Integer.parseInt(attrs[1]));
                     // and put into list:
-                    elementValues.add(new Integer[]{SLIDER, maxPower, ports[0]});
+                    elementValues.add(newList(SLIDER, maxPower, ports[0]));
                     motors++;
                     fields += 2;
                     break;
@@ -96,7 +96,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports[0] = portToIndex(Integer.parseInt(attrs[1]));
                     int dur = Integer.parseInt(attrs[2]);
                     // and put into list:
-                    elementValues.add(new Integer[]{BUTTON, maxPower, ports[0], dur});
+                    elementValues.add(newList(BUTTON, maxPower, ports[0], dur));
                     motors++;
                     fields += 3;
                     break;
@@ -179,14 +179,14 @@ public class EV3ControlAdapter extends ControlAdapter {
             RadioGroup radioLeft = itemView.findViewById(R.id.radio_port_left);
 
             Integer t;
-            t = elementValues.get(pos)[1];
+            t = elementValues.get(pos).get(1);
             if (t != null) {
                 edit.setText(t.toString());
             } else {
                 edit.setText("");
             }
 
-            t = elementValues.get(pos)[2];
+            t = elementValues.get(pos).get(2);
             if (t != null) {
                 ((RadioButton) (radioRight.getChildAt(t))).setChecked(true);
             } else {
@@ -195,7 +195,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                 }
             }
 
-            t = elementValues.get(pos)[3];
+            t = elementValues.get(pos).get(3);
             if (t != null) {
                 ((RadioButton) (radioLeft.getChildAt(t))).setChecked(true);
             } else {
@@ -225,14 +225,14 @@ public class EV3ControlAdapter extends ControlAdapter {
             RadioGroup radio = itemView.findViewById(R.id.radio_port);
 
             Integer t;
-            t = elementValues.get(pos)[1];
+            t = elementValues.get(pos).get(1);
             if (t != null) {
                 edit.setText(t.toString());
             } else {
                 edit.setText("");
             }
 
-            t = elementValues.get(pos)[2];
+            t = elementValues.get(pos).get(2);
             if (t != null) {
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
             } else {
@@ -280,14 +280,14 @@ public class EV3ControlAdapter extends ControlAdapter {
             EditText editDur = itemView.findViewById(R.id.edit_duration);
 
             Integer t;
-            t = elementValues.get(pos)[1];
+            t = elementValues.get(pos).get(1);
             if (t != null) {
                 edit.setText(t.toString());
             } else {
                 edit.setText("");
             }
 
-            t = elementValues.get(pos)[2];
+            t = elementValues.get(pos).get(2);
             if (t != null) {
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
             } else {
@@ -295,7 +295,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ((RadioButton) (radio.getChildAt(i))).setChecked(false);
             }
 
-            t = elementValues.get(pos)[3];
+            t = elementValues.get(pos).get(3);
             if (t != null) {
                 editDur.setText(t.toString());
             } else {

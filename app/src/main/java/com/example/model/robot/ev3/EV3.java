@@ -22,23 +22,23 @@ public class EV3 implements Robot {
     }
 
     @Override
-    public void saveModel(int id, String name, String type, List<Integer[]> values) {
+    public void saveModel(int id, String name, String type, List<List<Integer>> values) {
         String specs = "";
-        for (Integer[] element : values) {
-            switch (element[0]) { // TODO define numbers centrally, maybe in Constants.java alongside robot type strings
+        for (List<Integer> element : values) {
+            switch (element.get(0)) { // TODO define numbers centrally, maybe in Constants.java alongside robot type strings
                 case 1: //Joystick
-                    specs += "joystick:" + element[1]
-                            + ";" + indexToPort(element[2])
-                            + "," + indexToPort(element[3]) + "|";
+                    specs += "joystick:" + element.get(1)
+                            + ";" + indexToPort(element.get(2))
+                            + "," + indexToPort(element.get(3)) + "|";
                     break;
                 case 2: //Slider
-                    specs += "slider:" + element[1]
-                            + ";" + indexToPort(element[2]) + "|";
+                    specs += "slider:" + element.get(1)
+                            + ";" + indexToPort(element.get(2)) + "|";
                     break;
                 case 3: //Button
-                    specs += "button:" + element[1]
-                            + ";" + indexToPort(element[2])
-                            + ";" + element[3] + "|";
+                    specs += "button:" + element.get(1)
+                            + ";" + indexToPort(element.get(2))
+                            + ";" + element.get(3) + "|";
                     break;
                 default:
             }
