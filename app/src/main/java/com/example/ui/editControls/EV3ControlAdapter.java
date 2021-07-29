@@ -40,6 +40,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     @Override
     boolean isReadyToSave() {
+        Log.d(TAG, fieldsFilled + " " + numberOfFields);
         return fieldsFilled == numberOfFields && numberOfFields > 0;
     }
 
@@ -107,7 +108,7 @@ public class EV3ControlAdapter extends ControlAdapter {
         motorCount = motors;
         // add button isn't shown when all motors set:
         itemCount = (motorCount == 4) ? list.size() : list.size() + 1;
-        //fieldsFilled = fields;
+        fieldsFilled = fields;
         numberOfFields = fields;
     }
 
@@ -168,20 +169,38 @@ public class EV3ControlAdapter extends ControlAdapter {
             radioRight.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
             radioLeft.setOnCheckedChangeListener(new PortChangedListener(pos, 3));
 
+            update(pos);
+        }
+
+        @Override
+        public void update(int pos) {
+            EditText edit = itemView.findViewById(R.id.edit_max_power);
+            RadioGroup radioRight = itemView.findViewById(R.id.radio_port_right);
+            RadioGroup radioLeft = itemView.findViewById(R.id.radio_port_left);
+
             Integer t;
             t = elementValues.get(pos)[1];
             if (t != null) {
                 edit.setText(t.toString());
+            } else {
+                edit.setText("");
             }
 
             t = elementValues.get(pos)[2];
             if (t != null) {
                 ((RadioButton) (radioRight.getChildAt(t))).setChecked(true);
+            } else {
+                for (int i = 0; i < 4; i++) {
+                    ((RadioButton) (radioRight.getChildAt(i))).setChecked(false);
+                }
             }
 
             t = elementValues.get(pos)[3];
             if (t != null) {
                 ((RadioButton) (radioLeft.getChildAt(t))).setChecked(true);
+            } else {
+                for (int i = 0; i < 4; i++)
+                    ((RadioButton) (radioLeft.getChildAt(i))).setChecked(false);
             }
         }
     }
@@ -197,15 +216,28 @@ public class EV3ControlAdapter extends ControlAdapter {
             edit.addTextChangedListener(new MotorPowerWatcher(pos));
             radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
 
+            update(pos);
+        }
+
+        @Override
+        public void update(int pos) {
+            EditText edit = itemView.findViewById(R.id.edit_max_power);
+            RadioGroup radio = itemView.findViewById(R.id.radio_port);
+
             Integer t;
             t = elementValues.get(pos)[1];
             if (t != null) {
                 edit.setText(t.toString());
+            } else {
+                edit.setText("");
             }
 
             t = elementValues.get(pos)[2];
             if (t != null) {
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
+            } else {
+                for (int i = 0; i < 4; i++)
+                    ((RadioButton) (radio.getChildAt(i))).setChecked(false);
             }
         }
     }
@@ -222,7 +254,6 @@ public class EV3ControlAdapter extends ControlAdapter {
             edit.addTextChangedListener(new MotorPowerWatcher(pos));
             radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
             editDur.addTextChangedListener(new TextWatcher() {
-                private int prevLength = 0;
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -234,32 +265,41 @@ public class EV3ControlAdapter extends ControlAdapter {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
-                        elementValues.get(pos)[3] = Integer.parseInt(s.toString());
-                        if (prevLength == 0)
-                            fieldsFilled++;
+                        setElementValue(pos, 3, Integer.parseInt(s.toString()));
                     } else {
-                        elementValues.get(pos)[3] = null;
-                        if (prevLength != 0)
-                            fieldsFilled--;
+                        removeElementValue(pos, 3);
                     }
-                    prevLength = s.length();
                 }
             });
+        }
+
+        @Override
+        public void update(int pos) {
+            EditText edit = itemView.findViewById(R.id.edit_max_power);
+            RadioGroup radio = itemView.findViewById(R.id.radio_port);
+            EditText editDur = itemView.findViewById(R.id.edit_duration);
 
             Integer t;
             t = elementValues.get(pos)[1];
             if (t != null) {
                 edit.setText(t.toString());
+            } else {
+                edit.setText("");
             }
 
             t = elementValues.get(pos)[2];
             if (t != null) {
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
+            } else {
+                for (int i = 0; i < 4; i++)
+                    ((RadioButton) (radio.getChildAt(i))).setChecked(false);
             }
 
             t = elementValues.get(pos)[3];
             if (t != null) {
                 editDur.setText(t.toString());
+            } else {
+                editDur.setText("");
             }
         }
     }
@@ -267,7 +307,6 @@ public class EV3ControlAdapter extends ControlAdapter {
     // caps power to <=100 and saves it in elements
     private class MotorPowerWatcher implements TextWatcher {
         private final int pos, index;
-        private int prevLength = 0;
 
         public MotorPowerWatcher(int pos) {
             this.pos = pos;
@@ -282,17 +321,11 @@ public class EV3ControlAdapter extends ControlAdapter {
                     value = 100;
                     s.replace(0, s.length(), Integer.toString(value));
                 }
-                elementValues.get(pos)[index] = value;
-                if (prevLength == 0)
-                    fieldsFilled++;
+                setElementValue(pos, index, value);
                 Log.d(TAG, "textWatcher >0: " + fieldsFilled);
-                prevLength = s.length();
             } else {
-                elementValues.get(pos)[index] = null;
-                if (prevLength != 0)
-                    fieldsFilled--;
+                removeElementValue(pos, index);
                 Log.d(TAG, "textWatcher 0: " + fieldsFilled);
-                prevLength = 0;
             }
         }
 
@@ -308,7 +341,6 @@ public class EV3ControlAdapter extends ControlAdapter {
     // saves index of selected port to elements
     private class PortChangedListener implements RadioGroup.OnCheckedChangeListener {
         private final int pos, index;
-        private boolean prevState = false;
 
         public PortChangedListener(int pos, int index) {
             this.pos = pos;
@@ -322,14 +354,10 @@ public class EV3ControlAdapter extends ControlAdapter {
                 if (group.findViewById(checkedId) == group.getChildAt(i))
                     checkedIndex = i;
             }
-            elementValues.get(pos)[index] = checkedIndex;
-            if (checkedIndex == null && prevState){
-                fieldsFilled--;
-            }
-            else if (!prevState) {
-                fieldsFilled++;
-            }
-            prevState = checkedIndex != null;
+            if (checkedIndex != null)
+                setElementValue(pos, index, checkedIndex);
+            else
+                removeElementValue(pos, index);
         }
     }
 }

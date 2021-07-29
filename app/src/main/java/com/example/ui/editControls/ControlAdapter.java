@@ -53,6 +53,19 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void resetFilled() {
         fieldsFilled = 0;
     }
+    void removeFilledFields(int count) {
+        fieldsFilled -= count;
+        if (fieldsFilled < 0)
+            fieldsFilled = 0;
+    }
+    void setElementValue(int position, int index, int value) {
+        if (elementValues.get(position)[index] == null) fieldsFilled++;
+        elementValues.get(position)[index] = value;
+    }
+    void removeElementValue(int position, int index) {
+        if (elementValues.get(position)[index] != null) fieldsFilled--;
+        elementValues.get(position)[index] = null;
+    }
 
     @NonNull
     @Override
@@ -103,11 +116,13 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
                 newMotors = 2;
                 newFields = 3;
                 break;
-            case SLIDER:
-                newFields = 2;
             case BUTTON:
                 newMotors = 1;
                 newFields = 3;
+                break;
+            case SLIDER:
+                newMotors = 1;
+                newFields = 2;
                 break;
             default:
                 newMotors = 0;
@@ -124,6 +139,9 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (elementType == SLIDER) e = new Integer[2 + 1];
             else e = new Integer[3 + 1];
             e[0] = elementType;
+            for (int i = 1; i < e.length; i++) {
+                e[i] = null;
+            }
 
             elementValues.add(e);
             itemCount++;
@@ -145,7 +163,8 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             int element = elementValues.remove(position)[0];
             itemCount--;
             motorCount -= (element == JOYSTICK) ? 2 : 1;
-            fieldsFilled = numberOfFields -= (element == SLIDER) ? 2 : 3;
+            numberOfFields -= (element == SLIDER) ? 2 : 3;
+            removeFilledFields((element == SLIDER) ? 2 : 3);
             notifyItemRemoved(position);
         }
     }
@@ -161,6 +180,10 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof DeletableHolder) {
+            DeletableHolder d = (DeletableHolder) holder;
+            d.update(position);
+        }
     }
 
     @Override
@@ -198,6 +221,8 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             ImageButton delete = itemView.findViewById(R.id.delete);
             delete.setOnClickListener((v -> removeElement(getAdapterPosition())));
         }
+
+        public abstract void update(int pos);
     }
 
     // base classes for any type of robot

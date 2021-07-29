@@ -19,6 +19,13 @@ public class RobotModel {
     @ColumnInfo(name = "specs")
     public String specs; //the specs of the robot, translated to a string
 
+    /**
+     *
+     * @param id 0 for new model, >0 to overwrite an existing model
+     * @param name will be displayed in model selection
+     * @param type type of robot
+     * @param specs specifies which control elements map to which motors
+     */
     public RobotModel(int id, String name, String type, String specs) {
         this.id = id;
         this.name = name;
