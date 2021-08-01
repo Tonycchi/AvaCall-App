@@ -132,7 +132,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     @Override
     protected int getJoystickHolderLayout() {
-        return R.layout.ev3_joystick;
+        return R.layout.ev3_edit_joystick;
     }
 
     @Override
@@ -142,7 +142,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     @Override
     protected int getSliderHolderLayout() {
-        return R.layout.ev3_slider;
+        return R.layout.ev3_edit_slider;
     }
 
     @Override
@@ -152,7 +152,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     @Override
     protected int getButtonHolderLayout() {
-        return R.layout.ev3_button;
+        return R.layout.ev3_edit_button;
     }
 
     // controlElements

@@ -30,6 +30,7 @@ public class EditControlsFragment extends HostedFragment {
     private MainViewModel viewModel;
     private RobotModel robotModel;
     private EditText editName;
+    private EditText editDescription;
 
     public EditControlsFragment() {
         super(R.layout.edit_controls);
@@ -66,6 +67,8 @@ public class EditControlsFragment extends HostedFragment {
         if (robotModel != null) {
             editName = view.findViewById(R.id.edit_model_name);
             editName.setText(robotModel.name);
+            editDescription = view.findViewById(R.id.edit_model_description);
+            editDescription.setText(robotModel.description);
         } else {
             Log.e(TAG, "robotModel == null");
         }
@@ -89,7 +92,7 @@ public class EditControlsFragment extends HostedFragment {
 
         if (robotModel != null && controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
             controlAdapter.resetFilled();
-            viewModel.saveModel(robotModel.id, editName.getText().toString(), robotModel.type, controlAdapter.getValues());
+            viewModel.saveModel(robotModel.id, editName.getText().toString(), editDescription.getText().toString(), robotModel.type, controlAdapter.getValues());
 
             FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.beginTransaction()

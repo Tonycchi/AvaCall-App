@@ -38,14 +38,14 @@ public abstract class LocalDatabase extends RoomDatabase {
                             );
                             //TODO remove for final version:
                             tmp.robotModelDAO().insertAll(
-                                    new RobotModel(0, "Kettenroboter", "EV3", "joystick:50;1,8"),
-                                    new RobotModel(0, "Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4"),
-                                    new RobotModel(0, "Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000"),
-                                    new RobotModel(0, "Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000|slider:30;4|button:20;4;5000"),
-                                    new RobotModel(0, "Gensearsch", "EV3", "button:20;1;5000|button:20;2;5000|button:20;4;5000|button:20;8;5000"),
-                                    new RobotModel(0, "NUR GREIFARM", "EV3", "slider:30;4"),
-                                    new RobotModel(0, "Painter", "EV3", "slider:30;4|slider:50;1"),
-                                    new RobotModel(0, "Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2;5000")
+                                    new RobotModel(0, "Kettenroboter", "EV3", "joystick:50;1,8", "Linker Kettenmotor: Port A und Rechter Kettenmotor: Port D"),
+                                    new RobotModel(0, "Kettenroboter mit Greifarm", "EV3", "joystick:50;1,8|slider:30;4", "Linker Kettenmotor: Port A, Rechter Kettenmotor: Port D und Motor des Greifarms: Port B"),
+                                    new RobotModel(0, "Michael Gösele", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000", null),
+                                    new RobotModel(0, "Was geht", "EV3", "joystick:50;1,8|slider:30;4|button:20;2;5000|slider:30;4|button:20;4;5000", ""),
+                                    new RobotModel(0, "Gensearsch", "EV3", "button:20;1;5000|button:20;2;5000|button:20;4;5000|button:20;8;5000", " "),
+                                    new RobotModel(0, "Greifarm", "EV3", "slider:30;4", "Motor des Greifarms: Port B"),
+                                    new RobotModel(0, "Painter", "EV3", "slider:30;4|slider:50;1", "Mal schauen"),
+                                    new RobotModel(0, "Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2;5000", null)
                             );
                         });
                     }

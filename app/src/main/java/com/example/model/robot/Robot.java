@@ -13,5 +13,5 @@ public interface Robot {
      */
     Controller getController(RobotModel robotModel, ConnectionService service);
 
-    void saveModel(int id, String name, String type, List<List<Integer>> values);
+    void saveModel(int id, String name, String description, String type, List<List<Integer>> values);
 }

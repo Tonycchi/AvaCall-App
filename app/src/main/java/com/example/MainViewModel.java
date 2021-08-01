@@ -99,8 +99,8 @@ public class MainViewModel extends AndroidViewModel {
         return model.getSelectedModelPosition();
     }
 
-    public void saveModel(int id, String name, String type, List<List<Integer>> values) {
-        model.saveModel(id, name, type, values);
+    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
+        model.saveModel(id, name, description, type, values);
     }
 
     public void setSelectedModelPosition(int position) {

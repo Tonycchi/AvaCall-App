@@ -19,6 +19,9 @@ public class RobotModel {
     @ColumnInfo(name = "specs")
     public String specs; //the specs of the robot, translated to a string
 
+    @ColumnInfo(name = "description")
+    public String description; //the description of the robot, can be null. If null, in ui specs are shown
+
     /**
      *
      * @param id 0 for new model, >0 to overwrite an existing model
@@ -26,11 +29,12 @@ public class RobotModel {
      * @param type type of robot
      * @param specs specifies which control elements map to which motors
      */
-    public RobotModel(int id, String name, String type, String specs) {
+    public RobotModel(int id, String name, String type, String specs,  String description) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.specs = specs;
+        this.description = description;
     }
 
 }

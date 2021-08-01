@@ -65,6 +65,7 @@
         android:id="@+id/model_description_text"
         style="@style/text_standard"
         android:layout_width="0dp"
+        android:textStyle="normal"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_side_land"
         android:layout_marginTop="@dimen/margin_top_land"

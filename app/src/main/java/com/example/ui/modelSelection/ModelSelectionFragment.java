@@ -72,12 +72,8 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicker.setOnValueChangedListener(this::onSelectedModelChanged);
 
         modelDescription = view.findViewById(R.id.model_description_text);
-        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
-        modelDescription.setText(robotModel.name+"("+robotModel.type+"): "+robotModel.specs);
-
-        //TODO: other picture
         modelPicture = view.findViewById(R.id.model_picture);
-        modelPicture.setImageResource(R.drawable.no_image_available);
+        setModelDescription();
 
         getActivity().setTitle(R.string.title_model_selection);
     }
@@ -91,8 +87,16 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
         viewModel.setSelectedModelPosition(modelPicker.getValue());
+        setModelDescription();
+    }
+
+    private void setModelDescription(){
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
-        modelDescription.setText(robotModel.name+"("+robotModel.type+"): "+robotModel.specs);
+        String descriptionText = robotModel.description;
+        if(descriptionText==null || descriptionText.isEmpty())
+            descriptionText = robotModel.specs;
+        modelDescription.setText(robotModel.name+"("+robotModel.type+"): "+descriptionText);
+
         //TODO: other picture
         modelPicture.setImageResource(R.drawable.no_image_available);
         Log.d(TAG, "Model at Position "+modelPicker.getValue()+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
