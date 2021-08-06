@@ -60,7 +60,7 @@ public class TestRobotFragment extends HostedFragment {
         ConstraintLayout constraintLayout = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 ? view.findViewById(R.id.test_robot_fragment)
                 : view.findViewById(R.id.test_robot_fragment_landscape);
-        
+
         String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
         String[] order = rankOrder(t);
         createControlElements(order, constraintLayout);
@@ -104,7 +104,7 @@ public class TestRobotFragment extends HostedFragment {
 
     /**
      * Puts the control elements we have to create in a certain order 1.joystick 2.slider 3.button
-     * @param input string of control elements we need for the selected model
+     * @param input string of control elements we need for the selected model f.e. joystick|button|slider|button
      * @return String Array with the order we defined above
      */
     public String[] rankOrder(String input) {
@@ -129,7 +129,7 @@ public class TestRobotFragment extends HostedFragment {
 
     /**
      * All control elements are created in this method
-     * @param order the order in which we create the control elements
+     * @param order the order in which we want to create the control elements
      * @param constraintLayout the current constraintLayout we are using
      */
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {

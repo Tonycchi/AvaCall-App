@@ -128,7 +128,7 @@ public class EV3Controller implements Controller {
         //byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
         byte[] output = e.getCommand(Arrays.copyOfRange(input, 1, input.length));
 
-        int length = 10 + output.length;            // e.g. joystick may return two values
+        int length = 10 + output.length + 8;            // e.g. joystick may return two values
         int lastCommand = 7 + output.length;
         byte[] directCommand = new byte[length];        // this will be the command
 
@@ -174,6 +174,16 @@ public class EV3Controller implements Controller {
         directCommand[14] = PORT_LEFT;   // PORT left motor
         directCommand[16] = leftPower;   // POWER left motor
          */
+        byte[] changeMode = new byte[8];
+        changeMode[0] = (byte) 0x99;             //opcode
+        changeMode[1] = (byte) 0x1C;
+        changeMode[2] = (byte) 0x00;
+        changeMode[3] = (byte) 0x10;
+        changeMode[4] = (byte) 0x08;
+        changeMode[5] = (byte) 0x02;           //typemode
+        changeMode[6] = (byte) 0x01;
+        changeMode[7] = (byte) 0x60;
+        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 8);
         return directCommand;
     }
 
