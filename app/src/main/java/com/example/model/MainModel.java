@@ -159,7 +159,7 @@ public class MainModel {
     }
 
 
-    public void reveivedMessageFromRobot(String message){
+    public void reveivedMessageFromRobot(byte[] message){
         testRobotModel.reveivedMessage(message);
     }
 

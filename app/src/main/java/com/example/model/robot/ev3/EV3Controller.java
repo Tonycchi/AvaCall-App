@@ -164,7 +164,7 @@ public class EV3Controller implements Controller {
         changeMode[0] = (byte) 0x99;             //opcode
         changeMode[1] = (byte) 0x1C;
         changeMode[2] = (byte) 0x00;
-        changeMode[3] = (byte) 0x10;            //Port
+        changeMode[3] = (byte) 0x10;            //port
         changeMode[4] = (byte) 0x07;
         changeMode[5] = (byte) 0x02;           //typemode
         changeMode[6] = (byte) 0x01;

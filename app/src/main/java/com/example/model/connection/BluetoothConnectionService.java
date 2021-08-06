@@ -329,7 +329,7 @@ public class BluetoothConnectionService implements ConnectionService {
                     Log.d(TAG, "handshake received:" + bytesToHex(buffer, replySize + 2) + " length:" + replySize);
 
                     if (byteArrayHandshake.isAckCorrect(buffer)) {
-                        Log.d(TAG, "handshake not successful");
+                        Log.d(TAG, "handshake successful");
                         connectionStatus.postValue(4);
                         listen();
                     } else {
@@ -364,9 +364,8 @@ public class BluetoothConnectionService implements ConnectionService {
                 try {
                     INPUT_STREAM.read(buffer);
                     int replySize = (buffer[1]*16+buffer[0]);
-                    String message = bytesToHex(buffer, replySize+2);
-                    Log.d(TAG,"received:"+message+" length:"+replySize);
-                    mainModel.reveivedMessageFromRobot(message);
+                    Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
+                    mainModel.reveivedMessageFromRobot(buffer);
                 } catch (IOException e) {
                     // connection got lost, so status gets set to 3
                     connectionStatus.postValue(3);
