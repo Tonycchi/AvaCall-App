@@ -134,7 +134,8 @@ public class EV3Controller implements Controller {
 
         directCommand[0] = (byte) (length - 2);         // pre defined parts of direct command
         directCommand[2] = 0x2a;
-        directCommand[4] = (byte) 0x80;
+        directCommand[4] = (byte) 0x00;
+        directCommand[5] = (byte) 0x04;
 
         int commandPos = 7;                                      // position of first output power command
         byte[] t;
@@ -178,8 +179,8 @@ public class EV3Controller implements Controller {
         changeMode[0] = (byte) 0x99;             //opcode
         changeMode[1] = (byte) 0x1C;
         changeMode[2] = (byte) 0x00;
-        changeMode[3] = (byte) 0x10;
-        changeMode[4] = (byte) 0x08;
+        changeMode[3] = (byte) 0x12;
+        changeMode[4] = (byte) 0x07;
         changeMode[5] = (byte) 0x02;           //typemode
         changeMode[6] = (byte) 0x01;
         changeMode[7] = (byte) 0x60;
