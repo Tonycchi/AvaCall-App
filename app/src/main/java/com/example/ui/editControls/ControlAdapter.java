@@ -32,7 +32,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     protected int itemCount = 1;
     protected int maxNumberElements = 4;
     protected int fieldsFilled = 0, numberOfFields = 0;
-    //TODO toast für fehlende Felder, vielleicht fehlende Felder rot hervorheben
+    //TODO fehlende felder rot hervorheben
     //TODO error: roboter verw -> zurück -> roboter verw funktioniert nicht
     //TODO error: field focussed -> enter -> crash
     //TODO vielleicht ui/model mehr trennen

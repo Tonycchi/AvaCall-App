@@ -30,17 +30,17 @@ public class EV3ControlAdapter extends ControlAdapter {
         if (model != null) {
             initElements(model.specs);
         } else {
-            Log.e(TAG, "model is null");
             numberOfFields = 0;
             fieldsFilled = 0;
         }
-        Log.d(TAG, "constructor: " + fieldsFilled);
         // true if all fields filled out (model != null ==> called by "Modell Bearbeiten")
     }
 
     @Override
     boolean isReadyToSave() {
-        Log.d(TAG, fieldsFilled + " " + numberOfFields);
+        if (!(fieldsFilled == numberOfFields && numberOfFields > 0)) {
+
+        }
         return fieldsFilled == numberOfFields && numberOfFields > 0;
     }
 
@@ -60,7 +60,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             list.add(t.split(":"));
         }
 
-        int motors = 0, fields = 0;
+        int fields = 0;
         // now translate each $attributes$ into corresponding array:
         for (String[] k : list) {
             String[] attrs = k[1].split(";");
@@ -76,7 +76,6 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports[1] = portToIndex(Integer.parseInt(portsString[1]));
                     // and put into list:
                     elementValues.add(newList(JOYSTICK, maxPower, ports[0], ports[1]));
-                    motors += 2; // joystick uses 2 motors
                     fields += 3;
                     break;
                 case "slider":
@@ -86,7 +85,6 @@ public class EV3ControlAdapter extends ControlAdapter {
                     ports[0] = portToIndex(Integer.parseInt(attrs[1]));
                     // and put into list:
                     elementValues.add(newList(SLIDER, maxPower, ports[0]));
-                    motors++;
                     fields += 2;
                     break;
                 case "button":
@@ -97,7 +95,6 @@ public class EV3ControlAdapter extends ControlAdapter {
                     int dur = Integer.parseInt(attrs[2]);
                     // and put into list:
                     elementValues.add(newList(BUTTON, maxPower, ports[0], dur));
-                    motors++;
                     fields += 3;
                     break;
                 default:
@@ -165,7 +162,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             RadioGroup radioRight = itemView.findViewById(R.id.radio_port_right);
             RadioGroup radioLeft = itemView.findViewById(R.id.radio_port_left);
 
-            edit.addTextChangedListener(new MotorPowerWatcher(pos));
+            edit.addTextChangedListener(new MotorPowerWatcher(pos, edit));
             radioRight.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
             radioLeft.setOnCheckedChangeListener(new PortChangedListener(pos, 3));
 
@@ -212,7 +209,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             EditText edit = itemView.findViewById(R.id.edit_max_power);
             RadioGroup radio = itemView.findViewById(R.id.radio_port);
 
-            edit.addTextChangedListener(new MotorPowerWatcher(pos));
+            edit.addTextChangedListener(new MotorPowerWatcher(pos, edit));
             radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
 
             update(pos);
@@ -232,11 +229,9 @@ public class EV3ControlAdapter extends ControlAdapter {
             }
 
             t = elementValues.get(pos).get(2);
+            radio.clearCheck();
             if (t != null) {
-                radio.clearCheck();
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
-            } else {
-                radio.clearCheck();
             }
         }
     }
@@ -250,7 +245,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             RadioGroup radio = itemView.findViewById(R.id.radio_port);
             EditText editDur = itemView.findViewById(R.id.edit_duration);
 
-            edit.addTextChangedListener(new MotorPowerWatcher(pos));
+            edit.addTextChangedListener(new MotorPowerWatcher(pos, edit));
             radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
             editDur.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -265,8 +260,10 @@ public class EV3ControlAdapter extends ControlAdapter {
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 0) {
                         setElementValue(pos, 3, Integer.parseInt(s.toString()));
+                        edit.setError(null);
                     } else {
                         removeElementValue(pos, 3);
+                        edit.setError("Wert fehlt."); //TODO dont hardcode maybe static context????
                     }
                 }
             });
@@ -287,11 +284,9 @@ public class EV3ControlAdapter extends ControlAdapter {
             }
 
             t = elementValues.get(pos).get(2);
+            radio.clearCheck();
             if (t != null) {
-                radio.clearCheck();
                 ((RadioButton) (radio.getChildAt(t))).setChecked(true);
-            } else {
-                radio.clearCheck();
             }
 
             t = elementValues.get(pos).get(3);
@@ -306,10 +301,12 @@ public class EV3ControlAdapter extends ControlAdapter {
     // caps power to <=100 and saves it in elements
     private class MotorPowerWatcher implements TextWatcher {
         private final int pos, index;
+        private final EditText edit;
 
-        public MotorPowerWatcher(int pos) {
+        public MotorPowerWatcher(int pos, EditText edit) {
             this.pos = pos;
             this.index = 1;
+            this.edit = edit;
         }
 
         @Override
@@ -321,8 +318,10 @@ public class EV3ControlAdapter extends ControlAdapter {
                     s.replace(0, s.length(), Integer.toString(value));
                 }
                 setElementValue(pos, index, value);
+                edit.setError(null);
             } else {
                 removeElementValue(pos, index);
+                edit.setError("Wert fehlt.");
             }
         }
 
@@ -349,6 +348,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             Log.d(TAG, checkedId + " checked");
             if (checkedId == -1) {
                 removeElementValue(pos, index);
+                ((RadioButton) group.getChildAt(3)).setError("Wert fehlt.");
             } else {
                 Integer checkedIndex = null;
                 for (int i = 0; i < 4; i++) {
@@ -356,6 +356,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                         checkedIndex = i;
                 }
                 setElementValue(pos, index, checkedIndex);
+                ((RadioButton) group.getChildAt(3)).setError(null);
             }
         }
     }

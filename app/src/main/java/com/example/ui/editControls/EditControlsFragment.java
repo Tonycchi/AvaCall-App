@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -100,6 +101,8 @@ public class EditControlsFragment extends HostedFragment {
                     .setReorderingAllowed(true)
                     .addToBackStack(null)
                     .commit();
+        } else {
+            Toast.makeText(getContext(), "Bitte alle Felder ausfüllen!", Toast.LENGTH_SHORT).show();
         }
     }
 
