@@ -133,7 +133,12 @@ public class EV3Controller implements Controller {
         byte[] directCommand = new byte[length];        // this will be the command
 
         directCommand[0] = (byte) (length - 2);         // pre defined parts of direct command
+
+        //TODO:
+        //directCommand[2] = port;            //message counter is used as info which port is used
         directCommand[2] = 0x2a;
+        directCommand[3] = (byte)id;              //message counter is used as info which control element is writing
+
         directCommand[4] = (byte) 0x00;
         directCommand[5] = (byte) 0x04;
 
@@ -155,31 +160,11 @@ public class EV3Controller implements Controller {
         directCommand[lastCommand] = (byte) 0xa6;                // end of direct command
         directCommand[lastCommand + 2] = portSum;
 
-        /*
-        byte length = 20;
-        byte[] directCommand = new byte[length];
-
-        directCommand[0] = (byte) (length - 2);
-        directCommand[2] = 0x2a;
-        directCommand[4] = (byte) 0x80;
-        directCommand[7] = (byte) 0xa4;
-        directCommand[10] = (byte) 0x81;
-        directCommand[12] = (byte) 0xa4;
-        directCommand[15] = (byte) 0x81;
-        directCommand[17] = (byte) 0xa6;
-        directCommand[19] = (byte) 0x0f;
-
-        directCommand[9] = PORT_RIGHT;    // PORT right motor
-        directCommand[11] = rightPower;  // POWER right motor
-
-        directCommand[14] = PORT_LEFT;   // PORT left motor
-        directCommand[16] = leftPower;   // POWER left motor
-         */
         byte[] changeMode = new byte[8];
         changeMode[0] = (byte) 0x99;             //opcode
         changeMode[1] = (byte) 0x1C;
         changeMode[2] = (byte) 0x00;
-        changeMode[3] = (byte) 0x12;
+        changeMode[3] = (byte) 0x10;            //Port
         changeMode[4] = (byte) 0x07;
         changeMode[5] = (byte) 0x02;           //typemode
         changeMode[6] = (byte) 0x01;

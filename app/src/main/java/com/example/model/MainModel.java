@@ -32,6 +32,8 @@ public class MainModel {
     private Handshake handshake;
     private VideoConnectionModel videoConnectionModel;
 
+    private TestRobotModel testRobotModel;
+
     private Robot robot;
     private Controller controller;
 
@@ -50,7 +52,10 @@ public class MainModel {
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
         //handshake = new AcceptAllHandshake();
-        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
+        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake, this);
+
+        testRobotModel = new TestRobotModel();
+
         //TODO: don't hard code robotType
         modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), "EV3");
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
@@ -154,6 +159,10 @@ public class MainModel {
     }
 
 
+    public void reveivedMessageFromRobot(String message){
+        testRobotModel.reveivedMessage(message);
+    }
+
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
         robot.saveModel(id, name, description, type, values);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
@@ -162,5 +171,9 @@ public class MainModel {
 
     public void setSelectedModelPosition(int position) {
         modelSelectionModel.setSelectedModelPosition(position);
+    }
+
+    public MutableLiveData<String> getMotorStrength() {
+        return testRobotModel.getMotorStrength();
     }
 }

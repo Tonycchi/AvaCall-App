@@ -106,4 +106,8 @@ public class MainViewModel extends AndroidViewModel {
     public void setSelectedModelPosition(int position) {
         model.setSelectedModelPosition(position);
     }
+
+    public MutableLiveData<String> getMotorStrength() {
+        return model.getMotorStrength();
+    }
 }

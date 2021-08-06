@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.data.ConnectedDevice;
 import com.example.data.ConnectedDeviceDAO;
+import com.example.model.MainModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,9 +37,9 @@ public class BluetoothModel extends RobotConnectionModel {
 
     private ConnectionService testService;
 
-    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO, Handshake byteArrayHandshake) {
+    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO, Handshake byteArrayHandshake, MainModel mainModel) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothConnectionService = new BluetoothConnectionService((ByteArrayHandshake) byteArrayHandshake);
+        bluetoothConnectionService = new BluetoothConnectionService((ByteArrayHandshake) byteArrayHandshake, mainModel);
         this.connectedDeviceDAO = connectedDeviceDAO;
     }
 

@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +17,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
+import com.example.model.connection.Device;
 import com.example.rcvc.R;
 import com.example.ui.editControls.EditControlsFragment;
 
@@ -36,6 +39,17 @@ public class TestRobotFragment extends HostedFragment {
     private boolean cameFromModelSelection;
 
     private MainViewModel viewModel;
+
+    private TextView motorStrengthText;
+
+    // Observer to check if amount of paired Devices has been changed
+    public final Observer<String> motorStrengthObserver = new Observer<String>() {
+        @Override
+        public void onChanged(@Nullable final String newStrength) {
+            // Update the UI
+            motorStrengthText.setText(newStrength);
+        }
+    };
 
     public TestRobotFragment(){super(R.layout.test_robot);}
 
@@ -64,6 +78,11 @@ public class TestRobotFragment extends HostedFragment {
         String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
         String[] order = rankOrder(t);
         createControlElements(order, constraintLayout);
+
+        motorStrengthText = view.findViewById(R.id.text_motor_strength);
+
+        MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
+        motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
 
         Button buttonYes = view.findViewById(R.id.button_yes);
         Button buttonNo = view.findViewById(R.id.button_no);
