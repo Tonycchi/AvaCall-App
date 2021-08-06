@@ -16,6 +16,7 @@ import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -33,8 +34,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     protected int maxNumberElements = 4;
     protected int fieldsFilled = 0, numberOfFields = 0;
     //TODO fehlende felder rot hervorheben
-    //TODO error: roboter verw -> zurück -> roboter verw funktioniert nicht
-    //TODO error: field focussed -> enter -> crash
     //TODO vielleicht ui/model mehr trennen
     protected int id;
 
@@ -53,9 +52,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     public int getId() {
         return id;
     };
-    public void resetFilled() {
-        fieldsFilled = 0;
-    }
     void removeFilledFields(int count) {
         fieldsFilled -= count;
         if (fieldsFilled < 0)
@@ -253,9 +249,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     protected List<Integer> newList(Integer... values) {
         ArrayList<Integer> r = new ArrayList<>(values.length);
-        for (Integer v : values) {
-            r.add(v);
-        }
+        Collections.addAll(r, values);
         return r;
     }
 }

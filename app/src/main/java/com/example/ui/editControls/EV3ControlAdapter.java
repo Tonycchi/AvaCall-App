@@ -4,6 +4,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,9 +39,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     @Override
     boolean isReadyToSave() {
-        if (!(fieldsFilled == numberOfFields && numberOfFields > 0)) {
-
-        }
+        Log.d(TAG, fieldsFilled + " " + numberOfFields);
         return fieldsFilled == numberOfFields && numberOfFields > 0;
     }
 
@@ -162,6 +161,8 @@ public class EV3ControlAdapter extends ControlAdapter {
             RadioGroup radioRight = itemView.findViewById(R.id.radio_port_right);
             RadioGroup radioLeft = itemView.findViewById(R.id.radio_port_left);
 
+            edit.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
             edit.addTextChangedListener(new MotorPowerWatcher(pos, edit));
             radioRight.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
             radioLeft.setOnCheckedChangeListener(new PortChangedListener(pos, 3));
@@ -184,19 +185,15 @@ public class EV3ControlAdapter extends ControlAdapter {
             }
 
             t = elementValues.get(pos).get(2);
+            radioRight.clearCheck();
             if (t != null) {
-                radioRight.clearCheck();
                 ((RadioButton) (radioRight.getChildAt(t))).setChecked(true);
-            } else {
-                radioRight.clearCheck();
             }
 
             t = elementValues.get(pos).get(3);
+            radioLeft.clearCheck();
             if (t != null) {
-                radioLeft.clearCheck();
                 ((RadioButton) (radioLeft.getChildAt(t))).setChecked(true);
-            } else {
-                radioLeft.clearCheck();
             }
         }
     }
@@ -208,6 +205,8 @@ public class EV3ControlAdapter extends ControlAdapter {
 
             EditText edit = itemView.findViewById(R.id.edit_max_power);
             RadioGroup radio = itemView.findViewById(R.id.radio_port);
+
+            edit.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
             edit.addTextChangedListener(new MotorPowerWatcher(pos, edit));
             radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
@@ -244,6 +243,9 @@ public class EV3ControlAdapter extends ControlAdapter {
             EditText edit = itemView.findViewById(R.id.edit_max_power);
             RadioGroup radio = itemView.findViewById(R.id.radio_port);
             EditText editDur = itemView.findViewById(R.id.edit_duration);
+
+            edit.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            editDur.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
             edit.addTextChangedListener(new MotorPowerWatcher(pos, edit));
             radio.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
@@ -345,7 +347,6 @@ public class EV3ControlAdapter extends ControlAdapter {
 
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
-            Log.d(TAG, checkedId + " checked");
             if (checkedId == -1) {
                 removeElementValue(pos, index);
                 ((RadioButton) group.getChildAt(3)).setError("Wert fehlt.");
