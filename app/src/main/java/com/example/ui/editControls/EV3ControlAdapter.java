@@ -23,7 +23,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     public EV3ControlAdapter(HostActivity activity, RobotModel model) {
         super(activity, model);
-        maxNumberOfMotors = 4;
+        maxNumberElements = 4;
 
         // model is not null if called by "Modell Bearbeiten"
         // and null if called by "Neues Modell"
@@ -105,9 +105,8 @@ public class EV3ControlAdapter extends ControlAdapter {
                     break;
             }
         }
-        motorCount = motors;
         // add button isn't shown when all motors set:
-        itemCount = (motorCount == 4) ? list.size() : list.size() + 1;
+        itemCount = (elementValues.size() == 4) ? list.size() : list.size() + 1;
         fieldsFilled = fields;
         numberOfFields = fields;
     }
@@ -157,6 +156,7 @@ public class EV3ControlAdapter extends ControlAdapter {
 
     // controlElements
     private class EV3JoystickHolder extends ControlAdapter.JoystickHolder {
+        //TODO test ports different
 
         public EV3JoystickHolder(@NonNull View itemView, int pos) {
             super(itemView);

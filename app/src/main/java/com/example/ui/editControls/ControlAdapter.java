@@ -30,9 +30,12 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     protected final HostActivity hostActivity;
     protected final List<List<Integer>> elementValues;
     protected int itemCount = 1;
-    protected int motorCount = 0;
-    protected int maxNumberOfMotors = 100;
+    protected int maxNumberElements = 4;
     protected int fieldsFilled = 0, numberOfFields = 0;
+    //TODO toast für fehlende Felder, vielleicht fehlende Felder rot hervorheben
+    //TODO error: roboter verw -> zurück -> roboter verw funktioniert nicht
+    //TODO error: field focussed -> enter -> crash
+    //TODO vielleicht ui/model mehr trennen
     protected int id;
 
     public ControlAdapter(HostActivity hostActivity, RobotModel model) {
@@ -114,26 +117,20 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
      * @param elementType type of element, see static constants in ControlAdapter.java
      */
     public void addElement(int elementType) {
-        int newMotors, newFields;
+        int newFields;
         switch (elementType) {
             case JOYSTICK:
-                newMotors = 2;
-                newFields = 3;
-                break;
             case BUTTON:
-                newMotors = 1;
                 newFields = 3;
                 break;
             case SLIDER:
-                newMotors = 1;
                 newFields = 2;
                 break;
             default:
-                newMotors = 0;
                 newFields = 0;
         }
 
-        if (motorCount + newMotors <= maxNumberOfMotors) {
+        if (elementValues.size() < maxNumberElements) {
             // each element is represented by an array of attributes to be used in ui:
             // joystick: [this.JOYSTICK, max power, right port, left port] -> length 3+1
             // slider:   [this.SLIDER, max power, port] -> length 2+1
@@ -145,7 +142,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
                 elementValues.add(newList(elementType, null, null, null));
 
             itemCount++;
-            motorCount += newMotors;
             notifyItemInserted(elementValues.size() - 1);
 
             numberOfFields += newFields;
@@ -164,7 +160,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             elementValues.get(position).clear();
             elementValues.remove(position);
             itemCount--;
-            motorCount -= (element == JOYSTICK) ? 2 : 1;
             numberOfFields -= (element == SLIDER) ? 2 : 3;
             removeFilledFields((element == SLIDER) ? 2 : 3);
             notifyItemRemoved(position);
@@ -173,7 +168,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemViewType(int position) {
-        if (position >= elementValues.size() && motorCount < maxNumberOfMotors)
+        if (position >= elementValues.size() && elementValues.size() < maxNumberElements)
             return ADD;
         else if (position >= elementValues.size())
             return EMPTY;
