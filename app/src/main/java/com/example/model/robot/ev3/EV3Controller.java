@@ -137,7 +137,7 @@ public class EV3Controller implements Controller {
         //TODO:
         //directCommand[2] = port;            //message counter is used as info which port is used
         directCommand[2] = 0x2a;
-        directCommand[3] = (byte)id;              //message counter is used as info which control element is writing
+        //directCommand[3] = (byte)id;              //message counter is used as info which control element is writing
 
         directCommand[4] = (byte) 0x00;
         directCommand[5] = (byte) 0x04;
