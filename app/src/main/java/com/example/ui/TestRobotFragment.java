@@ -256,6 +256,12 @@ public class TestRobotFragment extends HostedFragment {
                     button.setBackgroundResource(R.drawable.standard_button);
                     constraintLayout.addView(button);
 
+                    View background = new View(newContext);
+                    background.setId(View.generateViewId());
+                    background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.border));
+                    background.setVisibility(View.INVISIBLE); //TODO: set background size
+                    constraintLayout.addView(background);
+
                     set.constrainHeight(button.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
                     if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
                         updateConstraintSet(i, button.getId(), controlElements, set);
@@ -274,11 +280,13 @@ public class TestRobotFragment extends HostedFragment {
                                     viewModel.sendControlInput(id, 1);
                                     Log.d(TAG, "Button activity: " + 1);
                                     showBorder();
+                                    background.setVisibility(View.VISIBLE);
                                     return false;
                                 case MotionEvent.ACTION_UP:
                                 case MotionEvent.ACTION_CANCEL:
                                     Log.d(TAG, "Button activity: " + 0);
                                     hideBorder();
+                                    background.setVisibility(View.INVISIBLE);
                                     return false;
                             }
                             return true;
