@@ -159,8 +159,8 @@ public class MainModel {
     }
 
 
-    public void reveivedMessageFromRobot(byte[] message){
-        testRobotModel.reveivedMessage(message);
+    public void receivedMessageFromRobot(byte[] message){
+        testRobotModel.receivedMessage(message);
     }
 
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {

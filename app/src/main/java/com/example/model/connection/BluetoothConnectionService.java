@@ -365,7 +365,7 @@ public class BluetoothConnectionService implements ConnectionService {
                     INPUT_STREAM.read(buffer);
                     int replySize = (buffer[1]*16+buffer[0]);
                     Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
-                    mainModel.reveivedMessageFromRobot(buffer);
+                    mainModel.receivedMessageFromRobot(buffer);
                 } catch (IOException e) {
                     // connection got lost, so status gets set to 3
                     connectionStatus.postValue(3);

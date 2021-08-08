@@ -2,6 +2,9 @@
 <resources>
         <!--  portrait  -->
             <!-- General -->
+                <!-- Test Robot -->
+                    <dimen name="border">25dp</dimen>
+
                 <!-- Buttons -->
                     <dimen name="standard_button_width">@dimen/_230sdp</dimen>
                     <dimen name="small_button_height">@dimen/_30sdp</dimen>

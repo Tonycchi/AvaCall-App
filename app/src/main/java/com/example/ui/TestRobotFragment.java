@@ -39,7 +39,7 @@ public class TestRobotFragment extends HostedFragment {
     private boolean cameFromModelSelection;
 
     private MainViewModel viewModel;
-
+    private View thisView;
     private TextView motorStrengthText;
 
     // Observer to check if amount of paired Devices has been changed
@@ -52,6 +52,13 @@ public class TestRobotFragment extends HostedFragment {
     };
 
     public TestRobotFragment(){super(R.layout.test_robot);}
+
+    public void showBorder(){
+       thisView.setBackgroundResource(R.drawable.faded_border);
+    }
+    public void hideBorder(){
+        thisView.setBackground(null);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +77,8 @@ public class TestRobotFragment extends HostedFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+
+        thisView = view.findViewById(R.id.test_robot_fragment);
 
         ConstraintLayout constraintLayout = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 ? view.findViewById(R.id.test_robot_fragment)
@@ -182,6 +191,15 @@ public class TestRobotFragment extends HostedFragment {
                     joystick.setOnMoveListener((angle, strength) -> {
                         viewModel.sendControlInput(id, angle, strength);
                         Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
+                        if(angle==0 && strength==0) {
+                            hideBorder();
+                            joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                            joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
+                        }else {
+                            showBorder();
+                            joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.border));
+                            joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                        }
                     });
 
                     controlElements[i] = joystick.getId();
@@ -216,20 +234,23 @@ public class TestRobotFragment extends HostedFragment {
 
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {
-
+                            showBorder();
+                            slider.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.border));
                         }
 
                         @Override
                         public void onStopTrackingTouch(SeekBar seekBar) {
                             viewModel.sendControlInput(id, 50);
                             seekBar.setProgress(50);
+                            hideBorder();
+                            slider.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
                         }
                     });
                     controlElements[i] = slider.getId();
                     break;
                 case "button":
                     ContextThemeWrapper newContext = new ContextThemeWrapper(getContext(), R.style.button_control_element);
-                    Button button = new Button(newContext);
+                    android.widget.Button button = new android.widget.Button(newContext);
                     button.setId(View.generateViewId());
                     button.setText("Feuer");
                     button.setBackgroundResource(R.drawable.standard_button);
@@ -252,10 +273,12 @@ public class TestRobotFragment extends HostedFragment {
                                 case MotionEvent.ACTION_DOWN:
                                     viewModel.sendControlInput(id, 1);
                                     Log.d(TAG, "Button activity: " + 1);
+                                    showBorder();
                                     return false;
                                 case MotionEvent.ACTION_UP:
                                 case MotionEvent.ACTION_CANCEL:
                                     Log.d(TAG, "Button activity: " + 0);
+                                    hideBorder();
                                     return false;
                             }
                             return true;
