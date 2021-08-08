@@ -164,8 +164,8 @@ public class EV3ControlAdapter extends ControlAdapter {
             edit.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
             edit.addTextChangedListener(new MotorPowerWatcher(pos, edit));
-            radioRight.setOnCheckedChangeListener(new PortChangedListener(pos, 2));
-            radioLeft.setOnCheckedChangeListener(new PortChangedListener(pos, 3));
+            radioRight.setOnCheckedChangeListener(new PortChangedListener(radioLeft, pos, 2));
+            radioLeft.setOnCheckedChangeListener(new PortChangedListener(radioRight, pos, 3));
 
             update(pos);
         }
@@ -339,15 +339,22 @@ public class EV3ControlAdapter extends ControlAdapter {
     // saves index of selected port to elements
     private class PortChangedListener implements RadioGroup.OnCheckedChangeListener {
         private final int pos, index;
+        private RadioGroup opposite;
 
         public PortChangedListener(int pos, int index) {
             this.pos = pos;
             this.index = index;
         }
 
+        public PortChangedListener(RadioGroup opposite, int pos, int index) {
+            this(pos, index);
+            this.opposite = opposite;
+        }
+
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             if (checkedId == -1) {
+                resetDisableOpposite(-1);
                 removeElementValue(pos, index);
                 ((RadioButton) group.getChildAt(3)).setError("Wert fehlt.");
             } else {
@@ -356,9 +363,18 @@ public class EV3ControlAdapter extends ControlAdapter {
                     if (group.findViewById(checkedId).equals(group.getChildAt(i)))
                         checkedIndex = i;
                 }
+                resetDisableOpposite(checkedIndex);
                 setElementValue(pos, index, checkedIndex);
                 ((RadioButton) group.getChildAt(3)).setError(null);
             }
+        }
+
+        private void resetDisableOpposite(int checked) {
+            if (opposite == null) return;
+            for (int i = 0; i < 4; i++) {
+                opposite.getChildAt(i).setEnabled(true);
+            }
+            if (checked >= 0) opposite.getChildAt(checked).setEnabled(false);
         }
     }
 }
