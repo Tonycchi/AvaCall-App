@@ -1,6 +1,8 @@
 package com.example.ui;
 
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -237,7 +239,8 @@ public class TestRobotFragment extends HostedFragment {
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {
                             showBorder();
-                            slider.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.border));
+                            slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
+                            slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                         }
 
                         @Override
@@ -245,7 +248,8 @@ public class TestRobotFragment extends HostedFragment {
                             viewModel.sendControlInput(id, 50);
                             seekBar.setProgress(50);
                             hideBorder();
-                            slider.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                            slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                            slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
                         }
                     });
                     controlElements[i] = slider.getId();
@@ -255,14 +259,8 @@ public class TestRobotFragment extends HostedFragment {
                     android.widget.Button button = new android.widget.Button(newContext);
                     button.setId(View.generateViewId());
                     button.setText("Feuer");
-                    button.setBackgroundResource(R.drawable.standard_button);
+                    button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.standard_button));
                     constraintLayout.addView(button);
-
-                    View background = new View(newContext);
-                    background.setId(View.generateViewId());
-                    background.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.border));
-                    background.setVisibility(View.INVISIBLE); //TODO: set background size
-                    constraintLayout.addView(background);
 
                     set.constrainHeight(button.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
                     if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
@@ -282,13 +280,15 @@ public class TestRobotFragment extends HostedFragment {
                                     viewModel.sendControlInput(id, 1);
                                     Log.d(TAG, "Button activity: " + 1);
                                     showBorder();
-                                    background.setVisibility(View.VISIBLE);
+                                    button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.border));
+                                   // background.setVisibility(View.VISIBLE);
                                     return false;
                                 case MotionEvent.ACTION_UP:
                                 case MotionEvent.ACTION_CANCEL:
                                     Log.d(TAG, "Button activity: " + 0);
                                     hideBorder();
-                                    background.setVisibility(View.INVISIBLE);
+                                    button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                                  //  background.setVisibility(View.INVISIBLE);
                                     return false;
                             }
                             return true;

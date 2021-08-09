@@ -3,7 +3,7 @@
         <!--  portrait  -->
             <!-- General -->
                 <!-- Test Robot -->
-                    <dimen name="border">25dp</dimen>
+                    <dimen name="border">@dimen/_10sdp</dimen>
 
                 <!-- Buttons -->
                     <dimen name="standard_button_width">@dimen/_230sdp</dimen>
