@@ -78,7 +78,9 @@ public class TestRobotFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        thisView = view.findViewById(R.id.test_robot_fragment);
+        thisView = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                ? view.findViewById(R.id.test_robot_fragment)
+                : view.findViewById(R.id.test_robot_fragment_landscape);
 
         ConstraintLayout constraintLayout = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 ? view.findViewById(R.id.test_robot_fragment)
