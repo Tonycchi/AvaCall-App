@@ -108,6 +108,10 @@ public class MainModel {
     }
 
     public void modelSelected(int position) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
+        if (position == -1) {
+            controller = null;
+            return;
+        }
         modelSelectionModel.setSelectedModelPosition(position);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
@@ -159,5 +163,10 @@ public class MainModel {
 
     public void setSelectedModelPosition(int position) {
         modelSelectionModel.setSelectedModelPosition(position);
+    }
+
+    public String getCurrentRobotType() {
+        if (robot != null) return robot.getType();
+        throw new IllegalStateException();
     }
 }

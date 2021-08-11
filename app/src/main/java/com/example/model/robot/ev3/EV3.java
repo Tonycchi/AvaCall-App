@@ -22,6 +22,10 @@ public class EV3 implements Robot {
         return new EV3Controller(robotModel, service);
     }
 
+    public String getType() {
+        return Constants.TYPE_EV3;
+    }
+
     @Override
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
         String specs = "";

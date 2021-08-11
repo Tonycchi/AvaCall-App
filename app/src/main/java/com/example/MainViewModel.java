@@ -83,6 +83,10 @@ public class MainViewModel extends AndroidViewModel {
         model.modelSelected(modelPosition);
     }
 
+    public String getCurrentRobotType() {
+        return model.getCurrentRobotType();
+    }
+
     public void sendControlInput(int... input) {
         model.sendControlInputs(input);
     }

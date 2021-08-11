@@ -21,6 +21,7 @@ import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.TestRobotFragment;
 import com.example.ui.editControls.EditControlsFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.simonvt.numberpicker.NumberPicker;
 
@@ -56,10 +57,11 @@ public class ModelSelectionFragment extends HostedFragment {
 
         Button useModel = view.findViewById(R.id.button_use_model);
         Button editModel = view.findViewById(R.id.button_edit_model);
+        FloatingActionButton addModel = view.findViewById(R.id.add_model);
 
         useModel.setOnClickListener(this::onClickUseModel);
-
         editModel.setOnClickListener(this::onClickEditModel);
+        addModel.setOnClickListener(this::onClickAddModel);
 
         modelPicker = view.findViewById(R.id.model_picker);
 
@@ -104,6 +106,17 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private void onClickEditModel(View v) {
         viewModel.modelSelected(modelPicker.getValue());
+
+        FragmentManager fragmentManager = getParentFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, EditControlsFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void onClickAddModel(View v) {
+        viewModel.modelSelected(-1);
 
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()

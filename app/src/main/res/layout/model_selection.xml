@@ -41,7 +41,7 @@
         android:layout_marginStart="@dimen/margin_side"
         android:layout_marginEnd="@dimen/margin_horizontal_small"
         android:layout_marginBottom="@dimen/margin_bottom"
-        android:text="@string/use_model"
+        android:text="@string/save_use_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_edit_model"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,5 +73,15 @@
         app:layout_constraintBottom_toTopOf="@+id/model_picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_model"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

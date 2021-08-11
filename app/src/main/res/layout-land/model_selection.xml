@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,9 +9,9 @@
         android:id="@+id/model_picture"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="@dimen/margin_vertical_small_land"
         android:layout_marginStart="@dimen/margin_side_land"
         android:layout_marginTop="@dimen/margin_top_land"
+        android:layout_marginEnd="@dimen/margin_vertical_small_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
         android:contentDescription="@string/model_picture"
         app:layout_constraintBottom_toTopOf="@+id/button_use_model"
@@ -30,10 +29,10 @@
         android:layout_marginStart="@dimen/margin_vertical_small_land"
         android:layout_marginEnd="@dimen/margin_side_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
+        android:descendantFocusability="blocksDescendants"
         app:layout_constraintBottom_toTopOf="@+id/button_edit_model"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        android:descendantFocusability="blocksDescendants"
         app:layout_constraintStart_toEndOf="@+id/model_picture" />
 
     <android.widget.Button
@@ -43,7 +42,7 @@
         android:layout_marginStart="@dimen/margin_side_land"
         android:layout_marginEnd="@dimen/margin_vertical_small_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
-        android:text="@string/use_model"
+        android:text="@string/save_use_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_edit_model"
         app:layout_constraintStart_toStartOf="parent" />
@@ -53,9 +52,9 @@
         style="@style/button_neutral"
         android:layout_width="0dp"
         android:layout_marginStart="@dimen/margin_vertical_small_land"
+        android:layout_marginLeft="@dimen/margin_side_land"
         android:layout_marginEnd="@dimen/margin_side_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
-        android:layout_marginLeft="@dimen/margin_side_land"
         android:text="@string/edit_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,15 +64,24 @@
         android:id="@+id/model_description_text"
         style="@style/text_standard"
         android:layout_width="0dp"
-        android:textStyle="normal"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_side_land"
         android:layout_marginTop="@dimen/margin_top_land"
         android:layout_marginEnd="@dimen/margin_side_land"
         android:text="@string/no_model_selected"
         android:textAlignment="center"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/model_picture"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_model"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/model_picture"
+        app:layout_constraintEnd_toEndOf="@+id/model_picture"
+        app:srcCompat="@drawable/add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

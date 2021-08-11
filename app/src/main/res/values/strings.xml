@@ -42,7 +42,7 @@
 
         <!-- Model Selection -->
         <string name="model_picture">Picture of the currently selected model</string>
-        <string name="use_model">Roboter verwenden</string>
+        <string name="save_use_model">Speichern &amp;\n Roboter verwenden</string>
         <string name="edit_model">Steuerung des Roboters bearbeiten</string>
         <string name="no_model_selected">Kein Modell gewählt</string>
         <string name="different_model">Anderes Modell</string>

@@ -40,14 +40,14 @@ public class EditControlsFragment extends HostedFragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "A");
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
         robotModel = viewModel.getSelectedRobotModel();
+        String type = viewModel.getCurrentRobotType();
 
-        switch (robotModel.type) {
+        switch (type) {
             case Constants.TYPE_EV3:
                 controlAdapter = new EV3ControlAdapter((HostActivity) getActivity(), robotModel);
                 break;
@@ -66,10 +66,11 @@ public class EditControlsFragment extends HostedFragment {
         Button buttonEditModelNext = view.findViewById(R.id.button_edit_model_next);
         Button buttonEditModelBack = view.findViewById(R.id.button_edit_model_back);
 
+        editName = view.findViewById(R.id.edit_model_name);
+        editDescription = view.findViewById(R.id.edit_model_description);
+
         if (robotModel != null) {
-            editName = view.findViewById(R.id.edit_model_name);
             editName.setText(robotModel.name);
-            editDescription = view.findViewById(R.id.edit_model_description);
             editDescription.setText(robotModel.description);
         } else {
             Log.e(TAG, "robotModel == null");
@@ -92,8 +93,13 @@ public class EditControlsFragment extends HostedFragment {
     private void onClickButtonEditModelNext(View v) {
         // Log.d(TAG, "" + (robotModel != null) +" "+ (controlAdapter != null) +" "+ (controlAdapter.isReadyToSave()) +" "+ (editName.getText().length() > 0));
 
-        if (robotModel != null && controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
-            viewModel.saveModel(robotModel.id, editName.getText().toString(), editDescription.getText().toString(), robotModel.type, controlAdapter.getValues());
+        //TODO should editDescription always be filled out????????
+        if (controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
+            int id;
+            if (robotModel != null) id = robotModel.id;
+            else id = 0;
+
+            viewModel.saveModel(id, editName.getText().toString(), editDescription.getText().toString(), viewModel.getCurrentRobotType(), controlAdapter.getValues());
 
             FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.beginTransaction()

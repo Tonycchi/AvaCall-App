@@ -5,19 +5,15 @@ import android.util.Log;
 import com.example.data.RobotModel;
 import com.example.model.connection.ConnectionService;
 import com.example.model.robot.Controller;
-import com.example.model.robot.Robot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class EV3Controller implements Controller {
 
     private final String TAG = "EV3Controller";
-
-    private RobotModel model;
-
     public ConnectionService service;
+    private RobotModel model;
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
 
@@ -26,8 +22,8 @@ public class EV3Controller implements Controller {
 
         this.model = model;
 
-        Log.d(TAG, model.specs);
-        createElements(model.specs);
+        if (model != null)
+            createElements(model.specs);
     }
 
     @Override
@@ -201,7 +197,6 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     *
      * @param element string to be added to controlElementString
      */
     private void addToString(String element) {
