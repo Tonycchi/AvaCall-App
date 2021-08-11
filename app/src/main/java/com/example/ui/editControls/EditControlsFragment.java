@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Constants;
 import com.example.MainViewModel;
 import com.example.data.RobotModel;
 import com.example.rcvc.R;
@@ -47,7 +48,7 @@ public class EditControlsFragment extends HostedFragment {
         robotModel = viewModel.getSelectedRobotModel();
 
         switch (robotModel.type) {
-            case "EV3": //TODO: dont hard code string
+            case Constants.TYPE_EV3:
                 controlAdapter = new EV3ControlAdapter((HostActivity) getActivity(), robotModel);
                 break;
             default:

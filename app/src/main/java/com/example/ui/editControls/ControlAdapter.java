@@ -11,6 +11,7 @@ import android.widget.Space;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.Constants;
 import com.example.data.RobotModel;
 import com.example.rcvc.R;
 import com.example.ui.HostActivity;
@@ -24,9 +25,9 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     static final int
             EMPTY = 69,
             ADD = 0,
-            JOYSTICK = 1,
-            SLIDER = 2,
-            BUTTON = 3;
+            JOYSTICK = Constants.JOYSTICK,
+            SLIDER = Constants.SLIDER,
+            BUTTON = Constants.BUTTON;
     private static final String TAG = "ControlAdapter";
     protected final HostActivity hostActivity;
     protected final List<List<Integer>> elementValues;

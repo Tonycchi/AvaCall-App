@@ -1,5 +1,6 @@
 package com.example.model.robot.ev3;
 
+import com.example.Constants;
 import com.example.data.RobotModel;
 import com.example.data.RobotModelDAO;
 import com.example.model.connection.ConnectionService;
@@ -26,16 +27,16 @@ public class EV3 implements Robot {
         String specs = "";
         for (List<Integer> element : values) {
             switch (element.get(0)) { // TODO define numbers centrally, maybe in Constants.java alongside robot type strings
-                case 1: //Joystick
+                case Constants.JOYSTICK: //Joystick
                     specs += "joystick:" + element.get(1)
                             + ";" + indexToPort(element.get(2))
                             + "," + indexToPort(element.get(3)) + "|";
                     break;
-                case 2: //Slider
+                case Constants.SLIDER: //Slider
                     specs += "slider:" + element.get(1)
                             + ";" + indexToPort(element.get(2)) + "|";
                     break;
-                case 3: //Button
+                case Constants.BUTTON: //Button
                     specs += "button:" + element.get(1)
                             + ";" + indexToPort(element.get(2))
                             + ";" + element.get(3) + "|";

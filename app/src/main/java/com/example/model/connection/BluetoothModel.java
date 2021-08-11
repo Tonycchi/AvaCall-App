@@ -9,6 +9,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.Constants;
 import com.example.data.ConnectedDevice;
 import com.example.data.ConnectedDeviceDAO;
 
@@ -21,8 +22,8 @@ public class BluetoothModel extends RobotConnectionModel {
 
     private static final String TAG = "BluetoothModel";
 
-    // adds dummy device TODO: set false in user versions
-    private static final boolean ADD_DUMMY = true;
+    // adds dummy device
+    private static final boolean ADD_DUMMY = !Constants.USER_RELEASE;
 
     // Model for BluetoothFragment
     // Bluetooth adapter of our device

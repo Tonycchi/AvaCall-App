@@ -6,10 +6,10 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.Constants;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
 import com.example.data.RobotModel;
-import com.example.data.URLSettings;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.EV3BluetoothHandshake;
@@ -18,8 +18,6 @@ import com.example.model.connection.RobotConnectionModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 import com.example.model.robot.ev3.EV3;
-
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +49,7 @@ public class MainModel {
         handshake = new EV3BluetoothHandshake();
         //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
-        //TODO: don't hard code robotType
-        modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), "EV3");
+        modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), Constants.TYPE_EV3);
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
 
