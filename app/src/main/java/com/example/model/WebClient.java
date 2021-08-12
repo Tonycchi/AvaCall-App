@@ -35,9 +35,9 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onOpen(ServerHandshake handshakeData) {
-        String t = controller.getControlElementString();
-        send("app:" + videoURL + ":" + t);
-        Log.d(TAG, "open, control elements: " + t);
+        String syn = "app:" + videoURL + ":" + controller.getControlElementString();
+        send(syn);
+        Log.d(TAG,"send handshake:"+syn);
     }
 
     /**
@@ -86,7 +86,7 @@ public class WebClient extends WebSocketClient {
      */
     @Override
     public void onError(Exception ex) {
-        Log.e(TAG, "an error occurred:" + ex);
+        Log.e(TAG, ex + ex.getMessage());
         status = -1;
     }
 

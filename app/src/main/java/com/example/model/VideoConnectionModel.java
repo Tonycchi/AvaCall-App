@@ -5,13 +5,14 @@ import android.util.Log;
 import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
+import com.example.model.robot.ev3.EV3Controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class VideoConnectionModel {
 
-    private final String TAG = "VideoConnection";
+    private final String TAG = "VideoConnectionModel";
 
     private URLSettings urlSettings;
     private WebClient webClient;
@@ -31,10 +32,10 @@ public class VideoConnectionModel {
         if (sessionData == null) {
             String videoURL = urlSettings.getVideoURL_https();
             try {
-                //Log.d(TAG, "service " + ((EV3Controller)controller).service.toString());
+                Log.d(TAG, "service " + ((EV3Controller)controller).service.toString());
                 webClient = new WebClient(new URI(urlSettings.getHost_wss()), urlSettings.getVideoURL_plain(), controller);
             } catch (URISyntaxException e) {
-                Log.d(TAG, "e");
+                Log.d(TAG, e.getMessage());
                 e.printStackTrace();
             }
 
