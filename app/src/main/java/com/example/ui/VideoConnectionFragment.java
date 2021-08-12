@@ -82,31 +82,40 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private void onClickInvitePartner(View v) {
         Log.d(TAG, "onClickInvitePartner");
-        viewModel.invitePartner();
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-            Log.d(TAG, "OLD Android Version!! -> no share Link pop-up shown");
-            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getShareURL());
-            clipboard.setPrimaryClip(clip);
-            ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
-        } else {
-            Log.d(TAG, "New Android Version!");
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getShareURL());
-            sendIntent.setType("text/plain");
+        if(viewModel.invitePartner()) { //successful connection to server
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+                Log.d(TAG, "OLD Android Version!! -> no share Link pop-up shown");
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getShareURL());
+                clipboard.setPrimaryClip(clip);
+                ((HostActivity) getActivity()).showToast(getString(R.string.toast_link_copied));
+            } else {
+                Log.d(TAG, "New Android Version!");
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getShareURL());
+                sendIntent.setType("text/plain");
 
-            Intent shareIntent = Intent.createChooser(sendIntent, null);
-            startActivity(shareIntent);
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+            }
+
+            meetingIdTextView.setText(getString(R.string.meeting_id) + " " + viewModel.getID());
+
+        }else{ //failed to connect to server
+            ((HostActivity)getActivity()).showToast(R.string.server_connection_failed);
         }
 
-        meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
     }
 
     private void onClickSwitchToVideoCall(View v) {
-        // TODO setReceiveCommands kommt hier noch hin
-        JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions)viewModel.getOptions());
-        viewModel.setReceiveCommands();
+        if(viewModel.isConnectedToServer()) {
+            // TODO setReceiveCommands kommt hier noch hin
+            JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getOptions());
+            viewModel.setReceiveCommands();
+        }else{
+            ((HostActivity)getActivity()).showToast(R.string.connect_to_server);
+        }
     }
 
     @Override

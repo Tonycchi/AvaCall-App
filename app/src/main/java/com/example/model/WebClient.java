@@ -19,13 +19,13 @@ public class WebClient extends WebSocketClient {
     private Controller controller;
     private String id;
     private boolean receiveCommands;
-    private boolean ready;
+    private int status; //-1=error; 0=no connection; 1=connected
 
     public WebClient(URI serverURI, String videoURL, Controller controller) {
         super(serverURI);
         this.controller = controller;
         this.videoURL = videoURL;
-        this.ready = false;
+        this.status = 0;
         receiveCommands = false;
         Log.d(TAG, "serverURI:" + serverURI.toASCIIString());
     }
@@ -46,7 +46,7 @@ public class WebClient extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         Log.d(TAG, "closed with exit code " + code + " additional info: " + reason);
-        ready = false;
+        status = 0;
     }
 
     /**
@@ -59,7 +59,7 @@ public class WebClient extends WebSocketClient {
         Log.d(TAG, message);
         if (message.startsWith("id:")) {
             id = message.split(":", 2)[1];
-            ready = true;
+            status = 1;
         } else {
             if (true) {
                 List<String> t1 = Arrays.asList(message.split(";|:"));
@@ -77,8 +77,8 @@ public class WebClient extends WebSocketClient {
     public void onMessage(ByteBuffer message) {
     }
 
-    public boolean isReady() {
-        return ready;
+    public int getStatus() {
+        return status;
     }
 
     /**
@@ -87,6 +87,7 @@ public class WebClient extends WebSocketClient {
     @Override
     public void onError(Exception ex) {
         Log.e(TAG, "an error occurred:" + ex);
+        status = -1;
     }
 
     public String getId() {
