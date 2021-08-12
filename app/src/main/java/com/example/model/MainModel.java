@@ -78,9 +78,9 @@ public class MainModel {
         return this.videoConnectionModel;
     }
 
-    public void invitePartner() {
+    public boolean invitePartner() {
         videoConnectionModel.setController(controller);
-        videoConnectionModel.invitePartner();
+        return videoConnectionModel.invitePartner();
     }
 
     public String getShareURL() {
@@ -168,5 +168,9 @@ public class MainModel {
     public String getCurrentRobotType() {
         if (robot != null) return robot.getType();
         throw new IllegalStateException();
+    }
+
+    public boolean isConnectedToServer() {
+        return videoConnectionModel.isConnected();
     }
 }

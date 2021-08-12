@@ -43,8 +43,8 @@ public class MainViewModel extends AndroidViewModel {
         model.startConnection(device);
     }
 
-    public void invitePartner() {
-        model.invitePartner();
+    public boolean invitePartner() {
+        return model.invitePartner();
     }
 
     public String getShareURL() {
@@ -109,5 +109,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public void setSelectedModelPosition(int position) {
         model.setSelectedModelPosition(position);
+    }
+
+    public boolean isConnectedToServer() {
+        return model.isConnectedToServer();
     }
 }

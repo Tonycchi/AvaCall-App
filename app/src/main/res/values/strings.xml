@@ -60,6 +60,8 @@
         <string name="room_link">Jitsi Room Link</string>
         <string name="toast_link_copied">Link kopiert</string>
         <string name="meeting_id">Kennnummer:</string>
+        <string name="server_connection_failed">Verbindung zum Server fehlgeschlagen. Bitte überprüfen Sie die URL-Einstellungen.</string>
+        <string name="connect_to_server">Bitte laden Sie zuerst einen Partner ein.</string>
 
         <string name="title_web_url">URL zur Webanwendung</string>
         <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>
