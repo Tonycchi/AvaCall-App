@@ -91,7 +91,7 @@ public class MainModel {
         return videoConnectionModel.getOptions();
     }
 
-    public void cancelConnection() {
+    public void cancelRobotConnection() {
         robotConnectionModel.cancelConnection();
     }
 
@@ -172,5 +172,9 @@ public class MainModel {
 
     public boolean isConnectedToServer() {
         return videoConnectionModel.isConnected();
+    }
+
+    public void cancelServerConnection() {
+        videoConnectionModel.cancelConnection();
     }
 }

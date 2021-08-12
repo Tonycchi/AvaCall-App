@@ -75,7 +75,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.cancelConnection();
+        viewModel.cancelRobotConnection();
 
         //bluetooth is disabled
         if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {

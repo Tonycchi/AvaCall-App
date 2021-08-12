@@ -1,11 +1,9 @@
 package com.example.ui;
 
-import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -17,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
@@ -72,6 +69,8 @@ public class VideoConnectionFragment extends HostedFragment {
     private void openURLSettings(View v) {
         new URLDialogFragment().show(
                 getChildFragmentManager(), URLDialogFragment.TAG);
+        viewModel.cancelServerConnection();
+        meetingIdTextView.setText("");
     }
 
     private void onClickTestControls(View v) {
