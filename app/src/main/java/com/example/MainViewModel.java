@@ -59,8 +59,8 @@ public class MainViewModel extends AndroidViewModel {
         return model.getOptions();
     }
 
-    public void cancelConnection() {
-        model.cancelConnection();
+    public void cancelRobotConnection() {
+        model.cancelRobotConnection();
     }
 
     public void deviceAccepted() {
@@ -113,5 +113,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public boolean isConnectedToServer() {
         return model.isConnectedToServer();
+    }
+
+    public void cancelServerConnection() {
+        model.cancelServerConnection();
     }
 }

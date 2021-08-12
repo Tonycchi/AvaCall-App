@@ -29,7 +29,7 @@ public class VideoConnectionModel {
      */
     public boolean invitePartner() {
         Log.d(TAG, "invite");
-        if (sessionData == null) {
+        if (sessionData == null || webClient == null || webClient.getStatus()!=1) {
             String videoURL = urlSettings.getVideoURL_https();
             try {
                 Log.d(TAG, "service " + ((EV3Controller)controller).service.toString());
@@ -101,5 +101,10 @@ public class VideoConnectionModel {
 
     public void setReceiveCommands(){
         webClient.setReceiveCommands();
+    }
+
+    public void cancelConnection() {
+        if(webClient != null && webClient.getStatus()==1)
+            webClient.close();
     }
 }
