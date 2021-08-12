@@ -42,7 +42,7 @@
         android:layout_marginStart="@dimen/margin_side_land"
         android:layout_marginEnd="@dimen/margin_vertical_small_land"
         android:layout_marginBottom="@dimen/margin_bottom_land"
-        android:text="@string/save_use_model"
+        android:text="@string/use_model"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_edit_model"
         app:layout_constraintStart_toStartOf="parent" />
