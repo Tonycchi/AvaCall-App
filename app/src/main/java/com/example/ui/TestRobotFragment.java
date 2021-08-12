@@ -1,5 +1,5 @@
 package com.example.ui;
-
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
@@ -43,6 +43,8 @@ public class TestRobotFragment extends HostedFragment {
     private MainViewModel viewModel;
     private View thisView;
     private TextView motorStrengthText;
+    private boolean borderVisible;
+
 
     // Observer to check if amount of paired Devices has been changed
     public final Observer<String> motorStrengthObserver = new Observer<String>() {
@@ -56,10 +58,16 @@ public class TestRobotFragment extends HostedFragment {
     public TestRobotFragment(){super(R.layout.test_robot);}
 
     public void showBorder(){
-       thisView.setBackgroundResource(R.drawable.faded_border);
+        if(!borderVisible) {
+            borderVisible = !borderVisible;
+            thisView.setBackgroundResource(R.drawable.faded_border);
+        }
     }
     public void hideBorder(){
-        thisView.setBackground(null);
+        if(borderVisible) {
+            borderVisible = !borderVisible;
+            thisView.setBackground(null);
+        }
     }
 
     @Override
@@ -79,6 +87,8 @@ public class TestRobotFragment extends HostedFragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+
+        borderVisible = false;
 
         thisView = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 ? view.findViewById(R.id.test_robot_fragment)
@@ -164,6 +174,7 @@ public class TestRobotFragment extends HostedFragment {
      * @param order the order in which we want to create the control elements
      * @param constraintLayout the current constraintLayout we are using
      */
+    @SuppressLint("ClickableViewAccessibility")
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
         int[] controlElements = new int[order.length];
         ConstraintSet set = new ConstraintSet();
@@ -281,19 +292,18 @@ public class TestRobotFragment extends HostedFragment {
                                     Log.d(TAG, "Button activity: " + 1);
                                     showBorder();
                                     button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.border));
-                                   // background.setVisibility(View.VISIBLE);
                                     return false;
                                 case MotionEvent.ACTION_UP:
                                 case MotionEvent.ACTION_CANCEL:
                                     Log.d(TAG, "Button activity: " + 0);
                                     hideBorder();
                                     button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
-                                  //  background.setVisibility(View.INVISIBLE);
                                     return false;
                             }
                             return true;
                         }
                     });
+
                     controlElements[i] = button.getId();
                     break;
             }
