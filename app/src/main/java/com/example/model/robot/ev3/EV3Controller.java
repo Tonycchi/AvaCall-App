@@ -34,6 +34,12 @@ public class EV3Controller implements Controller {
     public void sendInput(int... input) {
         Log.d(TAG, Arrays.toString(input));
         service.write(createCommand(input));
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        service.write(createOutputCommand());
     }
 
     public String getControlElementString() {
@@ -160,18 +166,56 @@ public class EV3Controller implements Controller {
         directCommand[lastCommand] = (byte) 0xa6;                // end of direct command
         directCommand[lastCommand + 2] = portSum;
 
-        byte[] changeMode = new byte[8];
-        changeMode[0] = (byte) 0x99;             //opcode
-        changeMode[1] = (byte) 0x1C;
-        changeMode[2] = (byte) 0x00;
-        changeMode[3] = (byte) 0x10;            //port
-        changeMode[4] = (byte) 0x07;
-        changeMode[5] = (byte) 0x02;           //typemode
-        changeMode[6] = (byte) 0x01;
-        changeMode[7] = (byte) 0x60;
-        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 8);
+//        byte[] timer = new byte[7]; // 1 + 3 + 1 | 1 + 1
+//        timer[0] = (byte) 0x85; //opcode timer_wait
+//        timer[1] = (byte) 0x82; //LC2
+//        timer[2] = (byte) 0x64; //LC2 Value
+//        timer[4] = (byte) 0x40; //LV(0)
+//
+//        timer[5] = (byte) 0x86; //opcoode timer_read
+//        timer[6] = (byte) 0x40; //LV(0)
+//        System.arraycopy(timer, 0, directCommand, lastCommand + 3, 7);
+
+//        byte[] changeMode = new byte[8];
+//        changeMode[0] = (byte) 0x99;             //opcode
+//        changeMode[1] = (byte) 0x1C;
+//        changeMode[2] = (byte) 0x00;
+//        changeMode[3] = (byte) 0x10;            //port
+//        changeMode[4] = (byte) 0x08;
+//        changeMode[5] = (byte) 0x02;           //typemode
+//        changeMode[6] = (byte) 0x01;
+//        changeMode[7] = (byte) 0x60;
+//        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 8);
         return directCommand;
     }
+
+    private byte[] createOutputCommand() {
+        //0x|14:00|2A:00|80|00:00|A4|00|0p|81:po|...|A6|00|0P
+        //   0  1  2  3  4  5  6  7  8  9  10 11
+        // 0 length of command minus 2
+        // 2-6 predefined
+        // 7-11 command for one motor (see commandPart)
+        // last 3 bytes: A6 opcode for start output
+        //               00 filler
+        //               0P = sum of used ports
+
+        byte[] directCommand = new byte[15];
+        directCommand[0] = (byte) 0x0D;
+        directCommand[2] = (byte) 0x2A;
+        directCommand[5] = (byte) 0x04;
+        directCommand[7] = (byte) 0x99;             //opcode
+        directCommand[8] = (byte) 0x1C;
+        directCommand[9] = (byte) 0x00;
+        directCommand[10] = (byte) 0x10;            //port
+        directCommand[11] = (byte) 0x08;
+        directCommand[12] = (byte) 0x02;           //typemode
+        directCommand[13] = (byte) 0x01;
+        directCommand[14] = (byte) 0x60;
+
+        return directCommand;
+    }
+
+
 
     /**
      * @param port  ev3 motor port
