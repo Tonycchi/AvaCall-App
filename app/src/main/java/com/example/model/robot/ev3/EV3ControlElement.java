@@ -5,7 +5,7 @@ import android.util.Log;
 abstract class EV3ControlElement {
 
     final int maxPower;
-    final int[] port;
+    public final int[] port;
 
     protected EV3ControlElement(int[] ports, int maxPower) {
         this.maxPower = maxPower;
