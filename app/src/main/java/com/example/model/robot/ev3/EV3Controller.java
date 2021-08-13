@@ -34,12 +34,12 @@ public class EV3Controller implements Controller {
     public void sendInput(int... input) {
         Log.d(TAG, Arrays.toString(input));
         service.write(createCommand(input));
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        service.write(createOutputCommand());
+//        try {
+//            Thread.sleep(100);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        service.write(createOutputCommand());
     }
 
     public String getControlElementString() {
@@ -134,7 +134,7 @@ public class EV3Controller implements Controller {
         //byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
         byte[] output = e.getCommand(Arrays.copyOfRange(input, 1, input.length));
 
-        int length = 10 + output.length + 8;            // e.g. joystick may return two values
+        int length = 10 + output.length + 16;            // e.g. joystick may return two values
         int lastCommand = 7 + output.length;
         byte[] directCommand = new byte[length];        // this will be the command
 
@@ -142,8 +142,15 @@ public class EV3Controller implements Controller {
 
         //TODO:
         //directCommand[2] = port;            //message counter is used as info which port is used
-        directCommand[2] = 0x2a;
-        //directCommand[3] = (byte)id;              //message counter is used as info which control element is writing
+        if (e.port.length == 1) {
+            directCommand[2] = Byte.parseByte(Integer.toHexString(e.port[0]), 16);
+        }
+        else {
+            Log.d(TAG, "Port 1: "+e.port[0]+" Port 2: "+e.port[1]);
+            directCommand[2] = Byte.parseByte(Integer.toHexString((e.port[0]<<4)+e.port[1]), 16);
+        }
+
+        directCommand[3] = (byte) id;              //message counter is used as info which control element is writing
 
         directCommand[4] = (byte) 0x00;
         directCommand[5] = (byte) 0x04;
@@ -176,16 +183,25 @@ public class EV3Controller implements Controller {
 //        timer[6] = (byte) 0x40; //LV(0)
 //        System.arraycopy(timer, 0, directCommand, lastCommand + 3, 7);
 
-//        byte[] changeMode = new byte[8];
-//        changeMode[0] = (byte) 0x99;             //opcode
-//        changeMode[1] = (byte) 0x1C;
-//        changeMode[2] = (byte) 0x00;
-//        changeMode[3] = (byte) 0x10;            //port
-//        changeMode[4] = (byte) 0x08;
-//        changeMode[5] = (byte) 0x02;           //typemode
-//        changeMode[6] = (byte) 0x01;
-//        changeMode[7] = (byte) 0x60;
-//        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 8);
+        byte[] changeMode = new byte[16];
+        changeMode[0] = (byte) 0x99;             //opcode
+        changeMode[1] = (byte) 0x1C;
+        changeMode[2] = (byte) 0x00;
+        changeMode[3] = (byte) 0x10;            //port
+        changeMode[4] = (byte) 0x08;
+        changeMode[5] = (byte) 0x02;           //typemode
+        changeMode[6] = (byte) 0x01;
+        changeMode[7] = (byte) 0x60;
+
+        changeMode[8] = (byte) 0x99;
+        changeMode[9] = (byte) 0x1C;
+        changeMode[10] = (byte) 0x00;
+        changeMode[11] = (byte) 0x13;
+        changeMode[12] = (byte) 0x08;
+        changeMode[13] = (byte) 0x02;
+        changeMode[14] = (byte) 0x01;
+        changeMode[15] = (byte) 0x61;
+        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 16);
         return directCommand;
     }
 
