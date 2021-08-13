@@ -15,5 +15,5 @@ public interface Robot {
 
     String getType();
 
-    void saveModel(int id, String name, String description, String type, List<List<Integer>> values);
+    RobotModel saveModel(int id, String name, String description, String type, List<List<Integer>> values);
 }
