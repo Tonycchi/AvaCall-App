@@ -50,7 +50,7 @@
         <string name="name">Name</string>
 
         <!-- Edit Model -->
-        <string name="edit_controls_motor_alert">Es können maximal 4 Motoren belegt werden.</string>
+        <string name="edit_controls_motor_alert">Es können maximal 4 Steuerelemente verwendet werden.</string>
 
         <!-- Video Connection -->
         <string name="url_settings">URL-Einstellungen</string>

@@ -104,7 +104,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             }
         }
         // add button isn't shown when all motors set:
-        itemCount = (elementValues.size() == 4) ? list.size() : list.size() + 1;
+        itemCount = list.size() + 1;
         fieldsFilled = fields;
         numberOfFields = fields;
     }
