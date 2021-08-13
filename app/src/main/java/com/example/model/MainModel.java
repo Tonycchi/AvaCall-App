@@ -169,9 +169,9 @@ public class MainModel {
     }
 
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
-        robot.saveModel(id, name, description, type, values);
-        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
-        controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
+        RobotModel robotModel = robot.saveModel(id, name, description, type, values);
+        //RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
+        controller = robot.getController(robotModel, robotConnectionModel.getService()); // use model that was just saved
     }
 
     public void setSelectedModelPosition(int position) {
@@ -194,4 +194,5 @@ public class MainModel {
     public MutableLiveData<String> getMotorStrength() {
         return testRobotModel.getMotorStrength();
     }
+
 }

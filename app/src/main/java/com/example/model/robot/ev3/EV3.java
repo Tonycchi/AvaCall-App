@@ -27,7 +27,7 @@ public class EV3 implements Robot {
     }
 
     @Override
-    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
+    public RobotModel saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
         String specs = "";
         for (List<Integer> element : values) {
             switch (element.get(0)) { // TODO define numbers centrally, maybe in Constants.java alongside robot type strings
@@ -50,7 +50,11 @@ public class EV3 implements Robot {
         }
         if (specs.length() > 0) {
             specs = specs.substring(0, specs.length() - 1);
-            db.insertAll(new RobotModel(id, name, type, specs, description.trim()));
+            RobotModel robotModel = new RobotModel(id, name, type, specs, description.trim());
+            db.insertAll(robotModel);
+            return robotModel;
+        } else {
+            throw new IllegalStateException();
         }
     }
 
