@@ -10,6 +10,8 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.model.MainModel;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,11 +38,14 @@ public class BluetoothConnectionService implements ConnectionService {
     private ConnectedThread connectedThread;
     private BluetoothDevice bluetoothDevice;
     private ByteArrayHandshake byteArrayHandshake;
+    private MainModel mainModel;
 
-    public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake) {
+
+    public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake, MainModel mainModel) {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<Integer>();
         this.byteArrayHandshake = byteArrayHandshake;
+        this.mainModel = mainModel;
     }
 
     public MutableLiveData<Integer> getConnectionStatus() {
@@ -324,9 +329,12 @@ public class BluetoothConnectionService implements ConnectionService {
                     Log.d(TAG, "handshake received:" + bytesToHex(buffer, replySize + 2) + " length:" + replySize);
 
                     if (byteArrayHandshake.isAckCorrect(buffer)) {
+                        Log.d(TAG, "handshake successful");
                         connectionStatus.postValue(4);
                         listen();
                     } else {
+                        //TODO: close connection
+                        Log.d(TAG, "handshake not successful");
                         connectionStatus.postValue(5);
                     }
                 }
@@ -356,8 +364,8 @@ public class BluetoothConnectionService implements ConnectionService {
                 try {
                     INPUT_STREAM.read(buffer);
                     int replySize = (buffer[1]*16+buffer[0]);
-
                     Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
+                    mainModel.receivedMessageFromRobot(buffer);
                 } catch (IOException e) {
                     // connection got lost, so status gets set to 3
                     connectionStatus.postValue(3);

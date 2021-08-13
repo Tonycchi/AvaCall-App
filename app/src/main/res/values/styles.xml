@@ -26,6 +26,10 @@
         <item name="android:backgroundTint">@color/joystick_border</item>
     </style>
 
+    <style name="button_stall_control_element" parent="buttons">
+        <item name="android:backgroundTint">@color/border</item>
+    </style>
+
     <style name="text_standard">
         <item name="android:textColor">@color/text_standard</item>
         <item name="android:textSize">@dimen/_11sdp</item>

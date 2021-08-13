@@ -1,15 +1,17 @@
 package com.example.ui;
-
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +19,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
+import com.example.model.connection.Device;
 import com.example.rcvc.R;
 import com.example.ui.editControls.EditControlsFragment;
 
@@ -36,8 +41,34 @@ public class TestRobotFragment extends HostedFragment {
     private boolean cameFromModelSelection;
 
     private MainViewModel viewModel;
+    private View thisView;
+    private TextView motorStrengthText;
+    private boolean borderVisible;
+
+
+    // Observer to check if amount of paired Devices has been changed
+    public final Observer<String> motorStrengthObserver = new Observer<String>() {
+        @Override
+        public void onChanged(@Nullable final String newStrength) {
+            // Update the UI
+            motorStrengthText.setText(newStrength);
+        }
+    };
 
     public TestRobotFragment(){super(R.layout.test_robot);}
+
+    public void showBorder(){
+        if(!borderVisible) {
+            borderVisible = !borderVisible;
+            thisView.setBackgroundResource(R.drawable.faded_border);
+        }
+    }
+    public void hideBorder(){
+        if(borderVisible) {
+            borderVisible = !borderVisible;
+            thisView.setBackground(null);
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,13 +88,24 @@ public class TestRobotFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
+        borderVisible = false;
+
+        thisView = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                ? view.findViewById(R.id.test_robot_fragment)
+                : view.findViewById(R.id.test_robot_fragment_landscape);
+
         ConstraintLayout constraintLayout = (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                 ? view.findViewById(R.id.test_robot_fragment)
                 : view.findViewById(R.id.test_robot_fragment_landscape);
-        
+
         String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
         String[] order = rankOrder(t);
         createControlElements(order, constraintLayout);
+
+        motorStrengthText = view.findViewById(R.id.text_motor_strength);
+
+        MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
+        motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
 
         Button buttonYes = view.findViewById(R.id.button_yes);
         Button buttonNo = view.findViewById(R.id.button_no);
@@ -104,7 +146,7 @@ public class TestRobotFragment extends HostedFragment {
 
     /**
      * Puts the control elements we have to create in a certain order 1.joystick 2.slider 3.button
-     * @param input string of control elements we need for the selected model
+     * @param input string of control elements we need for the selected model f.e. joystick|button|slider|button
      * @return String Array with the order we defined above
      */
     public String[] rankOrder(String input) {
@@ -129,9 +171,10 @@ public class TestRobotFragment extends HostedFragment {
 
     /**
      * All control elements are created in this method
-     * @param order the order in which we create the control elements
+     * @param order the order in which we want to create the control elements
      * @param constraintLayout the current constraintLayout we are using
      */
+    @SuppressLint("ClickableViewAccessibility")
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
         int[] controlElements = new int[order.length];
         ConstraintSet set = new ConstraintSet();
@@ -163,6 +206,15 @@ public class TestRobotFragment extends HostedFragment {
                     joystick.setOnMoveListener((angle, strength) -> {
                         viewModel.sendControlInput(id, angle, strength);
                         Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
+                        if(angle==0 && strength==0) {
+                            hideBorder();
+                            joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                            joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
+                        }else {
+                            showBorder();
+                            joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.border));
+                            joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                        }
                     });
 
                     controlElements[i] = joystick.getId();
@@ -197,23 +249,28 @@ public class TestRobotFragment extends HostedFragment {
 
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {
-
+                            showBorder();
+                            slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
+                            slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                         }
 
                         @Override
                         public void onStopTrackingTouch(SeekBar seekBar) {
                             viewModel.sendControlInput(id, 50);
                             seekBar.setProgress(50);
+                            hideBorder();
+                            slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                            slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
                         }
                     });
                     controlElements[i] = slider.getId();
                     break;
                 case "button":
                     ContextThemeWrapper newContext = new ContextThemeWrapper(getContext(), R.style.button_control_element);
-                    Button button = new Button(newContext);
+                    android.widget.Button button = new android.widget.Button(newContext);
                     button.setId(View.generateViewId());
                     button.setText("Feuer");
-                    button.setBackgroundResource(R.drawable.standard_button);
+                    button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.standard_button));
                     constraintLayout.addView(button);
 
                     set.constrainHeight(button.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
@@ -233,15 +290,20 @@ public class TestRobotFragment extends HostedFragment {
                                 case MotionEvent.ACTION_DOWN:
                                     viewModel.sendControlInput(id, 1);
                                     Log.d(TAG, "Button activity: " + 1);
+                                    showBorder();
+                                    button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.border));
                                     return false;
                                 case MotionEvent.ACTION_UP:
                                 case MotionEvent.ACTION_CANCEL:
                                     Log.d(TAG, "Button activity: " + 0);
+                                    hideBorder();
+                                    button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                                     return false;
                             }
                             return true;
                         }
                     });
+
                     controlElements[i] = button.getId();
                     break;
             }

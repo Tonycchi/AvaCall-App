@@ -47,7 +47,6 @@ public abstract class RobotConnectionFragment extends HostedFragment {
 
     public RobotConnectionFragment(@LayoutRes int contentLayoutId){
         super(contentLayoutId);
-
     }
 
     @Override

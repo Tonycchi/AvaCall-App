@@ -118,4 +118,8 @@ public class MainViewModel extends AndroidViewModel {
     public void cancelServerConnection() {
         model.cancelServerConnection();
     }
+
+    public MutableLiveData<String> getMotorStrength() {
+        return model.getMotorStrength();
+    }
 }

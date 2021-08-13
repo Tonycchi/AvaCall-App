@@ -10,6 +10,7 @@ import com.example.Constants;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
 import com.example.data.RobotModel;
+import com.example.data.URLSettings;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.EV3BluetoothHandshake;
@@ -18,6 +19,8 @@ import com.example.model.connection.RobotConnectionModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 import com.example.model.robot.ev3.EV3;
+
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,8 @@ public class MainModel {
     private RobotConnectionModel robotConnectionModel;
     private Handshake handshake;
     private VideoConnectionModel videoConnectionModel;
+
+    private TestRobotModel testRobotModel;
 
     private Robot robot;
     private Controller controller;
@@ -48,7 +53,11 @@ public class MainModel {
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
         //handshake = new AcceptAllHandshake();
-        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake);
+        robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake, this);
+
+        testRobotModel = new TestRobotModel();
+
+        //TODO: don't hard code robotType
         modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), Constants.TYPE_EV3);
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
@@ -155,6 +164,10 @@ public class MainModel {
     }
 
 
+    public void receivedMessageFromRobot(byte[] message){
+        testRobotModel.receivedMessage(message);
+    }
+
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
         robot.saveModel(id, name, description, type, values);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
@@ -176,5 +189,9 @@ public class MainModel {
 
     public void cancelServerConnection() {
         videoConnectionModel.cancelConnection();
+    }
+
+    public MutableLiveData<String> getMotorStrength() {
+        return testRobotModel.getMotorStrength();
     }
 }
