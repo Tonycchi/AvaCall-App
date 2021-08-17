@@ -75,13 +75,4 @@
         app:layout_constraintStart_toEndOf="@+id/model_picture"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_model"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/model_picture"
-        app:layout_constraintEnd_toEndOf="@+id/model_picture"
-        app:srcCompat="@drawable/add" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

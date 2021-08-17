@@ -1,8 +1,12 @@
 package com.example.ui.modelSelection;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,18 +19,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
 import com.example.data.RobotModel;
-import com.example.data.RobotModelDAO;
 import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.TestRobotFragment;
 import com.example.ui.editControls.EditControlsFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.simonvt.numberpicker.NumberPicker;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModelSelectionFragment extends HostedFragment {
 
@@ -49,6 +48,8 @@ public class ModelSelectionFragment extends HostedFragment {
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
         setEnterTransition(inflater.inflateTransition(R.transition.slide));
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -57,11 +58,10 @@ public class ModelSelectionFragment extends HostedFragment {
 
         Button useModel = view.findViewById(R.id.button_use_model);
         Button editModel = view.findViewById(R.id.button_edit_model);
-        FloatingActionButton addModel = view.findViewById(R.id.add_model);
+
 
         useModel.setOnClickListener(this::onClickUseModel);
         editModel.setOnClickListener(this::onClickEditModel);
-        addModel.setOnClickListener(this::onClickAddModel);
 
         modelPicker = view.findViewById(R.id.model_picker);
 
@@ -78,6 +78,28 @@ public class ModelSelectionFragment extends HostedFragment {
         setModelDescription();
 
         getActivity().setTitle(R.string.title_model_selection);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.add_model, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_add) {
+            viewModel.modelSelected(-1);
+
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, EditControlsFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -106,17 +128,6 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private void onClickEditModel(View v) {
         viewModel.modelSelected(modelPicker.getValue());
-
-        FragmentManager fragmentManager = getParentFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, EditControlsFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    private void onClickAddModel(View v) {
-        viewModel.modelSelected(-1);
 
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()

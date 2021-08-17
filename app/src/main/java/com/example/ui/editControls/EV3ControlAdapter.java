@@ -27,10 +27,9 @@ public class EV3ControlAdapter extends ControlAdapter {
         maxNumberElements = 4;
 
         // model is not null if called by "Modell Bearbeiten"
-        // and null if called by "Neues Modell"
         if (model != null) {
             initElements(model.specs);
-        } else {
+        } else { // and null if called by "Neues Modell"
             numberOfFields = 0;
             fieldsFilled = 0;
         }
