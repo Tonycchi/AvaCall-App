@@ -180,24 +180,25 @@ public class EV3Controller implements Controller {
 //        timer[6] = (byte) 0x40; //LV(0)
 //        System.arraycopy(timer, 0, directCommand, lastCommand + 3, 7);
 
+        // directCommand to read output of motors
         byte[] changeMode = new byte[16];
-        changeMode[0] = (byte) 0x99;             //opcode
-        changeMode[1] = (byte) 0x1C;
-        changeMode[2] = (byte) 0x00;
-        changeMode[3] = (byte) 0x10;            //port
-        changeMode[4] = (byte) 0x08;
-        changeMode[5] = (byte) 0x02;           //typemode
-        changeMode[6] = (byte) 0x01;
-        changeMode[7] = (byte) 0x60;
+        changeMode[0] = (byte) 0x99;    //opcode
+        changeMode[1] = (byte) 0x1C;    //opcode extension
+        changeMode[2] = (byte) 0x00;    //layer
+        changeMode[3] = (byte) 0x10;    //port
+        changeMode[4] = (byte) 0x07;    //type
+        changeMode[5] = (byte) 0x02;    //typemode
+        changeMode[6] = (byte) 0x01;    //values
+        changeMode[7] = (byte) 0x60;    //global memory address
 
-        changeMode[8] = (byte) 0x99;
-        changeMode[9] = (byte) 0x1C;
-        changeMode[10] = (byte) 0x00;
-        changeMode[11] = (byte) 0x13;
-        changeMode[12] = (byte) 0x08;
-        changeMode[13] = (byte) 0x02;
-        changeMode[14] = (byte) 0x01;
-        changeMode[15] = (byte) 0x61;
+        changeMode[8] = (byte) 0x99;    //opcode
+        changeMode[9] = (byte) 0x1C;    //opcode extension
+        changeMode[10] = (byte) 0x00;   //layer
+        changeMode[11] = (byte) 0x13;   //port
+        changeMode[12] = (byte) 0x07;   //type
+        changeMode[13] = (byte) 0x02;   //typemode
+        changeMode[14] = (byte) 0x01;   //values
+        changeMode[15] = (byte) 0x61;   //global memory address
         System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 16);
         return directCommand;
     }

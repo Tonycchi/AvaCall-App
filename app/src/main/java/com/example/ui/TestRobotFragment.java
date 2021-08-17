@@ -146,7 +146,7 @@ public class TestRobotFragment extends HostedFragment {
 
     /**
      * Puts the control elements we have to create in a certain order 1.joystick 2.slider 3.button
-     * @param input string of control elements we need for the selected model f.e. joystick|button|slider|button
+     * @param input string of control elements we need for the selected model e.g. joystick|button|slider|button
      * @return String Array with the order we defined above
      */
     public String[] rankOrder(String input) {
@@ -178,12 +178,15 @@ public class TestRobotFragment extends HostedFragment {
     public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
         int[] controlElements = new int[order.length];
         ConstraintSet set = new ConstraintSet();
+        // used to rotate all sliders at the same time
         List<SeekBar> sliderList = new ArrayList<SeekBar>();
         //iterate through the order Array
         for (int i = 0; i < order.length; i++) {
+            // id of position in the order of control elements
             int id = i;
             switch (order[i]) {
                 case "joystick":
+                    // create the joystick
                     JoystickView joystick = new JoystickView(getContext());
                     joystick.setId(View.generateViewId());
                     joystick.setBorderWidth((int) getResources().getDimension(R.dimen.joystick_border_width));
@@ -192,34 +195,45 @@ public class TestRobotFragment extends HostedFragment {
                     joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
                     joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
                     joystick.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.joystick_background));
+
+                    // add the joystick to the constraintLayout
+                    // set constraintHeight and constraintWidth (this depends on the orientation)
+                    // update the constraintSet based on the orientation in dependency of control elements created before
                     constraintLayout.addView(joystick);
                     set.constrainHeight(joystick.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
-                    if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
+                    if ((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
                         updateConstraintSet(i, joystick.getId(), controlElements, set);
                         set.constrainWidth(joystick.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
                     } else {
                         updateConstraintSetLandscape(i, joystick.getId(), controlElements, set);
                         set.constrainWidth(joystick.getId(), (int) getResources().getDimension(R.dimen.control_element_size_landscape));
                     }
+                    // apply all changes to the constraintLayout
                     set.applyTo(constraintLayout);
 
+                    // set a onMoveListener for the functionality when the joystick is used
                     joystick.setOnMoveListener((angle, strength) -> {
                         viewModel.sendControlInput(id, angle, strength);
                         Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
-                        if(angle==0 && strength==0) {
+                        // change the color when a stall is detected
+                        if (angle==0 && strength==0) {
+                            // hide the border when no stall is detected
                             hideBorder();
                             joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
                             joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
-                        }else {
+                        } else {
+                            // show a border when a stall is detected
                             showBorder();
                             joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.border));
                             joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
                         }
                     });
 
+                    // save the unique id of this element
                     controlElements[i] = joystick.getId();
                     break;
                 case "slider":
+                    // create the slider
                     SeekBar slider = new SeekBar(getContext());
                     sliderList.add(slider);
                     slider.setId(View.generateViewId());
@@ -227,19 +241,23 @@ public class TestRobotFragment extends HostedFragment {
                     slider.setThumb(ContextCompat.getDrawable(getContext(), R.drawable.slider_thumb));
                     slider.setProgressDrawable(ContextCompat.getDrawable(getContext(), R.drawable.slider_progressbar));
                     slider.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
-                    constraintLayout.addView(slider);
 
+                    // add the slider to the constraintLayout
+                    // set constraintHeight and constraintWidth (this depends on the orientation)
+                    // update the constraintSet based on the orientation in dependency of control elements created before
+                    constraintLayout.addView(slider);
                     set.constrainHeight(slider.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
-                    if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
+                    if ((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
                         updateConstraintSet(i, slider.getId(), controlElements, set);
                         set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
                     } else {
                         updateConstraintSetLandscape(i, slider.getId(), controlElements, set);
                         set.constrainWidth(slider.getId(), (int) getResources().getDimension(R.dimen.control_element_size_landscape));
                     }
-
+                    // apply all changes to the constraintLayout
                     set.applyTo(constraintLayout);
 
+                    // set a onSeekBarChangeListener for the functionality when the slider is used
                     slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -249,7 +267,9 @@ public class TestRobotFragment extends HostedFragment {
 
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {
+                            // show a border when a stall is detected
                             showBorder();
+                            // change the color when a stall is detected
                             slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
                             slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                         }
@@ -258,31 +278,41 @@ public class TestRobotFragment extends HostedFragment {
                         public void onStopTrackingTouch(SeekBar seekBar) {
                             viewModel.sendControlInput(id, 50);
                             seekBar.setProgress(50);
+                            // hide the border when no stall is detected
                             hideBorder();
+                            // change the color when no stall is detected
                             slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                             slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
                         }
                     });
+
+                    // save the unique id of this  element
                     controlElements[i] = slider.getId();
                     break;
                 case "button":
+                    // create the button
                     ContextThemeWrapper newContext = new ContextThemeWrapper(getContext(), R.style.button_control_element);
                     android.widget.Button button = new android.widget.Button(newContext);
                     button.setId(View.generateViewId());
                     button.setText("Feuer");
                     button.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.standard_button));
-                    constraintLayout.addView(button);
 
+                    // add the button to the constraintLayout
+                    // set constraintHeight and constraintWidth (this depends on the orientation)
+                    // update the constraintSet based on the orientation in dependency of control elements created before
+                    constraintLayout.addView(button);
                     set.constrainHeight(button.getId(), (int) getResources().getDimension(R.dimen.standard_button_height));
-                    if((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
+                    if ((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)) {
                         updateConstraintSet(i, button.getId(), controlElements, set);
                         set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.control_element_size));
                     } else {
                         updateConstraintSetLandscape(i, button.getId(), controlElements, set);
                         set.constrainWidth(button.getId(), (int) getResources().getDimension(R.dimen.control_element_size_landscape));
                     }
+                    // apply all changes to the constraintLayout
                     set.applyTo(constraintLayout);
 
+                    // set a onTouchListener for the functionality when the button is used
                     button.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
@@ -290,13 +320,17 @@ public class TestRobotFragment extends HostedFragment {
                                 case MotionEvent.ACTION_DOWN:
                                     viewModel.sendControlInput(id, 1);
                                     Log.d(TAG, "Button activity: " + 1);
+                                    // show a border when a stall is detected
                                     showBorder();
+                                    // change the color when a stall is detected
                                     button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.border));
                                     return false;
                                 case MotionEvent.ACTION_UP:
                                 case MotionEvent.ACTION_CANCEL:
                                     Log.d(TAG, "Button activity: " + 0);
+                                    // hide the border when no stall is detected
                                     hideBorder();
+                                    // change the color when no stall is detected
                                     button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                                     return false;
                             }
@@ -304,6 +338,7 @@ public class TestRobotFragment extends HostedFragment {
                         }
                     });
 
+                    // save the unique id of this element
                     controlElements[i] = button.getId();
                     break;
             }
