@@ -20,14 +20,13 @@ public class TestRobotModel {
         Log.d(TAG,"received");
         String ok = message[4]==0x02 ? "ok" : "nicht ok";
 
-//        int strength = message[8]<<3;
-//        strength += message[7]<<2;
-//        strength += message[6]<<1;
-//        strength += message[5];
+        // the power of the ports from the global memorey
         int strength1 = message[5];
         int strength2 = message[6];
+        // ports are combined in the message counter first byte
         int port1 = (message[2] & 0xf0) >>> 4;
         int port2 = (message[2] & 0x0f);
+        // id of the element is in the message counter second byte
         int id1 = message[3];
         int id2 = message[3];
         Log.d(TAG,message[5]+":"+message[6]+":"+message[7]+":"+message[8]+"->Stärke:"+strength1);

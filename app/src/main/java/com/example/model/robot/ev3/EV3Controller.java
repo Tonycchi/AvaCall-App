@@ -126,9 +126,9 @@ public class EV3Controller implements Controller {
         //               00 filler
         //               0P = sum of used ports
 
-        int id = input[0];              // get id of input
+        int id = input[0];  // get id of input
         EV3ControlElement e = controlElements.get(id);  // for this
-        //byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
+        //byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));  // and compute output power
         byte[] output = e.getCommand(Arrays.copyOfRange(input, 1, input.length));
 
         int length = 10 + output.length + 16;            // e.g. joystick may return two values
@@ -138,12 +138,14 @@ public class EV3Controller implements Controller {
         directCommand[0] = (byte) (length - 2);         // pre defined parts of direct command
 
         //TODO:
-        //directCommand[2] = port;            //message counter is used as info which port is used
+        //directCommand[2] = port;  //message counter is used as info which port is used
         if (e.port.length == 1) {
+            // directly write the port into the message counter
             directCommand[2] = Byte.parseByte(Integer.toHexString(e.port[0]), 16);
         }
         else {
             Log.d(TAG, "Port 1: "+e.port[0]+" Port 2: "+e.port[1]);
+            // combine the ports into a single byte and write it into the message counter
             directCommand[2] = Byte.parseByte(Integer.toHexString((e.port[0]<<4)+e.port[1]), 16);
         }
 
