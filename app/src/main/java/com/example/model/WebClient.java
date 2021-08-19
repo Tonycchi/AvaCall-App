@@ -73,6 +73,17 @@ public class WebClient extends WebSocketClient {
         }
     }
 
+    public void sendStallDetected(String controlElementType, int controlElementId){
+        String stallMessage = "STALL:start:"+controlElementType+":"+controlElementId;
+        send(stallMessage);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId){
+        String stallMessage = "STALL:stop:"+controlElementType+":"+controlElementId;
+        send(stallMessage);
+    }
+
+
     @Override
     public void onMessage(ByteBuffer message) {
     }
