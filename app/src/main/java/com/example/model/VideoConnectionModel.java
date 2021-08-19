@@ -97,4 +97,12 @@ public class VideoConnectionModel {
     public void setReceiveCommands(){
         webClient.setReceiveCommands();
     }
+
+    public void sendStallDetected(String controlElementType, int controlElementId) {
+        webClient.sendStallDetected(controlElementType, controlElementId);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId) {
+        webClient.sendStallEnded(controlElementType, controlElementId);
+    }
 }

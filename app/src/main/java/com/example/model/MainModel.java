@@ -176,4 +176,12 @@ public class MainModel {
     public MutableLiveData<String> getMotorStrength() {
         return testRobotModel.getMotorStrength();
     }
+
+    public void sendStallDetected(String controlElementType, int controlElementId) {
+        videoConnectionModel.sendStallDetected(controlElementType, controlElementId);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId) {
+        videoConnectionModel.sendStallEnded(controlElementType, controlElementId);
+    }
 }

@@ -110,4 +110,12 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<String> getMotorStrength() {
         return model.getMotorStrength();
     }
+
+    public void sendStallDetected(String controlElementType, int controlElementId) {
+        model.sendStallDetected(controlElementType, controlElementId);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId) {
+        model.sendStallEnded(controlElementType, controlElementId);
+    }
 }
