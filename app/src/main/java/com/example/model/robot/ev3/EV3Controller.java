@@ -1,5 +1,6 @@
 package com.example.model.robot.ev3;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.example.data.RobotModel;
@@ -20,6 +21,7 @@ public class EV3Controller implements Controller {
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
+    private Handler h = new Handler();
 
     public EV3Controller(RobotModel model, ConnectionService service) {
         this.service = service;
@@ -34,13 +36,15 @@ public class EV3Controller implements Controller {
     public void sendInput(int... input) {
         Log.d(TAG, Arrays.toString(input));
         service.write(createCommand(input));
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        service.write(createOutputCommand());
+        h.postDelayed(r, 100);
     }
+
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            service.write(createOutputCommand());
+        }
+    };
 
     public String getControlElementString() {
         return controlElementString;
@@ -134,7 +138,7 @@ public class EV3Controller implements Controller {
         //byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
         byte[] output = e.getCommand(Arrays.copyOfRange(input, 1, input.length));
 
-        int length = 10 + output.length + 16;            // e.g. joystick may return two values
+        int length = 10 + output.length;            // e.g. joystick may return two values
         int lastCommand = 7 + output.length;
         byte[] directCommand = new byte[length];        // this will be the command
 
@@ -183,25 +187,25 @@ public class EV3Controller implements Controller {
 //        timer[6] = (byte) 0x40; //LV(0)
 //        System.arraycopy(timer, 0, directCommand, lastCommand + 3, 7);
 
-        byte[] changeMode = new byte[16];
-        changeMode[0] = (byte) 0x99;             //opcode
-        changeMode[1] = (byte) 0x1C;
-        changeMode[2] = (byte) 0x00;
-        changeMode[3] = (byte) 0x10;            //port
-        changeMode[4] = (byte) 0x08;
-        changeMode[5] = (byte) 0x02;           //typemode
-        changeMode[6] = (byte) 0x01;
-        changeMode[7] = (byte) 0x60;
-
-        changeMode[8] = (byte) 0x99;
-        changeMode[9] = (byte) 0x1C;
-        changeMode[10] = (byte) 0x00;
-        changeMode[11] = (byte) 0x13;
-        changeMode[12] = (byte) 0x08;
-        changeMode[13] = (byte) 0x02;
-        changeMode[14] = (byte) 0x01;
-        changeMode[15] = (byte) 0x61;
-        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 16);
+//        byte[] changeMode = new byte[16];
+//        changeMode[0] = (byte) 0x99;             //opcode
+//        changeMode[1] = (byte) 0x1C;
+//        changeMode[2] = (byte) 0x00;
+//        changeMode[3] = (byte) 0x10;            //port
+//        changeMode[4] = (byte) 0x08;
+//        changeMode[5] = (byte) 0x02;           //typemode
+//        changeMode[6] = (byte) 0x01;
+//        changeMode[7] = (byte) 0x60;
+//
+//        changeMode[8] = (byte) 0x99;
+//        changeMode[9] = (byte) 0x1C;
+//        changeMode[10] = (byte) 0x00;
+//        changeMode[11] = (byte) 0x13;
+//        changeMode[12] = (byte) 0x08;
+//        changeMode[13] = (byte) 0x02;
+//        changeMode[14] = (byte) 0x01;
+//        changeMode[15] = (byte) 0x61;
+//        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 16);
         return directCommand;
     }
 
@@ -215,8 +219,8 @@ public class EV3Controller implements Controller {
         //               00 filler
         //               0P = sum of used ports
 
-        byte[] directCommand = new byte[15];
-        directCommand[0] = (byte) 0x0D;
+        byte[] directCommand = new byte[23];
+        directCommand[0] = (byte) 0x15;
         directCommand[2] = (byte) 0x2A;
         directCommand[5] = (byte) 0x04;
         directCommand[7] = (byte) 0x99;             //opcode
@@ -226,7 +230,16 @@ public class EV3Controller implements Controller {
         directCommand[11] = (byte) 0x08;
         directCommand[12] = (byte) 0x02;           //typemode
         directCommand[13] = (byte) 0x01;
-        directCommand[14] = (byte) 0x60;
+        directCommand[14] = (byte) 0x62;
+        directCommand[15] = (byte) 0x99;             //opcode
+        directCommand[16] = (byte) 0x1C;
+        directCommand[17] = (byte) 0x00;
+        directCommand[18] = (byte) 0x13;            //port
+        directCommand[19] = (byte) 0x08;
+        directCommand[20] = (byte) 0x02;           //typemode
+        directCommand[21] = (byte) 0x01;
+        directCommand[22] = (byte) 0x63;
+
 
         return directCommand;
     }

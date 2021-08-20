@@ -24,8 +24,8 @@ public class TestRobotModel {
 //        strength += message[7]<<2;
 //        strength += message[6]<<1;
 //        strength += message[5];
-        int strength1 = message[5];
-        int strength2 = message[6];
+        int strength1 = message[7];
+        int strength2 = message[8];
         int port1 = (message[2] & 0xf0) >>> 4;
         int port2 = (message[2] & 0x0f);
         int id1 = message[3];
