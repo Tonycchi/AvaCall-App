@@ -1,11 +1,9 @@
 package com.example.ui;
 
-import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -63,10 +61,15 @@ public class VideoConnectionFragment extends HostedFragment {
         buttonTestControls.setOnClickListener(this::onClickTestControls);
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
 
-        if(viewModel.getID()!=null)
-            meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
+        if (viewModel.getID() != null)
+            meetingIdTextView.setText(getString(R.string.meeting_id) + " " + viewModel.getID());
 
         requireActivity().setTitle(R.string.title_video_connection);
+
+        buttonAccessVideoCall.setEnabled(false);
+        final Observer<Boolean> videoReadyObserver = buttonAccessVideoCall::setEnabled;
+
+        viewModel.isVideoReady().observe(getViewLifecycleOwner(), videoReadyObserver);
     }
 
     private void openURLSettings(View v) {
@@ -79,7 +82,6 @@ public class VideoConnectionFragment extends HostedFragment {
         fragmentManager.popBackStack();
     }
 
-
     private void onClickInvitePartner(View v) {
         Log.d(TAG, "onClickInvitePartner");
         viewModel.invitePartner();
@@ -88,7 +90,7 @@ public class VideoConnectionFragment extends HostedFragment {
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getShareURL());
             clipboard.setPrimaryClip(clip);
-            ((HostActivity)getActivity()).showToast(getString(R.string.toast_link_copied));
+            ((HostActivity) getActivity()).showToast(getString(R.string.toast_link_copied));
         } else {
             Log.d(TAG, "New Android Version!");
             Intent sendIntent = new Intent();
@@ -100,18 +102,17 @@ public class VideoConnectionFragment extends HostedFragment {
             startActivity(shareIntent);
         }
 
-        meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
+        meetingIdTextView.setText(getString(R.string.meeting_id) + " " + viewModel.getID());
     }
 
     private void onClickSwitchToVideoCall(View v) {
-        // TODO setReceiveCommands kommt hier noch hin
-        JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions)viewModel.getOptions());
+        JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getOptions());
         viewModel.setReceiveCommands();
     }
 
     @Override
     public void connectionStatusChanged(Integer newConnectionStatus) {
         //TODO: implement
-        ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
+        ((HostActivity) getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
     }
 }

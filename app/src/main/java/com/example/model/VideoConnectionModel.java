@@ -2,6 +2,8 @@ package com.example.model;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
@@ -16,11 +18,13 @@ public class VideoConnectionModel {
     private URLSettings urlSettings;
     private WebClient webClient;
     private SessionData sessionData;
+    private MutableLiveData<Boolean> videoReady;
 
     private Controller controller;
 
     public VideoConnectionModel(LocalPreferenceDAO db) {
         urlSettings = new URLSettings(db);
+        videoReady = new MutableLiveData<>(false);
     }
 
     /**
@@ -51,7 +55,7 @@ public class VideoConnectionModel {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
                     connectionError = true;
-                    Log.e(TAG, "connection timeout: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
+                    Log.e(TAG, "connection timeout: jist:" + videoURL + " hostURL:" + urlSettings.getHost_https() + " port:" + urlSettings.getPort());
                     break;
                 }
             }
@@ -60,20 +64,25 @@ public class VideoConnectionModel {
                 String id = webClient.getId();
                 //TODO: generalize
                 sessionData = new JitsiSessionData(videoURL, urlSettings.getHost_https(), id);
-                // TODO: Zum Videocall hier auf visible setzen!
+                videoReady.setValue(true); // enables change to call button
             } else {
-               Log.e(TAG, "connectionError on: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
+                Log.e(TAG, "connectionError on: jist:" + videoURL + " hostURL:" + urlSettings.getHost_https() + " port:" + urlSettings.getPort());
                 // TODO: Passende fehlermedlung in app anzeigen
             }
         }
+    }
+
+    public MutableLiveData<Boolean> isVideoReady() {
+        if (videoReady == null) videoReady = new MutableLiveData<>();
+        return videoReady;
     }
 
     public URLSettings.stringTriple getCurrentURLs() {
         return urlSettings.getAll();
     }
 
-    public String getID(){
-        if(sessionData==null)
+    public String getID() {
+        if (sessionData == null)
             return null;
         return sessionData.getID();
     }
@@ -94,7 +103,7 @@ public class VideoConnectionModel {
         return sessionData.getOptions();
     }
 
-    public void setReceiveCommands(){
+    public void setReceiveCommands() {
         webClient.setReceiveCommands();
     }
 }
