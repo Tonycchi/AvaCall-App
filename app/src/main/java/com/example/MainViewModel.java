@@ -87,6 +87,8 @@ public class MainViewModel extends AndroidViewModel {
         model.sendControlInputs(input);
     }
 
+    public void getControlOutput() { model.getControlOutputs(); }
+
     public String getSelectedModelElements() {
         return model.getSelectedModelElements();
     }

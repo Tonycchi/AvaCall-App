@@ -12,6 +12,11 @@ public interface Controller {
     void sendInput(int... input);
 
     /**
+     * get the output for the motors from the robot
+     */
+    void getOutput();
+
+    /**
      * 
      * @return String specifying which control elements to show on website
      */

@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -44,6 +45,7 @@ public class TestRobotFragment extends HostedFragment {
     private View thisView;
     private TextView motorStrengthText;
     private boolean borderVisible;
+    private Handler handler;
 
 
     // Observer to check if amount of paired Devices has been changed
@@ -104,6 +106,9 @@ public class TestRobotFragment extends HostedFragment {
 
         motorStrengthText = view.findViewById(R.id.text_motor_strength);
 
+        handler = new Handler();
+        handler.post(getMotorOutput);
+
         MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
         motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
 
@@ -116,7 +121,18 @@ public class TestRobotFragment extends HostedFragment {
         getActivity().setTitle(R.string.title_test_robot);
     }
 
-    private void onClickYes(View v){
+    Runnable getMotorOutput = new Runnable() {
+        @Override
+        public void run() {
+            Log.d(TAG, "loop loop");
+            viewModel.getControlOutput();
+            handler.postDelayed(this, 50);
+        }
+    };
+
+    private void onClickYes(View v) {
+        Log.d(TAG, "YES BABY");
+        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
@@ -124,7 +140,9 @@ public class TestRobotFragment extends HostedFragment {
                 .addToBackStack(null)
                 .commit();
     }
-    private void onClickNo(View v){
+    private void onClickNo(View v) {
+        Log.d(TAG, "NO BABY");
+        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();

@@ -125,6 +125,8 @@ public class MainModel {
         controller.sendInput(input);
     }
 
+    public void getControlOutputs() { controller.getOutput(); }
+
     public String getSelectedModelElements() {
         return controller.getControlElementString();
     }

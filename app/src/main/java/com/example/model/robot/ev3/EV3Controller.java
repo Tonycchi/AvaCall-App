@@ -38,15 +38,19 @@ public class EV3Controller implements Controller {
     public void sendInput(int... input) {
         Log.d(TAG, Arrays.toString(input));
         service.write(createCommand(input));
-        h.postDelayed(r, 50);
     }
 
-    Runnable r = new Runnable() {
-        @Override
-        public void run() {
-            service.write(createOutputCommand());
-        }
-    };
+    @Override
+    public void getOutput() {
+        service.write(createOutputCommand());
+    }
+
+//    Runnable r = new Runnable() {
+//        @Override
+//        public void run() {
+//            service.write(createOutputCommand());
+//        }
+//    };
 
     public String getControlElementString() {
         return controlElementString;
@@ -156,8 +160,9 @@ public class EV3Controller implements Controller {
             directCommand[2] = Byte.parseByte(Integer.toHexString((e.port[0]<<4)+e.port[1]), 16);
         }
 
-        directCommand[3] = (byte) inputCounter;              //message counter is used as info which control element is writing
-        inputCounter++;
+        directCommand[3] = (byte) id;              //message counter is used as info which control element is writing
+//        directCommand[3] = inputCounter;
+//        inputCounter++;
 
         directCommand[4] = (byte) 0x00;
         directCommand[5] = (byte) 0x04;
@@ -225,7 +230,7 @@ public class EV3Controller implements Controller {
         byte[] directCommand = new byte[23];
         directCommand[0] = (byte) 0x15;
         directCommand[2] = (byte) 0x2A;
-        directCommand[3] = Byte.parseByte(Integer.toHexString(outputCounter), 16);
+//        directCommand[3] = Byte.parseByte(Integer.toHexString(outputCounter), 16);
         directCommand[5] = (byte) 0x04;
         directCommand[7] = (byte) 0x99;             //opcode
         directCommand[8] = (byte) 0x1C;
@@ -243,7 +248,7 @@ public class EV3Controller implements Controller {
         directCommand[20] = (byte) 0x02;           //typemode
         directCommand[21] = (byte) 0x01;
         directCommand[22] = (byte) 0x61;
-        outputCounter++;
+//        outputCounter++;
 
         return directCommand;
     }
