@@ -265,7 +265,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                         edit.setError(null);
                     } else {
                         removeElementValue(pos, 3);
-                        edit.setError("Wert fehlt."); //TODO dont hardcode maybe static context????
+                        edit.setError(hostActivity.getResources().getString(R.string.value_missing));
                     }
                 }
             });
@@ -323,7 +323,7 @@ public class EV3ControlAdapter extends ControlAdapter {
                 edit.setError(null);
             } else {
                 removeElementValue(pos, index);
-                edit.setError("Wert fehlt.");
+                edit.setError(hostActivity.getResources().getString(R.string.value_missing));
             }
         }
 
@@ -356,7 +356,7 @@ public class EV3ControlAdapter extends ControlAdapter {
             if (checkedId == -1) {
                 resetDisableOpposite(-1);
                 removeElementValue(pos, index);
-                ((RadioButton) group.getChildAt(3)).setError("Wert fehlt.");
+                ((RadioButton) group.getChildAt(3)).setError(hostActivity.getResources().getString(R.string.value_missing));
             } else {
                 Integer checkedIndex = null;
                 for (int i = 0; i < 4; i++) {

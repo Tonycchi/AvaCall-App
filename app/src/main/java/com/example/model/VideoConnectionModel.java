@@ -8,6 +8,7 @@ import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
 
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -49,10 +50,17 @@ public class VideoConnectionModel {
 
 
             //continue with share link when ws is connected
+            long currentTime;
             long startTime = System.currentTimeMillis();
             //check if a timeout occurs while connecting to server
-            while (!webClient.isReady()) { //TODO: when error occurs in wc, stop waiting and directly throw error
-                long currentTime = System.currentTimeMillis();
+            while (true) {
+                try {
+                    if (webClient.isReady()) break;
+                } catch (ConnectException e) {
+                    connectionError = true;
+                    break;
+                }
+                currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
                     connectionError = true;
                     Log.e(TAG, "connection timeout: jist:" + videoURL + " hostURL:" + urlSettings.getHost_https() + " port:" + urlSettings.getPort());

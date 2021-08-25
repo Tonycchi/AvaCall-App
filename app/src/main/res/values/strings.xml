@@ -50,6 +50,7 @@
 
         <!-- Edit Model -->
         <string name="edit_controls_motor_alert">Es können maximal 4 Steuerelemente verwendet werden.</string>
+        <string name="value_missing">Wert fehlt.</string>
 
         <!-- Video Connection -->
         <string name="url_settings">URL-Einstellungen</string>

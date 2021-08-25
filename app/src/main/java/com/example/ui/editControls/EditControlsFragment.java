@@ -93,7 +93,6 @@ public class EditControlsFragment extends HostedFragment {
     private void onClickButtonEditModelNext(View v) {
         // Log.d(TAG, "" + (robotModel != null) +" "+ (controlAdapter != null) +" "+ (controlAdapter.isReadyToSave()) +" "+ (editName.getText().length() > 0));
 
-        //TODO should editDescription always be filled out????????
         if (controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
             int id;
             if (robotModel != null) id = robotModel.id;
