@@ -119,6 +119,7 @@ public class MainModel {
         modelSelectionModel.setSelectedModelPosition(position);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
+        testRobotModel.setPorts(selectedRobotModel.specs);
     }
 
     public void sendControlInputs(int... input) {

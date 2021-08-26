@@ -22,8 +22,7 @@ public class EV3Controller implements Controller {
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
     private Handler h = new Handler();
-    private byte inputCounter = 0;
-    private byte outputCounter = 0;
+
 
     public EV3Controller(RobotModel model, ConnectionService service) {
         this.service = service;
@@ -44,13 +43,6 @@ public class EV3Controller implements Controller {
     public void getOutput() {
         service.write(createOutputCommand());
     }
-
-//    Runnable r = new Runnable() {
-//        @Override
-//        public void run() {
-//            service.write(createOutputCommand());
-//        }
-//    };
 
     public String getControlElementString() {
         return controlElementString;
@@ -141,7 +133,6 @@ public class EV3Controller implements Controller {
 
         int id = input[0];              // get id of input
         EV3ControlElement e = controlElements.get(id);  // for this
-        //byte[] output = e.getMotorPower(Arrays.copyOfRange(input, 1, input.length));         // and compute output power
         byte[] output = e.getCommand(Arrays.copyOfRange(input, 1, input.length));
 
         int length = 10 + output.length;            // e.g. joystick may return two values
@@ -161,59 +152,18 @@ public class EV3Controller implements Controller {
         }
 
         directCommand[3] = (byte) id;              //message counter is used as info which control element is writing
-//        directCommand[3] = inputCounter;
-//        inputCounter++;
 
-        directCommand[4] = (byte) 0x00;
+        directCommand[4] = (byte) 0x80;
         directCommand[5] = (byte) 0x04;
 
         int commandPos = 7;                                      // position of first output power command
-        byte[] t;
         byte portSum = 0;
         System.arraycopy(output, 0, directCommand, commandPos, output.length);
-        /*
-        for (int k = 0; k < output.length; k++) {
-            portSum += e.port[k];
-            t = commandPart(e.port[k], output[k]);      // get output power command & copy 2 direct command
-            System.arraycopy(t, 0, directCommand, i, t.length);
-            i += t.length;
-        }
-         */
         for (int p : e.port)
             portSum += p;
 
         directCommand[lastCommand] = (byte) 0xa6;                // end of direct command
         directCommand[lastCommand + 2] = portSum;
-
-//        byte[] timer = new byte[7]; // 1 + 3 + 1 | 1 + 1
-//        timer[0] = (byte) 0x85; //opcode timer_wait
-//        timer[1] = (byte) 0x82; //LC2
-//        timer[2] = (byte) 0x64; //LC2 Value
-//        timer[4] = (byte) 0x40; //LV(0)
-//
-//        timer[5] = (byte) 0x86; //opcoode timer_read
-//        timer[6] = (byte) 0x40; //LV(0)
-//        System.arraycopy(timer, 0, directCommand, lastCommand + 3, 7);
-
-//        byte[] changeMode = new byte[16];
-//        changeMode[0] = (byte) 0x99;             //opcode
-//        changeMode[1] = (byte) 0x1C;
-//        changeMode[2] = (byte) 0x00;
-//        changeMode[3] = (byte) 0x10;            //port
-//        changeMode[4] = (byte) 0x08;
-//        changeMode[5] = (byte) 0x02;           //typemode
-//        changeMode[6] = (byte) 0x01;
-//        changeMode[7] = (byte) 0x60;
-//
-//        changeMode[8] = (byte) 0x99;
-//        changeMode[9] = (byte) 0x1C;
-//        changeMode[10] = (byte) 0x00;
-//        changeMode[11] = (byte) 0x13;
-//        changeMode[12] = (byte) 0x08;
-//        changeMode[13] = (byte) 0x02;
-//        changeMode[14] = (byte) 0x01;
-//        changeMode[15] = (byte) 0x61;
-//        System.arraycopy(changeMode,0, directCommand, lastCommand + 3, 16);
         return directCommand;
     }
 
@@ -227,11 +177,11 @@ public class EV3Controller implements Controller {
         //               00 filler
         //               0P = sum of used ports
 
-        byte[] directCommand = new byte[23];
-        directCommand[0] = (byte) 0x15;
-        directCommand[2] = (byte) 0x2A;
-//        directCommand[3] = Byte.parseByte(Integer.toHexString(outputCounter), 16);
+        byte[] directCommand = new byte[39];
+        directCommand[0] = (byte) 0x25;
+        directCommand[2] = (byte) 0x18;
         directCommand[5] = (byte) 0x04;
+
         directCommand[7] = (byte) 0x99;             //opcode
         directCommand[8] = (byte) 0x1C;
         directCommand[9] = (byte) 0x00;
@@ -240,41 +190,50 @@ public class EV3Controller implements Controller {
         directCommand[12] = (byte) 0x02;           //typemode
         directCommand[13] = (byte) 0x01;
         directCommand[14] = (byte) 0x60;
-        directCommand[15] = (byte) 0x99;             //opcode
+
+        directCommand[15] = (byte) 0x99;            //opcode
         directCommand[16] = (byte) 0x1C;
         directCommand[17] = (byte) 0x00;
-        directCommand[18] = (byte) 0x13;            //port
+        directCommand[18] = (byte) 0x11;            //port
         directCommand[19] = (byte) 0x08;
         directCommand[20] = (byte) 0x02;           //typemode
         directCommand[21] = (byte) 0x01;
         directCommand[22] = (byte) 0x61;
-//        outputCounter++;
 
+        directCommand[23] = (byte) 0x99;
+        directCommand[24] = (byte) 0x1C;
+        directCommand[25] = (byte) 0x00;
+        directCommand[26] = (byte) 0x12;            //port
+        directCommand[27] = (byte) 0x08;
+        directCommand[28] = (byte) 0x02;           //typemode
+        directCommand[29] = (byte) 0x01;
+        directCommand[30] = (byte) 0x62;
+
+        directCommand[31] = (byte) 0x99;
+        directCommand[32] = (byte) 0x1C;
+        directCommand[33] = (byte) 0x00;
+        directCommand[34] = (byte) 0x13;            //port
+        directCommand[35] = (byte) 0x08;
+        directCommand[36] = (byte) 0x02;           //typemode
+        directCommand[37] = (byte) 0x01;
+        directCommand[38] = (byte) 0x63;
         return directCommand;
     }
 
-
-
     /**
      * @param port  ev3 motor port
-     * @param power evr motor power
+     * @param counter offset of global memory
      * @return part of direct command for given port
      */
-    private byte[] commandPart(int port, int power) {
-        // A4|00|0p|81:po
-        //  0  1  2  3  4
-        // 0 opcode for output power
-        // 1 filler
-        // 2 p = port
-        // 3 predefined prefix
-        // 4 po = power
-
-        byte[] r = new byte[5];
-        r[0] = (byte) 0xA4;
-        r[1] = (byte) 0x00;
-        r[2] = (byte) port;
-        r[3] = (byte) 0x81;
-        r[4] = (byte) power;
+    private byte[] commandPart(int port, int counter) {
+        byte[] r = new byte[8];
+        r[0] = (byte) 0x99;
+        r[1] = (byte) 0x1C;
+        r[3] = (byte) port;
+        r[4] = (byte) 0x08;
+        r[5] = (byte) 0x02;
+        r[6] = (byte) 0x01;
+        r[7] = Byte.parseByte(Integer.toHexString((6<<4)+counter), 16);
         return r;
     }
 
