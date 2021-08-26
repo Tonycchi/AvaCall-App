@@ -32,24 +32,24 @@ public class TestRobotModel {
         int strength2 = message[6];
         int strength3 = message[7];
         int strength4 = message[8];
-        int port1 = (message[2] & 0xf0) >>> 4;
-        int port2 = (message[2] & 0x0f);
-        int id1 = message[3];
-        int id2 = message[3];
+        int id1 = (message[2] & 0xf0) >>> 4;
+        int id2 = message[2] & 0x0f;
+        int id3 = (message[3] & 0xf0) >>> 4;
+        int id4 = message[3] & 0x0f;
         Log.d(TAG,message[5]+":"+message[6]+":"+message[7]+":"+message[8]+"->Stärke:"+strength1);
         if (ports != null) {
             StringBuilder sb = new StringBuilder();
             if (ports.contains(1)) {
-                sb.append("Port " + 1 + " wird gesteuert von element " + 0 + ", ist " + ok + " und hat Stärke: " + strength1 + "\n");
+                sb.append("Port " + 1 + " wird gesteuert von element " + id1 + ", ist " + ok + " und hat Stärke: " + strength1 + "\n");
             }
             if (ports.contains(2)) {
-                sb.append("Port " + 2 + " wird gesteuert von element " + 0 + ", ist " + ok + " und hat Stärke: " + strength2 + "\n");
+                sb.append("Port " + 2 + " wird gesteuert von element " + id2 + ", ist " + ok + " und hat Stärke: " + strength2 + "\n");
             }
             if (ports.contains(4)) {
-                sb.append("Port " + 4 + " wird gesteuert von element " + 0 + ", ist " + ok + " und hat Stärke: " + strength3 + "\n");
+                sb.append("Port " + 4 + " wird gesteuert von element " + id3 + ", ist " + ok + " und hat Stärke: " + strength3 + "\n");
             }
             if (ports.contains(8)) {
-                sb.append("Port " + 8 + " wird gesteuert von element " + 0 + ", ist " + ok + " und hat Stärke: " + strength4 + "\n");
+                sb.append("Port " + 8 + " wird gesteuert von element " + id4 + ", ist " + ok + " und hat Stärke: " + strength4 + "\n");
             }
 //        String displayStrengthMessage = "Port "+port1+" wird gesteuert von element "+id1 +", ist " +
 //                ok+" und hat Stärke: "+strength1+"\nPort "+port2+" wird gesteuert von element "+id2

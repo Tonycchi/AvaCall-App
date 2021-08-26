@@ -21,8 +21,7 @@ public class EV3Controller implements Controller {
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
-    private Handler h = new Handler();
-
+    private int[] ids = new int[4];
 
     public EV3Controller(RobotModel model, ConnectionService service) {
         this.service = service;
@@ -176,47 +175,92 @@ public class EV3Controller implements Controller {
         // last 3 bytes: A6 opcode for start output
         //               00 filler
         //               0P = sum of used ports
+        for (int i=0; i< controlElements.size(); i++) {
+            switch (controlElements.get(i).port[0]) {
+                case 1:
+                    ids[0] = i;
+                    break;
+                case 2:
+                    ids[1] = i;
+                    break;
+                case 4:
+                    ids[2] = i;
+                    break;
+                case 8:
+                    ids[3] = i;
+                    break;
+                default:
+            }
+            if ((controlElements.get(i).port.length) > 1) {
+                switch (controlElements.get(i).port[1]) {
+                    case 1:
+                        ids[0] = i;
+                        break;
+                    case 2:
+                        ids[1] = i;
+                        break;
+                    case 4:
+                        ids[2] = i;
+                        break;
+                    case 8:
+                        ids[3] = i;
+                        break;
+                    default:
+                }
+            }
+        }
 
         byte[] directCommand = new byte[39];
+        byte[] tmp;
         directCommand[0] = (byte) 0x25;
-        directCommand[2] = (byte) 0x18;
+        directCommand[2] = Byte.parseByte(Integer.toHexString((ids[0]<<4)+ids[1]), 16);
+        directCommand[3] = Byte.parseByte(Integer.toHexString((ids[2]<<4)+ids[3]), 16);
         directCommand[5] = (byte) 0x04;
 
-        directCommand[7] = (byte) 0x99;             //opcode
-        directCommand[8] = (byte) 0x1C;
-        directCommand[9] = (byte) 0x00;
-        directCommand[10] = (byte) 0x10;            //port
-        directCommand[11] = (byte) 0x08;
-        directCommand[12] = (byte) 0x02;           //typemode
-        directCommand[13] = (byte) 0x01;
-        directCommand[14] = (byte) 0x60;
+        tmp = commandPart((byte) 0x10, (byte) 0x60);
+        System.arraycopy(tmp, 0, directCommand, 7, 8);
+        tmp = commandPart((byte) 0x11, (byte) 0x61);
+        System.arraycopy(tmp, 0, directCommand, 15, 8);
+        tmp = commandPart((byte) 0x12, (byte) 0x62);
+        System.arraycopy(tmp, 0, directCommand, 23, 8);
+        tmp = commandPart((byte) 0x13, (byte) 0x63);
+        System.arraycopy(tmp, 0, directCommand, 31, 8);
 
-        directCommand[15] = (byte) 0x99;            //opcode
-        directCommand[16] = (byte) 0x1C;
-        directCommand[17] = (byte) 0x00;
-        directCommand[18] = (byte) 0x11;            //port
-        directCommand[19] = (byte) 0x08;
-        directCommand[20] = (byte) 0x02;           //typemode
-        directCommand[21] = (byte) 0x01;
-        directCommand[22] = (byte) 0x61;
-
-        directCommand[23] = (byte) 0x99;
-        directCommand[24] = (byte) 0x1C;
-        directCommand[25] = (byte) 0x00;
-        directCommand[26] = (byte) 0x12;            //port
-        directCommand[27] = (byte) 0x08;
-        directCommand[28] = (byte) 0x02;           //typemode
-        directCommand[29] = (byte) 0x01;
-        directCommand[30] = (byte) 0x62;
-
-        directCommand[31] = (byte) 0x99;
-        directCommand[32] = (byte) 0x1C;
-        directCommand[33] = (byte) 0x00;
-        directCommand[34] = (byte) 0x13;            //port
-        directCommand[35] = (byte) 0x08;
-        directCommand[36] = (byte) 0x02;           //typemode
-        directCommand[37] = (byte) 0x01;
-        directCommand[38] = (byte) 0x63;
+//        directCommand[7] = (byte) 0x99;             //opcode
+//        directCommand[8] = (byte) 0x1C;
+//        directCommand[9] = (byte) 0x00;
+//        directCommand[10] = (byte) 0x10;            //port
+//        directCommand[11] = (byte) 0x08;
+//        directCommand[12] = (byte) 0x02;           //typemode
+//        directCommand[13] = (byte) 0x01;
+//        directCommand[14] = (byte) 0x60;
+//
+//        directCommand[15] = (byte) 0x99;            //opcode
+//        directCommand[16] = (byte) 0x1C;
+//        directCommand[17] = (byte) 0x00;
+//        directCommand[18] = (byte) 0x11;            //port
+//        directCommand[19] = (byte) 0x08;
+//        directCommand[20] = (byte) 0x02;           //typemode
+//        directCommand[21] = (byte) 0x01;
+//        directCommand[22] = (byte) 0x61;
+//
+//        directCommand[23] = (byte) 0x99;
+//        directCommand[24] = (byte) 0x1C;
+//        directCommand[25] = (byte) 0x00;
+//        directCommand[26] = (byte) 0x12;            //port
+//        directCommand[27] = (byte) 0x08;
+//        directCommand[28] = (byte) 0x02;           //typemode
+//        directCommand[29] = (byte) 0x01;
+//        directCommand[30] = (byte) 0x62;
+//
+//        directCommand[31] = (byte) 0x99;
+//        directCommand[32] = (byte) 0x1C;
+//        directCommand[33] = (byte) 0x00;
+//        directCommand[34] = (byte) 0x13;            //port
+//        directCommand[35] = (byte) 0x08;
+//        directCommand[36] = (byte) 0x02;           //typemode
+//        directCommand[37] = (byte) 0x01;
+//        directCommand[38] = (byte) 0x63;
         return directCommand;
     }
 
@@ -225,15 +269,15 @@ public class EV3Controller implements Controller {
      * @param counter offset of global memory
      * @return part of direct command for given port
      */
-    private byte[] commandPart(int port, int counter) {
+    private byte[] commandPart(byte port, byte counter) {
         byte[] r = new byte[8];
         r[0] = (byte) 0x99;
         r[1] = (byte) 0x1C;
-        r[3] = (byte) port;
+        r[3] = port;
         r[4] = (byte) 0x08;
         r[5] = (byte) 0x02;
         r[6] = (byte) 0x01;
-        r[7] = Byte.parseByte(Integer.toHexString((6<<4)+counter), 16);
+        r[7] = counter;
         return r;
     }
 
