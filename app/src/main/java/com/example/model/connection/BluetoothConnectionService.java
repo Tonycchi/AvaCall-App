@@ -39,6 +39,7 @@ public class BluetoothConnectionService implements ConnectionService {
     private BluetoothDevice bluetoothDevice;
     private ByteArrayHandshake byteArrayHandshake;
     private MainModel mainModel;
+    private boolean isStallThread;
 
 
     public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake, MainModel mainModel) {
@@ -46,6 +47,7 @@ public class BluetoothConnectionService implements ConnectionService {
         connectionStatus = new MutableLiveData<Integer>();
         this.byteArrayHandshake = byteArrayHandshake;
         this.mainModel = mainModel;
+        isStallThread = false;
     }
 
     public MutableLiveData<Integer> getConnectionStatus() {
@@ -133,6 +135,11 @@ public class BluetoothConnectionService implements ConnectionService {
         Log.d(TAG, "write: Write Called.");
         //perform the write
         connectedThread.write(out);
+    }
+
+    @Override
+    public void setIsStallThread(boolean stallThread) {
+        this.isStallThread = stallThread;
     }
 
     /**
@@ -365,7 +372,9 @@ public class BluetoothConnectionService implements ConnectionService {
                     INPUT_STREAM.read(buffer);
                     int replySize = (buffer[1]*16+buffer[0]);
                     Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
-                    mainModel.receivedMessageFromRobot(buffer);
+                    if (!isStallThread) {
+                        mainModel.receivedMessageFromRobot(buffer);
+                    }
                 } catch (IOException e) {
                     // connection got lost, so status gets set to 3
                     connectionStatus.postValue(3);

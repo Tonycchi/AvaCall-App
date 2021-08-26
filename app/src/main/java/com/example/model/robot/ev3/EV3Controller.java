@@ -22,6 +22,7 @@ public class EV3Controller implements Controller {
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
     private int[] ids = new int[4];
+    private byte[] outputBuffer;
 
     public EV3Controller(RobotModel model, ConnectionService service) {
         this.service = service;
@@ -35,12 +36,28 @@ public class EV3Controller implements Controller {
     @Override
     public void sendInput(int... input) {
         Log.d(TAG, Arrays.toString(input));
-        service.write(createCommand(input));
+        byte[] inputCommand = createCommand(input);
+        service.write(inputCommand);
+        Thread stall = new Thread() {
+            @Override
+            public void run() {
+                stall.sleep(50);
+                service.setIsStallThread(true);
+                byte[] stallCommand = createStallCommand(input[0]);
+                service.write(stallCommand);
+            }
+        };
+        stall.start();
     }
 
     @Override
     public void getOutput() {
+        service.setIsStallThread(false);
         service.write(createOutputCommand());
+    }
+
+    public void setOutputBuffer(byte[] buffer) {
+        this.outputBuffer = outputBuffer;
     }
 
     public String getControlElementString() {
@@ -225,42 +242,26 @@ public class EV3Controller implements Controller {
         System.arraycopy(tmp, 0, directCommand, 23, 8);
         tmp = commandPart((byte) 0x13, (byte) 0x63);
         System.arraycopy(tmp, 0, directCommand, 31, 8);
+        return directCommand;
+    }
 
-//        directCommand[7] = (byte) 0x99;             //opcode
-//        directCommand[8] = (byte) 0x1C;
-//        directCommand[9] = (byte) 0x00;
-//        directCommand[10] = (byte) 0x10;            //port
-//        directCommand[11] = (byte) 0x08;
-//        directCommand[12] = (byte) 0x02;           //typemode
-//        directCommand[13] = (byte) 0x01;
-//        directCommand[14] = (byte) 0x60;
-//
-//        directCommand[15] = (byte) 0x99;            //opcode
-//        directCommand[16] = (byte) 0x1C;
-//        directCommand[17] = (byte) 0x00;
-//        directCommand[18] = (byte) 0x11;            //port
-//        directCommand[19] = (byte) 0x08;
-//        directCommand[20] = (byte) 0x02;           //typemode
-//        directCommand[21] = (byte) 0x01;
-//        directCommand[22] = (byte) 0x61;
-//
-//        directCommand[23] = (byte) 0x99;
-//        directCommand[24] = (byte) 0x1C;
-//        directCommand[25] = (byte) 0x00;
-//        directCommand[26] = (byte) 0x12;            //port
-//        directCommand[27] = (byte) 0x08;
-//        directCommand[28] = (byte) 0x02;           //typemode
-//        directCommand[29] = (byte) 0x01;
-//        directCommand[30] = (byte) 0x62;
-//
-//        directCommand[31] = (byte) 0x99;
-//        directCommand[32] = (byte) 0x1C;
-//        directCommand[33] = (byte) 0x00;
-//        directCommand[34] = (byte) 0x13;            //port
-//        directCommand[35] = (byte) 0x08;
-//        directCommand[36] = (byte) 0x02;           //typemode
-//        directCommand[37] = (byte) 0x01;
-//        directCommand[38] = (byte) 0x63;
+    private byte[] createStallCommand(int id) {
+        byte[] tmp;
+
+        EV3ControlElement controlElement = controlElements.get(id);
+        byte[] directCommand = controlElement.port.length > 1 ? new byte[23] : new byte[15];
+        directCommand[0] = controlElement.port.length > 1 ? (byte) 0x15 : (byte) 0x0D;
+        directCommand[5] = (byte) 0x04;
+
+        int port1 = controlElement.port[0];
+        tmp = commandPart(intToBytePort(port1), (byte) 0x60);
+        System.arraycopy(tmp, 0, directCommand, 7, 8);
+        if (controlElement.port.length > 1) {
+            int port2 = controlElement.port[1];
+            tmp = commandPart(intToBytePort(port2), (byte) 0x61);
+            System.arraycopy(tmp, 0, directCommand, 15, 8);
+        }
+
         return directCommand;
     }
 
@@ -289,5 +290,20 @@ public class EV3Controller implements Controller {
         if (!controlElementString.equals(""))
             controlElementString += "|";
         controlElementString += element;
+    }
+
+    private byte intToBytePort(int port) {
+        switch (port) {
+            case 1:
+                return 0x10;
+            case 2:
+                return 0x11;
+            case 4:
+                return 0x12;
+            case 8:
+                return 0x13;
+            default:
+                return 0x00;
+        }
     }
 }
