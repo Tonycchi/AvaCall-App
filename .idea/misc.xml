@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Benedikt/StudioProjects/AvaCall-App/app/src/main/res/layout/video_connection.xml" value="0.16510416666666666" />
         <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/drawable/list_item.xml" value="0.1962962962962963" />
         <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/drawable/standard_button.xml" value="0.27578125" />
         <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout-land/edit_controls.xml" value="0.27708333333333335" />
@@ -19,7 +20,8 @@
         <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/list_item.xml" value="0.1" />
         <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/model_selection.xml" value="0.23550724637681159" />
         <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/layout/simple_list_item.xml" value="0.34782608695652173" />
-        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/menu/add_model.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/menu/add_model.xml" value="0.1875" />
+        <entry key="..\:/Users/agott/AvaCall/AvaCall-App/app/src/main/res/menu/delete_trash.xml" value="0.25" />
       </map>
     </option>
   </component>

@@ -1,8 +1,13 @@
 package com.example.ui.editControls;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +35,7 @@ public class EditControlsFragment extends HostedFragment {
     private ControlAdapter controlAdapter;
     private RecyclerView editControlsList;
     private MainViewModel viewModel;
-    private RobotModel robotModel;
+    private RobotModel selectedRobotModel;
     private EditText editName;
     private EditText editDescription;
 
@@ -44,12 +49,12 @@ public class EditControlsFragment extends HostedFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
 
-        robotModel = viewModel.getSelectedRobotModel();
+        selectedRobotModel = viewModel.getSelectedRobotModel();
         String type = viewModel.getCurrentRobotType();
 
         switch (type) {
             case Constants.TYPE_EV3:
-                controlAdapter = new EV3ControlAdapter((HostActivity) getActivity(), robotModel);
+                controlAdapter = new EV3ControlAdapter((HostActivity) getActivity(), selectedRobotModel);
                 break;
             default:
                 Log.e(TAG, "ModelType not available for edit model");
@@ -59,6 +64,8 @@ public class EditControlsFragment extends HostedFragment {
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.fade));
         setEnterTransition(inflater.inflateTransition(R.transition.slide));
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -69,9 +76,9 @@ public class EditControlsFragment extends HostedFragment {
         editName = view.findViewById(R.id.edit_model_name);
         editDescription = view.findViewById(R.id.edit_model_description);
 
-        if (robotModel != null) {
-            editName.setText(robotModel.name);
-            editDescription.setText(robotModel.description);
+        if (selectedRobotModel != null) {
+            editName.setText(selectedRobotModel.name);
+            editDescription.setText(selectedRobotModel.description);
         } else {
             Log.e(TAG, "robotModel == null");
         }
@@ -90,12 +97,45 @@ public class EditControlsFragment extends HostedFragment {
         getActivity().setTitle(R.string.title_edit_controls);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.delete_trash, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_delete) {
+            DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (selectedRobotModel != null)
+                            viewModel.deleteModel(selectedRobotModel.id);
+
+                        FragmentManager fragmentManager = getParentFragmentManager();
+                        fragmentManager.popBackStack();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Dieses Modell löschen?")
+                    .setPositiveButton("Ja", dialogClickListener)
+                    .setNegativeButton("Nein", dialogClickListener)
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void onClickButtonEditModelNext(View v) {
         // Log.d(TAG, "" + (robotModel != null) +" "+ (controlAdapter != null) +" "+ (controlAdapter.isReadyToSave()) +" "+ (editName.getText().length() > 0));
 
         if (controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
             int id;
-            if (robotModel != null) id = robotModel.id;
+            if (selectedRobotModel != null) id = selectedRobotModel.id;
             else id = 0;
 
             viewModel.saveModel(id, editName.getText().toString(), editDescription.getText().toString(), viewModel.getCurrentRobotType(), controlAdapter.getValues());

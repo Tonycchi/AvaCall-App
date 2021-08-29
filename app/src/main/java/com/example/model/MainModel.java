@@ -172,4 +172,8 @@ public class MainModel {
     public MutableLiveData<Boolean> isVideoReady() {
         return videoConnectionModel.isVideoReady();
     }
+
+    public void deleteModel(int id) {
+        localDatabase.robotModelDAO().deleteByID(id);
+    }
 }

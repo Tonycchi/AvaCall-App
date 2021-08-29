@@ -114,4 +114,8 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<Boolean> isVideoReady() {
         return model.isVideoReady();
     }
+
+    public void deleteModel(int id) {
+        model.deleteModel(id);
+    }
 }
