@@ -36,16 +36,23 @@ public class TestRobotModel {
     }
 
     public void receivedMessage(byte[] message) {
-        int expectedStrength1 = message[2];
-        int expectedStrength2 = message[3];
-        int actualStrength1 = message[5];
-        int actualStrength2 = message[6];
-        boolean stallDetected = detectStall(expectedStrength1, actualStrength1);
-        if(stallDetected) {
-            EV3Controller controller = (EV3Controller) mainModel.getController();
-            int usedId = controller.getUsedId();
-            EV3ControlElement test = controller.getControlElements().get(usedId);
-            mainModel.sendStallDetected(test.getType(), usedId);
+        if (mainModel.getController() != null) {
+            int expectedStrength1 = message[2];
+            int expectedStrength2 = message[3];
+            int actualStrength1 = message[5];
+            int actualStrength2 = message[6];
+            boolean stallDetected = detectStall(expectedStrength1, actualStrength1);
+            if (stallDetected) {
+                EV3Controller controller = (EV3Controller) mainModel.getController();
+                int usedId = controller.getUsedId();
+                EV3ControlElement test = controller.getControlElements().get(usedId);
+                mainModel.sendStallDetected(test.getType(), usedId);
+            } else {
+                EV3Controller controller = (EV3Controller) mainModel.getController();
+                int usedId = controller.getUsedId();
+                EV3ControlElement test = controller.getControlElements().get(usedId);
+                mainModel.sendStallEnded(test.getType(), usedId);
+            }
         }
 
 

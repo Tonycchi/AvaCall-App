@@ -75,6 +75,7 @@ public class WebClient extends WebSocketClient {
 
     public void sendStallDetected(String controlElementType, int controlElementId){
         String stallMessage = "STALL:start:"+controlElementType+":"+controlElementId;
+        Log.d(TAG, "Send: " + stallMessage);
         send(stallMessage);
     }
 

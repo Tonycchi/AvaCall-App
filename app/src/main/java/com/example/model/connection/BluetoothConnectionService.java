@@ -39,15 +39,12 @@ public class BluetoothConnectionService implements ConnectionService {
     private BluetoothDevice bluetoothDevice;
     private ByteArrayHandshake byteArrayHandshake;
     private MainModel mainModel;
-    private boolean isStallThread;
-
 
     public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake, MainModel mainModel) {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<Integer>();
         this.byteArrayHandshake = byteArrayHandshake;
         this.mainModel = mainModel;
-        isStallThread = false;
     }
 
     public MutableLiveData<Integer> getConnectionStatus() {
@@ -367,9 +364,7 @@ public class BluetoothConnectionService implements ConnectionService {
                     INPUT_STREAM.read(buffer);
                     int replySize = (buffer[1]*16+buffer[0]);
                     Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
-                    if (!isStallThread) {
-                        mainModel.receivedMessageFromRobot(buffer);
-                    }
+                    mainModel.receivedMessageFromRobot(buffer);
                 } catch (IOException e) {
                     // connection got lost, so status gets set to 3
                     connectionStatus.postValue(3);

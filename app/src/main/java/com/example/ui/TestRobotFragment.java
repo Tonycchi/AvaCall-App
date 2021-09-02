@@ -107,8 +107,8 @@ public class TestRobotFragment extends HostedFragment {
 
         motorStrengthText = view.findViewById(R.id.text_motor_strength);
 
-        handler = new Handler();
-        handler.post(getMotorOutput);
+//        handler = new Handler();
+//        handler.post(getMotorOutput);
 
         MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
         motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
@@ -122,18 +122,18 @@ public class TestRobotFragment extends HostedFragment {
         getActivity().setTitle(R.string.title_test_robot);
     }
 
-    Runnable getMotorOutput = new Runnable() {
-        @Override
-        public void run() {
-            Log.d(TAG, "loop loop");
-            viewModel.getControlOutput();
-            handler.postDelayed(this, 50);
-        }
-    };
+//    Runnable getMotorOutput = new Runnable() {
+//        @Override
+//        public void run() {
+//            Log.d(TAG, "loop loop");
+//            viewModel.getControlOutput();
+//            handler.postDelayed(this, 50);
+//        }
+//    };
 
     private void onClickYes(View v) {
         Log.d(TAG, "YES BABY");
-        handler.removeCallbacks(getMotorOutput);
+//        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
@@ -143,7 +143,7 @@ public class TestRobotFragment extends HostedFragment {
     }
     private void onClickNo(View v) {
         Log.d(TAG, "NO BABY");
-        handler.removeCallbacks(getMotorOutput);
+//        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();
@@ -267,8 +267,14 @@ public class TestRobotFragment extends HostedFragment {
                     slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            viewModel.sendControlInput(id, progress);
-                            Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
+                            Thread kekw2 = new Thread() {
+                                @Override
+                                public void run() {
+                                    viewModel.sendControlInput(id, progress);
+                                    Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
+                                }
+                            };
+                            kekw2.start();
                         }
 
                         @Override
