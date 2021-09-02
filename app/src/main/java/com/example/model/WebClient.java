@@ -66,7 +66,7 @@ public class WebClient extends WebSocketClient {
                 int[] t2 = new int[t1.size()];
                 for (int i = 0; i < t2.length; i++)
                     t2[i] = Integer.parseInt(t1.get(i));
-
+                controller.setUsedId(t2[0]);
                 controller.sendInput(t2);
                 //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
             }

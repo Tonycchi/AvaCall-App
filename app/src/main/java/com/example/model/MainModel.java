@@ -54,11 +54,15 @@ public class MainModel {
         //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake, this);
 
-        testRobotModel = new TestRobotModel();
+        testRobotModel = new TestRobotModel(this);
 
         //TODO: don't hard code robotType
         modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), "EV3");
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
+    }
+
+    public Controller getController() {
+        return controller;
     }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {

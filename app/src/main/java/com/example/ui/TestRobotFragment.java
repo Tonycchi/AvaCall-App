@@ -102,6 +102,7 @@ public class TestRobotFragment extends HostedFragment {
 
         String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
         String[] order = rankOrder(t);
+        Log.d(TAG, t);
         createControlElements(order, constraintLayout);
 
         motorStrengthText = view.findViewById(R.id.text_motor_strength);
@@ -193,7 +194,7 @@ public class TestRobotFragment extends HostedFragment {
      * @param constraintLayout the current constraintLayout we are using
      */
     @SuppressLint("ClickableViewAccessibility")
-    public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
+        public void createControlElements(String[] order, ConstraintLayout constraintLayout) {
         int[] controlElements = new int[order.length];
         ConstraintSet set = new ConstraintSet();
         List<SeekBar> sliderList = new ArrayList<SeekBar>();
@@ -222,13 +223,18 @@ public class TestRobotFragment extends HostedFragment {
                     set.applyTo(constraintLayout);
 
                     joystick.setOnMoveListener((angle, strength) -> {
-                        viewModel.sendControlInput(id, angle, strength);
-                        Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
-                        if(angle==0 && strength==0) {
+                        Thread kekw = new Thread() {
+                            public void run() {
+                                viewModel.sendControlInput(id, angle, strength);
+                                Log.d(TAG, "Joystick angle;strength: " + angle + ";" + strength);
+                            }
+                         };
+                        kekw.start();
+                        if (angle == 0 && strength == 0) {
                             hideBorder();
                             joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
                             joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
-                        }else {
+                        } else {
                             showBorder();
                             joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.border));
                             joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_border));

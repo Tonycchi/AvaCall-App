@@ -137,11 +137,6 @@ public class BluetoothConnectionService implements ConnectionService {
         connectedThread.write(out);
     }
 
-    @Override
-    public void setIsStallThread(boolean stallThread) {
-        this.isStallThread = stallThread;
-    }
-
     /**
      * This thread runs while listening for incoming connections. It behaves
      * like a server-side client. It runs until a connection is accepted

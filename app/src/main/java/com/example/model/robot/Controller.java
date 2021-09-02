@@ -2,6 +2,8 @@ package com.example.model.robot;
 
 import com.example.data.RobotModel;
 
+import java.util.ArrayList;
+
 public interface Controller {
 
     /**
@@ -27,5 +29,9 @@ public interface Controller {
      * @return Object representing used model
      */
     RobotModel getCurrentModel();
+
+    void setUsedId(int id);
+
+    int getUsedId();
 
 }

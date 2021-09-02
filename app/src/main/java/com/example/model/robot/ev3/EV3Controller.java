@@ -11,6 +11,7 @@ import com.example.model.robot.Robot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class EV3Controller implements Controller {
 
@@ -22,7 +23,19 @@ public class EV3Controller implements Controller {
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
     private int[] ids = new int[4];
-    private byte[] outputBuffer;
+    private int usedId;
+
+    public void setUsedId(int id){
+        usedId = id;
+    }
+
+    public ArrayList<EV3ControlElement> getControlElements(){
+        return controlElements;
+    }
+
+    public int getUsedId() {
+        return usedId;
+    }
 
     public EV3Controller(RobotModel model, ConnectionService service) {
         this.service = service;
@@ -37,28 +50,23 @@ public class EV3Controller implements Controller {
     public void sendInput(int... input) {
         Log.d(TAG, Arrays.toString(input));
         byte[] inputCommand = createCommand(input);
+        byte[] outputCommand = createStallCommand(input);
         service.write(inputCommand);
-        Thread stall = new Thread() {
-            @Override
-            public void run() {
-                stall.sleep(50);
-                service.setIsStallThread(true);
-                byte[] stallCommand = createStallCommand(input[0]);
-                service.write(stallCommand);
-            }
-        };
-        stall.start();
+        try {
+            Log.d(TAG, "before sleep");
+            Thread.sleep(50);
+            Log.d(TAG, "after sleep");
+            service.write(outputCommand);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void getOutput() {
-        service.setIsStallThread(false);
         service.write(createOutputCommand());
     }
 
-    public void setOutputBuffer(byte[] buffer) {
-        this.outputBuffer = outputBuffer;
-    }
 
     public String getControlElementString() {
         return controlElementString;
@@ -149,6 +157,7 @@ public class EV3Controller implements Controller {
 
         int id = input[0];              // get id of input
         EV3ControlElement e = controlElements.get(id);  // for this
+        Log.d("TAG", e.getClass().toString());
         byte[] output = e.getCommand(Arrays.copyOfRange(input, 1, input.length));
 
         int length = 10 + output.length;            // e.g. joystick may return two values
@@ -183,7 +192,7 @@ public class EV3Controller implements Controller {
         return directCommand;
     }
 
-    private byte[] createOutputCommand() {
+    private byte[] createOutputCommand(int... input) {
         //0x|14:00|2A:00|80|00:00|A4|00|0p|81:po|...|A6|00|0P
         //   0  1  2  3  4  5  6  7  8  9  10 11
         // 0 length of command minus 2
@@ -245,13 +254,16 @@ public class EV3Controller implements Controller {
         return directCommand;
     }
 
-    private byte[] createStallCommand(int id) {
+    private byte[] createStallCommand(int... input) {
         byte[] tmp;
 
-        EV3ControlElement controlElement = controlElements.get(id);
+        EV3ControlElement controlElement = controlElements.get(input[0]);
         byte[] directCommand = controlElement.port.length > 1 ? new byte[23] : new byte[15];
         directCommand[0] = controlElement.port.length > 1 ? (byte) 0x15 : (byte) 0x0D;
-        directCommand[5] = (byte) 0x04;
+        byte[] motorPower = controlElement.getMotorPower(input);
+        directCommand[2] = controlElement.getMotorPower(input)[0];
+        directCommand[3] = motorPower.length > 1 ? motorPower[1] : (byte) 0x00;
+        directCommand[5] = (byte) 0x02;
 
         int port1 = controlElement.port[0];
         tmp = commandPart(intToBytePort(port1), (byte) 0x60);
@@ -306,4 +318,12 @@ public class EV3Controller implements Controller {
                 return 0x00;
         }
     }
+
+    /**
+     * Puts the control elements we have to create in a certain order 1.joystick 2.slider 3.button
+     * @param input string of control elements we need for the selected model f.e. joystick|button|slider|button
+     * @return String Array with the order we defined above
+     */
 }
+
+
