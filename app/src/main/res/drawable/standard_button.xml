@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:state_pressed="true" >
-        <shape android:shape="rectangle"  >
-            <corners android:radius="@dimen/_7sdp" />
-            <stroke android:width="@dimen/standard_button_border_width" android:color="#000000" />
-            <solid android:color="#999999"/>
-        </shape>
-    </item>
-    <item >
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/_7sdp" />
             <stroke android:width="@dimen/standard_button_border_width" android:color="#000000" />
-            <solid android:color="#FFFFFF"/>
+            <solid android:color="#999999" />
+        </shape>
+    </item>
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/_7sdp" />
+            <stroke android:width="@dimen/standard_button_border_width" android:color="#000000" />
+            <solid android:color="#000000" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/_7sdp" />
+            <stroke android:width="@dimen/standard_button_border_width" android:color="#000000" />
+            <solid android:color="#FFFFFF" />
         </shape>
     </item>
 </selector>

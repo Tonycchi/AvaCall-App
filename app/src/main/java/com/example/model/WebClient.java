@@ -7,6 +7,7 @@ import com.example.model.robot.Controller;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+import java.net.ConnectException;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Arrays;

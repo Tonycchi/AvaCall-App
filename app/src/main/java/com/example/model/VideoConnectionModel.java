@@ -2,11 +2,14 @@ package com.example.model;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.example.data.LocalPreferenceDAO;
 import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
 import com.example.model.robot.ev3.EV3Controller;
 
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -17,11 +20,13 @@ public class VideoConnectionModel {
     private URLSettings urlSettings;
     private WebClient webClient;
     private SessionData sessionData;
+    private MutableLiveData<Boolean> videoReady;
 
     private Controller controller;
 
     public VideoConnectionModel(LocalPreferenceDAO db) {
         urlSettings = new URLSettings(db);
+        videoReady = new MutableLiveData<>(false);
     }
 
     /**
@@ -44,10 +49,11 @@ public class VideoConnectionModel {
 
 
             //continue with share link when ws is connected
+            long currentTime;
             long startTime = System.currentTimeMillis();
             //check if a timeout occurs while connecting to server
             while (webClient.getStatus()==0) { //while there is no connection
-                long currentTime = System.currentTimeMillis();
+                currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
                     Log.e(TAG, "connection timeout: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
                     break;
@@ -58,13 +64,19 @@ public class VideoConnectionModel {
                 String id = webClient.getId();
                 //TODO: generalize
                 sessionData = new JitsiSessionData(videoURL, urlSettings.getHost_https(), id);
-                // TODO: Zum Videocall hier auf visible setzen!
+                videoReady.setValue(true); // enables change to call button
             } else {//error
                Log.e(TAG, "connectionError on: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
+               //TODO: Passende fehlermedlung in app anzeigen
             }
         }
 
         return webClient.getStatus()==1;
+    }
+
+    public MutableLiveData<Boolean> isVideoReady() {
+        if (videoReady == null) videoReady = new MutableLiveData<>();
+        return videoReady;
     }
 
     public URLSettings.stringTriple getCurrentURLs() {

@@ -51,7 +51,7 @@ public class MainViewModel extends AndroidViewModel {
         return model.getShareURL();
     }
 
-    public String getID(){
+    public String getID() {
         return model.getID();
     }
 
@@ -103,12 +103,20 @@ public class MainViewModel extends AndroidViewModel {
         return model.getSelectedModelPosition();
     }
 
+    public void setSelectedModelPosition(int position) {
+        model.setSelectedModelPosition(position);
+    }
+
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
         model.saveModel(id, name, description, type, values);
     }
 
-    public void setSelectedModelPosition(int position) {
-        model.setSelectedModelPosition(position);
+    public MutableLiveData<Boolean> isVideoReady() {
+        return model.isVideoReady();
+    }
+
+    public void deleteModel(int id) {
+        model.deleteModel(id);
     }
 
     public boolean isConnectedToServer() {

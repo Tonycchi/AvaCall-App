@@ -35,6 +35,7 @@
     <color name="button_next_inner">#D230EA10</color>
     <color name="button_back_inner">#BCFF1F1F</color>
     <color name="button_neutral_inner">#AA0047FF</color>
+    <color name="button_disabled">#999999</color>
 
     <!-- textcolor -->
     <color name="text_button">#000000</color>

@@ -11,15 +11,15 @@
     </style>
 
     <style name="button_next" parent="buttons">
-        <item name="android:backgroundTint">@color/button_next_inner</item>
+        <item name="android:backgroundTint">@color/button_next_color</item>
     </style>
 
     <style name="button_back" parent="buttons">
-        <item name="android:backgroundTint">@color/button_back_inner</item>
+        <item name="android:backgroundTint">@color/button_back_color</item>
     </style>
 
     <style name="button_neutral" parent="buttons">
-        <item name="android:backgroundTint">@color/button_neutral_inner</item>
+        <item name="android:backgroundTint">@color/button_neutral_color</item>
     </style>
 
     <style name="button_control_element" parent="buttons">

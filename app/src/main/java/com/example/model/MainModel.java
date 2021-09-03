@@ -74,7 +74,7 @@ public class MainModel {
         videoConnectionModel.saveURLs(urls);
     }
 
-    public String getID(){
+    public String getID() {
         return videoConnectionModel.getID();
     }
 
@@ -147,6 +147,10 @@ public class MainModel {
         return modelSelectionModel.getSelectedModelPosition();
     }
 
+    public void setSelectedModelPosition(int position) {
+        modelSelectionModel.setSelectedModelPosition(position);
+    }
+
     public String[] getAllRobotNames() {
         List<RobotModel> allDBRobots = modelSelectionModel.getAllRobots();
         int numberOfRobots = allDBRobots.size();
@@ -191,4 +195,11 @@ public class MainModel {
         return testRobotModel.getMotorStrength();
     }
 
+    public MutableLiveData<Boolean> isVideoReady() {
+        return videoConnectionModel.isVideoReady();
+    }
+
+    public void deleteModel(int id) {
+        localDatabase.robotModelDAO().deleteByID(id);
+    }
 }
