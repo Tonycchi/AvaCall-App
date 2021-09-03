@@ -29,11 +29,11 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
             SLIDER = Constants.SLIDER,
             BUTTON = Constants.BUTTON;
     private static final String TAG = "ControlAdapter";
-    protected final HostActivity hostActivity;
-    protected final List<List<Integer>> elementValues;
-    protected int itemCount = 1;
+    protected final HostActivity hostActivity; // for context
+    protected final List<List<Integer>> elementValues; // represents UI state
+    protected int itemCount = 1; // number of UI items, not equal to number control elements
     protected int maxNumberElements = 4;
-    protected int fieldsFilled = 0, numberOfFields = 0;
+    protected int fieldsFilled = 0, numberOfFields = 0; // fieldsFilled==numberOfFields ==> all required data entered
     //TODO vielleicht ui/model mehr trennen
     protected int id;
 
@@ -51,7 +51,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public int getId() {
         return id;
-    };
+    }
     void removeFilledFields(int count) {
         fieldsFilled -= count;
         if (fieldsFilled < 0)
@@ -113,7 +113,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
      * @param elementType type of element, see static constants in ControlAdapter.java
      */
     public void addElement(int elementType) {
-        int newFields;
+        int newFields; // no. of data fields for each control element
         switch (elementType) {
             case JOYSTICK:
             case BUTTON:
@@ -165,10 +165,12 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public int getItemViewType(int position) {
         if (position >= elementValues.size() && elementValues.size() < maxNumberElements)
-            return ADD;
+            return ADD; // last element in list is add button, if less than 4 elements
         else if (position >= elementValues.size())
-            return EMPTY;
-        return elementValues.get(position).get(0) + (position << 16);
+            return EMPTY; // more than 4 -> show empty space
+
+        // get viewType and position of UI item in one 32 bit int:
+        return elementValues.get(position).get(0) + (position << 16); //
     }
 
     @Override

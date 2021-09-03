@@ -10,6 +10,7 @@ import com.example.Constants;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
 import com.example.data.RobotModel;
+import com.example.data.URLSettings;
 import com.example.model.connection.BluetoothModel;
 import com.example.model.connection.Device;
 import com.example.model.connection.EV3BluetoothHandshake;
@@ -65,7 +66,7 @@ public class MainModel {
         videoConnectionModel.saveURLs(urls);
     }
 
-    public String getID(){
+    public String getID() {
         return videoConnectionModel.getID();
     }
 
@@ -138,6 +139,10 @@ public class MainModel {
         return modelSelectionModel.getSelectedModelPosition();
     }
 
+    public void setSelectedModelPosition(int position) {
+        modelSelectionModel.setSelectedModelPosition(position);
+    }
+
     public String[] getAllRobotNames() {
         List<RobotModel> allDBRobots = modelSelectionModel.getAllRobots();
         int numberOfRobots = allDBRobots.size();
@@ -176,5 +181,13 @@ public class MainModel {
 
     public void cancelServerConnection() {
         videoConnectionModel.cancelConnection();
+    }
+
+    public MutableLiveData<Boolean> isVideoReady() {
+        return videoConnectionModel.isVideoReady();
+    }
+
+    public void deleteModel(int id) {
+        localDatabase.robotModelDAO().deleteByID(id);
     }
 }
