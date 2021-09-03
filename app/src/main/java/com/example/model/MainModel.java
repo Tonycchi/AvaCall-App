@@ -174,10 +174,6 @@ public class MainModel {
         controller = robot.getController(robotModel, robotConnectionModel.getService()); // use model that was just saved
     }
 
-    public void setSelectedModelPosition(int position) {
-        modelSelectionModel.setSelectedModelPosition(position);
-    }
-
     public String getCurrentRobotType() {
         if (robot != null) return robot.getType();
         throw new IllegalStateException();
