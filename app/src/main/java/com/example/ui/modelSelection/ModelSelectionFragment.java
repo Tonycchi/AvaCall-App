@@ -1,7 +1,10 @@
 package com.example.ui.modelSelection;
 
-import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +30,9 @@ import com.example.ui.editControls.EditControlsFragment;
 
 import net.simonvt.numberpicker.NumberPicker;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public class ModelSelectionFragment extends HostedFragment {
 
     private static final String TAG = "ModelSelectionFragment";
@@ -34,6 +40,10 @@ public class ModelSelectionFragment extends HostedFragment {
     private MainViewModel viewModel;
     private TextView modelDescription;
     private ImageView modelPicture;
+
+    private Context context;
+
+    private static final int PICK_IMAGE = 1;
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
@@ -54,7 +64,7 @@ public class ModelSelectionFragment extends HostedFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //super.onViewCreated(view, savedInstanceState);
+        context = getContext();
 
         Button useModel = view.findViewById(R.id.button_use_model);
         Button editModel = view.findViewById(R.id.button_edit_model);
@@ -75,9 +85,47 @@ public class ModelSelectionFragment extends HostedFragment {
 
         modelDescription = view.findViewById(R.id.model_description_text);
         modelPicture = view.findViewById(R.id.model_picture);
-        setModelDescription();
+        modelPicture.setOnClickListener(v -> changeImage());
+
+        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        setModelDescription(robotModel);
+        setModelPicture(robotModel);
 
         getActivity().setTitle(R.string.title_model_selection);
+    }
+
+    private void changeImage(){
+        Intent pickIntent = new Intent();
+        pickIntent.setType("image/*");
+        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        String pickTitle = getResources().getString(R.string.select_or_take_picture);
+
+        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { takePhotoIntent });
+
+        startActivityForResult(chooserIntent, PICK_IMAGE);
+
+        Log.d(TAG, "image pressed");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE) {
+            if(resultCode == Activity.RESULT_OK && data != null) {
+                try {
+                    InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
+                } catch (FileNotFoundException e) {
+                    ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
+                }
+            }else {
+                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
+            }
+        }
     }
 
     @Override
@@ -111,19 +159,22 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
         viewModel.setSelectedModelPosition(modelPicker.getValue());
-        setModelDescription();
+        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        setModelDescription(robotModel);
+        setModelPicture(robotModel);
+        Log.d(TAG, "Model at Position "+modelPicker.getValue()+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
     }
 
-    private void setModelDescription(){
-        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+    private void setModelPicture(RobotModel robotModel){
+        //TODO: other picture
+        modelPicture.setImageResource(R.drawable.no_image_available);
+    }
+
+    private void setModelDescription(RobotModel robotModel){
         String descriptionText = robotModel.description;
         if(descriptionText==null || descriptionText.isEmpty())
             descriptionText = robotModel.specs;
         modelDescription.setText(robotModel.name+"("+robotModel.type+"): "+descriptionText);
-
-        //TODO: other picture
-        modelPicture.setImageResource(R.drawable.no_image_available);
-        Log.d(TAG, "Model at Position "+modelPicker.getValue()+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
     }
 
     private void onClickEditModel(View v) {
