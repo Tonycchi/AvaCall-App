@@ -1,5 +1,7 @@
 package com.example.data;
 
+import android.net.Uri;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -22,6 +24,9 @@ public class RobotModel {
     @ColumnInfo(name = "description")
     public String description; //the description of the robot, can be null. If null, in ui specs are shown
 
+    @ColumnInfo(name = "picture")
+    public Uri picture; //uri to the image
+
     /**
      *
      * @param id 0 for new model, >0 to overwrite an existing model
@@ -35,6 +40,7 @@ public class RobotModel {
         this.type = type;
         this.specs = specs;
         this.description = description;
+        picture = null;
     }
 
 }
