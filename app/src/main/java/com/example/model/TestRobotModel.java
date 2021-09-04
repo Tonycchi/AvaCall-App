@@ -34,31 +34,30 @@ public class TestRobotModel {
     }
 
     public boolean detectStall(int expectedStrength, int actualStrength) {
-        int delta = 20;
-        return Math.abs(expectedStrength - actualStrength) > 20;
+        return Math.abs(expectedStrength - actualStrength) > Math.abs(expectedStrength/2);
     }
 
     public void checkStall(byte[] message) {
-        EV3Controller controller = (EV3Controller) mainModel.getController();
-        int lastUsed = controller.getLastUsedId();
-        int expectedStrength1 = message[2];
-        int expectedStrength2 = message[3];
-        int actualStrength1 = message[5];
-        int actualStrength2 = message[6];
-        Log.d(TAG, "ICH BIN AKTUELL: " + actualStrength1 + " ICH BIN SOLL: " + expectedStrength1);
-        Boolean[] stallDetected = new Boolean[controller.getControlElements().size()];
-        stallDetected[lastUsed] = detectStall(expectedStrength1, actualStrength1);
+            EV3Controller controller = (EV3Controller) mainModel.getController();
+            int lastUsed = controller.getLastUsedId();
+            int expectedStrength1 = message[2];
+            int expectedStrength2 = message[3];
+            int actualStrength1 = message[5];
+            int actualStrength2 = message[6];
+            Log.d(TAG, "ICH BIN AKTUELL: " + actualStrength1 + " ICH BIN SOLL: " + expectedStrength1);
+            Boolean[] stallDetected = new Boolean[controller.getControlElements().size()];
+            stallDetected[lastUsed] = detectStall(expectedStrength1, actualStrength1);
 
 //            if (stallDetected) {
 //                mainModel.sendStallDetected(controller.getControlElements().get(usedId).getType(), usedId);
 //            }else {
 //                mainModel.sendStallEnded(controller.getControlElements().get(usedId).getType(), usedId);
 //            }
-        stall.postValue(stallDetected);
+            stall.postValue(stallDetected);
 
 
-        Log.d(TAG, "received");
-        String ok = message[4] == 0x02 ? "ok" : "nicht ok";
+ //       Log.d(TAG, "received");
+ //       String ok = message[4] == 0x02 ? "ok" : "nicht ok";
 
 //        int strength = message[8]<<3;
 //        strength += message[7]<<2;
@@ -133,24 +132,24 @@ public class TestRobotModel {
         return -1;
     }
 
-    public void setMessage() {
-        EV3Controller controller = (EV3Controller) mainModel.getController();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < controller.getControlElements().size(); i++) {
-            Log.d(TAG, "Hallo display message");
-            String newline = i != 0 ? "\n" : "";
-            if (controller.getControlElements().get(i).getType().equals("joystick")) {
-                sb.append(newline + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[0]
-                        + " an und hat die Stärke " + 0 + ".");
-                sb.append("\n" + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[1]
-                        + " an und hat die Stärke " + 0 + ".");
-            } else {
-                sb.append(newline + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[0]
-                        + " an und hat die Stärke " + 0 + ".");
-            }
-        }
-        motorStrength.postValue(sb.toString());
-    }
+//    public void setMessage() {
+//        EV3Controller controller = (EV3Controller) mainModel.getController();
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < controller.getControlElements().size(); i++) {
+//            Log.d(TAG, "Hallo display message");
+//            String newline = i != 0 ? "\n" : "";
+//            if (controller.getControlElements().get(i).getType().equals("joystick")) {
+//                sb.append(newline + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[0]
+//                        + " an und hat die Stärke " + 0 + ".");
+//                sb.append("\n" + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[1]
+//                        + " an und hat die Stärke " + 0 + ".");
+//            } else {
+//                sb.append(newline + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[0]
+//                        + " an und hat die Stärke " + 0 + ".");
+//            }
+//        }
+//        motorStrength.postValue(sb.toString());
+//    }
 }
 
 //    public void setPorts(String specs) {

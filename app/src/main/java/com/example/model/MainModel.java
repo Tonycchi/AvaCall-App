@@ -2,6 +2,7 @@ package com.example.model;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainModel {
+
+    private final String TAG = "MainModel";
 
     private Context context;
 
@@ -123,7 +126,7 @@ public class MainModel {
         modelSelectionModel.setSelectedModelPosition(position);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
-        testRobotModel.setMessage();
+        //testRobotModel.setMessage();
     }
 
     public void sendControlInputs(int... input) {
@@ -167,6 +170,7 @@ public class MainModel {
 
 
     public void receivedMessageFromRobot(byte[] message){
+        Log.d(TAG, "received message length: " + message.length);
         if(message.length == 9){
             testRobotModel.receivedMotorStrengths(message);
         } else if(message.length == 7) {
