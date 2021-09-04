@@ -23,18 +23,18 @@ public class EV3Controller implements Controller {
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
     private int[] ids = new int[4];
-    private int usedId;
+    private int lastUsedId;
 
-    public void setUsedId(int id){
-        usedId = id;
+    public void setLastUsedId(int id){
+        lastUsedId = id;
     }
 
     public ArrayList<EV3ControlElement> getControlElements(){
         return controlElements;
     }
 
-    public int getUsedId() {
-        return usedId;
+    public int getLastUsedId() {
+        return lastUsedId;
     }
 
     public EV3Controller(RobotModel model, ConnectionService service) {
@@ -49,7 +49,9 @@ public class EV3Controller implements Controller {
     @Override
     public void sendInput(int... input) {
         Log.d(TAG, Arrays.toString(input));
+        // command to move the mindstorm
         byte[] inputCommand = createCommand(input);
+        // command to get current motor strength
         byte[] outputCommand = createStallCommand(input);
         service.write(inputCommand);
         try {

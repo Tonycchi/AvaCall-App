@@ -30,8 +30,8 @@ public interface Controller {
      */
     RobotModel getCurrentModel();
 
-    void setUsedId(int id);
+    void setLastUsedId(int id);
 
-    int getUsedId();
+    int getLastUsedId();
 
 }

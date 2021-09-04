@@ -123,7 +123,7 @@ public class MainModel {
         modelSelectionModel.setSelectedModelPosition(position);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
-   //     testRobotModel.setPorts(selectedRobotModel.specs);
+        testRobotModel.setMessage();
     }
 
     public void sendControlInputs(int... input) {
@@ -167,7 +167,11 @@ public class MainModel {
 
 
     public void receivedMessageFromRobot(byte[] message){
-        testRobotModel.receivedMessage(message);
+        if(message.length == 9){
+            testRobotModel.receivedMotorStrengths(message);
+        } else if(message.length == 7) {
+            testRobotModel.checkStall(message);
+        }
     }
 
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
@@ -180,13 +184,13 @@ public class MainModel {
         modelSelectionModel.setSelectedModelPosition(position);
     }
 
-    public void setUsedId(int id){controller.setUsedId(id);}
+    public void setLastUsedId(int id){controller.setLastUsedId(id);}
 
     public MutableLiveData<String> getMotorStrength() {
         return testRobotModel.getMotorStrength();
     }
 
-    public MutableLiveData<Boolean> getStall(){return testRobotModel.getStall();}
+    public MutableLiveData<Boolean[]> getStall(){return testRobotModel.getStall();}
 
     public void sendStallDetected(String controlElementType, int controlElementId) {
         videoConnectionModel.sendStallDetected(controlElementType, controlElementId);

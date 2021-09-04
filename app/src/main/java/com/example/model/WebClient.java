@@ -66,7 +66,7 @@ public class WebClient extends WebSocketClient {
                 int[] t2 = new int[t1.size()];
                 for (int i = 0; i < t2.length; i++)
                     t2[i] = Integer.parseInt(t1.get(i));
-                controller.setUsedId(t2[0]);
+                controller.setLastUsedId(t2[0]);
                 Thread webClientinput = new Thread(){
                     public void run(){
                         controller.sendInput(t2);

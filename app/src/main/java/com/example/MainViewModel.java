@@ -109,13 +109,13 @@ public class MainViewModel extends AndroidViewModel {
         model.setSelectedModelPosition(position);
     }
 
-    public void setUsedId(int id){model.setUsedId(id);}
+    public void setLastUsedId(int id){model.setLastUsedId(id);}
 
     public MutableLiveData<String> getMotorStrength() {
         return model.getMotorStrength();
     }
 
-    public MutableLiveData<Boolean> getStall() {return model.getStall();}
+    public MutableLiveData<Boolean[]> getStall() {return model.getStall();}
 
     public void sendStallDetected(String controlElementType, int controlElementId) {
         model.sendStallDetected(controlElementType, controlElementId);
