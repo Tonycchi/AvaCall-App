@@ -111,6 +111,9 @@ public class TestRobotFragment extends HostedFragment {
         String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
         String[] order = rankOrder(t);
         stallDetected = new Boolean[order.length];
+        for(int i = 0; i < stallDetected.length; i++){
+            stallDetected[i] = false;
+        }
         Log.d(TAG, t);
         createControlElements(order, constraintLayout);
 
