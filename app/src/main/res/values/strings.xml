@@ -43,7 +43,8 @@
     <!-- Model Selection -->
     <string name="model_picture">Picture of the currently selected model</string>
     <string name="select_or_take_picture">Neues Bild machen oder auswählen</string>
-    <string name="wrong_picture_selected">Das Bild konnte nicht geändert werden.</string>
+    <string name="picture_name">AvaCall_Modell_</string>
+    <string name="wrong_picture_selected">Das Bild konnte nicht geladen werden.</string>
     <string name="save_use_model">Speichern &amp;\n Roboter verwenden</string>
     <string name="use_model">Roboter verwenden</string>
     <string name="edit_model">Steuerung des Roboters bearbeiten</string>

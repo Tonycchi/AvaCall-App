@@ -1,9 +1,15 @@
 package com.example.ui.modelSelection;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -30,8 +36,9 @@ import com.example.ui.editControls.EditControlsFragment;
 
 import net.simonvt.numberpicker.NumberPicker;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelSelectionFragment extends HostedFragment {
 
@@ -43,7 +50,9 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private Context context;
 
-    private static final int PICK_IMAGE = 1;
+    private Uri outputFileUri;
+
+    private static final int SELECT_PICTURE_REQUEST_CODE = 1;
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
@@ -85,7 +94,7 @@ public class ModelSelectionFragment extends HostedFragment {
 
         modelDescription = view.findViewById(R.id.model_description_text);
         modelPicture = view.findViewById(R.id.model_picture);
-        modelPicture.setOnClickListener(v -> changeImage());
+        modelPicture.setOnClickListener(v -> loadNewImage());
 
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
         setModelDescription(robotModel);
@@ -94,36 +103,75 @@ public class ModelSelectionFragment extends HostedFragment {
         getActivity().setTitle(R.string.title_model_selection);
     }
 
-    private void changeImage(){
-        Intent pickIntent = new Intent();
-        pickIntent.setType("image/*");
-        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+    private void loadNewImage(){
+        // Determine Uri of camera image to save.
+        final File root = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + "ModelPictures" + File.separator);
+        root.mkdirs();
+        final String fileName = getResources().getString(R.string.picture_name) + System.currentTimeMillis() + ".jpg";
+        final File sdImageMainDirectory = new File(root, fileName);
+        outputFileUri = Uri.fromFile(sdImageMainDirectory);
 
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Camera.
+        final List<Intent> cameraIntents = new ArrayList<Intent>();
+        final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        final PackageManager packageManager = getActivity().getPackageManager();
+        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for(ResolveInfo res : listCam) {
+            final String packageName = res.activityInfo.packageName;
+            final Intent intent = new Intent(captureIntent);
+            intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
+            intent.setPackage(packageName);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+            cameraIntents.add(intent);
+        }
 
-        String pickTitle = getResources().getString(R.string.select_or_take_picture);
+        // Filesystem.
+        final Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
 
-        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { takePhotoIntent });
+        // Chooser of filesystem options.
+        final Intent chooserIntent = Intent.createChooser(galleryIntent, getResources().getString(R.string.select_or_take_picture));
 
-        startActivityForResult(chooserIntent, PICK_IMAGE);
+        // Add the camera options.
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
 
-        Log.d(TAG, "image pressed");
+        startActivityForResult(chooserIntent, SELECT_PICTURE_REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
-            if(resultCode == Activity.RESULT_OK && data != null) {
-                try {
-                    InputStream inputStream = context.getContentResolver().openInputStream(data.getData());
-                } catch (FileNotFoundException e) {
-                    ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
+        if (requestCode == SELECT_PICTURE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                final boolean isCamera;
+                if (data == null) {
+                    isCamera = true;
+                } else {
+                    final String action = data.getAction();
+                    if (action == null) {
+                        isCamera = false;
+                    } else {
+                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    }
                 }
-            }else {
+
+                Uri selectedImageUri = null;
+                if (isCamera) {
+                    selectedImageUri = outputFileUri;
+                } else {
+                    if(data != null) {
+                        selectedImageUri = data.getData();
+                    }else{
+                        ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
+                        Log.e(TAG,"data==null");
+                    }
+                }
+                modelPicture.setImageURI(selectedImageUri);
+                Log.d(TAG,"selected Image: "+selectedImageUri);
+            }else{
                 ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
+                Log.e(TAG,"image result not OK. resultCode:"+resultCode);
             }
         }
     }
