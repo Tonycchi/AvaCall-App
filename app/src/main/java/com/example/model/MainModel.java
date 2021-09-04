@@ -2,6 +2,7 @@ package com.example.model;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class MainModel {
 
-    private Context context;
+    private static final String TAG = "MainModel";
 
     private RobotConnectionModel robotConnectionModel;
     private Handshake handshake;
@@ -115,6 +116,7 @@ public class MainModel {
     public RobotModel getRobotModel(int position) {
         return modelSelectionModel.getRobotModel(modelPositionToId[position]);
     }
+
 
     public void modelSelected(int position) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
         if (position == -1) {

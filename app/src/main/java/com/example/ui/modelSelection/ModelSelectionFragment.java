@@ -127,6 +127,7 @@ public class ModelSelectionFragment extends HostedFragment {
                         viewModel.deleteSelectedModel(v);
 
                         refreshNumberPicker();
+                        setModelDescription();
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
                         break;
