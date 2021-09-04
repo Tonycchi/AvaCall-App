@@ -33,11 +33,7 @@ public class TestRobotModel {
 
     public boolean detectStall(int expectedStrength, int actualStrength){
         int delta = 20;
-        if(Math.abs(expectedStrength - actualStrength) > 20) {
-            return true;
-        } else {
-            return false;
-        }
+        return Math.abs(expectedStrength - actualStrength) > 20;
     }
 
     public void receivedMessage(byte[] message) {
@@ -48,12 +44,13 @@ public class TestRobotModel {
             int expectedStrength2 = message[3];
             int actualStrength1 = message[5];
             int actualStrength2 = message[6];
+            Log.d(TAG, "ICH BIN AKTUELL: " + actualStrength1 + " ICH BIN SOLL: " + expectedStrength1);
             boolean stallDetected = detectStall(expectedStrength1, actualStrength1);
-            if (stallDetected) {
-                mainModel.sendStallDetected(controller.getControlElements().get(usedId).getType(), usedId);
-            }else {
-                mainModel.sendStallEnded(controller.getControlElements().get(usedId).getType(), usedId);
-            }
+//            if (stallDetected) {
+//                mainModel.sendStallDetected(controller.getControlElements().get(usedId).getType(), usedId);
+//            }else {
+//                mainModel.sendStallEnded(controller.getControlElements().get(usedId).getType(), usedId);
+//            }
             stall.postValue(stallDetected);
 
 
@@ -74,6 +71,7 @@ public class TestRobotModel {
             //       int id4 = message[3] & 0x0f;
             StringBuilder sb = new StringBuilder();
             for(int i = 0; i < controller.getControlElements().size(); i++){
+                Log.d(TAG, "Hallo display message");
                 String newline = i != 0 ? "\n" : "";
                 int strength = controller.getUsedId() == i ? actualStrength1 : 0;
                 if(controller.getControlElements().get(i).getType().equals("joystick")) {

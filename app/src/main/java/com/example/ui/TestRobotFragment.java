@@ -236,16 +236,16 @@ public class TestRobotFragment extends HostedFragment {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
                             if(event.getAction() == MotionEvent.ACTION_DOWN){
-                                Log.d(TAG, "Down");
-                                stallDetected = false;
-                            } else if(event.getAction() == MotionEvent.ACTION_DOWN){
                                 viewModel.setUsedId(id);
                                 Log.d(TAG, "move");
-                            } else if(event.getAction() == MotionEvent.ACTION_CANCEL){
+                            } else if(event.getAction() == MotionEvent.ACTION_UP) {
                                 Log.d(TAG, "cancel");
+                                hideBorder();
+                                joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                                joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
                             }
                             return false;
-                        };
+                        }
                     });
 
                     joystick.setOnMoveListener((angle, strength) -> {

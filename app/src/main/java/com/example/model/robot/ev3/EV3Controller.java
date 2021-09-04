@@ -257,11 +257,13 @@ public class EV3Controller implements Controller {
     private byte[] createStallCommand(int... input) {
         byte[] tmp;
 
+        int[] inp = Arrays.copyOfRange(input, 1, input.length);
+
         EV3ControlElement controlElement = controlElements.get(input[0]);
         byte[] directCommand = controlElement.port.length > 1 ? new byte[23] : new byte[15];
         directCommand[0] = controlElement.port.length > 1 ? (byte) 0x15 : (byte) 0x0D;
-        byte[] motorPower = controlElement.getMotorPower(input);
-        directCommand[2] = controlElement.getMotorPower(input)[0];
+        byte[] motorPower = controlElement.getMotorPower(inp);
+        directCommand[2] = controlElement.getMotorPower(inp)[0];
         directCommand[3] = motorPower.length > 1 ? motorPower[1] : (byte) 0x00;
         directCommand[5] = (byte) 0x02;
 
