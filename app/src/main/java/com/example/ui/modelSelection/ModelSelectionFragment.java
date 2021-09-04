@@ -1,5 +1,6 @@
 package com.example.ui.modelSelection;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -128,7 +129,7 @@ public class ModelSelectionFragment extends HostedFragment {
         // Filesystem.
         final Intent galleryIntent = new Intent();
         galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
 
         // Chooser of filesystem options.
         final Intent chooserIntent = Intent.createChooser(galleryIntent, getResources().getString(R.string.select_or_take_picture));
@@ -139,6 +140,7 @@ public class ModelSelectionFragment extends HostedFragment {
         startActivityForResult(chooserIntent, SELECT_PICTURE_REQUEST_CODE);
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -167,14 +169,25 @@ public class ModelSelectionFragment extends HostedFragment {
                         Log.e(TAG,"data==null");
                     }
                 }
+
+                final int takeFlags = data.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                // Check for the freshest data.
+                getActivity().getContentResolver().takePersistableUriPermission(selectedImageUri, takeFlags);
+
                 modelPicture.setImageURI(selectedImageUri);
-                Log.d(TAG,"selected Image: "+selectedImageUri);
+                viewModel.setImageOfSelectedModel(selectedImageUri);
+
+                Log.d(TAG,"store Image: "+selectedImageUri);
             }else{
                 ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
                 Log.e(TAG,"image result not OK. resultCode:"+resultCode);
             }
         }
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -206,16 +219,23 @@ public class ModelSelectionFragment extends HostedFragment {
     }
 
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
-        viewModel.setSelectedModelPosition(modelPicker.getValue());
-        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        viewModel.setSelectedModelPosition(newVal);
+        RobotModel robotModel = viewModel.getRobotModel(newVal);
         setModelDescription(robotModel);
         setModelPicture(robotModel);
-        Log.d(TAG, "Model at Position "+modelPicker.getValue()+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
+        Log.d(TAG, "Model at Position "+newVal+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
     }
 
     private void setModelPicture(RobotModel robotModel){
-        //TODO: other picture
-        modelPicture.setImageResource(R.drawable.no_image_available);
+        if(robotModel.picture == null) {
+            //Log.d(TAG, "Picture == null");
+            modelPicture.setImageResource(R.drawable.no_image_available);
+        } else {
+            //TODO: what if image is deleted???
+            Uri uri = Uri.parse(robotModel.picture);
+            modelPicture.setImageURI(uri);
+            Log.d(TAG, "show Image: "+robotModel.picture+" | "+uri);
+        }
     }
 
     private void setModelDescription(RobotModel robotModel){

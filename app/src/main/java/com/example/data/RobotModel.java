@@ -25,7 +25,7 @@ public class RobotModel {
     public String description; //the description of the robot, can be null. If null, in ui specs are shown
 
     @ColumnInfo(name = "picture")
-    public Uri picture; //uri to the image
+    public String picture; //uri to the image
 
     /**
      *

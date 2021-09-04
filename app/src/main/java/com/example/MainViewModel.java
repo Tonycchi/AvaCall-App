@@ -1,6 +1,7 @@
 package com.example;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -129,5 +130,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> getMotorStrength() {
         return model.getMotorStrength();
+    }
+
+    public void setImageOfSelectedModel(Uri selectedImageUri) {
+        model.setImageOfSelectedModel(selectedImageUri);
     }
 }

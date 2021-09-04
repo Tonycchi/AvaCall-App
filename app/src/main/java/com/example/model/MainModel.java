@@ -2,6 +2,7 @@ package com.example.model;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -40,7 +41,6 @@ public class MainModel {
 
     // Model for ModelSelectionFragment
     private ModelSelectionModel modelSelectionModel;
-    private int[] modelPositionToId;
 
     private LocalDatabase localDatabase;
 
@@ -113,7 +113,7 @@ public class MainModel {
     }
 
     public RobotModel getRobotModel(int position) {
-        return modelSelectionModel.getRobotModel(modelPositionToId[position]);
+        return modelSelectionModel.getRobotModel(position);
     }
 
     public void modelSelected(int position) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
@@ -122,7 +122,7 @@ public class MainModel {
             return;
         }
         modelSelectionModel.setSelectedModelPosition(position);
-        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
+        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(position);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
     }
 
@@ -152,19 +152,7 @@ public class MainModel {
     }
 
     public String[] getAllRobotNames() {
-        List<RobotModel> allDBRobots = modelSelectionModel.getAllRobots();
-        int numberOfRobots = allDBRobots.size();
-
-        String[] allRobotNames = new String[numberOfRobots];
-        modelPositionToId = new int[numberOfRobots];
-
-        for (int i = 0; i < numberOfRobots; i++) {
-            RobotModel temp = allDBRobots.get(i);
-            allRobotNames[i] = temp.name;
-            modelPositionToId[i] = temp.id;
-        }
-
-        return allRobotNames;
+        return modelSelectionModel.getAllRobotNames();
     }
 
 
@@ -201,5 +189,9 @@ public class MainModel {
 
     public void deleteModel(int id) {
         localDatabase.robotModelDAO().deleteByID(id);
+    }
+
+    public void setImageOfSelectedModel(Uri selectedImageUri) {
+        modelSelectionModel.setImageOfSelectedModel(selectedImageUri);
     }
 }
