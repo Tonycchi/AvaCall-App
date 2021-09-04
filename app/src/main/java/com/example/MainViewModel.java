@@ -130,4 +130,8 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<String> getMotorStrength() {
         return model.getMotorStrength();
     }
+
+    public void deleteSelectedModel(int position) {
+        model.deleteSelectedModel(position);
+    }
 }

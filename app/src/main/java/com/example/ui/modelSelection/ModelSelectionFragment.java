@@ -1,6 +1,7 @@
 package com.example.ui.modelSelection;
 
-import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -34,6 +35,8 @@ public class ModelSelectionFragment extends HostedFragment {
     private MainViewModel viewModel;
     private TextView modelDescription;
     private ImageView modelPicture;
+    private boolean modelsExist;
+    private Button useModel;
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
@@ -56,7 +59,7 @@ public class ModelSelectionFragment extends HostedFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //super.onViewCreated(view, savedInstanceState);
 
-        Button useModel = view.findViewById(R.id.button_use_model);
+        useModel = view.findViewById(R.id.button_use_model);
         Button editModel = view.findViewById(R.id.button_edit_model);
 
 
@@ -65,11 +68,8 @@ public class ModelSelectionFragment extends HostedFragment {
 
         modelPicker = view.findViewById(R.id.model_picker);
 
-        String[] allRobotNames = viewModel.getAllRobotNames();
-        modelPicker.setMaxValue(allRobotNames.length-1);
-        modelPicker.setMinValue(0);
-        modelPicker.setDisplayedValues(allRobotNames);
-        modelPicker.setValue(viewModel.getSelectedModelPosition());
+        modelsExist = false;
+        refreshNumberPicker();
 
         modelPicker.setOnValueChangedListener(this::onSelectedModelChanged);
 
@@ -85,6 +85,26 @@ public class ModelSelectionFragment extends HostedFragment {
         inflater.inflate(R.menu.add_model, menu);
     }
 
+    private void refreshNumberPicker() {
+        String[] allRobotNames = viewModel.getAllRobotNames();
+        int maxVal = allRobotNames.length - 1;
+        if (maxVal < 0) {
+            maxVal = 0;
+            modelsExist = false;
+        } else {
+            modelsExist = true;
+        }
+        modelPicker.setMaxValue(maxVal);
+        modelPicker.setMinValue(0);
+        if (modelsExist)
+            modelPicker.setDisplayedValues(allRobotNames);
+        else
+            modelPicker.setDisplayedValues(new String[]{"Keine Modelle vorhanden."});
+        modelPicker.setValue(viewModel.getSelectedModelPosition());
+        
+        useModel.setEnabled(modelsExist);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -98,6 +118,26 @@ public class ModelSelectionFragment extends HostedFragment {
                     .addToBackStack(null)
                     .commit();
             return true;
+        } else if (id == R.id.menu_delete) {
+            DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        // delete model and remove from view
+                        int v = modelPicker.getValue();
+                        viewModel.deleteSelectedModel(v);
+
+                        refreshNumberPicker();
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Dieses Modell löschen?:\n\"" + viewModel.getRobotModel(modelPicker.getValue()).name + "\"")
+                    .setPositiveButton("Ja", dialogClickListener)
+                    .setNegativeButton("Nein", dialogClickListener)
+                    .show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -105,7 +145,7 @@ public class ModelSelectionFragment extends HostedFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "Position: "+viewModel.getSelectedModelPosition());
+        Log.d(TAG, "Position: " + viewModel.getSelectedModelPosition());
         modelPicker.setValue(viewModel.getSelectedModelPosition());
     }
 
@@ -114,20 +154,30 @@ public class ModelSelectionFragment extends HostedFragment {
         setModelDescription();
     }
 
-    private void setModelDescription(){
-        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
-        String descriptionText = robotModel.description;
-        if(descriptionText==null || descriptionText.isEmpty())
+    private void setModelDescription() {
+        RobotModel robotModel;
+        String descriptionText = "";
+        if (modelsExist) {
+            robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        } else {
+            robotModel = new RobotModel(-1, "", "", "", "");
+        }
+        String typeString = (modelsExist) ? "(" + robotModel.type + "):" : "";
+        descriptionText = robotModel.description;
+        if (descriptionText == null || descriptionText.isEmpty())
             descriptionText = robotModel.specs;
-        modelDescription.setText(robotModel.name+"("+robotModel.type+"): "+descriptionText);
+        modelDescription.setText(robotModel.name + typeString + descriptionText);
 
         //TODO: other picture
         modelPicture.setImageResource(R.drawable.no_image_available);
-        Log.d(TAG, "Model at Position "+modelPicker.getValue()+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
+        Log.d(TAG, "Model at Position " + modelPicker.getValue() + " selected! Name:" + robotModel.name + " Id:" + robotModel.id);
     }
 
     private void onClickEditModel(View v) {
-        viewModel.modelSelected(modelPicker.getValue());
+        if (modelsExist)
+            viewModel.modelSelected(modelPicker.getValue());
+        else
+            viewModel.modelSelected(-1);
 
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
@@ -138,22 +188,24 @@ public class ModelSelectionFragment extends HostedFragment {
     }
 
     private void onClickUseModel(View v) {
-        viewModel.modelSelected(modelPicker.getValue());
+        if (modelsExist) {
+            viewModel.modelSelected(modelPicker.getValue());
 
-        FragmentManager fragmentManager = getParentFragmentManager();
-        Bundle bundle = new Bundle();
-        bundle.putInt("cameFromModelSelection", 1);
+            FragmentManager fragmentManager = getParentFragmentManager();
+            Bundle bundle = new Bundle();
+            bundle.putInt("cameFromModelSelection", 1);
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, TestRobotFragment.class, bundle, getResources().getString(R.string.fragment_tag_hosted))
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, TestRobotFragment.class, bundle, getResources().getString(R.string.fragment_tag_hosted))
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     @Override
     public void connectionStatusChanged(Integer newConnectionStatus) {
-         //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
+        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
         switch (newConnectionStatus) {
             case 3:
                 Log.d(TAG, "Case 3: Connection lost!");

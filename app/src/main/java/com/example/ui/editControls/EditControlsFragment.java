@@ -109,6 +109,7 @@ public class EditControlsFragment extends HostedFragment {
             DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
+                        // delete if robot model exists
                         if (selectedRobotModel != null)
                             viewModel.deleteModel(selectedRobotModel.id);
 

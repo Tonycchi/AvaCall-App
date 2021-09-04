@@ -202,4 +202,8 @@ public class MainModel {
     public void deleteModel(int id) {
         localDatabase.robotModelDAO().deleteByID(id);
     }
+
+    public void deleteSelectedModel(int position) {
+        localDatabase.robotModelDAO().deleteByID(modelPositionToId[position]);
+    }
 }
