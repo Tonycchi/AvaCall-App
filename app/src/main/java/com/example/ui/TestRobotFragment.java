@@ -258,6 +258,7 @@ public class TestRobotFragment extends HostedFragment {
                      * Code executed when you move the joystick
                      */
                     joystick.setOnMoveListener((angle, strength) -> {
+                        viewModel.setLastUsedId(id);
                         Thread joystickInput = new Thread() {
                             public void run() {
                                 viewModel.sendControlInput(id, angle, strength);
@@ -312,6 +313,7 @@ public class TestRobotFragment extends HostedFragment {
                                 }
                             };
                             sliderInput.start();
+                            viewModel.setLastUsedId(id);
                             if(stallDetected[id]){
                                 showBorder();
                                 slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
