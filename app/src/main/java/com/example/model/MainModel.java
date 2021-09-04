@@ -123,7 +123,7 @@ public class MainModel {
         modelSelectionModel.setSelectedModelPosition(position);
         RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
-        testRobotModel.setPorts(selectedRobotModel.specs);
+   //     testRobotModel.setPorts(selectedRobotModel.specs);
     }
 
     public void sendControlInputs(int... input) {
@@ -180,9 +180,13 @@ public class MainModel {
         modelSelectionModel.setSelectedModelPosition(position);
     }
 
+    public void setUsedId(int id){controller.setUsedId(id);}
+
     public MutableLiveData<String> getMotorStrength() {
         return testRobotModel.getMotorStrength();
     }
+
+    public MutableLiveData<Boolean> getStall(){return testRobotModel.getStall();}
 
     public void sendStallDetected(String controlElementType, int controlElementId) {
         videoConnectionModel.sendStallDetected(controlElementType, controlElementId);

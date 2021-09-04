@@ -67,7 +67,12 @@ public class WebClient extends WebSocketClient {
                 for (int i = 0; i < t2.length; i++)
                     t2[i] = Integer.parseInt(t1.get(i));
                 controller.setUsedId(t2[0]);
-                controller.sendInput(t2);
+                Thread webClientinput = new Thread(){
+                    public void run(){
+                        controller.sendInput(t2);
+                    }
+                };
+                webClientinput.start();
                 //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
             }
         }
@@ -75,7 +80,6 @@ public class WebClient extends WebSocketClient {
 
     public void sendStallDetected(String controlElementType, int controlElementId){
         String stallMessage = "STALL:start:"+controlElementType+":"+controlElementId;
-        Log.d(TAG, "Send: " + stallMessage);
         send(stallMessage);
     }
 

@@ -40,6 +40,7 @@ public class BluetoothConnectionService implements ConnectionService {
     private ByteArrayHandshake byteArrayHandshake;
     private MainModel mainModel;
 
+
     public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake, MainModel mainModel) {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<Integer>();

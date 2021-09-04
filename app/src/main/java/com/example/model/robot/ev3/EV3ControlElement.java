@@ -59,6 +59,9 @@ public abstract class EV3ControlElement {
     protected abstract byte[] getCommand(int... input);
 
     public abstract String getType();
+
+    public abstract int[] getPort();
+
     /**
      *
      * @param x value in [0,1], percentage of maxPower
@@ -146,6 +149,11 @@ public abstract class EV3ControlElement {
             return "joystick";
         }
 
+        @Override
+        public int[] getPort() {
+            return port;
+        }
+
     }
 
     protected static class Slider extends EV3ControlElement {
@@ -184,6 +192,11 @@ public abstract class EV3ControlElement {
 
         public String getType(){
             return "slider";
+        }
+
+        @Override
+        public int[] getPort() {
+            return port;
         }
 
     }
@@ -239,6 +252,11 @@ public abstract class EV3ControlElement {
 
         public String getType(){
             return "button";
+        }
+
+        @Override
+        public int[] getPort() {
+            return port;
         }
 
     }
