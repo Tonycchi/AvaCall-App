@@ -142,13 +142,24 @@ public class ModelSelectionFragment extends HostedFragment {
                 File photoFile = null;
                 try {
                     photoFile = createImageFile();
+                } catch (IOException ex) {
+                    Log.e(TAG, ex.getMessage());
+                    failedTakingPicture();
+                }
+                if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(context,
                             "com.example.rcvc.fileprovider",
                             photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                    // Check for the freshest data.
+                    //getActivity().getContentResolver().takePersistableUriPermission(photoURI, takeFlags);
+                    takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     startActivityForResult(takePictureIntent, TAKE_PICTURE_REQUEST_CODE);
-                } catch (IOException ex) {
-                    Log.e(TAG, ex.getMessage());
+                }else{
+                    Log.e(TAG, "photoFile == null");
                     failedTakingPicture();
                 }
             }else{
@@ -162,30 +173,23 @@ public class ModelSelectionFragment extends HostedFragment {
     }
     private void selectPicture(){
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto , SELECT_PICTURE_REQUEST_CODE);
+        startActivityForResult(pickPhoto, SELECT_PICTURE_REQUEST_CODE);
     }
     private void deletePicture(){
         viewModel.setImageOfSelectedModel(null);
         updateModelPicture();
     }
 
-    private void storePicture(){
-        try {
-            FileOutputStream out = new FileOutputStream(currentPhotoPath);
-            //bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-
-            out.flush();
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        /*Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File file = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(file);
+    private void storeTakenPicture(){
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File photoFile = new File(currentPhotoPath);
+        Log.d(TAG, "test");
+        Uri contentUri = FileProvider.getUriForFile(context,
+                "com.example.rcvc.fileprovider",
+                photoFile);
+        Log.d(TAG, "test2");
         mediaScanIntent.setData(contentUri);
-        getActivity().sendBroadcast(mediaScanIntent);*/
+        getActivity().sendBroadcast(mediaScanIntent);
     }
 
     private void failedTakingPicture(){
@@ -197,56 +201,11 @@ public class ModelSelectionFragment extends HostedFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        /*if (requestCode == SELECT_PICTURE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                final boolean isCamera;
-                if (data == null) {
-                    isCamera = true;
-                } else {
-                    final String action = data.getAction();
-                    if (action == null) {
-                        isCamera = false;
-                    } else {
-                        isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    }
-                }
-
-                Uri selectedImageUri = null;
-                if (isCamera) {
-                    selectedImageUri = outputFileUri;
-                } else {
-                    if(data != null) {
-                        selectedImageUri = data.getData();
-                    }else{
-                        ((HostActivity) getActivity()).showToast(getResources().getString(R.string.error_selecting_picture));
-                        Log.e(TAG,"data==null");
-                    }
-                }
-
-                final int takeFlags = data.getFlags()
-                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                // Check for the freshest data.
-                getActivity().getContentResolver().takePersistableUriPermission(selectedImageUri, takeFlags);
-
-                modelPicture.setImageURI(selectedImageUri);
-                viewModel.setImageOfSelectedModel(selectedImageUri);
-
-                Log.d(TAG,"store Image: "+selectedImageUri);
-            }else{
-                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.error_selecting_picture));
-                Log.e(TAG,"image result not OK. resultCode:"+resultCode);
-            }
-        }*/
-
         if(resultCode == RESULT_OK) {
             if (requestCode == TAKE_PICTURE_REQUEST_CODE) {
-                /*Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                modelPicture.setImageBitmap(imageBitmap);*/
+                storeTakenPicture();
                 viewModel.setImageOfSelectedModel(currentPhotoPath);
                 updateModelPicture();
-                storePicture();
             } else if (requestCode == SELECT_PICTURE_REQUEST_CODE) {
                 Uri selectedImageUri = null;
                 if(data != null) {
@@ -272,7 +231,7 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "ModelPictures_" + timeStamp + "_";
+        String imageFileName = "ModelPicture_" + timeStamp;
         File imageDir = getImageDir();
         File imageFile = File.createTempFile(imageFileName, ".jpg", imageDir);
 
@@ -281,11 +240,13 @@ public class ModelSelectionFragment extends HostedFragment {
     }
 
     private File getImageDir(){
+        //File imageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File imageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        // Make sure the directory "Android/data/com.mypackage.etc/files/Pictures" exists
+        Log.d(TAG,"1imagedir:"+imageDir.getAbsolutePath());
         if (!imageDir.exists()) {
             imageDir.mkdirs();
         }
+        Log.d(TAG,"2imagedir:"+imageDir.getAbsolutePath());
         return imageDir;
     }
 
@@ -293,7 +254,9 @@ public class ModelSelectionFragment extends HostedFragment {
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
         if(robotModel.picture == null) {
             modelPicture.setImageResource(R.drawable.no_image_available);
+            Log.d(TAG, "default pic");
         } else {
+            Log.d(TAG,"pic:"+robotModel.picture);
             // Get the dimensions of the View
             int targetW = modelPicture.getWidth() == 0 ? 1 : modelPicture.getWidth();
             int targetH = modelPicture.getHeight() == 0 ? 1 : modelPicture.getHeight();
@@ -373,7 +336,7 @@ public class ModelSelectionFragment extends HostedFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "Position: "+viewModel.getSelectedModelPosition());
+        //Log.d(TAG, "Position: "+viewModel.getSelectedModelPosition());
         modelPicker.setValue(viewModel.getSelectedModelPosition());
     }
 
@@ -382,7 +345,7 @@ public class ModelSelectionFragment extends HostedFragment {
         RobotModel robotModel = viewModel.getRobotModel(newVal);
         setModelDescription();
         updateModelPicture();
-        Log.d(TAG, "Model at Position "+newVal+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
+        //Log.d(TAG, "Model at Position "+newVal+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
     }
 
     private void setModelDescription(){
