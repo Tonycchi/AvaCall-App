@@ -1,16 +1,18 @@
 package com.example.ui.modelSelection;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ComponentName;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -24,6 +26,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -38,8 +41,11 @@ import com.example.ui.editControls.EditControlsFragment;
 import net.simonvt.numberpicker.NumberPicker;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ModelSelectionFragment extends HostedFragment {
 
@@ -53,7 +59,9 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private Uri outputFileUri;
 
-    private static final int SELECT_PICTURE_REQUEST_CODE = 1;
+    private static final int TAKE_PICTURE_REQUEST_CODE = 1;
+    private static final int SELECT_PICTURE_REQUEST_CODE = 2;
+    private String currentPhotoPath;
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
@@ -97,54 +105,99 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicture = view.findViewById(R.id.model_picture);
         modelPicture.setOnClickListener(v -> loadNewImage());
 
-        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
-        setModelDescription(robotModel);
-        setModelPicture(robotModel);
+        setModelDescription();
+        updateModelPicture();
 
         getActivity().setTitle(R.string.title_model_selection);
     }
 
     private void loadNewImage(){
-        // Determine Uri of camera image to save.
-        final File root = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + File.separator + "ModelPictures" + File.separator);
-        root.mkdirs();
-        final String fileName = getResources().getString(R.string.picture_name) + System.currentTimeMillis() + ".jpg";
-        final File sdImageMainDirectory = new File(root, fileName);
-        outputFileUri = Uri.fromFile(sdImageMainDirectory);
+        String takePicture = getResources().getString(R.string.take_picture);
+        String selectPicture = getResources().getString(R.string.select_picture);
+        String deletePicture = getResources().getString(R.string.delete_picture);
+        final CharSequence[] optionsMenu = {takePicture, selectPicture, deletePicture};
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setItems(optionsMenu, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(optionsMenu[which].equals(takePicture)){
+                    takePicture();
+                }else if(optionsMenu[which].equals(selectPicture)){
+                    selectPicture();
+                }else if(optionsMenu[which].equals(deletePicture)){
+                    deletePicture();
+                }else{
+                    Log.e(TAG, "This can't happen - I hope lel");
+                }
+            }
+        });
+        builder.show();
+    }
 
-        // Camera.
-        final List<Intent> cameraIntents = new ArrayList<Intent>();
-        final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        final PackageManager packageManager = getActivity().getPackageManager();
-        final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for(ResolveInfo res : listCam) {
-            final String packageName = res.activityInfo.packageName;
-            final Intent intent = new Intent(captureIntent);
-            intent.setComponent(new ComponentName(packageName, res.activityInfo.name));
-            intent.setPackage(packageName);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            cameraIntents.add(intent);
+    private void takePicture(){
+        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                    Uri photoURI = FileProvider.getUriForFile(context,
+                            "com.example.rcvc.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, TAKE_PICTURE_REQUEST_CODE);
+                } catch (IOException ex) {
+                    Log.e(TAG, ex.getMessage());
+                    failedTakingPicture();
+                }
+            }else{
+                Log.e(TAG, "takePictureIntent.resolveActivity(context.getPackageManager()) == null");
+                failedTakingPicture();
+            }
+        }else{
+            Log.e(TAG, "No camera feature!");
+            failedTakingPicture();
         }
+    }
+    private void selectPicture(){
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , SELECT_PICTURE_REQUEST_CODE);
+    }
+    private void deletePicture(){
+        viewModel.setImageOfSelectedModel(null);
+        updateModelPicture();
+    }
 
-        // Filesystem.
-        final Intent galleryIntent = new Intent();
-        galleryIntent.setType("image/*");
-        galleryIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+    private void storePicture(){
+        try {
+            FileOutputStream out = new FileOutputStream(currentPhotoPath);
+            //bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
-        // Chooser of filesystem options.
-        final Intent chooserIntent = Intent.createChooser(galleryIntent, getResources().getString(R.string.select_or_take_picture));
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File file = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        getActivity().sendBroadcast(mediaScanIntent);*/
+    }
 
-        // Add the camera options.
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
-
-        startActivityForResult(chooserIntent, SELECT_PICTURE_REQUEST_CODE);
+    private void failedTakingPicture(){
+        ((HostActivity) getActivity()).showToast(getResources().getString(R.string.error_taking_picture));
     }
 
     @SuppressLint("WrongConstant")
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == SELECT_PICTURE_REQUEST_CODE) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        /*if (requestCode == SELECT_PICTURE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 final boolean isCamera;
                 if (data == null) {
@@ -165,7 +218,7 @@ public class ModelSelectionFragment extends HostedFragment {
                     if(data != null) {
                         selectedImageUri = data.getData();
                     }else{
-                        ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
+                        ((HostActivity) getActivity()).showToast(getResources().getString(R.string.error_selecting_picture));
                         Log.e(TAG,"data==null");
                     }
                 }
@@ -181,13 +234,119 @@ public class ModelSelectionFragment extends HostedFragment {
 
                 Log.d(TAG,"store Image: "+selectedImageUri);
             }else{
-                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.wrong_picture_selected));
+                ((HostActivity) getActivity()).showToast(getResources().getString(R.string.error_selecting_picture));
                 Log.e(TAG,"image result not OK. resultCode:"+resultCode);
             }
+        }*/
+
+        if(resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE_REQUEST_CODE) {
+                /*Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                modelPicture.setImageBitmap(imageBitmap);*/
+                viewModel.setImageOfSelectedModel(currentPhotoPath);
+                updateModelPicture();
+                storePicture();
+            } else if (requestCode == SELECT_PICTURE_REQUEST_CODE) {
+                Uri selectedImageUri = null;
+                if(data != null) {
+                    selectedImageUri = data.getData();
+                }else{
+                    ((HostActivity) getActivity()).showToast(getResources().getString(R.string.error_selecting_picture));
+                    Log.e(TAG,"data==null");
+                }
+
+                final int takeFlags = data.getFlags()
+                        & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                // Check for the freshest data.
+                getActivity().getContentResolver().takePersistableUriPermission(selectedImageUri, takeFlags);
+
+                viewModel.setImageOfSelectedModel(currentPhotoPath);
+                updateModelPicture();
+            }
+        }else{
+            Log.e(TAG, "resultCode != RESULT_OK");
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "ModelPictures_" + timeStamp + "_";
+        File imageDir = getImageDir();
+        File imageFile = File.createTempFile(imageFileName, ".jpg", imageDir);
+
+        currentPhotoPath = imageFile.getAbsolutePath();
+        return imageFile;
+    }
+
+    private File getImageDir(){
+        File imageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        // Make sure the directory "Android/data/com.mypackage.etc/files/Pictures" exists
+        if (!imageDir.exists()) {
+            imageDir.mkdirs();
+        }
+        return imageDir;
+    }
+
+    private void updateModelPicture() {
+        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        if(robotModel.picture == null) {
+            modelPicture.setImageResource(R.drawable.no_image_available);
+        } else {
+            // Get the dimensions of the View
+            int targetW = modelPicture.getWidth() == 0 ? 1 : modelPicture.getWidth();
+            int targetH = modelPicture.getHeight() == 0 ? 1 : modelPicture.getHeight();
+
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+
+            String robotModelPicturePath = robotModel.picture;
+            BitmapFactory.decodeFile(robotModelPicturePath, bmOptions);
+
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
+
+            // Determine how much to scale down the image
+            int scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH));
+
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+            modelPicture.setImageBitmap(bitmap);
         }
     }
 
 
+    /*/ function to check permission
+    public boolean checkAndRequestPermissions() {
+        final Activity context = getActivity();
+        int WExtstorePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int cameraPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CAMERA);
+        }
+
+        if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded
+                    .add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(context, listPermissionsNeeded
+                            .toArray(new String[listPermissionsNeeded.size()]),
+                    REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+
+        return true;
+    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -221,24 +380,13 @@ public class ModelSelectionFragment extends HostedFragment {
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
         viewModel.setSelectedModelPosition(newVal);
         RobotModel robotModel = viewModel.getRobotModel(newVal);
-        setModelDescription(robotModel);
-        setModelPicture(robotModel);
+        setModelDescription();
+        updateModelPicture();
         Log.d(TAG, "Model at Position "+newVal+" selected! Name:"+robotModel.name+" Id:"+robotModel.id);
     }
 
-    private void setModelPicture(RobotModel robotModel){
-        if(robotModel.picture == null) {
-            //Log.d(TAG, "Picture == null");
-            modelPicture.setImageResource(R.drawable.no_image_available);
-        } else {
-            //TODO: what if image is deleted???
-            Uri uri = Uri.parse(robotModel.picture);
-            modelPicture.setImageURI(uri);
-            Log.d(TAG, "show Image: "+robotModel.picture+" | "+uri);
-        }
-    }
-
-    private void setModelDescription(RobotModel robotModel){
+    private void setModelDescription(){
+        RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
         String descriptionText = robotModel.description;
         if(descriptionText==null || descriptionText.isEmpty())
             descriptionText = robotModel.specs;

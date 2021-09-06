@@ -191,7 +191,7 @@ public class MainModel {
         localDatabase.robotModelDAO().deleteByID(id);
     }
 
-    public void setImageOfSelectedModel(Uri selectedImageUri) {
-        modelSelectionModel.setImageOfSelectedModel(selectedImageUri);
+    public void setImageOfSelectedModel(String photoPath) {
+        modelSelectionModel.setImageOfSelectedModel(photoPath);
     }
 }

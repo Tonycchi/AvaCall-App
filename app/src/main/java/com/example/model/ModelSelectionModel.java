@@ -36,8 +36,8 @@ public class ModelSelectionModel {
         this.selectedModelPosition = selectedModelPosition;
     }
 
-    public void setImageOfSelectedModel(Uri imageUri) {
-        robotModelDAO.setPictureOfRobotModel(modelPositionToId[selectedModelPosition], imageUri.toString());
+    public void setImageOfSelectedModel(String photoPath) {
+        robotModelDAO.setPictureOfRobotModel(modelPositionToId[selectedModelPosition], photoPath);
     }
 
     public String[] getAllRobotNames() {

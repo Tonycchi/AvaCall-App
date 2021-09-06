@@ -132,7 +132,7 @@ public class MainViewModel extends AndroidViewModel {
         return model.getMotorStrength();
     }
 
-    public void setImageOfSelectedModel(Uri selectedImageUri) {
-        model.setImageOfSelectedModel(selectedImageUri);
+    public void setImageOfSelectedModel(String photoPath) {
+        model.setImageOfSelectedModel(photoPath);
     }
 }
