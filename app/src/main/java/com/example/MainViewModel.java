@@ -115,7 +115,7 @@ public class MainViewModel extends AndroidViewModel {
         return model.getMotorStrength();
     }
 
-    public MutableLiveData<Boolean[]> getStall() {return model.getStall();}
+    public MutableLiveData<Boolean> getStall() {return model.getStall();}
 
     public void sendStallDetected(String controlElementType, int controlElementId) {
         model.sendStallDetected(controlElementType, controlElementId);
@@ -124,4 +124,6 @@ public class MainViewModel extends AndroidViewModel {
     public void sendStallEnded(String controlElementType, int controlElementId) {
         model.sendStallEnded(controlElementType, controlElementId);
     }
+
+    public void setInputFromWebClient(boolean input) { model.setInputFromWebClient(input);}
 }

@@ -24,6 +24,7 @@ public class EV3Controller implements Controller {
     private String controlElementString = "";
     private int[] ids = new int[4];
     private int lastUsedId;
+    private boolean inputWebClient;
 
     public void setLastUsedId(int id){
         lastUsedId = id;
@@ -39,8 +40,8 @@ public class EV3Controller implements Controller {
 
     public EV3Controller(RobotModel model, ConnectionService service) {
         this.service = service;
-
         this.model = model;
+        this.inputWebClient = false;
 
         Log.d(TAG, model.specs);
         createElements(model.specs);
@@ -69,7 +70,6 @@ public class EV3Controller implements Controller {
         service.write(createOutputCommand());
     }
 
-
     public String getControlElementString() {
         return controlElementString;
     }
@@ -78,6 +78,9 @@ public class EV3Controller implements Controller {
         return model;
     }
 
+    public boolean getInputFromWebClient() { return inputWebClient; }
+
+    public void setInputFromWebClient(boolean input) { inputWebClient = input; }
     /**
      * creates EV3ControlElement objects according to specifications
      *
@@ -322,12 +325,6 @@ public class EV3Controller implements Controller {
                 return 0x00;
         }
     }
-
-    /**
-     * Puts the control elements we have to create in a certain order 1.joystick 2.slider 3.button
-     * @param input string of control elements we need for the selected model f.e. joystick|button|slider|button
-     * @return String Array with the order we defined above
-     */
 }
 
 

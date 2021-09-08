@@ -34,4 +34,6 @@ public interface Controller {
 
     int getLastUsedId();
 
+    void setInputFromWebClient(boolean input);
+
 }

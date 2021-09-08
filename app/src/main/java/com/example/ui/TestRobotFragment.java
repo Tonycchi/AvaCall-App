@@ -46,7 +46,7 @@ public class TestRobotFragment extends HostedFragment {
     private TextView motorStrengthText;
     private boolean borderVisible;
     private Handler handler;
-    private Boolean[] stallDetected;
+    private boolean stallDetected;
 
 
     // Observer to check if amount of paired Devices has been changed
@@ -58,9 +58,9 @@ public class TestRobotFragment extends HostedFragment {
         }
     };
 
-    public final Observer<Boolean[]> stallObserver = new Observer<Boolean[]>() {
+    public final Observer<Boolean> stallObserver = new Observer<Boolean>() {
         @Override
-        public void onChanged(Boolean[] booleans) {
+        public void onChanged(Boolean booleans) {
             stallDetected = booleans;
         }
     };
@@ -110,17 +110,14 @@ public class TestRobotFragment extends HostedFragment {
 
         String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
         String[] order = rankOrder(t);
-        stallDetected = new Boolean[order.length];
-        for(int i = 0; i < stallDetected.length; i++){
-            stallDetected[i] = false;
-        }
+        stallDetected = false;
         Log.d(TAG, t);
         createControlElements(order, constraintLayout);
 
         motorStrengthText = view.findViewById(R.id.text_motor_strength);
 
         handler = new Handler();
-        handler.post(getMotorOutput);
+//        handler.post(getMotorOutput);
 
         MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
         motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
@@ -146,7 +143,7 @@ public class TestRobotFragment extends HostedFragment {
 
     private void onClickYes(View v) {
         Log.d(TAG, "YES BABY");
-        handler.removeCallbacks(getMotorOutput);
+//        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
@@ -156,7 +153,7 @@ public class TestRobotFragment extends HostedFragment {
     }
     private void onClickNo(View v) {
         Log.d(TAG, "NO BABY");
-        handler.removeCallbacks(getMotorOutput);
+//        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();
@@ -243,12 +240,13 @@ public class TestRobotFragment extends HostedFragment {
                         public boolean onTouch(View v, MotionEvent event) {
                             // When first touched joystick
                             if(event.getAction() == MotionEvent.ACTION_DOWN){
+                                viewModel.setInputFromWebClient(false);
                                 viewModel.setLastUsedId(id);
                                 Log.d(TAG, "move");
                                 // When released joystick
                             } else if(event.getAction() == MotionEvent.ACTION_UP) {
                                 Log.d(TAG, "cancel");
-                                stallDetected[id] = false;
+                                stallDetected= false;
                                 hideBorder();
                                 joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
                                 joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
@@ -261,7 +259,6 @@ public class TestRobotFragment extends HostedFragment {
                      * Code executed when you move the joystick
                      */
                     joystick.setOnMoveListener((angle, strength) -> {
-                        viewModel.setLastUsedId(id);
                         Thread joystickInput = new Thread() {
                             public void run() {
                                 viewModel.sendControlInput(id, angle, strength);
@@ -269,7 +266,7 @@ public class TestRobotFragment extends HostedFragment {
                             }
                          };
                         joystickInput.start();
-                        if (!stallDetected[id]) {
+                        if (!stallDetected) {
                             hideBorder();
                             joystick.setBorderColor(ContextCompat.getColor(getContext(), R.color.joystick_border));
                             joystick.setButtonColor(ContextCompat.getColor(getContext(), R.color.joystick_button));
@@ -309,23 +306,23 @@ public class TestRobotFragment extends HostedFragment {
                     slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            Thread sliderInput = new Thread() {
-                                public void run() {
-                                    viewModel.sendControlInput(id, progress);
-                                    Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
-                                }
-                            };
-                            sliderInput.start();
-                            viewModel.setLastUsedId(id);
-                            if(stallDetected[id]){
-                                showBorder();
-                                slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
-                                slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
-                            } else {
-                                hideBorder();
-                                slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
-                                slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
-                            }
+//                            Thread sliderInput = new Thread() {
+//                                public void run() {
+//                                    viewModel.sendControlInput(id, progress);
+//                                    Log.d(TAG, "Slider deflection: " + String.valueOf(progress));
+//                                }
+//                            };
+//                            sliderInput.start();
+//                            viewModel.setLastUsedId(id);
+//                            if(stallDetected){
+//                                showBorder();
+//                                slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
+//                                slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
+//                            } else {
+//                                hideBorder();
+//                                slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
+//                                slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
+//                            }
                         }
 
                         /**
@@ -334,6 +331,7 @@ public class TestRobotFragment extends HostedFragment {
                          */
                         @Override
                         public void onStartTrackingTouch(SeekBar seekBar) {
+                            viewModel.setInputFromWebClient(false);
                             viewModel.setLastUsedId(id);
            //                 showBorder();
             //                slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
@@ -356,7 +354,33 @@ public class TestRobotFragment extends HostedFragment {
                             hideBorder();
                             slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                             slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
-                            stallDetected[id] = false;
+                            stallDetected = false;
+                        }
+                    });
+
+                    slider.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                                Log.d(TAG, "MOVE MOVE MOVE");
+                                Thread sliderInput = new Thread() {
+                                    public void run() {
+                                            viewModel.sendControlInput(id, slider.getProgress());
+                                            Log.d(TAG, "Slider deflection: " + String.valueOf(slider.getProgress()));
+                                    }
+                                };
+                                sliderInput.start();
+                                if(stallDetected){
+                                    showBorder();
+                                    slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
+                                    slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                                } else {
+                                    hideBorder();
+                                    slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
+                                    slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
+                                }
+                            }
+                            return false;
                         }
                     });
                     controlElements[i] = slider.getId();
@@ -387,6 +411,7 @@ public class TestRobotFragment extends HostedFragment {
                         public boolean onTouch(View v, MotionEvent event) {
                             switch(event.getAction()) {
                                 case MotionEvent.ACTION_DOWN:
+                                    viewModel.setInputFromWebClient(false);
                                     viewModel.setLastUsedId(id);
                                     Thread buttonInput = new Thread(){
                                         public void run(){
@@ -395,7 +420,7 @@ public class TestRobotFragment extends HostedFragment {
                                         }
                                     };
                                     buttonInput.start();
-                                    if(stallDetected[id]) {
+                                    if(stallDetected) {
                                         showBorder();
                                         button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.border));
                                     } else {
@@ -408,7 +433,7 @@ public class TestRobotFragment extends HostedFragment {
                                     Log.d(TAG, "Button activity: " + 0);
                                     hideBorder();
                                     button.getBackground().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
-                                    stallDetected[id] = false;
+                                    stallDetected = false;
                                     return false;
                             }
                             return true;

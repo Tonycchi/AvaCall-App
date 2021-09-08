@@ -68,6 +68,8 @@ public class MainModel {
         return controller;
     }
 
+    public void setInputFromWebClient(boolean input) { controller.setInputFromWebClient(input); }
+
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return robotConnectionModel.getPairedDevices();
     }
@@ -171,9 +173,10 @@ public class MainModel {
 
     public void receivedMessageFromRobot(byte[] message){
         Log.d(TAG, "received message length: " + message.length);
-        if(message.length == 9){
+        int length = message[0];
+        if(length == 7 && controller != null) {
             testRobotModel.receivedMotorStrengths(message);
-        } else if(message.length == 7) {
+        } else if(length == 5 && controller != null) {
             testRobotModel.checkStall(message);
         }
     }
@@ -194,7 +197,7 @@ public class MainModel {
         return testRobotModel.getMotorStrength();
     }
 
-    public MutableLiveData<Boolean[]> getStall(){return testRobotModel.getStall();}
+    public MutableLiveData<Boolean> getStall(){return testRobotModel.getStall();}
 
     public void sendStallDetected(String controlElementType, int controlElementId) {
         videoConnectionModel.sendStallDetected(controlElementType, controlElementId);

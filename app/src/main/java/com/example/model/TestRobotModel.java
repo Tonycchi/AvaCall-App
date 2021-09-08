@@ -16,45 +16,60 @@ public class TestRobotModel {
     private MainModel mainModel;
     private static final String TAG = "TestRobotModel";
     MutableLiveData<String> motorStrength;
-    MutableLiveData<Boolean[]> stall;
-    //   HashSet<Integer> ports;
+    MutableLiveData<Boolean> stall;
+    private int[] lastExpected;
 
     public TestRobotModel(MainModel mainModel) {
         motorStrength = new MutableLiveData<String>();
         this.mainModel = mainModel;
-        stall = new MutableLiveData<Boolean[]>();
+        stall = new MutableLiveData<Boolean>();
+        this.lastExpected = new int[2];
     }
 
     public MutableLiveData<String> getMotorStrength() {
         return motorStrength;
     }
 
-    public MutableLiveData<Boolean[]> getStall() {
+    public MutableLiveData<Boolean> getStall() {
         return stall;
     }
 
     public boolean detectStall(int expectedStrength, int actualStrength) {
-        return Math.abs(expectedStrength - actualStrength) > Math.abs(expectedStrength/2);
+        if (Math.abs(expectedStrength) > Math.abs(actualStrength)) {
+            return Math.abs(expectedStrength - actualStrength) > Math.abs(expectedStrength * 0.7);
+        }
+        return false;
+    }
+
+    private boolean detectBigChange(int expectedStrength1, int expectedStrength2) {
+        int delta1 = Math.abs((int) (lastExpected[0] * 0.15));
+        int delta2 = Math.abs((int) (lastExpected[1] * 0.15));
+        return (Math.abs(lastExpected[0] - expectedStrength1) > delta1 || Math.abs(lastExpected[1] - expectedStrength2) > delta2);
     }
 
     public void checkStall(byte[] message) {
             EV3Controller controller = (EV3Controller) mainModel.getController();
+            Boolean stallDetected = false;
             int lastUsed = controller.getLastUsedId();
             int expectedStrength1 = message[2];
             int expectedStrength2 = message[3];
             int actualStrength1 = message[5];
             int actualStrength2 = message[6];
-            Log.d(TAG, "ICH BIN AKTUELL: " + actualStrength1 + " ICH BIN SOLL: " + expectedStrength1);
-            Boolean[] stallDetected = new Boolean[controller.getControlElements().size()];
-            stallDetected[lastUsed] = detectStall(expectedStrength1, actualStrength1);
-
-//            if (stallDetected) {
-//                mainModel.sendStallDetected(controller.getControlElements().get(usedId).getType(), usedId);
-//            }else {
-//                mainModel.sendStallEnded(controller.getControlElements().get(usedId).getType(), usedId);
-//            }
+            Log.d(TAG, "ICH BIN AKTUELL 1: " + actualStrength1 + " ICH BIN SOLL 1: " + expectedStrength1);
+            Log.d(TAG, "ICH BIN AKTUELL 2: " + actualStrength2 + " ICH BIN SOLL 2: " + expectedStrength2);
+//            if (expectedStrength1 >= lastExpected[0] && expectedStrength2 >= lastExpected[1]) {
+            if (!detectBigChange(expectedStrength1, expectedStrength2)) {
+                stallDetected = detectStall(expectedStrength1, actualStrength1) ||
+                        detectStall(expectedStrength2, actualStrength2);
+            }
+            if (stallDetected && controller.getInputFromWebClient()) {
+                mainModel.sendStallDetected(controller.getControlElements().get(lastUsed).getType(), lastUsed);
+            } else if (!stallDetected && controller.getInputFromWebClient()) {
+                mainModel.sendStallEnded(controller.getControlElements().get(lastUsed).getType(), lastUsed);
+            }
             stall.postValue(stallDetected);
-
+            lastExpected[0] = expectedStrength1;
+            lastExpected[1] = expectedStrength2;
 
  //       Log.d(TAG, "received");
  //       String ok = message[4] == 0x02 ? "ok" : "nicht ok";
