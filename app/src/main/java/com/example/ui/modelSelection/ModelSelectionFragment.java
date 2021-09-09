@@ -143,10 +143,6 @@ public class ModelSelectionFragment extends HostedFragment {
                             "com.example.rcvc.fileprovider",
                             photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
-                    // Check for the freshest data.
-                    getActivity().getContentResolver().takePersistableUriPermission(photoURI, takeFlags);
                     takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     startActivityForResult(takePictureIntent, TAKE_PICTURE_REQUEST_CODE);
@@ -207,7 +203,8 @@ public class ModelSelectionFragment extends HostedFragment {
 
         if (resultCode == RESULT_OK) {
             if (requestCode == TAKE_PICTURE_REQUEST_CODE) {
-                storeTakenPicture();
+                Uri savedImg = saveScaledDown(Uri.fromFile(new File(currentPhotoPath)));
+                currentPhotoPath = savedImg.toString();
                 viewModel.setImageOfSelectedModel(currentPhotoPath);
                 updateModelPicture();
             } else if (requestCode == SELECT_PICTURE_REQUEST_CODE) {
@@ -234,7 +231,7 @@ public class ModelSelectionFragment extends HostedFragment {
      * @param imageUri uri of selected image
      * @return uri of scaled down copy
      */
-    private Uri saveScaledDown(Uri imageUri) {
+    private Uri saveScaledDown(Uri imageUri) { // TODO photos get rotated???????
         // get bitmap from uri
         Bitmap bitmap = null;
         try {
@@ -306,7 +303,6 @@ public class ModelSelectionFragment extends HostedFragment {
             modelPicture.setImageURI(Uri.parse(robotModel.picture));
         }
     }
-
 
     /*/ function to check permission
     public boolean checkAndRequestPermissions() {
