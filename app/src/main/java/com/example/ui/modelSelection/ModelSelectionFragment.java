@@ -58,7 +58,7 @@ public class ModelSelectionFragment extends HostedFragment {
     private TextView modelDescription;
     private ImageView modelPicture;
     private boolean modelsExist;
-    private Button useModel;
+    private Button useModel, editModel;
     private Context context;
     private String currentPhotoPath;
 
@@ -84,7 +84,7 @@ public class ModelSelectionFragment extends HostedFragment {
         context = getContext();
 
         useModel = view.findViewById(R.id.button_use_model);
-        Button editModel = view.findViewById(R.id.button_edit_model);
+        editModel = view.findViewById(R.id.button_edit_model);
 
 
         useModel.setOnClickListener(this::onClickUseModel);
@@ -318,6 +318,11 @@ public class ModelSelectionFragment extends HostedFragment {
         else
             modelPicker.setDisplayedValues(new String[]{"Keine Modelle vorhanden."});
         modelPicker.setValue(viewModel.getSelectedModelPosition());
+
+        if (modelsExist)
+            editModel.setText(R.string.edit_model);
+        else
+            editModel.setText(R.string.create_model);
 
         useModel.setEnabled(modelsExist);
     }
