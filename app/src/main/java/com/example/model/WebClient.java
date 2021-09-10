@@ -112,7 +112,7 @@ public class WebClient extends WebSocketClient {
         return id;
     }
 
-    public void setReceiveCommands() {
-        receiveCommands = true;
+    public void setReceiveCommands(boolean receiveCommands) {
+        this.receiveCommands = receiveCommands;
     }
 }

@@ -110,8 +110,8 @@ public class VideoConnectionModel {
         return sessionData.getOptions();
     }
 
-    public void setReceiveCommands(){
-        webClient.setReceiveCommands();
+    public void setReceiveCommands(boolean receiveCommands){
+        webClient.setReceiveCommands(receiveCommands);
     }
 
     public void cancelConnection() {

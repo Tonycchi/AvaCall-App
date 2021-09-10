@@ -12,8 +12,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.MainViewModel;
 import com.example.rcvc.R;
 import com.example.ui.connection.BluetoothFragment;
+import com.facebook.react.modules.core.PermissionListener;
 
-public class HostActivity extends AppCompatActivity {
+import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
+
+public class HostActivity extends AppCompatActivity implements JitsiMeetActivityInterface {
 
 
     private MainViewModel viewModel;
@@ -69,4 +72,8 @@ public class HostActivity extends AppCompatActivity {
         showToast(getResources().getString(messageId));
     }
 
+    @Override
+    public void requestPermissions(String[] strings, int i, PermissionListener permissionListener) {
+
+    }
 }

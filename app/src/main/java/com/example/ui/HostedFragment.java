@@ -10,6 +10,10 @@ public abstract class HostedFragment extends Fragment {
     public HostedFragment(@LayoutRes int contentLayoutId){
         super(contentLayoutId);
     }
+    public HostedFragment() {
+        super();
+
+    }
 
     public abstract void robotConnectionStatusChanged(Integer newConnectionStatus);
 

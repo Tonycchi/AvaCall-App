@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.example.rcvc"
         minSdkVersion 23
-        targetSdkVersion 23
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -39,7 +39,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-	implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') { transitive = true }
+	implementation ('org.jitsi.react:jitsi-meet-sdk:3.+') { transitive = true }
     implementation 'io.github.controlwear:virtualjoystick:1.10.1'
     implementation "org.java-websocket:Java-WebSocket:1.5.1"
     implementation 'com.intuit.sdp:sdp-android:1.0.6'

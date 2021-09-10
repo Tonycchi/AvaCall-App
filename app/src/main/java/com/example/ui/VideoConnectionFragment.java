@@ -1,20 +1,15 @@
 package com.example.ui;
 
-import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,11 +20,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
 import com.example.rcvc.R;
-
-import org.jitsi.meet.sdk.JitsiMeetActivity;
-import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
-import org.jitsi.meet.sdk.JitsiMeetViewListener;
 
 public class VideoConnectionFragment extends HostedFragment {
 
@@ -109,12 +99,6 @@ public class VideoConnectionFragment extends HostedFragment {
         fragmentManager.popBackStack();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        cancelServerConnection();
-    }
-
     private void onClickInvitePartner(View v) {
         Log.d(TAG, "onClickInvitePartner");
         if(viewModel.invitePartner()) { //successful connection to server
@@ -145,8 +129,12 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private void onClickSwitchToVideoCall(View v) {
         if(viewModel.isConnectedToServer()) {
-            JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getOptions());
-            viewModel.setReceiveCommands();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_view, JitsiFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
         }else{
             ((HostActivity)getActivity()).showToast(R.string.connect_to_server);
         }

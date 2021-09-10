@@ -67,8 +67,8 @@ public class MainViewModel extends AndroidViewModel {
         model.deviceAccepted();
     }
 
-    public void setReceiveCommands() {
-        model.setReceiveCommands();
+    public void setReceiveCommands(boolean receiveCommands) {
+        model.setReceiveCommands(receiveCommands);
     }
 
     public String[] getAllRobotNames() {

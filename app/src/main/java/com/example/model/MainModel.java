@@ -116,8 +116,8 @@ public class MainModel {
         robotConnectionModel.deviceAccepted();
     }
 
-    public void setReceiveCommands() {
-        videoConnectionModel.setReceiveCommands();
+    public void setReceiveCommands(boolean receiveCommands) {
+        videoConnectionModel.setReceiveCommands(receiveCommands);
     }
 
     public RobotModel getRobotModel(int position) {
