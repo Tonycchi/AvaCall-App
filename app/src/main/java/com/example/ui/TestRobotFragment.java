@@ -117,7 +117,7 @@ public class TestRobotFragment extends HostedFragment {
         motorStrengthText = view.findViewById(R.id.text_motor_strength);
 
         handler = new Handler();
-//        handler.post(getMotorOutput);
+        handler.post(getMotorOutput);
 
         MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
         motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
@@ -143,7 +143,7 @@ public class TestRobotFragment extends HostedFragment {
 
     private void onClickYes(View v) {
         Log.d(TAG, "YES BABY");
-//        handler.removeCallbacks(getMotorOutput);
+        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
@@ -153,7 +153,7 @@ public class TestRobotFragment extends HostedFragment {
     }
     private void onClickNo(View v) {
         Log.d(TAG, "NO BABY");
-//        handler.removeCallbacks(getMotorOutput);
+        handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();
