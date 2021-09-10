@@ -111,7 +111,7 @@ public class EditControlsFragment extends HostedFragment {
                     case DialogInterface.BUTTON_POSITIVE:
                         // delete if robot model exists
                         if (selectedRobotModel != null)
-                            viewModel.deleteModel(selectedRobotModel.id);
+                            viewModel.deleteModelById(selectedRobotModel.id);
 
                         FragmentManager fragmentManager = getParentFragmentManager();
                         fragmentManager.popBackStack();

@@ -135,4 +135,8 @@ public class MainViewModel extends AndroidViewModel {
     public void setImageOfSelectedModel(String photoPath) {
         model.setImageOfSelectedModel(photoPath);
     }
+
+    public void deleteModelById(int id) {
+        model.deleteModelById(id);
+    }
 }
