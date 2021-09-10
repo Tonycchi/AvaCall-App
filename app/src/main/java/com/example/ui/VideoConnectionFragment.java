@@ -12,6 +12,9 @@ import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -63,8 +66,11 @@ public class VideoConnectionFragment extends HostedFragment {
         buttonTestControls.setOnClickListener(this::onClickTestControls);
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
 
-        if (viewModel.getID() != null)
-            meetingIdTextView.setText(getString(R.string.meeting_id) + " " + viewModel.getID());
+        //TODO: delete method
+        testStallStuff(view);
+
+        if(viewModel.getID() != null)
+            meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
 
         requireActivity().setTitle(R.string.title_video_connection);
 
@@ -73,6 +79,37 @@ public class VideoConnectionFragment extends HostedFragment {
 
         viewModel.isVideoReady().observe(getViewLifecycleOwner(), videoReadyObserver);
     }
+
+    private void testStallStuff(View view){
+        Button button = view.findViewById(R.id.test_send_stall_button);
+
+        RadioGroup element = view.findViewById(R.id.test_radio_element);
+        EditText idInput = view.findViewById(R.id.test_editText_id);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(button.getText().toString().startsWith("start")){
+                    RadioButton rb = view.findViewById(element.getCheckedRadioButtonId());
+                    String controlElementId = idInput.getText().toString();
+                    String controlElementType = rb.getText().toString().toLowerCase();
+                    Log.d(TAG, "start: checked:"+controlElementType+" id:"+controlElementId);
+                    button.setText("end stall");
+                    if(controlElementId!="")
+                        viewModel.sendStallDetected(controlElementType, Integer.parseInt(controlElementId));
+                }else{
+                    RadioButton rb = view.findViewById(element.getCheckedRadioButtonId());
+                    String controlElementId = idInput.getText().toString();
+                    String controlElementType = rb.getText().toString().toLowerCase();
+                    Log.d(TAG, "end: checked:"+controlElementType+" id:"+controlElementId);
+                    button.setText("start stall");
+                    if(controlElementId!="")
+                        viewModel.sendStallEnded(controlElementType, Integer.parseInt(controlElementId));
+                }
+            }
+        });
+    }
+
 
     private void openURLSettings(View v) {
         new URLDialogFragment().show(

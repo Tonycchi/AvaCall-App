@@ -2,6 +2,8 @@ package com.example.model.robot;
 
 import com.example.data.RobotModel;
 
+import java.util.ArrayList;
+
 public interface Controller {
 
     /**
@@ -10,6 +12,11 @@ public interface Controller {
      * @param input input
      */
     void sendInput(int... input);
+
+    /**
+     * get the output for the motors from the robot
+     */
+    void getOutput();
 
     /**
      * 
@@ -22,5 +29,11 @@ public interface Controller {
      * @return Object representing used model
      */
     RobotModel getCurrentModel();
+
+    void setLastUsedId(int id);
+
+    int getLastUsedId();
+
+    void setInputFromWebClient(boolean input);
 
 }

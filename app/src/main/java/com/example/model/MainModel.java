@@ -42,6 +42,7 @@ public class MainModel {
 
     // Model for ModelSelectionFragment
     private ModelSelectionModel modelSelectionModel;
+    private int[] modelPositionToId;
 
     private LocalDatabase localDatabase;
 
@@ -56,12 +57,18 @@ public class MainModel {
         //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake, this);
 
-        testRobotModel = new TestRobotModel();
+        testRobotModel = new TestRobotModel(this);
 
         //TODO: don't hard code robotType
         modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), Constants.TYPE_EV3);
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
+
+    public Controller getController() {
+        return controller;
+    }
+
+    public void setInputFromWebClient(boolean input) { controller.setInputFromWebClient(input); }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return robotConnectionModel.getPairedDevices();
@@ -131,6 +138,8 @@ public class MainModel {
         controller.sendInput(input);
     }
 
+    public void getControlOutputs() { controller.getOutput(); }
+
     public String getSelectedModelElements() {
         return controller.getControlElementString();
     }
@@ -158,7 +167,13 @@ public class MainModel {
 
 
     public void receivedMessageFromRobot(byte[] message){
-        testRobotModel.receivedMessage(message);
+        Log.d(TAG, "received message length: " + message.length);
+        int length = message[0];
+        if(length == 7 && controller != null) {
+            testRobotModel.receivedMotorStrengths(message);
+        } else if(length == 5 && controller != null) {
+            testRobotModel.checkStall(message);
+        }
     }
 
     public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
@@ -180,8 +195,20 @@ public class MainModel {
         videoConnectionModel.cancelConnection();
     }
 
+    public void setLastUsedId(int id){controller.setLastUsedId(id);}
+
     public MutableLiveData<String> getMotorStrength() {
         return testRobotModel.getMotorStrength();
+    }
+
+    public MutableLiveData<Boolean> getStall(){return testRobotModel.getStall();}
+
+    public void sendStallDetected(String controlElementType, int controlElementId) {
+        videoConnectionModel.sendStallDetected(controlElementType, controlElementId);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId) {
+        videoConnectionModel.sendStallEnded(controlElementType, controlElementId);
     }
 
     public MutableLiveData<Boolean> isVideoReady() {

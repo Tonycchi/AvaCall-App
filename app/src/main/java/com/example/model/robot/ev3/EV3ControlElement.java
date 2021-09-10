@@ -2,7 +2,7 @@ package com.example.model.robot.ev3;
 
 import android.util.Log;
 
-abstract class EV3ControlElement {
+public abstract class EV3ControlElement {
 
     final int maxPower;
     public final int[] port;
@@ -57,6 +57,10 @@ abstract class EV3ControlElement {
      * @return part of direct command
      */
     protected abstract byte[] getCommand(int... input);
+
+    public abstract String getType();
+
+    public abstract int[] getPort();
 
     /**
      *
@@ -140,6 +144,16 @@ abstract class EV3ControlElement {
             r[9] = power[1];
             return r;
         }
+
+        public String getType(){
+            return "joystick";
+        }
+
+        @Override
+        public int[] getPort() {
+            return port;
+        }
+
     }
 
     protected static class Slider extends EV3ControlElement {
@@ -175,6 +189,16 @@ abstract class EV3ControlElement {
 
             return r;
         }
+
+        public String getType(){
+            return "slider";
+        }
+
+        @Override
+        public int[] getPort() {
+            return port;
+        }
+
     }
 
     protected static class Button extends EV3ControlElement {
@@ -225,5 +249,15 @@ abstract class EV3ControlElement {
                     0x01 // nop
             };
         }
+
+        public String getType(){
+            return "button";
+        }
+
+        @Override
+        public int[] getPort() {
+            return port;
+        }
+
     }
 }

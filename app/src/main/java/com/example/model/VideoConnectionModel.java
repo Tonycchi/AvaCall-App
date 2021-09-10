@@ -119,4 +119,12 @@ public class VideoConnectionModel {
         if(webClient != null && webClient.getStatus()==1)
             webClient.close();
     }
+
+    public void sendStallDetected(String controlElementType, int controlElementId) {
+        webClient.sendStallDetected(controlElementType, controlElementId);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId) {
+        webClient.sendStallEnded(controlElementType, controlElementId);
+    }
 }

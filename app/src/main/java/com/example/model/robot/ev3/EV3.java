@@ -7,6 +7,8 @@ import com.example.model.connection.ConnectionService;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EV3 implements Robot {
@@ -28,19 +30,27 @@ public class EV3 implements Robot {
 
     @Override
     public RobotModel saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
+        Comparator<List<Integer>> c = (o1, o2) -> {
+            if (o1.size() > 0 && o2.size() > 0) {
+                return Integer.compare(o1.get(0), o2.get(0));
+            }
+            return 0;
+        };
+        Collections.sort(values, c);
+
         String specs = "";
         for (List<Integer> element : values) {
             switch (element.get(0)) { // TODO define numbers centrally, maybe in Constants.java alongside robot type strings
-                case Constants.JOYSTICK: //Joystick
+                case 1: //Joystick
                     specs += "joystick:" + element.get(1)
                             + ";" + indexToPort(element.get(2))
                             + "," + indexToPort(element.get(3)) + "|";
                     break;
-                case Constants.SLIDER: //Slider
+                case 2: //Slider
                     specs += "slider:" + element.get(1)
                             + ";" + indexToPort(element.get(2)) + "|";
                     break;
-                case Constants.BUTTON: //Button
+                case 3: //Button
                     specs += "button:" + element.get(1)
                             + ";" + indexToPort(element.get(2))
                             + ";" + element.get(3) + "|";

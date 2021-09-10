@@ -1,7 +1,6 @@
 package com.example;
 
 import android.app.Application;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -92,6 +91,8 @@ public class MainViewModel extends AndroidViewModel {
         model.sendControlInputs(input);
     }
 
+    public void getControlOutput() { model.getControlOutputs(); }
+
     public String getSelectedModelElements() {
         return model.getSelectedModelElements();
     }
@@ -124,6 +125,8 @@ public class MainViewModel extends AndroidViewModel {
         model.cancelServerConnection();
     }
 
+    public void setLastUsedId(int id){model.setLastUsedId(id);}
+
     public MutableLiveData<String> getMotorStrength() {
         return model.getMotorStrength();
     }
@@ -135,4 +138,16 @@ public class MainViewModel extends AndroidViewModel {
     public void setImageOfSelectedModel(String photoPath) {
         model.setImageOfSelectedModel(photoPath);
     }
+
+    public MutableLiveData<Boolean> getStall() {return model.getStall();}
+
+    public void sendStallDetected(String controlElementType, int controlElementId) {
+        model.sendStallDetected(controlElementType, controlElementId);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId) {
+        model.sendStallEnded(controlElementType, controlElementId);
+    }
+
+    public void setInputFromWebClient(boolean input) { model.setInputFromWebClient(input);}
 }
