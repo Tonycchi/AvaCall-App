@@ -150,4 +150,8 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void setInputFromWebClient(boolean input) { model.setInputFromWebClient(input);}
+
+    public void deleteModelById(int id) {
+        model.deleteModelById(id);
+    }
 }
