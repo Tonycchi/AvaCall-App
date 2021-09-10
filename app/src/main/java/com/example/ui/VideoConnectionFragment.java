@@ -1,9 +1,11 @@
 package com.example.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -17,9 +19,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.MainViewModel;
 import com.example.rcvc.R;
+
+import org.jitsi.meet.sdk.BroadcastAction;
+import org.jitsi.meet.sdk.BroadcastEvent;
+import org.jitsi.meet.sdk.BroadcastIntentHelper;
+import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetActivityDelegate;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 public class VideoConnectionFragment extends HostedFragment {
 
@@ -72,6 +82,20 @@ public class VideoConnectionFragment extends HostedFragment {
         final Observer<Boolean> videoReadyObserver = this::videoReady;
 
         viewModel.isVideoReady().observe(getViewLifecycleOwner(), videoReadyObserver);
+
+        //Observe if video call is terminated
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BroadcastEvent.Type.CONFERENCE_TERMINATED.getAction());
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Object error = intent.getExtras().get("error");
+                Object url = intent.getExtras().get("url");
+                Log.d(TAG, "User hung up "+url+" with error:"+error);
+                closeVideoCall();
+            }
+        };
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void videoReady(boolean ready){
@@ -86,6 +110,7 @@ public class VideoConnectionFragment extends HostedFragment {
     private void cancelServerConnection(){
         viewModel.cancelServerConnection();
         meetingIdTextView.setText("");
+        closeVideoCall();
     }
 
     private void openURLSettings(View v) {
@@ -129,15 +154,25 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private void onClickSwitchToVideoCall(View v) {
         if(viewModel.isConnectedToServer()) {
-            FragmentManager fragmentManager = getParentFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_view, JitsiFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
-                    .setReorderingAllowed(true)
-                    .addToBackStack(null)
-                    .commit();
+            JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getOptions());
+            viewModel.setReceiveCommands(true);
         }else{
             ((HostActivity)getActivity()).showToast(R.string.connect_to_server);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy Jitsi");
+        closeVideoCall();
+    }
+
+    private void closeVideoCall(){
+        Intent muteBroadcastIntent = BroadcastIntentHelper.buildHangUpIntent();
+        if(getActivity()!=null)
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).sendBroadcast(muteBroadcastIntent);
+        viewModel.setReceiveCommands(false);
     }
 
     @Override
