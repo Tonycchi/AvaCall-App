@@ -43,6 +43,7 @@ dependencies {
     implementation 'io.github.controlwear:virtualjoystick:1.10.1'
     implementation "org.java-websocket:Java-WebSocket:1.5.1"
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //for the database
     def room_version = "2.3.0"

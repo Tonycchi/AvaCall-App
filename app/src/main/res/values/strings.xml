@@ -5,73 +5,80 @@
     <string name="cancel">Schließen</string>
 
     <!-- New Design -->
-        <!-- Titles -->
-        <string name="title_bluetooth">AvaCall: Gerät verbinden</string>
-        <string name="title_model_selection">AvaCall: Roboter wählen</string>
-        <string name="title_edit_controls">AvaCall: Steuerung bearbeiten</string>
-        <string name="title_test_robot">AvaCall: Steuerung testen</string>
-        <string name="title_video_connection">AvaCall: Videoanruf starten</string>
+    <!-- Titles -->
+    <string name="title_bluetooth">AvaCall: Gerät verbinden</string>
+    <string name="title_model_selection">AvaCall: Roboter wählen</string>
+    <string name="title_edit_controls">AvaCall: Steuerung bearbeiten</string>
+    <string name="title_test_robot">AvaCall: Steuerung testen</string>
+    <string name="title_video_connection">AvaCall: Videoanruf starten</string>
 
-        <!--   TAGs     -->
-        <string name="fragment_tag_hosted">HOSTEDFRAGMENT</string>
+    <!--   TAGs     -->
+    <string name="fragment_tag_hosted">HOSTEDFRAGMENT</string>
 
-        <!--  Connection      -->
-        <string name="connecting_title">Verbindung wird hergestellt</string>
-        <string name="bluetooth_connection_check_device">Gerättyp wird geprüft</string>
-        <string name="connection_lost">Verbindung wurde getrennt</string>
+    <!--  Connection      -->
+    <string name="connecting_title">Verbindung wird hergestellt</string>
+    <string name="bluetooth_connection_check_device">Gerättyp wird geprüft</string>
+    <string name="connection_lost">Verbindung wurde getrennt</string>
 
-        <!-- Bluetooth -->
-        <string name="text_connected_bluetooth_devices">Zuletzt verbundene Geräte:</string>
-        <string name="text_roboter_shown_question">Der Roboter wird noch nicht in der Liste angezeigt?</string>
-        <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>
-        <string name="placeholder">Nothing to see here</string>
-        <string name="no_bluetooth_device">Kein Gerät verbunden. Mit Roboter koppeln!</string>
+    <!-- Bluetooth -->
+    <string name="text_connected_bluetooth_devices">Zuletzt verbundene Geräte:</string>
+    <string name="text_roboter_shown_question">Der Roboter wird noch nicht in der Liste angezeigt?</string>
+    <string name="button_bluetooth_first_connection">Mit Roboter koppeln</string>
+    <string name="placeholder">Nothing to see here</string>
+    <string name="no_bluetooth_device">Kein Gerät verbunden. Mit Roboter koppeln!</string>
 
-        <string name="connecting_bluetooth_wait">Bitte warten...</string>
-        <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
-        <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
-        <string name="bluetooth_connection_wrong_device">Das verbundene Gerät entspricht nicht den Anforderungen.</string>
-
-
-        <!-- Test Robot -->
-        <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>
-        <string name="button_robot_control_good">Ja</string>
-        <string name="button_robot_control_bad">Nein</string>
-        <string name="button_fire">Feuer</string>
+    <string name="connecting_bluetooth_wait">Bitte warten...</string>
+    <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
+    <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
+    <string name="bluetooth_connection_wrong_device">Das verbundene Gerät entspricht nicht den Anforderungen.</string>
 
 
-        <!-- Model Selection -->
-        <string name="model_picture">Picture of the currently selected model</string>
-        <string name="save_use_model">Speichern &amp;\n Roboter verwenden</string>
-        <string name="use_model">Roboter verwenden</string>
-        <string name="edit_model">Steuerung des Roboters bearbeiten</string>
-        <string name="no_model_selected">Kein Modell gewählt</string>
-        <string name="different_model">Anderes Modell</string>
-        <string name="name">Name</string>
+    <!-- Test Robot -->
+    <string name="text_robot_control_question">Verhält sich der Roboter wie gewünscht?</string>
+    <string name="button_robot_control_good">Ja</string>
+    <string name="button_robot_control_bad">Nein</string>
+    <string name="button_fire">Feuer</string>
 
-        <!-- Edit Model -->
-        <string name="edit_controls_motor_alert">Es können maximal 4 Steuerelemente verwendet werden.</string>
-        <string name="value_missing">Wert fehlt.</string>
 
-        <!-- Video Connection -->
-        <string name="url_settings">URL-Einstellungen</string>
-        <string name="invite_partner">Partner einladen</string>
-        <string name="access_videocall">Zum Videocall</string>
-        <string name="test_controls">Steuerung testen</string>
-        <string name="room_link">Jitsi Room Link</string>
-        <string name="toast_link_copied">Link kopiert</string>
-        <string name="meeting_id">Kennnummer:</string>
-        <string name="server_connection_failed">Verbindung zum Server fehlgeschlagen. Bitte überprüfen Sie die URL-Einstellungen.</string>
-        <string name="connect_to_server">Bitte laden Sie zuerst einen Partner ein.</string>
+    <!-- Model Selection -->
+    <string name="model_picture">Picture of the currently selected model</string>
+    <string name="select_picture">Bild auswählen</string>
+    <string name="take_picture">Neues Bild machen</string>
+    <string name="delete_picture">Bild entfernen</string>
+    <string name="no_model_exists">Bitte zuerst ein Modell erstellen</string>
+    <string name="picture_name">AvaCall_Modell_</string>
+    <string name="error_selecting_picture">Das Bild konnte nicht geladen werden.</string>
+    <string name="error_taking_picture">Es konnte kein Bild aufgenommen werden.</string>
+    <string name="save_use_model">Speichern &amp;\n Roboter verwenden</string>
+    <string name="use_model">Roboter verwenden</string>
+    <string name="edit_model">Steuerung des Roboters bearbeiten</string>
+    <string name="no_model_selected">Kein Modell gewählt</string>
+    <string name="different_model">Anderes Modell</string>
+    <string name="name">Name</string>
 
-        <string name="title_web_url">URL zur Webanwendung</string>
-        <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>
-        <string name="title_port_url">Port für Verbindung zum Server</string>
+    <!-- Edit Model -->
+    <string name="edit_controls_motor_alert">Es können maximal 4 Steuerelemente verwendet werden.</string>
+    <string name="value_missing">Wert fehlt.</string>
 
-        <!-- URLS -->
-        <string name="host_url">avatar.mintclub.org</string>
-        <string name="jitsi_url">meet.jit.si</string>
-        <string name="host_port">22222</string>
+    <!-- Video Connection -->
+    <string name="url_settings">URL-Einstellungen</string>
+    <string name="invite_partner">Partner einladen</string>
+    <string name="access_videocall">Zum Videocall</string>
+    <string name="test_controls">Steuerung testen</string>
+    <string name="room_link">Jitsi Room Link</string>
+    <string name="toast_link_copied">Link kopiert</string>
+    <string name="meeting_id">Kennnummer:</string>
+    <string name="server_connection_failed">Verbindung zum Server fehlgeschlagen. Bitte überprüfen Sie die URL-Einstellungen.</string>
+    <string name="connect_to_server">Bitte laden Sie zuerst einen Partner ein.</string>
+
+    <string name="title_web_url">URL zur Webanwendung</string>
+    <string name="title_jitsi_url">URL zur Jitsi-Instanz</string>
+    <string name="title_port_url">Port für Verbindung zum Server</string>
+
+    <!-- URLS -->
+    <string name="host_url">avatar.mintclub.org</string>
+    <string name="jitsi_url">meet.jit.si</string>
+    <string name="host_port">22222</string>
 
 
 </resources>

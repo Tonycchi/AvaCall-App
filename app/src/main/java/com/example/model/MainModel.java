@@ -3,6 +3,7 @@ package com.example.model;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -41,7 +42,6 @@ public class MainModel {
 
     // Model for ModelSelectionFragment
     private ModelSelectionModel modelSelectionModel;
-    private int[] modelPositionToId;
 
     private LocalDatabase localDatabase;
 
@@ -114,9 +114,8 @@ public class MainModel {
     }
 
     public RobotModel getRobotModel(int position) {
-        return modelSelectionModel.getRobotModel(modelPositionToId[position]);
+        return modelSelectionModel.getRobotModel(position);
     }
-
 
     public void modelSelected(int position) { //this method is started when modell verwenden or steuerung bearbeiten is pressed
         if (position == -1) {
@@ -124,7 +123,7 @@ public class MainModel {
             return;
         }
         modelSelectionModel.setSelectedModelPosition(position);
-        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(modelPositionToId[position]);
+        RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(position);
         controller = robot.getController(selectedRobotModel, robotConnectionModel.getService());
     }
 
@@ -154,19 +153,7 @@ public class MainModel {
     }
 
     public String[] getAllRobotNames() {
-        List<RobotModel> allDBRobots = modelSelectionModel.getAllRobots();
-        int numberOfRobots = allDBRobots.size();
-
-        String[] allRobotNames = new String[numberOfRobots];
-        modelPositionToId = new int[numberOfRobots];
-
-        for (int i = 0; i < numberOfRobots; i++) {
-            RobotModel temp = allDBRobots.get(i);
-            allRobotNames[i] = temp.name;
-            modelPositionToId[i] = temp.id;
-        }
-
-        return allRobotNames;
+        return modelSelectionModel.getAllRobotNames();
     }
 
 
@@ -201,11 +188,11 @@ public class MainModel {
         return videoConnectionModel.isVideoReady();
     }
 
-    public void deleteModel(int id) {
-        localDatabase.robotModelDAO().deleteByID(id);
+    public void deleteModel(int position) {
+        modelSelectionModel.deleteModel(position);
     }
 
-    public void deleteSelectedModel(int position) {
-        localDatabase.robotModelDAO().deleteByID(modelPositionToId[position]);
+    public void setImageOfSelectedModel(String photoPath) {
+        modelSelectionModel.setImageOfSelectedModel(photoPath);
     }
 }

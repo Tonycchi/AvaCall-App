@@ -1,6 +1,7 @@
 package com.example;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -115,10 +116,6 @@ public class MainViewModel extends AndroidViewModel {
         return model.isVideoReady();
     }
 
-    public void deleteModel(int id) {
-        model.deleteModel(id);
-    }
-
     public boolean isConnectedToServer() {
         return model.isConnectedToServer();
     }
@@ -131,7 +128,11 @@ public class MainViewModel extends AndroidViewModel {
         return model.getMotorStrength();
     }
 
-    public void deleteSelectedModel(int position) {
-        model.deleteSelectedModel(position);
+    public void deleteModel(int position) {
+        model.deleteModel(position);
+    }
+
+    public void setImageOfSelectedModel(String photoPath) {
+        model.setImageOfSelectedModel(photoPath);
     }
 }

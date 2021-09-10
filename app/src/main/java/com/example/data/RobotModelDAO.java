@@ -1,5 +1,7 @@
 package com.example.data;
 
+import android.net.Uri;
+
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,4 +30,7 @@ public interface RobotModelDAO {
 
     @Query("SELECT COUNT(id) FROM RobotModel")
     int getNumberOfRobotModels();
+
+    @Query(" UPDATE RobotModel SET picture = :uri WHERE id = :id")
+    void setPictureOfRobotModel(int id, String uri);
 }
