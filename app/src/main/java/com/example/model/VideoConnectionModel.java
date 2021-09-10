@@ -63,9 +63,10 @@ public class VideoConnectionModel {
                 String id = webClient.getId();
                 //TODO: generalize
                 sessionData = new JitsiSessionData(videoURL, urlSettings.getHost_https(), id);
-                videoReady.setValue(true); // enables change to call button
+                videoReady.setValue(true); //enables change to call button
             } else {//error
-               Log.e(TAG, "connectionError on: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
+                cancelConnection();
+                Log.e(TAG, "connectionError on: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
             }
         }
 
@@ -116,6 +117,7 @@ public class VideoConnectionModel {
     public void cancelConnection() {
         if(webClient != null && webClient.getStatus()==1)
             webClient.close();
+        videoReady.setValue(false);
     }
 
     public void sendStallDetected(String controlElementType, int controlElementId) {

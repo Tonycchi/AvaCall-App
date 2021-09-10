@@ -71,7 +71,7 @@ public class VideoConnectionFragment extends HostedFragment {
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
         buttonCancelConnection.setOnClickListener(this::onClickCancelConnection);
 
-        if(viewModel.getID() != null)
+        if(viewModel.getID() != null && viewModel.isVideoReady().getValue())
             meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
 
         requireActivity().setTitle(R.string.title_video_connection);
@@ -88,13 +88,18 @@ public class VideoConnectionFragment extends HostedFragment {
     }
 
     private void onClickCancelConnection(View view) {
+        cancelServerConnection();
+    }
+
+    private void cancelServerConnection(){
+        viewModel.cancelServerConnection();
+        meetingIdTextView.setText("");
     }
 
     private void openURLSettings(View v) {
         new URLDialogFragment().show(
                 getChildFragmentManager(), URLDialogFragment.TAG);
-        viewModel.cancelServerConnection();
-        meetingIdTextView.setText("");
+        cancelServerConnection();
     }
 
     private void onClickTestControls(View v) {
@@ -102,6 +107,11 @@ public class VideoConnectionFragment extends HostedFragment {
         fragmentManager.popBackStack();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cancelServerConnection();
+    }
 
     private void onClickInvitePartner(View v) {
         Log.d(TAG, "onClickInvitePartner");
