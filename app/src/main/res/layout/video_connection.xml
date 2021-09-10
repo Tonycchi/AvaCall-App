@@ -30,6 +30,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+
     <android.widget.Button
         android:id="@+id/button_access_videocall"
         style="@style/button_next"
@@ -42,6 +44,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/group" />
+
+    <android.widget.Button
+        android:id="@+id/button_cancel_connection"
+        style="@style/button_back"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/margin_side"
+        android:layout_marginEnd="@dimen/margin_side"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
+        android:text="@string/cancel_connection"
+        app:layout_constraintBottom_toTopOf="@+id/button_test_controls"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.widget.Button
         android:id="@+id/button_test_controls"
@@ -72,55 +86,5 @@
         android:layout_marginTop="@dimen/margin_vertical_big"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_access_videocall" />
-
-    <Button
-        android:id="@+id/test_send_stall_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_vertical_big"
-        android:layout_marginEnd="@dimen/margin_side"
-        android:text="start stall"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_url_settings" />
-
-    <EditText
-        android:id="@+id/test_editText_id"
-        android:layout_width="69dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="@dimen/margin_vertical_big"
-        android:layout_marginEnd="@dimen/margin_horizontal_small"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/test_send_stall_button"
-        app:layout_constraintTop_toBottomOf="@+id/button_url_settings" />
-
-    <RadioGroup
-        android:id="@+id/test_radio_element"
-        android:layout_width="154dp"
-        android:layout_height="91dp"
-        android:layout_marginTop="@dimen/margin_vertical_big"
-        android:layout_marginEnd="@dimen/margin_horizontal_small"
-        app:layout_constraintEnd_toStartOf="@+id/test_editText_id"
-        app:layout_constraintTop_toBottomOf="@+id/button_url_settings" >
-
-        <RadioButton
-            android:id="@+id/test_radio_joystick"
-            android:layout_width="match_parent"
-            android:layout_height="22dp"
-            android:text="Joystick" />
-
-        <RadioButton
-            android:id="@+id/test_radio_button"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="Button" />
-
-        <RadioButton
-            android:id="@+id/test_radio_slider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Slider" />
-
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

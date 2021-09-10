@@ -44,9 +44,8 @@ public class VideoConnectionModel {
                 e.printStackTrace();
             }
 
-            Log.d(TAG, "wc? " + (webClient != null));
+            Log.d(TAG, "wc!=null " + (webClient != null));
             webClient.connect();
-
 
             //continue with share link when ws is connected
             long currentTime;
@@ -67,7 +66,6 @@ public class VideoConnectionModel {
                 videoReady.setValue(true); // enables change to call button
             } else {//error
                Log.e(TAG, "connectionError on: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
-               //TODO: Passende fehlermedlung in app anzeigen
             }
         }
 

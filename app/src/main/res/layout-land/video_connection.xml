@@ -27,6 +27,17 @@
         app:layout_constraintTop_toBottomOf="@+id/button_url_settings" />
 
     <android.widget.Button
+        android:id="@+id/button_cancel_connection"
+        style="@style/button_back"
+        android:layout_width="@dimen/standard_button_width_land"
+        android:layout_height="@dimen/standard_button_height_land"
+        android:layout_marginTop="@dimen/margin_vertical_big_land"
+        android:text="@string/cancel_connection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_invite_partner" />
+
+    <android.widget.Button
         android:id="@+id/button_access_videocall"
         style="@style/button_next"
         android:layout_width="0dp"

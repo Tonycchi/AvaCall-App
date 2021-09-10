@@ -35,6 +35,9 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private MainViewModel viewModel;
 
+    private Button buttonCancelConnection;
+    private Button buttonAccessVideoCall;
+
     private TextView meetingIdTextView;
 
     public VideoConnectionFragment() {
@@ -56,7 +59,8 @@ public class VideoConnectionFragment extends HostedFragment {
 
         Button buttonURLsettings = view.findViewById(R.id.button_url_settings);
         Button buttonInvitePartner = view.findViewById(R.id.button_invite_partner);
-        Button buttonAccessVideoCall = view.findViewById(R.id.button_access_videocall);
+        buttonCancelConnection = view.findViewById(R.id.button_cancel_connection);
+        buttonAccessVideoCall = view.findViewById(R.id.button_access_videocall);
         Button buttonTestControls = view.findViewById(R.id.button_test_controls);
 
         meetingIdTextView = view.findViewById(R.id.text_meeting_id);
@@ -65,51 +69,26 @@ public class VideoConnectionFragment extends HostedFragment {
         buttonInvitePartner.setOnClickListener(this::onClickInvitePartner);
         buttonTestControls.setOnClickListener(this::onClickTestControls);
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
-
-        //TODO: delete method
-        testStallStuff(view);
+        buttonCancelConnection.setOnClickListener(this::onClickCancelConnection);
 
         if(viewModel.getID() != null)
             meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
 
         requireActivity().setTitle(R.string.title_video_connection);
 
-        buttonAccessVideoCall.setEnabled(false);
-        final Observer<Boolean> videoReadyObserver = buttonAccessVideoCall::setEnabled;
+        videoReady(false);
+        final Observer<Boolean> videoReadyObserver = this::videoReady;
 
         viewModel.isVideoReady().observe(getViewLifecycleOwner(), videoReadyObserver);
     }
 
-    private void testStallStuff(View view){
-        Button button = view.findViewById(R.id.test_send_stall_button);
-
-        RadioGroup element = view.findViewById(R.id.test_radio_element);
-        EditText idInput = view.findViewById(R.id.test_editText_id);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(button.getText().toString().startsWith("start")){
-                    RadioButton rb = view.findViewById(element.getCheckedRadioButtonId());
-                    String controlElementId = idInput.getText().toString();
-                    String controlElementType = rb.getText().toString().toLowerCase();
-                    Log.d(TAG, "start: checked:"+controlElementType+" id:"+controlElementId);
-                    button.setText("end stall");
-                    if(controlElementId!="")
-                        viewModel.sendStallDetected(controlElementType, Integer.parseInt(controlElementId));
-                }else{
-                    RadioButton rb = view.findViewById(element.getCheckedRadioButtonId());
-                    String controlElementId = idInput.getText().toString();
-                    String controlElementType = rb.getText().toString().toLowerCase();
-                    Log.d(TAG, "end: checked:"+controlElementType+" id:"+controlElementId);
-                    button.setText("start stall");
-                    if(controlElementId!="")
-                        viewModel.sendStallEnded(controlElementType, Integer.parseInt(controlElementId));
-                }
-            }
-        });
+    private void videoReady(boolean ready){
+        buttonAccessVideoCall.setEnabled(ready);
+        buttonCancelConnection.setEnabled(ready);
     }
 
+    private void onClickCancelConnection(View view) {
+    }
 
     private void openURLSettings(View v) {
         new URLDialogFragment().show(
