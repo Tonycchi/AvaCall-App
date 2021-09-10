@@ -158,7 +158,7 @@ public class EditControlsFragment extends HostedFragment {
     }
 
     @Override
-    public void connectionStatusChanged(Integer newConnectionStatus) {
+    public void robotConnectionStatusChanged(Integer newConnectionStatus) {
         //TODO: implement
         ((HostActivity) getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
     }

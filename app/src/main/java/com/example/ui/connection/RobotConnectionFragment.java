@@ -98,7 +98,7 @@ public abstract class RobotConnectionFragment extends HostedFragment {
     }
 
     @Override
-    public void connectionStatusChanged(Integer newConnectionStatus) {
+    public void robotConnectionStatusChanged(Integer newConnectionStatus) {
         //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device, 5 connection is not accepted = wrong device
         switch (newConnectionStatus) {
             case 0:

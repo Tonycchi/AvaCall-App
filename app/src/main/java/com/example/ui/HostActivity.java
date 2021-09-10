@@ -25,7 +25,7 @@ public class HostActivity extends AppCompatActivity {
         public void onChanged(@Nullable final Integer newConnectionStatus) {
             //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
             HostedFragment currentFragment = (HostedFragment)getSupportFragmentManager().findFragmentByTag("HOSTEDFRAGMENT");
-            currentFragment.connectionStatusChanged(newConnectionStatus);
+            currentFragment.robotConnectionStatusChanged(newConnectionStatus);
         }
     };
 

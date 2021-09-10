@@ -27,7 +27,9 @@ import com.example.MainViewModel;
 import com.example.rcvc.R;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+import org.jitsi.meet.sdk.JitsiMeetViewListener;
 
 public class VideoConnectionFragment extends HostedFragment {
 
@@ -143,7 +145,6 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private void onClickSwitchToVideoCall(View v) {
         if(viewModel.isConnectedToServer()) {
-            // TODO setReceiveCommands kommt hier noch hin
             JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getOptions());
             viewModel.setReceiveCommands();
         }else{
@@ -152,7 +153,7 @@ public class VideoConnectionFragment extends HostedFragment {
     }
 
     @Override
-    public void connectionStatusChanged(Integer newConnectionStatus) {
+    public void robotConnectionStatusChanged(Integer newConnectionStatus) {
         //TODO: implement
         ((HostActivity) getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
     }

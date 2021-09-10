@@ -11,7 +11,7 @@ public abstract class HostedFragment extends Fragment {
         super(contentLayoutId);
     }
 
-    public abstract void connectionStatusChanged(Integer newConnectionStatus);
+    public abstract void robotConnectionStatusChanged(Integer newConnectionStatus);
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
