@@ -58,7 +58,11 @@ public class ModelSelectionModel {
         return allRobotNames;
     }
 
-    public void deleteModel(int position) {
+    public void deleteModelByPosition(int position) {
         robotModelDAO.deleteByID(modelPositionToId[position]);
+    }
+
+    public void deleteModelById(int id) {
+        robotModelDAO.deleteByID(id);
     }
 }

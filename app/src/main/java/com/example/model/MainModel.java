@@ -188,11 +188,15 @@ public class MainModel {
         return videoConnectionModel.isVideoReady();
     }
 
-    public void deleteModel(int position) {
-        modelSelectionModel.deleteModel(position);
-    }
-
     public void setImageOfSelectedModel(String photoPath) {
         modelSelectionModel.setImageOfSelectedModel(photoPath);
+    }
+
+    public void deleteModelByPosition(int position) {
+        modelSelectionModel.deleteModelByPosition(position);
+    }
+
+    public void deleteModelById(int id) {
+        modelSelectionModel.deleteModelById(id);
     }
 }

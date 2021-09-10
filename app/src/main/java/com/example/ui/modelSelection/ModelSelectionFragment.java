@@ -347,7 +347,7 @@ public class ModelSelectionFragment extends HostedFragment {
                         case DialogInterface.BUTTON_POSITIVE:
                                 // delete model and remove from view
                                 int v = modelPicker.getValue();
-                                viewModel.deleteModel(v);
+                                viewModel.deleteModelByPosition(v);
 
                                 refreshNumberPicker();
                                 setModelDescription();

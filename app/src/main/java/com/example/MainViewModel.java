@@ -128,8 +128,12 @@ public class MainViewModel extends AndroidViewModel {
         return model.getMotorStrength();
     }
 
-    public void deleteModel(int position) {
-        model.deleteModel(position);
+    public void deleteModelByPosition(int position) {
+        model.deleteModelByPosition(position);
+    }
+
+    public void deleteModelById(int id) {
+        model.deleteModelById(id);
     }
 
     public void setImageOfSelectedModel(String photoPath) {
