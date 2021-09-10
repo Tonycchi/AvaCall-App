@@ -67,12 +67,29 @@ public class WebClient extends WebSocketClient {
                 int[] t2 = new int[t1.size()];
                 for (int i = 0; i < t2.length; i++)
                     t2[i] = Integer.parseInt(t1.get(i));
-
-                controller.sendInput(t2);
+                controller.setLastUsedId(t2[0]);
+                controller.setInputFromWebClient(true);
+                Thread webClientinput = new Thread(){
+                    public void run(){
+                        controller.sendInput(t2);
+                    }
+                };
+                webClientinput.start();
                 //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
             }
         }
     }
+
+    public void sendStallDetected(String controlElementType, int controlElementId){
+        String stallMessage = "STALL:start:"+controlElementType+":"+controlElementId;
+        send(stallMessage);
+    }
+
+    public void sendStallEnded(String controlElementType, int controlElementId){
+        String stallMessage = "STALL:stop:"+controlElementType+":"+controlElementId;
+        send(stallMessage);
+    }
+
 
     @Override
     public void onMessage(ByteBuffer message) {
