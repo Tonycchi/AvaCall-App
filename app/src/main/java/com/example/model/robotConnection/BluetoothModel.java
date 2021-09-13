@@ -88,7 +88,6 @@ public class BluetoothModel extends RobotConnectionModel {
                 shownDevices.add(new Device(new Annotation("test", "test"), "SKIP BLUETOOTH"));
 
         } else {
-            // TODO: something
             Log.d(TAG, "No Device found!");
         }
 

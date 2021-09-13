@@ -1,5 +1,8 @@
 package com.example.model;
 
+import static com.example.Constants.TYPE_EV3;
+import static com.example.Constants.USED_MODEL_TYPE;
+
 import android.app.Application;
 import android.util.Log;
 
@@ -31,7 +34,7 @@ public class MainModel {
 
     private final RobotConnectionModel robotConnectionModel;
     private final Handshake handshake;
-    private VideoConnectionModel videoConnectionModel;
+    private final VideoConnectionModel videoConnectionModel;
 
     private final TestRobotModel testRobotModel;
 
@@ -40,25 +43,28 @@ public class MainModel {
 
     // Model for ModelSelectionFragment
     private final ModelSelectionModel modelSelectionModel;
-    private int[] modelPositionToId;
 
     private final LocalDatabase localDatabase;
 
     public MainModel(@NonNull Application application) {
         localDatabase = LocalDatabase.getInstance(application);
 
-        videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
-        robot = new EV3(localDatabase.robotModelDAO()); //TODO: dont hard code
+        switch(USED_MODEL_TYPE){
+            case TYPE_EV3:
+                robot = new EV3(localDatabase.robotModelDAO());
+                break;
+            default:
+                robot = null;
+                Log.e(TAG, "No model type");
+        }
 
-        videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
         handshake = new EV3BluetoothHandshake();
         //handshake = new AcceptAllHandshake();
         robotConnectionModel = new BluetoothModel(localDatabase.connectedDeviceDAO(), handshake, this);
 
         testRobotModel = new TestRobotModel(this);
 
-        //TODO: don't hard code robotType
-        modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), Constants.TYPE_EV3);
+        modelSelectionModel = new ModelSelectionModel(localDatabase.robotModelDAO(), USED_MODEL_TYPE);
         videoConnectionModel = new VideoConnectionModel(localDatabase.localPreferenceDAO());
     }
 

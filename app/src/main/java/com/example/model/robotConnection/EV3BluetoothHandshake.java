@@ -19,8 +19,6 @@ public class EV3BluetoothHandshake implements ByteArrayHandshake {
         noOp[7] = 0x01;                    //opcode
         directCommands.add(noOp);
 
-        /*
-        //TODO: needed??
         byte[] waitForSoundReady = new byte[8];
         waitForSoundReady[0] = 0x06;                    //length
         waitForSoundReady[1] = 0x00;                    //length
@@ -32,7 +30,6 @@ public class EV3BluetoothHandshake implements ByteArrayHandshake {
         waitForSoundReady[7] = (byte) 0x96;             //opcode
         directCommands.add(waitForSoundReady);
 
-        //TODO: make methods and cooler stuff
         byte[] playSound = new byte[32];
         playSound[0] = 0x1E;                    //length
         playSound[1] = 0x00;                    //length
@@ -67,7 +64,7 @@ public class EV3BluetoothHandshake implements ByteArrayHandshake {
         playSound[30] = (byte) 0x73;
         playSound[31] = (byte) 0x00;            //string end
         directCommands.add(playSound);
-        */
+
         byte[] typeAndMotor = new byte[13];
         typeAndMotor[0] = 0x0B;                    //length
         typeAndMotor[1] = 0x00;                    //length

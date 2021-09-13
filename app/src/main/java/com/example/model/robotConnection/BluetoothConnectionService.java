@@ -354,9 +354,9 @@ public class BluetoothConnectionService implements ConnectionService {
                         connectionStatus.postValue(CONNECTION_ACCEPTED);
                         listen();
                     } else {
-                        //TODO: close connection
                         Log.d(TAG, "handshake not successful");
                         connectionStatus.postValue(CONNECTION_NOT_ACCEPTED);
+                        cancel();
                     }
                 }
             } catch (Exception e) {

@@ -7,9 +7,9 @@ public class URLSettings {
             HOSTPORTKEY = "host_port",
             HTTPS = "https://",
             WSS = "wss://",
-            DEFAULT_TEST_HOST = "test.avatar.mintclub.org", //TODO: make non test entries
+            DEFAULT_TEST_HOST = "avatar.mintclub.org",
             DEFAULT_TEST_JITSI = "meet.jit.si",
-            DEFAULT_TEST_PORT = "22223";
+            DEFAULT_TEST_PORT = "22222";
 
     public LocalPreferenceDAO localPreferenceDAO;
 

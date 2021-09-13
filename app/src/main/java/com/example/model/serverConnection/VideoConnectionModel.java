@@ -1,5 +1,8 @@
 package com.example.model.serverConnection;
 
+import static com.example.Constants.JITSI_VIDEOCALL;
+import static com.example.Constants.USED_VIDEOALL;
+
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -53,19 +56,24 @@ public class VideoConnectionModel {
             while (webClient.getStatus()==0) { //while there is no connection
                 currentTime = System.currentTimeMillis();
                 if (currentTime - startTime >= 5000) {
-                    Log.e(TAG, "connection timeout: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
+                    Log.e(TAG, "connection timeout: videoURL:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
                     break;
                 }
             }
 
             if (webClient.getStatus()==1) { //success
                 String id = webClient.getId();
-                //TODO: generalize
-                sessionData = new JitsiSessionData(videoURL, urlSettings.getHost_https(), id);
+                switch(USED_VIDEOALL){
+                    case JITSI_VIDEOCALL:
+                        sessionData = new JitsiSessionData(videoURL, urlSettings.getHost_https(), id);
+                        break;
+                    default:
+                        Log.e(TAG, "No videocall software used");
+                }
                 videoReady.setValue(true); //enables change to call button
             } else {//error
                 cancelConnection();
-                Log.e(TAG, "connectionError on: jist:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
+                Log.e(TAG, "connectionError on: videoURL:"+videoURL+" hostURL:"+urlSettings.getHost_https()+" port:"+urlSettings.getPort());
             }
         }
 

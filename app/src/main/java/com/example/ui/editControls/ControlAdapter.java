@@ -34,7 +34,6 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     protected int itemCount = 1; // number of UI items, not equal to number control elements
     protected int maxNumberElements = 4;
     protected int fieldsFilled = 0, numberOfFields = 0; // fieldsFilled==numberOfFields ==> all required data entered
-    //TODO vielleicht ui/model mehr trennen
     protected int id;
 
     public ControlAdapter(HostActivity hostActivity, RobotModel model) {

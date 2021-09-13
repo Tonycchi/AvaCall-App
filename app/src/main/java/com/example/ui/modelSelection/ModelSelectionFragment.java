@@ -223,7 +223,7 @@ public class ModelSelectionFragment extends HostedFragment {
      * @param imageUri uri of selected image
      * @return uri of scaled down copy
      */
-    private Uri saveScaledDown(Uri imageUri) { // TODO photos get rotated???????
+    private Uri saveScaledDown(Uri imageUri) {
         // get bitmap from uri
         Bitmap bitmap = null;
         try {

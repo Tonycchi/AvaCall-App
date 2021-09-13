@@ -40,7 +40,7 @@ public class EV3 implements Robot {
 
         String specs = "";
         for (List<Integer> element : values) {
-            switch (element.get(0)) { // TODO define numbers centrally, maybe in Constants.java alongside robot type strings
+            switch (element.get(0)) {
                 case 1: //Joystick
                     specs += "joystick:" + element.get(1)
                             + ";" + indexToPort(element.get(2))
@@ -76,25 +76,4 @@ public class EV3 implements Robot {
         }
         return y;
     }
-
-    /*private List<List<Integer>> specsToArray(String specs) {
-        List<List<Integer>> r = new ArrayList<>();
-
-        String[] controlElements = specs.split("\\|");
-        for (String element : controlElements) {
-            List<Integer> e = new ArrayList<>();
-            String[] tmp = element.split(":");
-            String[] attrs = tmp[1].split(";");
-
-            e.add(EV3ControlElement.ID.getNr(tmp[0]));
-            for (String a : attrs)
-                e.add(Integer.parseInt(a));
-
-            r.add(e);
-        }
-
-        return r;
-    }
-
-     */
 }

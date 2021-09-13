@@ -50,8 +50,6 @@ public class EV3ControlAdapter extends ControlAdapter {
     // "joystick:50;1,8|slider:30;4|button:20;2;5000"
 
     private void initElements(String specs) {
-        //TODO get array from other class (robot or smth)
-
         // split into $controlElement$ = $element$:$attributes$
         String[] tmp = specs.split("\\|");
         // put into list with [0] = $element$, [1] = $attributes$

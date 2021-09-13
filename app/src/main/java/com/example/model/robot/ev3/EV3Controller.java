@@ -83,7 +83,7 @@ public class EV3Controller implements Controller {
      * @param specs string specifying control element to port mapping
      */
     private void createElements(String specs) {
-        /* TODO document outside of code
+        /*
         we get:
         -$controlElement$|$controlElement$|...
          */
@@ -167,8 +167,6 @@ public class EV3Controller implements Controller {
 
         directCommand[0] = (byte) (length - 2);         // pre defined parts of direct command
 
-        //TODO:
-        //directCommand[2] = port;            //message counter is used as info which port is used
         if (e.port.length == 1) {
             // directly write the port into the message counter
             directCommand[2] = Byte.parseByte(Integer.toHexString(e.port[0]), 16);

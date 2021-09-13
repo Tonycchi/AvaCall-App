@@ -2554,7 +2554,6 @@ public class NumberPicker extends LinearLayout {
             info.setEnabled(NumberPicker.this.isEnabled());
             Rect boundsInParent = mTempRect;
             boundsInParent.set(left, top, right, bottom);
-            // TODO info.setVisibleToUser(isVisibleToUser(boundsInParent));
             info.setBoundsInParent(boundsInParent);
             Rect boundsInScreen = boundsInParent;
             int[] locationOnScreen = mTempArray;
@@ -2595,7 +2594,7 @@ public class NumberPicker extends LinearLayout {
             info.setEnabled(NumberPicker.this.isEnabled());
             info.setScrollable(true);
 
-            /** TODO: Figure out compat implementation for this
+            /**
             final float applicationScale =
                     getContext().getResources().getCompatibilityInfo().applicationScale;
 
