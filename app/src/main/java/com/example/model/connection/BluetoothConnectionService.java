@@ -38,13 +38,13 @@ public class BluetoothConnectionService implements ConnectionService {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device type, 5 connection is not accepted = wrong device type
-    private MutableLiveData<Integer> connectionStatus;
+    private final MutableLiveData<Integer> connectionStatus;
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
     private BluetoothDevice bluetoothDevice;
-    private ByteArrayHandshake byteArrayHandshake;
-    private MainModel mainModel;
+    private final ByteArrayHandshake byteArrayHandshake;
+    private final MainModel mainModel;
 
 
     public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake, MainModel mainModel) {
@@ -214,7 +214,7 @@ public class BluetoothConnectionService implements ConnectionService {
      */
     private class ConnectThread extends Thread {
         private BluetoothSocket bluetoothSocket;
-        private ParcelUuid[] deviceUUIDs;
+        private final ParcelUuid[] deviceUUIDs;
         private boolean stopConnecting;
 
         public ConnectThread(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {

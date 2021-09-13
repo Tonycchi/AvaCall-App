@@ -5,7 +5,7 @@ import android.os.Parcelable;
 public class Device {
 
     private Parcelable device;
-    private String name;
+    private final String name;
 
     public Device(String name) {
         this.name = name;

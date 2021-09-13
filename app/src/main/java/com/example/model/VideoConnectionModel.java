@@ -17,7 +17,7 @@ public class VideoConnectionModel {
 
     private final String TAG = "VideoConnectionModel";
 
-    private URLSettings urlSettings;
+    private final URLSettings urlSettings;
     private WebClient webClient;
     private SessionData sessionData;
     private MutableLiveData<Boolean> videoReady;

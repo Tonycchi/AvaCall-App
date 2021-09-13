@@ -19,7 +19,7 @@ import com.example.rcvc.R;
 public class AddControlElementFragment extends DialogFragment {
 
     public static final String TAG = "AddControlElementFragment";
-    private ControlAdapter adapter;
+    private final ControlAdapter adapter;
 
     public AddControlElementFragment(ControlAdapter adapter) {
         this.adapter = adapter;

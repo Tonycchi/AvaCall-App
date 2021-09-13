@@ -204,7 +204,7 @@ public abstract class EV3ControlElement {
     protected static class Button extends EV3ControlElement {
 
         private long pressedT = -1;
-        private int duration;
+        private final int duration;
         private final byte[] t;
 
         /**

@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class TestRobotModel {
-    private MainModel mainModel;
+    private final MainModel mainModel;
     private static final String TAG = "TestRobotModel";
     MutableLiveData<String> motorStrength;
     MutableLiveData<Boolean> stall;
-    private int[] lastExpected;
+    private final int[] lastExpected;
 
     public TestRobotModel(MainModel mainModel) {
         motorStrength = new MutableLiveData<String>();

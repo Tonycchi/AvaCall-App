@@ -28,13 +28,13 @@ public class BluetoothModel extends RobotConnectionModel {
 
     // Model for BluetoothFragment
     // Bluetooth adapter of our device
-    private BluetoothAdapter bluetoothAdapter;
+    private final BluetoothAdapter bluetoothAdapter;
     // Device we want to connect with
     private BluetoothDevice bluetoothDevice;
     //bluetooth
-    private BluetoothConnectionService bluetoothConnectionService;
+    private final BluetoothConnectionService bluetoothConnectionService;
 
-    private ConnectedDeviceDAO connectedDeviceDAO;
+    private final ConnectedDeviceDAO connectedDeviceDAO;
 
     private ConnectionService testService;
 

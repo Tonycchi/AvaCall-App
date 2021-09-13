@@ -193,7 +193,7 @@ public class TestRobotFragment extends HostedFragment {
             }
         }
         Log.d(TAG, "Reihenfolge" + temp);
-        String result[] = new String[temp.size()];
+        String[] result = new String[temp.size()];
         temp.toArray(result);
         return result;
     }
@@ -369,7 +369,7 @@ public class TestRobotFragment extends HostedFragment {
                                 Thread sliderInput = new Thread() {
                                     public void run() {
                                             viewModel.sendControlInput(id, slider.getProgress());
-                                            Log.d(TAG, "Slider deflection: " + String.valueOf(slider.getProgress()));
+                                            Log.d(TAG, "Slider deflection: " + slider.getProgress());
                                     }
                                 };
                                 sliderInput.start();

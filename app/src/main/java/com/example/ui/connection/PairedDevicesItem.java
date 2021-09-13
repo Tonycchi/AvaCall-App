@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class PairedDevicesItem extends RecyclerView.Adapter<PairedDevicesItem.ViewHolder> {
 
-    private MutableLiveData<ArrayList<Device>> devices;
+    private final MutableLiveData<ArrayList<Device>> devices;
     private final RobotConnectionFragment robotConnectionFragment;
 
     /**

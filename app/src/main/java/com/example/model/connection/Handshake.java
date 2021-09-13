@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Handshake<T> {
 
-    public List<T> getSyn();
-    public boolean isAckCorrect(T ack);
+    List<T> getSyn();
+    boolean isAckCorrect(T ack);
 
 }

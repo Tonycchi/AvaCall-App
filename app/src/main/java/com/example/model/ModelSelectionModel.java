@@ -9,8 +9,8 @@ import java.util.List;
 
 public class ModelSelectionModel {
 
-    private RobotModelDAO robotModelDAO;
-    private String robotType;
+    private final RobotModelDAO robotModelDAO;
+    private final String robotType;
     private int selectedModelPosition;
     private int[] modelPositionToId;
 

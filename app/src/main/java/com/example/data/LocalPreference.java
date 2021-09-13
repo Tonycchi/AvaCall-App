@@ -11,10 +11,10 @@ public class LocalPreference {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private String id;
+    private final String id;
 
     @ColumnInfo(name = "value")
-    private String value;
+    private final String value;
 
     public LocalPreference(String id, String value) {
         this.id = id;

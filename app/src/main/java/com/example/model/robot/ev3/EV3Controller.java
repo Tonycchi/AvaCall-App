@@ -14,12 +14,12 @@ public class EV3Controller implements Controller {
 
     private final String TAG = "EV3Controller";
 
-    private RobotModel model;
+    private final RobotModel model;
 
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
-    private int[] ids = new int[4];
+    private final int[] ids = new int[4];
     private int lastUsedId;
     private boolean inputWebClient;
 

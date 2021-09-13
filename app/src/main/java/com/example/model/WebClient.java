@@ -17,7 +17,7 @@ public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";
     private final String videoURL;
-    private Controller controller;
+    private final Controller controller;
     private String id;
     private boolean receiveCommands;
     private int status; //-1=error; 0=no connection; 1=connected

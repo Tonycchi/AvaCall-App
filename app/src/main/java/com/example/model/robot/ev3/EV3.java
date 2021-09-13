@@ -13,7 +13,7 @@ import java.util.List;
 
 public class EV3 implements Robot {
 
-    private RobotModelDAO db;
+    private final RobotModelDAO db;
 
     public EV3(RobotModelDAO db) {
         this.db = db;

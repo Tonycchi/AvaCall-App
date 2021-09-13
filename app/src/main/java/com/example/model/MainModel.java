@@ -31,20 +31,20 @@ public class MainModel {
 
     private static final String TAG = "MainModel";
 
-    private RobotConnectionModel robotConnectionModel;
-    private Handshake handshake;
+    private final RobotConnectionModel robotConnectionModel;
+    private final Handshake handshake;
     private VideoConnectionModel videoConnectionModel;
 
-    private TestRobotModel testRobotModel;
+    private final TestRobotModel testRobotModel;
 
-    private Robot robot;
+    private final Robot robot;
     private Controller controller;
 
     // Model for ModelSelectionFragment
-    private ModelSelectionModel modelSelectionModel;
+    private final ModelSelectionModel modelSelectionModel;
     private int[] modelPositionToId;
 
-    private LocalDatabase localDatabase;
+    private final LocalDatabase localDatabase;
 
     public MainModel(@NonNull Application application) {
         localDatabase = LocalDatabase.getInstance(application);
