@@ -1,4 +1,6 @@
 package com.example.ui.testRobot;
+import static com.example.Constants.USER_RELEASE;
+
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -114,14 +116,15 @@ public class TestRobotFragment extends HostedFragment {
         Log.d(TAG, t);
         createControlElements(order, constraintLayout);
 
-        motorStrengthText = view.findViewById(R.id.text_motor_strength);
-
         handler = new Handler();
         handler.post(getMotorOutput);
 
-        MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
-        motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
-        viewModel.getStall().observe(getViewLifecycleOwner(), stallObserver);
+        if(!USER_RELEASE) {
+            motorStrengthText = view.findViewById(R.id.text_motor_strength);
+            MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
+            motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
+            viewModel.getStall().observe(getViewLifecycleOwner(), stallObserver);
+        }
 
         Button buttonYes = view.findViewById(R.id.button_yes);
         Button buttonNo = view.findViewById(R.id.button_no);

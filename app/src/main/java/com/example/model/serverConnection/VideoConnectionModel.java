@@ -118,7 +118,8 @@ public class VideoConnectionModel {
     }
 
     public void setReceiveCommands(boolean receiveCommands){
-        webClient.setReceiveCommands(receiveCommands);
+        if(webClient!=null)
+            webClient.setReceiveCommands(receiveCommands);
     }
 
     public void cancelConnection() {
