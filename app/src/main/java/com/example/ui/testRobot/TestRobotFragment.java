@@ -116,15 +116,15 @@ public class TestRobotFragment extends HostedFragment {
         Log.d(TAG, t);
         createControlElements(order, constraintLayout);
 
-        handler = new Handler();
-        handler.post(getMotorOutput);
-
         if(!USER_RELEASE) {
+            handler = new Handler();
+            handler.post(getMotorOutput);
             motorStrengthText = view.findViewById(R.id.text_motor_strength);
             MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
             motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
-            viewModel.getStall().observe(getViewLifecycleOwner(), stallObserver);
         }
+
+        viewModel.getStall().observe(getViewLifecycleOwner(), stallObserver);
 
         Button buttonYes = view.findViewById(R.id.button_yes);
         Button buttonNo = view.findViewById(R.id.button_no);
@@ -146,7 +146,7 @@ public class TestRobotFragment extends HostedFragment {
 
     private void onClickYes(View v) {
         Log.d(TAG, "YES BABY");
-        handler.removeCallbacks(getMotorOutput);
+        if (!USER_RELEASE) handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
@@ -156,7 +156,7 @@ public class TestRobotFragment extends HostedFragment {
     }
     private void onClickNo(View v) {
         Log.d(TAG, "NO BABY");
-        handler.removeCallbacks(getMotorOutput);
+        if (!USER_RELEASE) handler.removeCallbacks(getMotorOutput);
         FragmentManager fragmentManager = getParentFragmentManager();
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();
