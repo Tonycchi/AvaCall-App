@@ -34,13 +34,13 @@ public class RobotModel {
      * @param type type of robot
      * @param specs specifies which control elements map to which motors
      */
-    public RobotModel(int id, String name, String type, String specs,  String description) {
+    public RobotModel(int id, String name, String type, String specs,  String description, String picture) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.specs = specs;
         this.description = description;
-        picture = null;
+        this.picture = picture;
     }
 
 }
