@@ -51,14 +51,9 @@ public abstract class LocalDatabase extends RoomDatabase {
     public static void addDefaultEV3Models(LocalDatabase localDatabase){
         localDatabase.robotModelDAO().insertAll(
                 new RobotModel(0, "Kettenroboter", Constants.TYPE_EV3, "joystick:50;1,8", "Linker Kettenmotor: Port A und Rechter Kettenmotor: Port D"),
-                new RobotModel(0, "Kettenroboter mit Greifarm", Constants.TYPE_EV3, "joystick:50;1,8|slider:30;4", "Linker Kettenmotor: Port A, Rechter Kettenmotor: Port D und Motor des Greifarms: Port B"),
-                new RobotModel(0, "Michael Gösele", Constants.TYPE_EV3, "joystick:50;1,8|slider:30;4|button:20;2;5000", null),
-                new RobotModel(0, "Was geht", Constants.TYPE_EV3, "joystick:50;1,8|slider:30;4|button:20;2;5000|slider:30;4|button:20;4;5000", ""),
-                new RobotModel(0, "Gensearsch", Constants.TYPE_EV3, "button:20;1;5000|button:20;2;5000|button:20;4;5000|button:20;8;5000", " "),
-                new RobotModel(0, "Greifarm", Constants.TYPE_EV3, "slider:30;4", "Motor des Greifarms: Port B"),
-                new RobotModel(0, "Painter", Constants.TYPE_EV3, "slider:30;4|slider:50;1", "Mal schauen"),
-                new RobotModel(0, "Sollte nicht angezeigt werde, weil falscher Typ", "TEST", "joystick:50;1,8|slider:30;4|button:20;2;5000", null)
-        );
+                new RobotModel(0, "Kettenroboter mit Greifarm", Constants.TYPE_EV3, "joystick:50;1,8|slider:30;2", "Linker Kettenmotor: Port A, Rechter Kettenmotor: Port D und Motor des Greifarms: Port B"),
+                new RobotModel(0, "Greifarm", Constants.TYPE_EV3, "slider:30;4", "Motor des Greifarms: Port B")
+                );
     }
 
     public abstract ConnectedDeviceDAO connectedDeviceDAO();
