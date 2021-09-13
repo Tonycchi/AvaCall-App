@@ -28,7 +28,7 @@
     <string name="no_bluetooth_device">Kein Gerät verbunden. Mit Roboter koppeln!</string>
 
     <string name="connecting_bluetooth_wait">Bitte warten...</string>
-    <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden</string>
+    <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden. Versuchen Sie es zu einem späteren Zeitpunkt erneut!</string>
     <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
     <string name="bluetooth_connection_wrong_device">Das verbundene Gerät entspricht nicht den Anforderungen.</string>
 
