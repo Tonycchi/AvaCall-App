@@ -1,9 +1,7 @@
 package com.example.model;
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -12,17 +10,17 @@ import com.example.Constants;
 import com.example.data.LocalDatabase;
 import com.example.data.URLSettings;
 import com.example.data.RobotModel;
-import com.example.data.URLSettings;
-import com.example.model.connection.BluetoothModel;
-import com.example.model.connection.Device;
-import com.example.model.connection.EV3BluetoothHandshake;
-import com.example.model.connection.Handshake;
-import com.example.model.connection.RobotConnectionModel;
+import com.example.model.modelSelection.ModelSelectionModel;
+import com.example.model.robotConnection.BluetoothModel;
+import com.example.model.robotConnection.Device;
+import com.example.model.robotConnection.EV3BluetoothHandshake;
+import com.example.model.robotConnection.Handshake;
+import com.example.model.robotConnection.RobotConnectionModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 import com.example.model.robot.ev3.EV3;
-
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+import com.example.model.serverConnection.VideoConnectionModel;
+import com.example.model.testRobot.TestRobotModel;
 
 import java.util.ArrayList;
 import java.util.List;

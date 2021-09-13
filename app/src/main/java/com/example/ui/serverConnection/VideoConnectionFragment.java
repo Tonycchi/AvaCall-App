@@ -1,4 +1,4 @@
-package com.example.ui;
+package com.example.ui.serverConnection;
 
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -23,12 +23,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.MainViewModel;
 import com.example.rcvc.R;
+import com.example.ui.HostActivity;
+import com.example.ui.HostedFragment;
 
-import org.jitsi.meet.sdk.BroadcastAction;
 import org.jitsi.meet.sdk.BroadcastEvent;
 import org.jitsi.meet.sdk.BroadcastIntentHelper;
 import org.jitsi.meet.sdk.JitsiMeetActivity;
-import org.jitsi.meet.sdk.JitsiMeetActivityDelegate;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
 public class VideoConnectionFragment extends HostedFragment {

@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.serverConnection;
 
 import android.util.Log;
 
@@ -9,7 +9,6 @@ import com.example.data.URLSettings;
 import com.example.model.robot.Controller;
 import com.example.model.robot.ev3.EV3Controller;
 
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 

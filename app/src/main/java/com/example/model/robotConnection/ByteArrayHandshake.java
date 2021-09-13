@@ -1,4 +1,4 @@
-package com.example.model.connection;
+package com.example.model.robotConnection;
 
 public interface ByteArrayHandshake extends Handshake<byte[]> {
 }

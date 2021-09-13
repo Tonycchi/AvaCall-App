@@ -1,4 +1,4 @@
-package com.example.ui;
+package com.example.ui.serverConnection;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

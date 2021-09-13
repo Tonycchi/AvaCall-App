@@ -1,7 +1,7 @@
 package com.example.model.robot;
 
 import com.example.data.RobotModel;
-import com.example.model.connection.ConnectionService;
+import com.example.model.robotConnection.ConnectionService;
 
 import java.util.List;
 

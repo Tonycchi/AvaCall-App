@@ -3,7 +3,7 @@ package com.example.model.robot.ev3;
 import com.example.Constants;
 import com.example.data.RobotModel;
 import com.example.data.RobotModelDAO;
-import com.example.model.connection.ConnectionService;
+import com.example.model.robotConnection.ConnectionService;
 import com.example.model.robot.Controller;
 import com.example.model.robot.Robot;
 

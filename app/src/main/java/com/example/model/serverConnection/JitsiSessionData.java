@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.serverConnection;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class JitsiSessionData extends SessionData<JitsiMeetConferenceOptions>{
+public class JitsiSessionData extends SessionData<JitsiMeetConferenceOptions> {
 
     private static final String TAG = "JitsiSessionData";
 

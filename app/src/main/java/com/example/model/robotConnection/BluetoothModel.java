@@ -1,4 +1,4 @@
-package com.example.model.connection;
+package com.example.model.robotConnection;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

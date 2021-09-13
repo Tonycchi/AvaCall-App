@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.serverConnection;
 
 import android.util.Log;
 

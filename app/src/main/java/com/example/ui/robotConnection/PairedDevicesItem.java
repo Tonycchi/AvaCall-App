@@ -1,4 +1,4 @@
-package com.example.ui.connection;
+package com.example.ui.robotConnection;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.Button;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.model.connection.Device;
+import com.example.model.robotConnection.Device;
 import com.example.rcvc.R;
 
 import java.util.ArrayList;

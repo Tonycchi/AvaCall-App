@@ -1,7 +1,5 @@
 package com.example;
 
-import android.widget.Toast;
-
 public class Constants {
 
    private Constants(){}

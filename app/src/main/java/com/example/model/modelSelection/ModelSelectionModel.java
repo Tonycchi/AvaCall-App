@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.model.modelSelection;
 
 import android.net.Uri;
 

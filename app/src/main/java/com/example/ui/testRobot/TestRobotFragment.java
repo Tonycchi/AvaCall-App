@@ -1,8 +1,6 @@
-package com.example.ui;
+package com.example.ui.testRobot;
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.TransitionInflater;
@@ -25,8 +23,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.MainViewModel;
-import com.example.model.connection.Device;
 import com.example.rcvc.R;
+import com.example.ui.HostActivity;
+import com.example.ui.HostedFragment;
+import com.example.ui.serverConnection.VideoConnectionFragment;
 import com.example.ui.editControls.EditControlsFragment;
 
 import java.util.ArrayList;

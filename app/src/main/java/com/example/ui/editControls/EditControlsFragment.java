@@ -26,7 +26,7 @@ import com.example.data.RobotModel;
 import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
-import com.example.ui.TestRobotFragment;
+import com.example.ui.testRobot.TestRobotFragment;
 
 public class EditControlsFragment extends HostedFragment {
 

@@ -1,9 +1,10 @@
-package com.example.model;
+package com.example.model.testRobot;
 
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.model.MainModel;
 import com.example.model.robot.Controller;
 import com.example.model.robot.ev3.EV3ControlElement;
 import com.example.model.robot.ev3.EV3Controller;

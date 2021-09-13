@@ -1,4 +1,4 @@
-package com.example.model.connection;
+package com.example.model.robotConnection;
 
 import java.util.List;
 

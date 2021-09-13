@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -35,7 +34,7 @@ import com.example.data.RobotModel;
 import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
-import com.example.ui.TestRobotFragment;
+import com.example.ui.testRobot.TestRobotFragment;
 import com.example.ui.editControls.EditControlsFragment;
 
 import net.simonvt.numberpicker.NumberPicker;

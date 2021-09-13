@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.data.RobotModel;
 import com.example.data.URLSettings;
 import com.example.model.MainModel;
-import com.example.model.connection.Device;
+import com.example.model.robotConnection.Device;
 
 import java.util.ArrayList;
 import java.util.List;

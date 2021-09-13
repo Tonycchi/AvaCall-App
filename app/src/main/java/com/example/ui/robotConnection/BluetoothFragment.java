@@ -1,4 +1,4 @@
-package com.example.ui.connection;
+package com.example.ui.robotConnection;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -14,7 +14,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.model.connection.Device;
+import com.example.model.robotConnection.Device;
 import com.example.rcvc.R;
 
 import java.util.ArrayList;

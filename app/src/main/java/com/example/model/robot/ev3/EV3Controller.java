@@ -3,9 +3,8 @@ package com.example.model.robot.ev3;
 import android.util.Log;
 
 import com.example.data.RobotModel;
-import com.example.model.connection.ConnectionService;
+import com.example.model.robotConnection.ConnectionService;
 import com.example.model.robot.Controller;
-import com.example.model.robot.Robot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,11 +14,10 @@ public class EV3Controller implements Controller {
     private final String TAG = "EV3Controller";
 
     private final RobotModel model;
-
+    private final int[] ids = new int[4];
     public ConnectionService service;
     private ArrayList<EV3ControlElement> controlElements;
     private String controlElementString = "";
-    private final int[] ids = new int[4];
     private int lastUsedId;
     private boolean inputWebClient;
 
@@ -33,16 +31,16 @@ public class EV3Controller implements Controller {
             createElements(model.specs);
     }
 
-    public void setLastUsedId(int id){
-        lastUsedId = id;
-    }
-
     public ArrayList<EV3ControlElement> getControlElements(){
         return controlElements;
     }
 
     public int getLastUsedId() {
         return lastUsedId;
+    }
+
+    public void setLastUsedId(int id){
+        lastUsedId = id;
     }
 
     @Override
