@@ -52,8 +52,10 @@ public abstract class LocalDatabase extends RoomDatabase {
         localDatabase.robotModelDAO().insertAll(
                 new RobotModel(0, "Kettenroboter", Constants.TYPE_EV3, "joystick:50;1,8", "Linker Kettenmotor: Port A und Rechter Kettenmotor: Port D", null),
                 new RobotModel(0, "Kettenroboter mit Greifarm", Constants.TYPE_EV3, "joystick:50;1,8|slider:30;2", "Linker Kettenmotor: Port A, Rechter Kettenmotor: Port D und Motor des Greifarms: Port B", null),
-                new RobotModel(0, "Greifarm", Constants.TYPE_EV3, "slider:30;4", "Motor des Greifarms: Port B", null)
-                );
+                new RobotModel(0, "Greifarm", Constants.TYPE_EV3, "slider:30;4", "Motor des Greifarms: Port B", null),
+                new RobotModel(0, "Elephant", Constants.TYPE_EV3, "slider:100;1|slider:100;2|slider:100;8", "Motor der Beine: Port A, Motor des Rüssels Port B und Motor des Kopfes Port D", null)
+
+        );
     }
 
     public abstract ConnectedDeviceDAO connectedDeviceDAO();
