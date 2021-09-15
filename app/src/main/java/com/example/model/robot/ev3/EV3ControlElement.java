@@ -2,6 +2,8 @@ package com.example.model.robot.ev3;
 
 import android.util.Log;
 
+import java.util.Arrays;
+
 public abstract class EV3ControlElement {
 
     final int maxPower;
@@ -84,7 +86,7 @@ public abstract class EV3ControlElement {
 
         @Override
         protected byte[] getMotorPower(int... input) {
-            Log.d("Joystick", String.valueOf(input));
+            Log.d("Joystick", Arrays.toString(input));
             float right = 0.0f;
             float left = 0.0f;
 

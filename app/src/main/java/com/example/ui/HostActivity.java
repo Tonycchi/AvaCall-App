@@ -23,13 +23,10 @@ public class HostActivity extends AppCompatActivity implements JitsiMeetActivity
     private Toast toast;
 
     // Observer to check if bluetooth connection status
-    public final Observer<Integer> connectionStatusObserver = new Observer<Integer>() {
-        @Override
-        public void onChanged(@Nullable final Integer newConnectionStatus) {
-            //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
-            HostedFragment currentFragment = (HostedFragment)getSupportFragmentManager().findFragmentByTag("HOSTEDFRAGMENT");
-            currentFragment.robotConnectionStatusChanged(newConnectionStatus);
-        }
+    public final Observer<Integer> connectionStatusObserver = newConnectionStatus -> {
+        //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
+        HostedFragment currentFragment = (HostedFragment)getSupportFragmentManager().findFragmentByTag("HOSTEDFRAGMENT");
+        currentFragment.robotConnectionStatusChanged(newConnectionStatus);
     };
 
     public HostActivity() {

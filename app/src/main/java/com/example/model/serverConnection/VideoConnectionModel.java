@@ -1,7 +1,7 @@
 package com.example.model.serverConnection;
 
-import static com.example.Constants.JITSI_VIDEOCALL;
-import static com.example.Constants.USED_VIDEOALL;
+import static com.example.Constants.JITSI_VIDEO_CALL;
+import static com.example.Constants.USED_VIDEO_CALL;
 
 import android.util.Log;
 
@@ -63,8 +63,8 @@ public class VideoConnectionModel {
 
             if (webClient.getStatus()==1) { //success
                 String id = webClient.getId();
-                switch(USED_VIDEOALL){
-                    case JITSI_VIDEOCALL:
+                switch(USED_VIDEO_CALL){
+                    case JITSI_VIDEO_CALL:
                         sessionData = new JitsiSessionData(videoURL, urlSettings.getHost_https(), id);
                         break;
                     default:

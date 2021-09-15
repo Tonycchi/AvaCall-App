@@ -31,12 +31,7 @@ public class PairedDevicesItem extends RecyclerView.Adapter<PairedDevicesItem.Vi
             // Define click listener for the ViewHolder's View
 
             deviceButton = view.findViewById(R.id.button_bluetooth_device);
-            deviceButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    robotConnectionFragment.onClickDevice(device);
-                }
-            });
+            deviceButton.setOnClickListener(v -> robotConnectionFragment.onClickDevice(device));
         }
 
         public void setDeviceView(Device device){

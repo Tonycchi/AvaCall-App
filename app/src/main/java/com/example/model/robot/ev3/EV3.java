@@ -38,29 +38,35 @@ public class EV3 implements Robot {
         };
         Collections.sort(values, c);
 
-        String specs = "";
+        StringBuilder specs = new StringBuilder();
         for (List<Integer> element : values) {
             switch (element.get(0)) {
                 case 1: //Joystick
-                    specs += "joystick:" + element.get(1)
-                            + ";" + indexToPort(element.get(2))
-                            + "," + indexToPort(element.get(3)) + "|";
+                    specs.append("joystick:")
+                            .append(element.get(1))
+                            .append(";").append(indexToPort(element.get(2)))
+                            .append(",").append(indexToPort(element.get(3)))
+                            .append("|");
                     break;
                 case 2: //Slider
-                    specs += "slider:" + element.get(1)
-                            + ";" + indexToPort(element.get(2)) + "|";
+                    specs.append("slider:")
+                            .append(element.get(1))
+                            .append(";").append(indexToPort(element.get(2)))
+                            .append("|");
                     break;
                 case 3: //Button
-                    specs += "button:" + element.get(1)
-                            + ";" + indexToPort(element.get(2))
-                            + ";" + element.get(3) + "|";
+                    specs.append("button:")
+                            .append(element.get(1))
+                            .append(";").append(indexToPort(element.get(2)))
+                            .append(";").append(element.get(3))
+                            .append("|");
                     break;
                 default:
             }
         }
         if (specs.length() > 0) {
-            specs = specs.substring(0, specs.length() - 1);
-            RobotModel robotModel = new RobotModel(id, name, type, specs, description.trim());
+            specs = new StringBuilder(specs.substring(0, specs.length() - 1));
+            RobotModel robotModel = new RobotModel(id, name, type, specs.toString(), description.trim(), null);
             db.insertAll(robotModel);
             return robotModel;
         } else {

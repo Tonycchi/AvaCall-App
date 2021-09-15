@@ -73,8 +73,8 @@ public class VideoConnectionFragment extends HostedFragment {
         buttonAccessVideoCall.setOnClickListener(this::onClickSwitchToVideoCall);
         buttonCancelConnection.setOnClickListener(this::onClickCancelConnection);
 
-        if(viewModel.getID() != null && viewModel.isVideoReady().getValue())
-            meetingIdTextView.setText(getString(R.string.meeting_id)+" "+viewModel.getID());
+        if (viewModel.getID() != null && viewModel.isVideoReady().getValue())
+            meetingIdTextView.setText(getString(R.string.meeting_id) + " " + viewModel.getID());
 
         requireActivity().setTitle(R.string.title_video_connection);
 
@@ -91,14 +91,14 @@ public class VideoConnectionFragment extends HostedFragment {
             public void onReceive(Context context, Intent intent) {
                 Object error = intent.getExtras().get("error");
                 Object url = intent.getExtras().get("url");
-                Log.d(TAG, "User hung up "+url+" with error:"+error);
+                Log.d(TAG, "User hung up " + url + " with error:" + error);
                 closeVideoCall();
             }
         };
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    private void videoReady(boolean ready){
+    private void videoReady(boolean ready) {
         buttonAccessVideoCall.setEnabled(ready);
         buttonCancelConnection.setEnabled(ready);
     }
@@ -107,7 +107,7 @@ public class VideoConnectionFragment extends HostedFragment {
         cancelServerConnection();
     }
 
-    private void cancelServerConnection(){
+    private void cancelServerConnection() {
         viewModel.cancelServerConnection();
         meetingIdTextView.setText("");
         closeVideoCall();
@@ -126,7 +126,7 @@ public class VideoConnectionFragment extends HostedFragment {
 
     private void onClickInvitePartner(View v) {
         Log.d(TAG, "onClickInvitePartner");
-        if(viewModel.invitePartner()) { //successful connection to server
+        if (viewModel.invitePartner()) { //successful connection to server
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 Log.d(TAG, "OLD Android Version!! -> no share Link pop-up shown");
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -146,18 +146,18 @@ public class VideoConnectionFragment extends HostedFragment {
 
             meetingIdTextView.setText(getString(R.string.meeting_id) + " " + viewModel.getID());
 
-        }else{ //failed to connect to server
-            ((HostActivity)getActivity()).showToast(R.string.server_connection_failed);
+        } else { //failed to connect to server
+            ((HostActivity) getActivity()).showToast(R.string.server_connection_failed);
         }
 
     }
 
     private void onClickSwitchToVideoCall(View v) {
-        if(viewModel.isConnectedToServer()) {
+        if (viewModel.isConnectedToServer()) {
             JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getOptions());
             viewModel.setReceiveCommands(true);
-        }else{
-            ((HostActivity)getActivity()).showToast(R.string.connect_to_server);
+        } else {
+            ((HostActivity) getActivity()).showToast(R.string.connect_to_server);
         }
     }
 
@@ -168,10 +168,10 @@ public class VideoConnectionFragment extends HostedFragment {
         closeVideoCall();
     }
 
-    private void closeVideoCall(){
+    private void closeVideoCall() {
         Intent muteBroadcastIntent = BroadcastIntentHelper.buildHangUpIntent();
-        if(getActivity()!=null)
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).sendBroadcast(muteBroadcastIntent);
+        if (getActivity() != null)
+            LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).sendBroadcast(muteBroadcastIntent);
         viewModel.setReceiveCommands(false);
     }
 

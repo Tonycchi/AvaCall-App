@@ -8,7 +8,7 @@ import java.util.List;
 public interface Robot {
 
     /**
-     * @param robotModel
+     * @param robotModel used model
      * @return a controller using model settings specified by key
      */
     Controller getController(RobotModel robotModel, ConnectionService service);

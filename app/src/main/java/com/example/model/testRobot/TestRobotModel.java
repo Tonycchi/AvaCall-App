@@ -5,25 +5,19 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.model.MainModel;
-import com.example.model.robot.Controller;
-import com.example.model.robot.ev3.EV3ControlElement;
 import com.example.model.robot.ev3.EV3Controller;
-import com.facebook.infer.annotation.Mutable;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 
 public class TestRobotModel {
-    private final MainModel mainModel;
     private static final String TAG = "TestRobotModel";
+    private final MainModel mainModel;
+    private final int[] lastExpected;
     MutableLiveData<String> motorStrength;
     MutableLiveData<Boolean> stall;
-    private final int[] lastExpected;
 
     public TestRobotModel(MainModel mainModel) {
-        motorStrength = new MutableLiveData<String>();
+        motorStrength = new MutableLiveData<>();
         this.mainModel = mainModel;
-        stall = new MutableLiveData<Boolean>();
+        stall = new MutableLiveData<>();
         this.lastExpected = new int[2];
     }
 
@@ -50,7 +44,7 @@ public class TestRobotModel {
 
     public void checkStall(byte[] message) {
         EV3Controller controller = (EV3Controller) mainModel.getController();
-        Boolean stallDetected = false;
+        boolean stallDetected = false;
         int lastUsed = controller.getLastUsedId();
         int expectedStrength1 = message[2];
         int expectedStrength2 = message[3];
@@ -84,14 +78,28 @@ public class TestRobotModel {
             if (controller.getControlElements().get(i).getType().equals("joystick")) {
                 int port1 = mapPortToIndex(controller.getControlElements().get(i).getPort()[0]);
                 int port2 = mapPortToIndex(controller.getControlElements().get(i).getPort()[1]);
-                sb.append(newline + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[0]
-                        + " an und hat die Stärke " + strength[port1] + ".");
-                sb.append("\n" + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[1]
-                        + " an und hat die Stärke " + strength[port2] + ".");
+                sb.append(newline)
+                        .append("Element ")
+                        .append(i)
+                        .append(" steuert Port ")
+                        .append(controller.getControlElements().get(i).getPort()[0])
+                        .append(" an und hat die Stärke ")
+                        .append(strength[port1]).append(".");
+                sb.append("\n" + "Element ")
+                        .append(i)
+                        .append(" steuert Port ")
+                        .append(controller.getControlElements().get(i).getPort()[1])
+                        .append(" an und hat die Stärke ")
+                        .append(strength[port2]).append(".");
             } else {
                 int port = mapPortToIndex(controller.getControlElements().get(i).getPort()[0]);
-                sb.append(newline + "Element " + i + " steuert Port " + controller.getControlElements().get(i).getPort()[0]
-                        + " an und hat die Stärke " + strength[port] + ".");
+                sb.append(newline)
+                        .append("Element ")
+                        .append(i)
+                        .append(" steuert Port ")
+                        .append(controller.getControlElements().get(i).getPort()[0])
+                        .append(" an und hat die Stärke ")
+                        .append(strength[port]).append(".");
             }
         }
         motorStrength.postValue(sb.toString());

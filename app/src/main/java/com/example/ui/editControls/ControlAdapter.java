@@ -31,10 +31,10 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static final String TAG = "ControlAdapter";
     protected final HostActivity hostActivity; // for context
     protected final List<List<Integer>> elementValues; // represents UI state
+    protected final int id;
     protected int itemCount = 1; // number of UI items, not equal to number control elements
     protected int maxNumberElements = 4;
     protected int fieldsFilled = 0, numberOfFields = 0; // fieldsFilled==numberOfFields ==> all required data entered
-    protected int id;
 
     public ControlAdapter(HostActivity hostActivity, RobotModel model) {
         this.hostActivity = hostActivity;
@@ -46,16 +46,15 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     abstract boolean isReadyToSave();
+
     abstract List<List<Integer>> getValues();
 
-    public int getId() {
-        return id;
-    }
     void removeFilledFields(int count) {
         fieldsFilled -= count;
         if (fieldsFilled < 0)
             fieldsFilled = 0;
     }
+
     void setElementValue(int position, int index, int value) {
         Log.d(TAG, "addElVal " + value);
         if (elementValues.get(position).get(index) == null) {
@@ -64,6 +63,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
         elementValues.get(position).set(index, value);
     }
+
     void removeElementValue(int position, int index) {
         if (elementValues.get(position).get(index) != null) fieldsFilled--;
         elementValues.get(position).set(index, null);
@@ -109,6 +109,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     /**
      * adds an element according to elementType
+     *
      * @param elementType type of element, see static constants in ControlAdapter.java
      */
     public void addElement(int elementType) {
@@ -147,6 +148,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     /**
      * removes element at position and changes itemCount accordingly
+     *
      * @param position of element to remove
      */
     public void removeElement(int position) {
@@ -197,6 +199,12 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     protected abstract int getButtonHolderLayout();
 
+    protected List<Integer> newList(Integer... values) {
+        ArrayList<Integer> r = new ArrayList<>(values.length);
+        Collections.addAll(r, values);
+        return r;
+    }
+
     class AddControlElement extends RecyclerView.ViewHolder {
 
         public AddControlElement(@NonNull View itemView, ControlAdapter adapter) {
@@ -241,16 +249,10 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    class EmptyHolder extends RecyclerView.ViewHolder {
+    static class EmptyHolder extends RecyclerView.ViewHolder {
 
         public EmptyHolder(@NonNull View itemView) {
             super(itemView);
         }
-    }
-
-    protected List<Integer> newList(Integer... values) {
-        ArrayList<Integer> r = new ArrayList<>(values.length);
-        Collections.addAll(r, values);
-        return r;
     }
 }

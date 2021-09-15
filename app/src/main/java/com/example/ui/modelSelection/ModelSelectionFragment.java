@@ -1,11 +1,11 @@
 package com.example.ui.modelSelection;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -34,8 +34,8 @@ import com.example.data.RobotModel;
 import com.example.rcvc.R;
 import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
-import com.example.ui.testRobot.TestRobotFragment;
 import com.example.ui.editControls.EditControlsFragment;
+import com.example.ui.testRobot.TestRobotFragment;
 
 import net.simonvt.numberpicker.NumberPicker;
 
@@ -107,7 +107,7 @@ public class ModelSelectionFragment extends HostedFragment {
     }
 
     private void loadNewImage() {
-        if(modelsExist) {
+        if (modelsExist) {
             String takePicture = getResources().getString(R.string.take_picture);
             String selectPicture = getResources().getString(R.string.select_picture);
             String deletePicture = getResources().getString(R.string.delete_picture);
@@ -125,7 +125,7 @@ public class ModelSelectionFragment extends HostedFragment {
                 }
             });
             builder.show();
-        }else{
+        } else {
             ((HostActivity) getActivity()).showToast(getResources().getString(R.string.no_model_exists));
         }
     }
@@ -220,6 +220,7 @@ public class ModelSelectionFragment extends HostedFragment {
 
     /**
      * save a scaled down copy of selected image in app specific storage
+     *
      * @param imageUri uri of selected image
      * @return uri of scaled down copy
      */
@@ -340,17 +341,17 @@ public class ModelSelectionFragment extends HostedFragment {
                     .commit();
             return true;
         } else if (id == R.id.menu_delete) {
-            if(modelsExist) {
+            if (modelsExist) {
                 DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
-                                // delete model and remove from view
-                                int v = modelPicker.getValue();
-                                viewModel.deleteModelByPosition(v);
+                            // delete model and remove from view
+                            int v = modelPicker.getValue();
+                            viewModel.deleteModelByPosition(v);
 
-                                refreshNumberPicker();
-                                setModelDescription();
-                                updateModelPicture();
+                            refreshNumberPicker();
+                            setModelDescription();
+                            updateModelPicture();
                         case DialogInterface.BUTTON_NEGATIVE:
                             dialog.dismiss();
                             break;
@@ -363,7 +364,7 @@ public class ModelSelectionFragment extends HostedFragment {
                         .setNegativeButton("Nein", dialogClickListener)
                         .show();
                 return true;
-            }else{
+            } else {
                 ((HostActivity) getActivity()).showToast(getResources().getString(R.string.no_model_exists));
             }
         }
@@ -385,11 +386,11 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private void setModelDescription() {
         RobotModel robotModel;
-        String descriptionText = "";
+        String descriptionText;
         if (modelsExist) {
             robotModel = viewModel.getRobotModel(modelPicker.getValue());
         } else {
-            robotModel = new RobotModel(-1, "", "", "", "");
+            robotModel = new RobotModel(-1, "", "", "", "", null);
         }
         String typeString = (modelsExist) ? "(" + robotModel.type + "):" : "";
         descriptionText = robotModel.description;

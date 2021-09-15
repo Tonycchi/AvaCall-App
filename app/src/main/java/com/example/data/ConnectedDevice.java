@@ -22,14 +22,6 @@ public class ConnectedDevice {
         this.lastConnected = lastConnected;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public long getLastConnected() {
-        return lastConnected;
-    }
-
     @Override
     public String toString() {
         return "ConnectedDevice{" +

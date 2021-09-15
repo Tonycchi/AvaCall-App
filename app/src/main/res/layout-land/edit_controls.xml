@@ -27,7 +27,7 @@
         android:layout_marginTop="@dimen/margin_vertical_small_land"
         android:layout_marginEnd="@dimen/margin_side_land"
         android:ems="10"
-        android:gravity="left|center"
+        android:gravity="start|center"
         android:inputType="textLongMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

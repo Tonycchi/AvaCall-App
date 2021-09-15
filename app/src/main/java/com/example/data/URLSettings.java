@@ -11,7 +11,7 @@ public class URLSettings {
             DEFAULT_TEST_JITSI = "meet.jit.si",
             DEFAULT_TEST_PORT = "22222";
 
-    public LocalPreferenceDAO localPreferenceDAO;
+    public final LocalPreferenceDAO localPreferenceDAO;
 
     public URLSettings(LocalPreferenceDAO localPreferenceDAO) {
         this.localPreferenceDAO = localPreferenceDAO;

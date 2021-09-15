@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_1sdp"
-                    android:text="Joystick"
+                    android:text="@string/title_joystick"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             </RelativeLayout>
@@ -45,7 +45,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Maximale Motorstärke (in %)" />
+                android:text="@string/title_motor_power" />
 
             <EditText
                 android:id="@+id/edit_max_power"
@@ -56,7 +56,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rechter Motorport" />
+                android:text="@string/title_motor_right_port" />
 
             <RadioGroup
                 android:id="@+id/radio_port_right"
@@ -88,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Linker Motorport" />
+                android:text="@string/title_motor_left_port" />
 
             <RadioGroup
                 android:id="@+id/radio_port_left"

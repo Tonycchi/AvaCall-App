@@ -2,8 +2,6 @@ package com.example.model.robot;
 
 import com.example.data.RobotModel;
 
-import java.util.ArrayList;
-
 public interface Controller {
 
     /**

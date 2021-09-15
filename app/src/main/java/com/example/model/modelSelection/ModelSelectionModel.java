@@ -1,7 +1,5 @@
 package com.example.model.modelSelection;
 
-import android.net.Uri;
-
 import com.example.data.RobotModel;
 import com.example.data.RobotModelDAO;
 

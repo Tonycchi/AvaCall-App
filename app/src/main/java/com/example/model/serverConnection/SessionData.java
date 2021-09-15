@@ -2,12 +2,7 @@ package com.example.model.serverConnection;
 
 import android.util.Log;
 
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
-public abstract class SessionData<OptionType extends Object>{
+public abstract class SessionData<OptionType> {
 
     private static final String TAG = "SessionData";
 
@@ -15,14 +10,16 @@ public abstract class SessionData<OptionType extends Object>{
     private final String ID;
 
     public SessionData(String host, String id) {
-        Log.d(TAG, " host:"+host+" id:"+id);
+        Log.d(TAG, " host:" + host + " id:" + id);
         this.ID = id;
         this.SHARE_URL = host + "/?meetingId=" + id;
     }
 
-    public String getShareURL() {return this.SHARE_URL; }
+    public String getShareURL() {
+        return this.SHARE_URL;
+    }
 
-    public String getID(){
+    public String getID() {
         return this.ID;
     }
 

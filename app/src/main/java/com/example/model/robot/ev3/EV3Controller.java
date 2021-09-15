@@ -3,8 +3,8 @@ package com.example.model.robot.ev3;
 import android.util.Log;
 
 import com.example.data.RobotModel;
-import com.example.model.robotConnection.ConnectionService;
 import com.example.model.robot.Controller;
+import com.example.model.robotConnection.ConnectionService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public class EV3Controller implements Controller {
             createElements(model.specs);
     }
 
-    public ArrayList<EV3ControlElement> getControlElements(){
+    public ArrayList<EV3ControlElement> getControlElements() {
         return controlElements;
     }
 
@@ -39,7 +39,7 @@ public class EV3Controller implements Controller {
         return lastUsedId;
     }
 
-    public void setLastUsedId(int id){
+    public void setLastUsedId(int id) {
         lastUsedId = id;
     }
 
@@ -74,9 +74,14 @@ public class EV3Controller implements Controller {
         return model;
     }
 
-    public boolean getInputFromWebClient() { return inputWebClient; }
+    public boolean getInputFromWebClient() {
+        return inputWebClient;
+    }
 
-    public void setInputFromWebClient(boolean input) { inputWebClient = input; }
+    public void setInputFromWebClient(boolean input) {
+        inputWebClient = input;
+    }
+
     /**
      * creates EV3ControlElement objects according to specifications
      *
@@ -94,7 +99,6 @@ public class EV3Controller implements Controller {
         // put into list with [0] = $element$, [1] = $attributes$
         ArrayList<String[]> list = new ArrayList<>();
         for (String t : tmp) {
-            String[] a = t.split(":");
             list.add(t.split(":"));
         }
         // now translate each $attributes$ into corresponding Objects:
@@ -131,14 +135,14 @@ public class EV3Controller implements Controller {
             }
         }
 
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < controlElements.size(); i++) {
             EV3ControlElement e = controlElements.get(i);
-            s += i + ": ";
-            s += e.getClass().getName() + " ports: ";
-            s += Arrays.toString(e.port) + "\n";
+            s.append(i).append(": ");
+            s.append(e.getClass().getName()).append(" ports: ");
+            s.append(Arrays.toString(e.port)).append("\n");
         }
-        Log.d(TAG, s);
+        Log.d(TAG, s.toString());
 
     }
 
@@ -170,11 +174,10 @@ public class EV3Controller implements Controller {
         if (e.port.length == 1) {
             // directly write the port into the message counter
             directCommand[2] = Byte.parseByte(Integer.toHexString(e.port[0]), 16);
-        }
-        else {
-            Log.d(TAG, "Port 1: "+e.port[0]+" Port 2: "+e.port[1]);
+        } else {
+            Log.d(TAG, "Port 1: " + e.port[0] + " Port 2: " + e.port[1]);
             // combine the ports into a single byte and write it into the message counter
-            directCommand[2] = Byte.parseByte(Integer.toHexString((e.port[0]<<4)+e.port[1]), 16);
+            directCommand[2] = Byte.parseByte(Integer.toHexString((e.port[0] << 4) + e.port[1]), 16);
         }
 
         directCommand[3] = (byte) id;              //message counter is used as info which control element is writing
@@ -193,7 +196,7 @@ public class EV3Controller implements Controller {
         return directCommand;
     }
 
-    private byte[] createOutputCommand(int... input) {
+    private byte[] createOutputCommand() {
         //0x|14:00|2A:00|80|00:00|A4|00|0p|81:po|...|A6|00|0P
         //   0  1  2  3  4  5  6  7  8  9  10 11
         // 0 length of command minus 2
@@ -202,7 +205,7 @@ public class EV3Controller implements Controller {
         // last 3 bytes: A6 opcode for start output
         //               00 filler
         //               0P = sum of used ports
-        for (int i=0; i< controlElements.size(); i++) {
+        for (int i = 0; i < controlElements.size(); i++) {
             switch (controlElements.get(i).port[0]) {
                 case 1:
                     ids[0] = i;
@@ -240,8 +243,8 @@ public class EV3Controller implements Controller {
         byte[] directCommand = new byte[39];
         byte[] tmp;
         directCommand[0] = (byte) 0x25;
-        directCommand[2] = Byte.parseByte(Integer.toHexString((ids[0]<<4)+ids[1]), 16);
-        directCommand[3] = Byte.parseByte(Integer.toHexString((ids[2]<<4)+ids[3]), 16);
+        directCommand[2] = Byte.parseByte(Integer.toHexString((ids[0] << 4) + ids[1]), 16);
+        directCommand[3] = Byte.parseByte(Integer.toHexString((ids[2] << 4) + ids[3]), 16);
         directCommand[5] = (byte) 0x04;
 
         tmp = commandPart((byte) 0x10, (byte) 0x60);
@@ -281,7 +284,7 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     * @param port  ev3 motor port
+     * @param port    ev3 motor port
      * @param counter offset of global memory
      * @return part of direct command for given port
      */
@@ -298,7 +301,6 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     *
      * @param element string to be added to controlElementString
      */
     private void addToString(String element) {

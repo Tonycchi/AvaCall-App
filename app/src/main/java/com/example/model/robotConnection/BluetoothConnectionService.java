@@ -15,6 +15,7 @@ import com.example.model.MainModel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -39,12 +40,12 @@ public class BluetoothConnectionService implements ConnectionService {
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device type, 5 connection is not accepted = wrong device type
     private final MutableLiveData<Integer> connectionStatus;
+    private final ByteArrayHandshake byteArrayHandshake;
+    private final MainModel mainModel;
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
     private ConnectedThread connectedThread;
     private BluetoothDevice bluetoothDevice;
-    private final ByteArrayHandshake byteArrayHandshake;
-    private final MainModel mainModel;
 
 
     public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake, MainModel mainModel) {
@@ -213,8 +214,8 @@ public class BluetoothConnectionService implements ConnectionService {
      * succeeds or fails.
      */
     private class ConnectThread extends Thread {
-        private BluetoothSocket bluetoothSocket;
         private final ParcelUuid[] deviceUUIDs;
+        private BluetoothSocket bluetoothSocket;
         private boolean stopConnecting;
 
         public ConnectThread(BluetoothDevice device, ParcelUuid[] deviceUUIDs) {
@@ -385,10 +386,10 @@ public class BluetoothConnectionService implements ConnectionService {
                 try {
                     INPUT_STREAM.read(buffer);
                     int replySize = (buffer[1] * 16 + buffer[0]);
-                    Log.d(TAG,"received:"+bytesToHex(buffer, replySize+2)+" length:"+replySize);
+                    Log.d(TAG, "received:" + bytesToHex(buffer, replySize + 2) + " length:" + replySize);
                     Log.d(TAG, "received:" + bytesToHex(buffer, replySize + 2) + " length:" + replySize);
                     mainModel.receivedMessageFromRobot(buffer);
-                    Log.d(TAG,"received:"+buffer+" length:"+replySize);
+                    Log.d(TAG, "received:" + Arrays.toString(buffer) + " length:" + replySize);
                 } catch (IOException e) {
                     // connection got lost, so status gets set to 3
                     connectionStatus.postValue(CONNECTION_LOST);

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="port_value_A">1</integer>
-    <integer name="port_value_B">2</integer>
-    <integer name="port_value_C">4</integer>
-    <integer name="port_value_D">8</integer>
-</resources>

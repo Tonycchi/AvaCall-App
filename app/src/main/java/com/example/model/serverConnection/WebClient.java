@@ -7,7 +7,6 @@ import com.example.model.robot.Controller;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
-import java.net.ConnectException;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class WebClient extends WebSocketClient {
     public void onOpen(ServerHandshake handshakeData) {
         String syn = "app:" + videoURL + ":" + controller.getControlElementString();
         send(syn);
-        Log.d(TAG,"send handshake:"+syn);
+        Log.d(TAG, "send handshake:" + syn);
     }
 
     /**
@@ -62,31 +61,31 @@ public class WebClient extends WebSocketClient {
             id = message.split(":", 2)[1];
             status = 1;
         } else {
-            if (true) {
+            if (true) { // TODO shouldn't this be if(receiveCommands) ????
                 List<String> t1 = Arrays.asList(message.split(";|:"));
                 int[] t2 = new int[t1.size()];
                 for (int i = 0; i < t2.length; i++)
                     t2[i] = Integer.parseInt(t1.get(i));
                 controller.setLastUsedId(t2[0]);
                 controller.setInputFromWebClient(true);
-                Thread webClientinput = new Thread(){
-                    public void run(){
+                Thread webClientInput = new Thread() {
+                    public void run() {
                         controller.sendInput(t2);
                     }
                 };
-                webClientinput.start();
+                webClientInput.start();
                 //controller.send(Integer.valueOf(values[0]), Integer.valueOf(values[1]));
             }
         }
     }
 
-    public void sendStallDetected(String controlElementType, int controlElementId){
-        String stallMessage = "STALL:start:"+controlElementType+":"+controlElementId;
+    public void sendStallDetected(String controlElementType, int controlElementId) {
+        String stallMessage = "STALL:start:" + controlElementType + ":" + controlElementId;
         send(stallMessage);
     }
 
-    public void sendStallEnded(String controlElementType, int controlElementId){
-        String stallMessage = "STALL:stop:"+controlElementType+":"+controlElementId;
+    public void sendStallEnded(String controlElementType, int controlElementId) {
+        String stallMessage = "STALL:stop:" + controlElementType + ":" + controlElementId;
         send(stallMessage);
     }
 

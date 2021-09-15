@@ -9,19 +9,18 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.Constants;
 import com.example.data.LocalDatabase;
-import com.example.data.URLSettings;
 import com.example.data.RobotModel;
+import com.example.data.URLSettings;
 import com.example.model.modelSelection.ModelSelectionModel;
+import com.example.model.robot.Controller;
+import com.example.model.robot.Robot;
+import com.example.model.robot.ev3.EV3;
 import com.example.model.robotConnection.BluetoothModel;
 import com.example.model.robotConnection.Device;
 import com.example.model.robotConnection.EV3BluetoothHandshake;
 import com.example.model.robotConnection.Handshake;
 import com.example.model.robotConnection.RobotConnectionModel;
-import com.example.model.robot.Controller;
-import com.example.model.robot.Robot;
-import com.example.model.robot.ev3.EV3;
 import com.example.model.serverConnection.VideoConnectionModel;
 import com.example.model.testRobot.TestRobotModel;
 
@@ -39,17 +38,15 @@ public class MainModel {
     private final TestRobotModel testRobotModel;
 
     private final Robot robot;
-    private Controller controller;
-
     // Model for ModelSelectionFragment
     private final ModelSelectionModel modelSelectionModel;
-
     private final LocalDatabase localDatabase;
+    private Controller controller;
 
     public MainModel(@NonNull Application application) {
         localDatabase = LocalDatabase.getInstance(application);
 
-        switch(USED_MODEL_TYPE){
+        switch (USED_MODEL_TYPE) {
             case TYPE_EV3:
                 robot = new EV3(localDatabase.robotModelDAO());
                 break;
@@ -72,7 +69,9 @@ public class MainModel {
         return controller;
     }
 
-    public void setInputFromWebClient(boolean input) { controller.setInputFromWebClient(input); }
+    public void setInputFromWebClient(boolean input) {
+        controller.setInputFromWebClient(input);
+    }
 
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return robotConnectionModel.getPairedDevices();
@@ -142,7 +141,9 @@ public class MainModel {
         controller.sendInput(input);
     }
 
-    public void getControlOutputs() { controller.getOutput(); }
+    public void getControlOutputs() {
+        controller.getOutput();
+    }
 
     public String getSelectedModelElements() {
         return controller.getControlElementString();
@@ -170,12 +171,12 @@ public class MainModel {
     }
 
 
-    public void receivedMessageFromRobot(byte[] message){
+    public void receivedMessageFromRobot(byte[] message) {
         Log.d(TAG, "received message length: " + message.length);
         int length = message[0];
-        if(length == 7 && controller != null) {
+        if (length == 7 && controller != null) {
             testRobotModel.receivedMotorStrengths(message);
-        } else if(length == 5 && controller != null) {
+        } else if (length == 5 && controller != null) {
             testRobotModel.checkStall(message);
         }
     }
@@ -199,13 +200,17 @@ public class MainModel {
         videoConnectionModel.cancelConnection();
     }
 
-    public void setLastUsedId(int id){controller.setLastUsedId(id);}
+    public void setLastUsedId(int id) {
+        controller.setLastUsedId(id);
+    }
 
     public MutableLiveData<String> getMotorStrength() {
         return testRobotModel.getMotorStrength();
     }
 
-    public MutableLiveData<Boolean> getStall(){return testRobotModel.getStall();}
+    public MutableLiveData<Boolean> getStall() {
+        return testRobotModel.getStall();
+    }
 
     public void sendStallDetected(String controlElementType, int controlElementId) {
         videoConnectionModel.sendStallDetected(controlElementType, controlElementId);

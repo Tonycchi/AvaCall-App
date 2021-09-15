@@ -62,12 +62,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button buttonFirstConnection = (Button) view.findViewById(R.id.button_first_connection);
-        buttonFirstConnection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickFirstBluetoothConnection();
-            }
-        });
+        buttonFirstConnection.setOnClickListener(v -> onClickFirstBluetoothConnection());
 
         getActivity().setTitle(R.string.title_bluetooth);
     }
@@ -123,7 +118,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     }
 
     private void setPlaceholder() {
-        ArrayList<Device> noDevicePlaceholder = new ArrayList<Device>();
+        ArrayList<Device> noDevicePlaceholder = new ArrayList<>();
         String noDevicePlaceholderText = getResources().getString(R.string.no_bluetooth_device);
         noDevicePlaceholder.add(new Device(noDevicePlaceholderText));
         Log.d(TAG, "setPlaceholder");

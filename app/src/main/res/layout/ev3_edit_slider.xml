@@ -11,7 +11,7 @@
         android:layout_margin="@dimen/_2sdp"
         card_view:cardCornerRadius="4dp">
 
-        <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_1sdp"
@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_1sdp"
-                    android:text="Slider"
+                    android:text="@string/title_slider"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
             </RelativeLayout>
@@ -44,7 +44,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Maximale Motorstärke (in %)" />
+                android:text="@string/title_motor_power" />
 
             <EditText
                 android:id="@+id/edit_max_power"
@@ -55,7 +55,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Motorport" />
+                android:text="@string/title_motor_port" />
 
             <RadioGroup
                 android:id="@+id/radio_port"

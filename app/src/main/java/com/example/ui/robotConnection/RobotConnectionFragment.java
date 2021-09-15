@@ -76,12 +76,7 @@ public abstract class RobotConnectionFragment extends HostedFragment {
         Log.d(TAG, "show ProgressDialog");
         //initprogress dialog
         progressDialog = ProgressDialog.show(this.getContext(), getResources().getString(R.string.connecting_title),
-                getResources().getString(R.string.connecting_bluetooth_wait), false, true, new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        viewModel.cancelRobotConnection();
-                    }
-                });
+                getResources().getString(R.string.connecting_bluetooth_wait), false, true, dialog -> viewModel.cancelRobotConnection());
     }
 
     protected void changeProgressDialog(){

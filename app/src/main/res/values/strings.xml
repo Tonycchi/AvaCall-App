@@ -1,7 +1,7 @@
 <resources>
     <!-- General -->
     <string name="app_name">AvaCall</string>
-    <string name="ok">Ok</string>
+    <string name="ok">@android:string/ok</string>
     <string name="cancel">Schließen</string>
 
     <!-- New Design -->
@@ -27,7 +27,7 @@
     <string name="placeholder">Nothing to see here</string>
     <string name="no_bluetooth_device">Kein Gerät verbunden. Mit Roboter koppeln!</string>
 
-    <string name="connecting_bluetooth_wait">Bitte warten...</string>
+    <string name="connecting_bluetooth_wait">Bitte warten…</string>
     <string name="bluetooth_connection_init_error">Es konnte keine Verbindung hergestellt werden. Versuchen Sie es zu einem späteren Zeitpunkt erneut!</string>
     <string name="bluetooth_connection_lost">Bluetooth Verbindung getrennt</string>
     <string name="bluetooth_connection_wrong_device">Das verbundene Gerät entspricht nicht den Anforderungen.</string>
@@ -60,6 +60,7 @@
     <!-- Edit Model -->
     <string name="edit_controls_motor_alert">Es können maximal 4 Steuerelemente verwendet werden.</string>
     <string name="value_missing">Wert fehlt.</string>
+    <string name="add_control_element">Steuerelement hinzufügen</string>
 
     <!-- Video Connection -->
     <string name="url_settings">URL-Einstellungen</string>
@@ -81,6 +82,16 @@
     <string name="host_url">avatar.mintclub.org</string>
     <string name="jitsi_url">meet.jit.si</string>
     <string name="host_port">22222</string>
+
+    <!-- EV3 control elements -->
+    <string name="title_button">Button</string>
+    <string name="title_joystick">Joystick</string>
+    <string name="title_slider">Slider</string>
+    <string name="title_motor_power">Motorstärke (in %)</string>
+    <string name="title_motor_port">Motorport</string>
+    <string name="title_duration">Dauer (in ms, max: 5000)</string>
+    <string name="title_motor_right_port">Rechter Motorport</string>
+    <string name="title_motor_left_port">Linker Motorport</string>
 
 
 </resources>
