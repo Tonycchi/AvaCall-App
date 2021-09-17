@@ -81,7 +81,7 @@ public class MainModel {
         return robotConnectionModel.getConnectionStatus();
     }
 
-    public void saveURLs(URLSettings.stringTriple urls) {
+    public void saveURLs(URLSettings.StringTriple urls) {
         videoConnectionModel.saveURLs(urls);
     }
 

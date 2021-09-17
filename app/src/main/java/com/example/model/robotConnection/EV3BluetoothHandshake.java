@@ -5,7 +5,7 @@ import static com.example.Constants.USER_RELEASE;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EV3BluetoothHandshake implements ByteArrayHandshake {
+public class EV3BluetoothHandshake implements Handshake<byte[]> {
     @Override
     public List<byte[]> getSyn() {
         List<byte[]> directCommands = new ArrayList<>();

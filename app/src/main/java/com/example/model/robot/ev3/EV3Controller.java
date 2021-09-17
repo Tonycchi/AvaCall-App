@@ -196,6 +196,10 @@ public class EV3Controller implements Controller {
         return directCommand;
     }
 
+    /**
+     * creates direct command requesting motor powers
+     * @return direct command
+     */
     private byte[] createOutputCommand() {
         //0x|14:00|2A:00|80|00:00|A4|00|0p|81:po|...|A6|00|0P
         //   0  1  2  3  4  5  6  7  8  9  10 11
@@ -258,6 +262,11 @@ public class EV3Controller implements Controller {
         return directCommand;
     }
 
+    /**
+     * TODO
+     * @param input ports
+     * @return command
+     */
     private byte[] createStallCommand(int... input) {
         byte[] tmp;
 
@@ -309,6 +318,11 @@ public class EV3Controller implements Controller {
         controlElementString += element;
     }
 
+    /**
+     *
+     * @param port ev3 port number
+     * @return corresponding direct command port variable
+     */
     private byte intToBytePort(int port) {
         switch (port) {
             case 1:

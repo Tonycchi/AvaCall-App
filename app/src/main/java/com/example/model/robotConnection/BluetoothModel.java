@@ -38,18 +38,23 @@ public class BluetoothModel extends RobotConnectionModel {
 
     private ConnectionService testService;
 
-    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO, Handshake byteArrayHandshake, MainModel mainModel) {
+    public BluetoothModel(ConnectedDeviceDAO connectedDeviceDAO, Handshake<byte[]> byteArrayHandshake, MainModel mainModel) {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothConnectionService = new BluetoothConnectionService((ByteArrayHandshake) byteArrayHandshake, mainModel);
+        bluetoothConnectionService = new BluetoothConnectionService(byteArrayHandshake, mainModel);
         this.connectedDeviceDAO = connectedDeviceDAO;
     }
 
+    /**
+     * updates list of paired bluetooth devices <br>
+     * previously used (in app) devices first, most recently on top <br>
+     * previously unused devices follow
+     */
     private void updatePairedDevice() {
         if (pairedDevices == null) {
             pairedDevices = new MutableLiveData<>();
         }
 
-        // devices bonded to system
+        // bonded to system
         Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
 
         // will be shown to user

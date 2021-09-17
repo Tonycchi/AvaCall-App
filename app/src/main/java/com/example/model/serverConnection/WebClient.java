@@ -61,7 +61,7 @@ public class WebClient extends WebSocketClient {
             id = message.split(":", 2)[1];
             status = 1;
         } else {
-            if (true) { // TODO shouldn't this be if(receiveCommands) ????
+            if (receiveCommands) {
                 List<String> t1 = Arrays.asList(message.split(";|:"));
                 int[] t2 = new int[t1.size()];
                 for (int i = 0; i < t2.length; i++)

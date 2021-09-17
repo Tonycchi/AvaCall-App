@@ -17,7 +17,7 @@ public class URLSettings {
         this.localPreferenceDAO = localPreferenceDAO;
     }
 
-    public void saveURLs(stringTriple urls) {
+    public void saveURLs(StringTriple urls) {
         localPreferenceDAO.insertAll(
                 new LocalPreference(HOSTURLKEY, trimURL(urls.getHostURL())),
                 new LocalPreference(VIDEOURLKEY, trimURL(urls.getVideoURL())),
@@ -25,8 +25,8 @@ public class URLSettings {
         );
     }
 
-    public stringTriple getAll() {
-        return new stringTriple(localPreferenceDAO.get(HOSTURLKEY), localPreferenceDAO.get(VIDEOURLKEY), localPreferenceDAO.get(HOSTPORTKEY));
+    public StringTriple getAll() {
+        return new StringTriple(localPreferenceDAO.get(HOSTURLKEY), localPreferenceDAO.get(VIDEOURLKEY), localPreferenceDAO.get(HOSTPORTKEY));
     }
 
     public String getHost_plain() {
@@ -67,10 +67,10 @@ public class URLSettings {
         return trimmedURL;
     }
 
-    public static class stringTriple {
+    public static class StringTriple {
         private final String hostURL, videoURL, port;
 
-        public stringTriple(String hostURL, String videoURL, String port) {
+        public StringTriple(String hostURL, String videoURL, String port) {
             this.hostURL = hostURL;
             this.videoURL = videoURL;
             this.port = port;

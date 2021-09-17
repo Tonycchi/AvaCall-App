@@ -40,7 +40,7 @@ public class BluetoothConnectionService implements ConnectionService {
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device type, 5 connection is not accepted = wrong device type
     private final MutableLiveData<Integer> connectionStatus;
-    private final ByteArrayHandshake byteArrayHandshake;
+    private final Handshake<byte[]> byteArrayHandshake;
     private final MainModel mainModel;
     private AcceptThread acceptThread;
     private ConnectThread connectThread;
@@ -48,7 +48,7 @@ public class BluetoothConnectionService implements ConnectionService {
     private BluetoothDevice bluetoothDevice;
 
 
-    public BluetoothConnectionService(ByteArrayHandshake byteArrayHandshake, MainModel mainModel) {
+    public BluetoothConnectionService(Handshake<byte[]> byteArrayHandshake, MainModel mainModel) {
         BLUETOOTH_ADAPTER = BluetoothAdapter.getDefaultAdapter();
         connectionStatus = new MutableLiveData<>();
         this.byteArrayHandshake = byteArrayHandshake;

@@ -85,7 +85,7 @@ public class VideoConnectionModel {
         return videoReady;
     }
 
-    public URLSettings.stringTriple getCurrentURLs() {
+    public URLSettings.StringTriple getCurrentURLs() {
         return urlSettings.getAll();
     }
 
@@ -101,7 +101,7 @@ public class VideoConnectionModel {
         return sessionData.getID();
     }
 
-    public void saveURLs(URLSettings.stringTriple urls) {
+    public void saveURLs(URLSettings.StringTriple urls) {
         urlSettings.saveURLs(urls);
     }
 
@@ -122,6 +122,9 @@ public class VideoConnectionModel {
             webClient.setReceiveCommands(receiveCommands);
     }
 
+    /**
+     * cancel current server connection
+     */
     public void cancelConnection() {
         if(webClient != null && webClient.getStatus()==1)
             webClient.close();

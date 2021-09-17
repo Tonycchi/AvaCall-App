@@ -74,6 +74,15 @@ public class EV3 implements Robot {
         }
     }
 
+    /**
+     * array index to port number
+     * 0 -> 1
+     * 1 -> 2
+     * 2 -> 4
+     * 3 -> 8
+     * @param index array index
+     * @return port number
+     */
     private int indexToPort(int index) {
         int y = 1, i = index;
         while (i > 0) {

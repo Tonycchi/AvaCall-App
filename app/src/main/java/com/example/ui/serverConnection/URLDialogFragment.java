@@ -36,7 +36,7 @@ public class URLDialogFragment extends DialogFragment {
                 editWebPort = dialogView.findViewById(R.id.edit_web_port);
 
         // set editText texts = current values
-        URLSettings.stringTriple t = viewModel.getCurrentURLs();
+        URLSettings.StringTriple t = viewModel.getCurrentURLs();
         String currentWebURL = t.getHostURL(),
                 currentJitsiURL = t.getVideoURL(),
                 currentWebPort = t.getPort();
@@ -54,7 +54,7 @@ public class URLDialogFragment extends DialogFragment {
             String jitsiURL = editJitsiURL.getText().toString();
             String webPort = editWebPort.getText().toString();
 
-            viewModel.saveURLs(new URLSettings.stringTriple(webURL, jitsiURL, webPort));
+            viewModel.saveURLs(new URLSettings.StringTriple(webURL, jitsiURL, webPort));
         });
 
         AlertDialog alertDialog = builder.create();
