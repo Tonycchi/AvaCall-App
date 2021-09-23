@@ -75,7 +75,7 @@ public class TestRobotModel {
         Log.d(TAG, "ICH BIN AKTUELL 1: " + actualStrength1 + " ICH BIN SOLL 1: " + expectedStrength1);
         Log.d(TAG, "ICH BIN AKTUELL 2: " + actualStrength2 + " ICH BIN SOLL 2: " + expectedStrength2);
 //            if (expectedStrength1 >= lastExpected[0] && expectedStrength2 >= lastExpected[1]) {
-        if (!detectBigChange(expectedStrength1, expectedStrength2) && !(Math.abs(expectedStrength1) < 5 && expectedStrength1 != 0 && actualStrength1 == 0) && !(Math.abs(expectedStrength2) < 5 && expectedStrength2 != 0 && actualStrength2 == 0)) {
+        if (!detectBigChange(expectedStrength1, expectedStrength2) && !(Math.abs(expectedStrength1) < 10 && expectedStrength1 != 0 && actualStrength1 == 0) && !(Math.abs(expectedStrength2) < 10 && expectedStrength2 != 0 && actualStrength2 == 0)) {
             stallDetected = detectStall(expectedStrength1, actualStrength1) ||
                     detectStall(expectedStrength2, actualStrength2);
         }

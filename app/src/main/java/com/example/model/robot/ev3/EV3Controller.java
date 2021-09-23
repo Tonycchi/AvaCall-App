@@ -174,14 +174,15 @@ public class EV3Controller implements Controller {
 
         directCommand[0] = (byte) (length - 2);         // pre defined parts of direct command
 
-        if (e.port.length == 1) {
-            // directly write the port into the message counter
-            directCommand[2] = Byte.parseByte(Integer.toHexString(e.port[0]), 16);
-        } else {
-            Log.d(TAG, "Port 1: " + e.port[0] + " Port 2: " + e.port[1]);
-            // combine the ports into a single byte and write it into the message counter
-            directCommand[2] = Byte.parseByte(Integer.toHexString((e.port[0] << 4) + e.port[1]), 16);
-        }
+        directCommand[2] = 0x1A;
+//        if (e.port.length == 1) {
+//            // directly write the port into the message counter
+//            directCommand[2] = Byte.parseByte(Integer.toHexString(e.port[0]), 16);
+//        } else {
+//            Log.d(TAG, "Port 1: " + e.port[0] + " Port 2: " + e.port[1]);
+//            // combine the ports into a single byte and write it into the message counter
+//            directCommand[2] = Byte.parseByte(Integer.toHexString((e.port[0] << 4) + e.port[1]), 16);
+//        }
 
         directCommand[3] = (byte) id;              //message counter is used as info which control element is writing
 
