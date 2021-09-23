@@ -19,8 +19,7 @@ import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
 /**
  * Hosts all fragments. See {@link android.app.Activity Activity}.
  */
-public class HostActivity extends AppCompatActivity implements JitsiMeetActivityInterface {
-
+public class HostActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
     private Toast toast;
@@ -66,10 +65,5 @@ public class HostActivity extends AppCompatActivity implements JitsiMeetActivity
 
     public void showToast(int messageId){
         showToast(getResources().getString(messageId));
-    }
-
-    @Override
-    public void requestPermissions(String[] strings, int i, PermissionListener permissionListener) {
-
     }
 }
