@@ -33,6 +33,12 @@ public class TestRobotModel {
         return stall;
     }
 
+    /**
+     * this method compares the expected strength with the actual strength and computes if a stall occurred
+     * @param expectedStrength the strength send from the input
+     * @param actualStrength the strength of the motor output
+     * @return true if a stall occurred, false if not
+     */
     public boolean detectStall(int expectedStrength, int actualStrength) {
         if (Math.abs(expectedStrength) > Math.abs(actualStrength)) {
             return Math.abs(expectedStrength - actualStrength) > Math.abs(expectedStrength * 0.7);
@@ -40,12 +46,24 @@ public class TestRobotModel {
         return false;
     }
 
+    /**
+     * covers a small problem of detecting stalls when the control element is moved too fast
+     * when the changes in strengths are too big -> don't detect stalls
+     * @param expectedStrength1 first strength from the input
+     * @param expectedStrength2 second strength from the input
+     * @return true if a big change occurred, false if not
+     */
     private boolean detectBigChange(int expectedStrength1, int expectedStrength2) {
         int delta1 = Math.abs((int) (lastExpected[0] * 0.15));
         int delta2 = Math.abs((int) (lastExpected[1] * 0.15));
         return (Math.abs(lastExpected[0] - expectedStrength1) > delta1 || Math.abs(lastExpected[1] - expectedStrength2) > delta2);
     }
 
+    /**
+     * this is the complete method to check if there is a stall when we get a reply message
+     * if a stall is detected sends a signal either to the website or the app
+     * @param message reply message of the EV3 (from stallCommand)
+     */
     public void checkStall(byte[] message) {
         EV3Controller controller = (EV3Controller) mainModel.getController();
         boolean stallDetected = false;
@@ -71,6 +89,10 @@ public class TestRobotModel {
         lastExpected[1] = expectedStrength2;
     }
 
+    /**
+     * a textview for showing all the motor outputs of the used ports to for debug purposes
+     * @param message reply message of the EV3 (from outputCommand)
+     */
     public void receivedMotorStrengths(byte[] message) {
         StringBuilder sb = new StringBuilder();
         EV3Controller controller = (EV3Controller) mainModel.getController();

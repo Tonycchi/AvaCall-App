@@ -264,8 +264,8 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     * @param input ports
-     * @return command
+     * @param input id and values (strength/angle) from the control element
+     * @return unique outputCommand for detecting stalls
      */
     private byte[] createStallCommand(int... input) {
         byte[] tmp;
@@ -293,7 +293,7 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     * @param port    ev3 motor port
+     * @param port ev3 motor port
      * @param counter offset of global memory
      * @return part of direct command for given port
      */
