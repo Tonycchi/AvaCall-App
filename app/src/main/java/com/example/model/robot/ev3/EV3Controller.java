@@ -155,7 +155,7 @@ public class EV3Controller implements Controller {
         //   0  1  2  3  4  5  6  7  8  9  10 11
         // 0 length of command minus 2
         // 2-6 predefined
-        // 7-11 command for one motor (see commandPart)
+        // 7-11 command for one motor
         // last 3 bytes: A6 opcode for start output
         //               00 filler
         //               0P = sum of used ports
@@ -201,14 +201,12 @@ public class EV3Controller implements Controller {
      * @return direct command
      */
     private byte[] createOutputCommand() {
-        //0x|14:00|2A:00|80|00:00|A4|00|0p|81:po|...|A6|00|0P
-        //   0  1  2  3  4  5  6  7  8  9  10 11
+        // 0x|25:00|01:23|00|04:00|99:1C|00|pp:08|02:01|gm1...
+        //    0  1  2  3  4  5  6  7  8  9  10 11 12 13 14
         // 0 length of command minus 2
-        // 2-6 predefined
-        // 7-11 command for one motor (see commandPart)
-        // last 3 bytes: A6 opcode for start output
-        //               00 filler
-        //               0P = sum of used ports
+        // 2-3 ids of the control elements for port AB:CD
+        // 5 global memory size 4 for port A:B:C:D
+        // 7-14 command for output of one motor (see commandPart)
         for (int i = 0; i < controlElements.size(); i++) {
             switch (controlElements.get(i).port[0]) {
                 case 1:
