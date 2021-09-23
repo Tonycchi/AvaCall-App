@@ -1,6 +1,9 @@
 package com.example.data;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Resources;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -9,6 +12,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.Constants;
+import com.example.rcvc.R;
 
 import java.util.concurrent.Executors;
 
@@ -20,6 +24,7 @@ import java.util.concurrent.Executors;
 public abstract class LocalDatabase extends RoomDatabase {
 
     private static LocalDatabase INSTANCE;
+    private static String pathStart = "android.resource://com.example/";
 
     public synchronized static LocalDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -43,7 +48,7 @@ public abstract class LocalDatabase extends RoomDatabase {
                                     new LocalPreference(URLSettings.VIDEOURLKEY, URLSettings.DEFAULT_TEST_JITSI),
                                     new LocalPreference(URLSettings.HOSTPORTKEY, URLSettings.DEFAULT_TEST_PORT)
                             );
-                            addDefaultEV3Models(tmp);
+                            addDefaultEV3Models(tmp, context);
                         });
                     }
                 })
@@ -51,14 +56,29 @@ public abstract class LocalDatabase extends RoomDatabase {
                 .build();
     }
 
-    public static void addDefaultEV3Models(LocalDatabase localDatabase){
+    public static void addDefaultEV3Models(LocalDatabase localDatabase, Context context){
+        String chain = getResourcePath(context, R.drawable.default_chain_model),
+                chainGripper = getResourcePath(context, R.drawable.default_chain_model_with_gripper),
+                gripper = getResourcePath(context, R.drawable.default_gripper_model),
+                elephant = getResourcePath(context, R.drawable.default_elephant_model);
+
         localDatabase.robotModelDAO().insertAll(
-                new RobotModel(0, "Kettenroboter", Constants.TYPE_EV3, "joystick:50;1,8", "Linker Kettenmotor: Port A und Rechter Kettenmotor: Port D", null),
-                new RobotModel(0, "Kettenroboter mit Greifarm", Constants.TYPE_EV3, "joystick:50;1,8|slider:30;2", "Linker Kettenmotor: Port A, Rechter Kettenmotor: Port D und Motor des Greifarms: Port B", null),
-                new RobotModel(0, "Greifarm", Constants.TYPE_EV3, "slider:30;4", "Motor des Greifarms: Port B", null),
-                new RobotModel(0, "Elephant", Constants.TYPE_EV3, "slider:100;1|slider:100;2|slider:100;8", "Motor der Beine: Port A, Motor des Rüssels Port B und Motor des Kopfes Port D", null)
+                new RobotModel(0, "Kettenroboter", Constants.TYPE_EV3, "joystick:50;1,8", "Linker Kettenmotor: Port A und Rechter Kettenmotor: Port D", chain),
+                new RobotModel(0, "Kettenroboter mit Greifarm", Constants.TYPE_EV3, "joystick:50;1,8|slider:30;2", "Linker Kettenmotor: Port A, Rechter Kettenmotor: Port D und Motor des Greifarms: Port B", chainGripper),
+                new RobotModel(0, "Greifarm", Constants.TYPE_EV3, "slider:30;4", "Motor des Greifarms: Port B", gripper),
+                new RobotModel(0, "Elephant", Constants.TYPE_EV3, "slider:100;1|slider:100;2|slider:100;8", "Motor der Beine: Port A, Motor des Rüssels Port B und Motor des Kopfes Port D", elephant)
 
         );
+    }
+
+    private static String getResourcePath(Context context, int resourceId) {
+        Resources resources = context.getResources();
+        return new Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(resourceId))
+                .appendPath(resources.getResourceTypeName(resourceId))
+                .appendPath(resources.getResourceEntryName(resourceId))
+                .build().toString();
     }
 
     public abstract ConnectedDeviceDAO connectedDeviceDAO();
