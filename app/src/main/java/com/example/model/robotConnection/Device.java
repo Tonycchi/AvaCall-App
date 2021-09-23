@@ -23,5 +23,4 @@ public class Device {
     public Parcelable getParcelable() {
         return device;
     }
-
 }

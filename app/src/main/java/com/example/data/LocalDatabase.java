@@ -38,9 +38,7 @@ public abstract class LocalDatabase extends RoomDatabase {
                                     new LocalPreference(URLSettings.VIDEOURLKEY, URLSettings.DEFAULT_TEST_JITSI),
                                     new LocalPreference(URLSettings.HOSTPORTKEY, URLSettings.DEFAULT_TEST_PORT)
                             );
-                            if (!Constants.USER_RELEASE) {
-                                addDefaultEV3Models(tmp);
-                            }
+                            addDefaultEV3Models(tmp);
                         });
                     }
                 })

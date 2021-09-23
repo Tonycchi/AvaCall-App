@@ -25,8 +25,8 @@ public interface RobotModelDAO {
     @Query("SELECT * FROM RobotModel WHERE id = :id")
     RobotModel getRobotModel(int id);
 
-    @Query("SELECT COUNT(id) FROM RobotModel")
-    int getNumberOfRobotModels();
+    @Query("SELECT COUNT(id) FROM RobotModel WHERE type = :type")
+    int getNumberOfRobotModels(String type);
 
     @Query(" UPDATE RobotModel SET picture = :uri WHERE id = :id")
     void setPictureOfRobotModel(int id, String uri);
