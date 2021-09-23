@@ -2,6 +2,11 @@ package com.example.model.robot;
 
 import com.example.data.RobotModel;
 
+/**
+ * A {@code Controller} sends commands to a connected robot. The implementation is specific to the
+ * type of robot. It uses {@code RobotModel} to determine mappings between UI inputs and sent
+ * commands.
+ */
 public interface Controller {
 
     /**

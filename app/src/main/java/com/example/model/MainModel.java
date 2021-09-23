@@ -27,6 +27,10 @@ import com.example.model.testRobot.TestRobotModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MVVM-model for the entire state of the app. Contains all other MVVM-models and methods for
+ * interacting with those.
+ */
 public class MainModel {
 
     private static final String TAG = "MainModel";

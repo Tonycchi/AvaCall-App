@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * {@link androidx.recyclerview.widget.RecyclerView.Adapter} for control elements.
+ */
 public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static final int

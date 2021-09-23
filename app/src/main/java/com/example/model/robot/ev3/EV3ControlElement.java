@@ -4,6 +4,10 @@ import android.util.Log;
 
 import java.util.Arrays;
 
+/**
+ * An {@code EV3ControlElement} converts control inputs into either integer values or subcommands for
+ * use in direct commands.
+ */
 public abstract class EV3ControlElement {
 
     final int maxPower;

@@ -31,6 +31,10 @@ import org.jitsi.meet.sdk.BroadcastIntentHelper;
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 
+/**
+ * {@link android.app.Fragment Fragment} for sharing a call link and starting a video call. URL
+ * settings are also accessed from here.
+ */
 public class VideoConnectionFragment extends HostedFragment {
 
     private static final String TAG = "VideoConnectionFragment";

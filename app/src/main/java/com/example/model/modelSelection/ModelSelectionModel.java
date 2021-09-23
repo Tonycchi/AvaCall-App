@@ -5,6 +5,10 @@ import com.example.data.RobotModelDAO;
 
 import java.util.List;
 
+/**
+ * {@code ModelSelectionModel} is the MVVM-model for model selection. It provides methods to
+ * initialize the model table and for model selection or deletion.
+ */
 public class ModelSelectionModel {
 
     private final RobotModelDAO robotModelDAO;

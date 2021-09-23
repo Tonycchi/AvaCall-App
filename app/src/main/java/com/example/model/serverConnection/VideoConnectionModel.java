@@ -15,6 +15,10 @@ import com.example.model.robot.ev3.EV3Controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+/**
+ * MVVM-model for sharing access to and starting a video call. Also needs a {@code Controller} to
+ * send to partner.
+ */
 public class VideoConnectionModel {
 
     private final String TAG = "VideoConnectionModel";

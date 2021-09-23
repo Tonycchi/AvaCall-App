@@ -1,11 +1,21 @@
 package com.example.data;
 
+/**
+ * {@code URLSettings} manages how data is saved via {@code LocalPreferenceDAO}. It prepares URLs
+ * for storage, contains important Strings and provides the subclass {@code StringTriple}.
+ */
 public class URLSettings {
 
+    /**
+     * Key value for {@code LocalPreference}.
+     */
     public final static String HOSTURLKEY = "host_url",
             VIDEOURLKEY = "jitsi_url",
-            HOSTPORTKEY = "host_port",
-            HTTPS = "https://",
+            HOSTPORTKEY = "host_port";
+    /**
+     *
+     */
+    public final static String HTTPS = "https://",
             WSS = "wss://",
             DEFAULT_TEST_HOST = "avatar.mintclub.org",
             DEFAULT_TEST_JITSI = "meet.jit.si",
@@ -67,6 +77,9 @@ public class URLSettings {
         return trimmedURL;
     }
 
+    /**
+     * Contains three strings, usually URLs and a transport layer port number.
+     */
     public static class StringTriple {
         private final String hostURL, videoURL, port;
 

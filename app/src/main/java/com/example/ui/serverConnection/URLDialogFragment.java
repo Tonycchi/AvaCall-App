@@ -20,6 +20,9 @@ import com.example.rcvc.R;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Dialog for URL settings.
+ */
 public class URLDialogFragment extends DialogFragment {
 
     public static final String TAG = "URLDialogFragment";

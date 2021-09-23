@@ -5,6 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * {@code LocalPreference} is meant to replace {@link android.content.SharedPreferences}. Currently
+ * for URL settings.
+ */
 @Entity(tableName = "LocalPreference")
 public class LocalPreference {
 

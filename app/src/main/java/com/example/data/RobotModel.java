@@ -4,6 +4,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * {@code RobotModel} represents an entry in the robot model database. A robot model determine
+ * which control elements control which motors and is associated with a description and an image.
+ */
 @Entity
 public class RobotModel {
 

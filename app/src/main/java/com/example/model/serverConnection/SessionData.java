@@ -2,6 +2,10 @@ package com.example.model.serverConnection;
 
 import android.util.Log;
 
+/**
+ * Data associated with a video call session.
+ * @param <OptionType> Type for video call options.
+ */
 public abstract class SessionData<OptionType> {
 
     private static final String TAG = "SessionData";

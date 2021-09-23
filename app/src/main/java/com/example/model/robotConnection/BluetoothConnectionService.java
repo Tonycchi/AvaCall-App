@@ -21,9 +21,9 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 /**
- * Created by User on 12/21/2016.
+ * {@code BluetoothConnectionService} manages the establishment, maintenance and cancellation of a
+ * bluetooth connection.
  */
-
 @SuppressLint("LogNotTimber")
 public class BluetoothConnectionService implements ConnectionService {
 

@@ -5,6 +5,9 @@ import static com.example.Constants.USER_RELEASE;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of {@code Handshake} for a LEGO MINDSTORMS EV3.
+ */
 public class EV3BluetoothHandshake implements Handshake<byte[]> {
     @Override
     public List<byte[]> getSyn() {

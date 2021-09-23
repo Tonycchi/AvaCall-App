@@ -4,6 +4,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 
+/**
+ * Models selection and opening of connections to devices. Implementation dependent of connection
+ * medium/protocol.
+ */
 public abstract class RobotConnectionModel {
 
     // All paired devices

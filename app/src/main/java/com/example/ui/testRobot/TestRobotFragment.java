@@ -1,4 +1,5 @@
 package com.example.ui.testRobot;
+
 import static com.example.Constants.USER_RELEASE;
 
 import android.annotation.SuppressLint;
@@ -36,6 +37,10 @@ import java.util.List;
 
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
+/**
+ * {@link android.app.Fragment Fragment} for controlling the robot from the app. Holds control
+ * elements (joysticks, sliders, buttons) and shows stalls.
+ */
 public class TestRobotFragment extends HostedFragment {
 
     private static final String TAG = "TestRobotFragment";
@@ -51,7 +56,7 @@ public class TestRobotFragment extends HostedFragment {
     private boolean stallDetected;
 
 
-    // Observer to check if amount of paired Devices has been changed
+    // Observer checks the changed motorStrengths for the textview
     public final Observer<String> motorStrengthObserver = new Observer<String>() {
         @Override
         public void onChanged(@Nullable final String newStrength) {
@@ -60,6 +65,7 @@ public class TestRobotFragment extends HostedFragment {
         }
     };
 
+    // Observer checks if there is a stall signal
     public final Observer<Boolean> stallObserver = new Observer<Boolean>() {
         @Override
         public void onChanged(Boolean booleans) {
@@ -67,15 +73,22 @@ public class TestRobotFragment extends HostedFragment {
         }
     };
 
-    public TestRobotFragment(){super(R.layout.test_robot);}
+    public TestRobotFragment() { super(R.layout.test_robot); }
 
-    public void showBorder(){
+    /**
+     * show red border when there is a stall
+     */
+    public void showBorder() {
         if(!borderVisible) {
             borderVisible = !borderVisible;
             thisView.setBackgroundResource(R.drawable.faded_border);
         }
     }
-    public void hideBorder(){
+
+    /**
+     * hide border if there is no stall
+     */
+    public void hideBorder() {
         if(borderVisible) {
             borderVisible = !borderVisible;
             thisView.setBackground(null);
@@ -111,14 +124,15 @@ public class TestRobotFragment extends HostedFragment {
                 : view.findViewById(R.id.test_robot_fragment_landscape);
 
         String t = viewModel.getSelectedModelElements(); //joystick|button|slider|button
-        String[] order = rankOrder(t);
+        String[] order = rankOrder(t); // sort the elements
         stallDetected = false;
         Log.d(TAG, t);
-        createControlElements(order, constraintLayout);
+        createControlElements(order, constraintLayout); // create the elements into the constraint layout
 
         if(!USER_RELEASE) {
+            // this is an extra thread which updates the showed motor strengths every 50ms
             handler = new Handler();
-            handler.post(getMotorOutput);
+            handler.post(getMotorOutput); // start the runnable
             motorStrengthText = view.findViewById(R.id.text_motor_strength);
             MutableLiveData<String> motorStrength = viewModel.getMotorStrength();
             motorStrength.observe(getViewLifecycleOwner(), motorStrengthObserver);
@@ -135,6 +149,7 @@ public class TestRobotFragment extends HostedFragment {
         getActivity().setTitle(R.string.title_test_robot);
     }
 
+    // runnable for the continuous motor strengths to show
     Runnable getMotorOutput = new Runnable() {
         @Override
         public void run() {
@@ -144,9 +159,12 @@ public class TestRobotFragment extends HostedFragment {
         }
     };
 
+    /**
+     * go to the next fragment
+     */
     private void onClickYes(View v) {
         Log.d(TAG, "YES BABY");
-        if (!USER_RELEASE) handler.removeCallbacks(getMotorOutput);
+        if (!USER_RELEASE) handler.removeCallbacks(getMotorOutput); // stop the runnable
         FragmentManager fragmentManager = getParentFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container_view, VideoConnectionFragment.class, null, getResources().getString(R.string.fragment_tag_hosted))
@@ -154,9 +172,13 @@ public class TestRobotFragment extends HostedFragment {
                 .addToBackStack(null)
                 .commit();
     }
+
+    /**
+     * go the previous fragment
+     */
     private void onClickNo(View v) {
         Log.d(TAG, "NO BABY");
-        if (!USER_RELEASE) handler.removeCallbacks(getMotorOutput);
+        if (!USER_RELEASE) handler.removeCallbacks(getMotorOutput); // stop the runnable
         FragmentManager fragmentManager = getParentFragmentManager();
         if(cameFromModelSelection) {    //if cameFromModelSelection: pop to modelselection and then switch to editcontrols
             fragmentManager.popBackStack();
@@ -170,6 +192,7 @@ public class TestRobotFragment extends HostedFragment {
         }
     }
 
+    // TODO: WAS MACHEN WIR HIER?!?!?!
     @Override
     public void robotConnectionStatusChanged(Integer newConnectionStatus) {
         ((HostActivity)getActivity()).showToast("Irgendwas mit Bluetooth hat sich geändert - noch nicht weiter geregelt, was jetzt passiert!");
@@ -267,6 +290,7 @@ public class TestRobotFragment extends HostedFragment {
                      */
                     // set a onMoveListener for the functionality when the joystick is used
                     joystick.setOnMoveListener((angle, strength) -> {
+                        // use a thread, because otherwise the joystick is lagging because of the stall detection
                         Thread joystickInput = new Thread() {
                             public void run() {
                                 viewModel.sendControlInput(id, angle, strength);
@@ -322,7 +346,6 @@ public class TestRobotFragment extends HostedFragment {
                     slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
                         }
 
                         /**
@@ -344,6 +367,7 @@ public class TestRobotFragment extends HostedFragment {
                          */
                         @Override
                         public void onStopTrackingTouch(SeekBar seekBar) {
+                            // use a thread, because otherwise the slider is lagging because of the stall detection
                             Thread sliderProgressReset = new Thread() {
                                 public void run() {
                                     viewModel.sendControlInput(id, 50);
@@ -360,9 +384,11 @@ public class TestRobotFragment extends HostedFragment {
                         }
                     });
 
+                    // set a onTouchListener for the functionality when the slider is moved
                     slider.setOnTouchListener((v, event) -> {
                         if (event.getAction() == MotionEvent.ACTION_MOVE) {
                             Log.d(TAG, "MOVE MOVE MOVE");
+                            // use a thread, because otherwise the slider is lagging because of the stall detection
                             Thread sliderInput = new Thread() {
                                 public void run() {
                                         viewModel.sendControlInput(id, slider.getProgress());
@@ -371,10 +397,12 @@ public class TestRobotFragment extends HostedFragment {
                             };
                             sliderInput.start();
                             if(stallDetected){
+                                // show a border when a stall is detected
                                 showBorder();
                                 slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.border));
                                 slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                             } else {
+                                // hide the border when no stall is detected
                                 hideBorder();
                                 slider.getProgressDrawable().setTint(ContextCompat.getColor(getContext(), R.color.joystick_border));
                                 slider.getThumb().setTint(ContextCompat.getColor(getContext(), R.color.border));
@@ -417,6 +445,7 @@ public class TestRobotFragment extends HostedFragment {
                             case MotionEvent.ACTION_DOWN:
                                 viewModel.setInputFromWebClient(false);
                                 viewModel.setLastUsedId(id);
+                                // use a thread, because otherwise the button is lagging because of the stall detection
                                 Thread buttonInput = new Thread(){
                                     public void run(){
                                         viewModel.sendControlInput(id, 1);

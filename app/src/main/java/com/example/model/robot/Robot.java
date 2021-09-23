@@ -5,6 +5,10 @@ import com.example.model.robotConnection.ConnectionService;
 
 import java.util.List;
 
+/**
+ * A {@code Robot} represents a physical robot model, i.e. a LEGO MINDSTORMS EV3 or LEGO MINDSTORMS
+ * NXT. It provides the necessary {@code Controller} and a method for saving new models.
+ */
 public interface Robot {
 
     /**
