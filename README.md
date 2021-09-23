@@ -2,11 +2,12 @@
 
 ## Was brauche ich um die AvaCall-App benutzen zu können?
 
-Um die App verwenden zu können benötigen Sie lediglich einen Lego Mindstorms EV3 und ein Mobilgerät mit Android 6.0 oder höher.
+- [LEGO MINDSTORMS EV3](https://www.lego.com/en-de/product/lego-mindstorms-ev3-31313)
+- Android 6.0 oder höher
 
 ## Was kann die App?
 
-Per Bluetooth lässt sich die App mit einem Lego Mindstorms EV3 verbinden. Nach Erstellung oder Auswahl eines Robotermodells, lässt sich die Steuerung des Roboters in der App selbst testen. Funktioniert die Steuerung wie gewollt, kann man einen Partner einladen indem man eine Kennnummer bzw. einen Link für ein Video-Meeting auf unserer Webseite teilt. Sobald die Kennnummer bzw. der Link erfolgreich verschickt wurde, ist der Beitritt zum Meeting direkt über die App möglich. 
+Per Bluetooth lässt sich die App mit einem EV3 verbinden. Nach Erstellung oder Auswahl eines Robotermodells, lässt sich die Steuerung des Roboters in der App selbst testen. Funktioniert die Steuerung wie gewollt, kann man einen Partner einladen indem man eine Kennnummer bzw. einen Link für ein Video-Meeting auf unserer Webseite teilt. Sobald die Kennnummer bzw. der Link erfolgreich verschickt wurde, ist der Beitritt zum Meeting direkt über die App möglich. 
 
 ## Wie installiere ich die App?
 
