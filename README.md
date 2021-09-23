@@ -11,6 +11,7 @@ Per Bluetooth lässt sich die App mit einem Lego Mindstorms EV3 verbinden. Nach 
 ## Wie installiere ich die App?
 
 1. Laden Sie die Android App über diesen Link auf ihr Smartphone oder Tablet.
+ 
  Download | Größe | Commit
 --- | --- | --- 
 [AvaCall_1.0.apk](https://drive.google.com/file/d/1jUQPSIBlmDARVwNUM2XojSsnelfVFeXX/view?usp=sharing) | 111,6 MB | 3040444
