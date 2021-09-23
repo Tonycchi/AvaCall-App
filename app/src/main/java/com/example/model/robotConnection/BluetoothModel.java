@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * {@code BluetoothModel} is the MVVM-model for selecting and starting a bluetooth connection.
+ */
 public class BluetoothModel extends RobotConnectionModel {
 
     private static final String TAG = "BluetoothModel";

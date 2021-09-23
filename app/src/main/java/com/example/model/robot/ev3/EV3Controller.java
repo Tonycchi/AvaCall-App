@@ -9,6 +9,9 @@ import com.example.model.robotConnection.ConnectionService;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * An implementation of {@code Controller} for a LEGO MINDSTORMS EV3.
+ */
 public class EV3Controller implements Controller {
 
     private final String TAG = "EV3Controller";
@@ -261,7 +264,6 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     * TODO
      * @param input ports
      * @return command
      */

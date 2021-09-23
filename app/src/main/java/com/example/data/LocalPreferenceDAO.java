@@ -5,6 +5,9 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+/**
+ * Data access to the {@code LocalPreference} database table.
+ */
 @Dao
 public interface LocalPreferenceDAO {
 

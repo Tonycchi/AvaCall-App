@@ -12,6 +12,9 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Manages a WebSocket connection to an AvaCall server. Opens a connections and sends/receives data.
+ */
 public class WebClient extends WebSocketClient {
 
     private final String TAG = "WebClient";

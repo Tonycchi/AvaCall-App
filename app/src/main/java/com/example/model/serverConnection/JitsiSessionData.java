@@ -7,6 +7,9 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Represents options for a Jitsi video call session.
+ */
 public class JitsiSessionData extends SessionData<JitsiMeetConferenceOptions> {
 
     private static final String TAG = "JitsiSessionData";

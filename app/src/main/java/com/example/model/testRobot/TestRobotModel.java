@@ -7,6 +7,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.model.MainModel;
 import com.example.model.robot.ev3.EV3Controller;
 
+/**
+ * MVVM-model for steering a robot from the app. Mostly reacts to replies from the robot during
+ * stalls.
+ */
 public class TestRobotModel {
     private static final String TAG = "TestRobotModel";
     private final MainModel mainModel;

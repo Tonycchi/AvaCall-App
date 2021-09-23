@@ -1,4 +1,5 @@
 package com.example.ui.testRobot;
+
 import static com.example.Constants.USER_RELEASE;
 
 import android.annotation.SuppressLint;
@@ -36,6 +37,10 @@ import java.util.List;
 
 import io.github.controlwear.virtual.joystick.android.JoystickView;
 
+/**
+ * {@link android.app.Fragment Fragment} for controlling the robot from the app. Holds control
+ * elements (joysticks, sliders, buttons) and shows stalls.
+ */
 public class TestRobotFragment extends HostedFragment {
 
     private static final String TAG = "TestRobotFragment";

@@ -7,6 +7,9 @@ import androidx.room.Query;
 
 import java.util.List;
 
+/**
+ * Data access to the {@code RobotModel} database table.
+ */
 @Dao
 public interface RobotModelDAO {
 

@@ -8,8 +8,12 @@ import androidx.room.Query;
 
 import java.util.List;
 
+/**
+ * Data access to the {@code ConnectedDevice} database table.
+ */
 @Dao
 public interface ConnectedDeviceDAO {
+
     @Query("SELECT address FROM ConnectedDevice ORDER BY lastConnected DESC")
     List<String> getSortedAddresses();
 

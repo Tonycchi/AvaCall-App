@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * {@code EV3} implements {@code Robot} functionality specific to the LEGO MINDSTORM EV3.
+ */
 public class EV3 implements Robot {
 
     private final RobotModelDAO db;

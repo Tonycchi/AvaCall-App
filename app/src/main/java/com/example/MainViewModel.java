@@ -14,6 +14,10 @@ import com.example.model.robotConnection.Device;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * View model in MVVM. As an extension of an android native class it separates model data from the
+ * fragments' and activity's lifecycles.
+ */
 public class MainViewModel extends AndroidViewModel {
 
     private final MainModel model;

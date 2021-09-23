@@ -46,6 +46,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * {@link android.app.Fragment Fragment} for selecting a model.
+ */
 @SuppressLint("LogNotTimber")
 public class ModelSelectionFragment extends HostedFragment {
 

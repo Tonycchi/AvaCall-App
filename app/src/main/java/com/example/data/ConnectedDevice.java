@@ -5,7 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-//is a Device that was previously connected with this app
+/**
+ * A {@code ConnectedDevice} object represents a database entry for a bluetooth device that was
+ * previously connected to this app.
+ */
 @Entity(tableName = "ConnectedDevice")
 public class ConnectedDevice {
 

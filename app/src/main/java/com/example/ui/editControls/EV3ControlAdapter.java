@@ -18,6 +18,9 @@ import com.example.ui.HostActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Extends {@code ControlAdapter} with EV3 specific functionality.
+ */
 public class EV3ControlAdapter extends ControlAdapter {
 
     private final String TAG = "EV3ControlAdapter";

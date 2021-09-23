@@ -5,6 +5,9 @@ import android.content.res.Configuration;
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 
+/**
+ * Defines functionality that all Fragments in this app need.
+ */
 public abstract class HostedFragment extends Fragment {
 
     public HostedFragment(@LayoutRes int contentLayoutId){

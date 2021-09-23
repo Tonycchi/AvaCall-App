@@ -12,8 +12,13 @@ import com.example.Constants;
 
 import java.util.concurrent.Executors;
 
+/**
+ * {@code LocalDatabase} is our implementation of {@link androidx.room.RoomDatabase}. It provides DAOs and pre-populates the
+ * database.
+ */
 @Database(entities = {ConnectedDevice.class, LocalPreference.class, RobotModel.class}, version = 1)
 public abstract class LocalDatabase extends RoomDatabase {
+
     private static LocalDatabase INSTANCE;
 
     public synchronized static LocalDatabase getInstance(Context context) {

@@ -28,6 +28,9 @@ import com.example.ui.HostActivity;
 import com.example.ui.HostedFragment;
 import com.example.ui.testRobot.TestRobotFragment;
 
+/**
+ * {@link android.app.Fragment Fragment} for editing models.
+ */
 public class EditControlsFragment extends HostedFragment {
 
     private final String TAG = "EditControlsFragment";

@@ -2,6 +2,10 @@ package com.example.model.robotConnection;
 
 import android.os.Parcelable;
 
+/**
+ * {@code Device} represents a device which one can connect with. It contains the necessary data for
+ * opening a connection and to display the device in a list.
+ */
 public class Device {
 
     private Parcelable device;

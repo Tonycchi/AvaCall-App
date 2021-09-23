@@ -19,6 +19,10 @@ import com.example.rcvc.R;
 
 import java.util.ArrayList;
 
+/**
+ * {@link android.app.Fragment Fragment} for choosing a bluetooth connection or pairing with new
+ * bluetooth devices.
+ */
 public class BluetoothFragment extends RobotConnectionFragment {
 
     private static final String TAG = "BluetoothFragment";

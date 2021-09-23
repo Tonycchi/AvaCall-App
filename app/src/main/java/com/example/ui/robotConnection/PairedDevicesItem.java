@@ -13,6 +13,10 @@ import com.example.rcvc.R;
 
 import java.util.ArrayList;
 
+/**
+ * {@link androidx.recyclerview.widget.RecyclerView.Adapter} for paired devices in
+ * {@code BluetoothFragment}.
+ */
 public class PairedDevicesItem extends RecyclerView.Adapter<PairedDevicesItem.ViewHolder> {
 
     private final MutableLiveData<ArrayList<Device>> devices;

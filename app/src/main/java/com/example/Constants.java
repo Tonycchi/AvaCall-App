@@ -2,7 +2,7 @@ package com.example;
 
 public class Constants {
 
-    public static final boolean USER_RELEASE = false;
+    public static final boolean USER_RELEASE = true;
     public static final int
             JOYSTICK = 1,
             SLIDER = 2,

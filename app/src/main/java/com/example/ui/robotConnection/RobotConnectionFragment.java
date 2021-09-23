@@ -25,6 +25,9 @@ import com.example.ui.modelSelection.ModelSelectionFragment;
 
 import java.util.ArrayList;
 
+/**
+ * {@link android.app.Fragment Fragment} for choosing a device to connect to.
+ */
 public abstract class RobotConnectionFragment extends HostedFragment {
 
     private static final String TAG = "RobotConnectionFragment";

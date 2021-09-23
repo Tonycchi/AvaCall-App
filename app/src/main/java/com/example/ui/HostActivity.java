@@ -16,6 +16,9 @@ import com.facebook.react.modules.core.PermissionListener;
 
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
 
+/**
+ * Hosts all fragments. See {@link android.app.Activity Activity}.
+ */
 public class HostActivity extends AppCompatActivity implements JitsiMeetActivityInterface {
 
 

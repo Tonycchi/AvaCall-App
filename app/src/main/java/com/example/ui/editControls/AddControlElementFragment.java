@@ -17,6 +17,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.rcvc.R;
 
+/**
+ * Dialog for adding a control element on the {@code EditControlsFragment}.
+ */
 public class AddControlElementFragment extends DialogFragment {
 
     public static final String TAG = "AddControlElementFragment";
