@@ -12,6 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * For the AvaCall Project we changed SELECTOR_WHEEL_ITEM_COUNT in Line 183 from 3 to 5.
  */
 
 package net.simonvt.numberpicker;

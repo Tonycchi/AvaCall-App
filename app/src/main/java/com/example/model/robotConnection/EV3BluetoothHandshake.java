@@ -14,11 +14,11 @@ public class EV3BluetoothHandshake implements Handshake<byte[]> {
         List<byte[]> directCommands = new ArrayList<>();
 
         byte[] noOp = new byte[8];
-        noOp[0] = 0x06;                     //length
+        noOp[0] = 0x06;                    //length
         noOp[1] = 0x00;                    //length
         noOp[2] = 0x01;                    //first message
         noOp[3] = 0x00;                    //first message
-        noOp[4] = 0x00;                    // Direct command, reply required
+        noOp[4] = 0x00;                    //Direct command, reply required
         noOp[5] = 0x00;                    //global variables
         noOp[6] = 0x00;                    //global and local variables
         noOp[7] = 0x01;                    //opcode
