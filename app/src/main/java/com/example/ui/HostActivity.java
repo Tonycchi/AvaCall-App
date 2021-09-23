@@ -25,7 +25,7 @@ public class HostActivity extends AppCompatActivity implements JitsiMeetActivity
     // Observer to check if bluetooth connection status
     public final Observer<Integer> connectionStatusObserver = newConnectionStatus -> {
         //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost
-        HostedFragment currentFragment = (HostedFragment)getSupportFragmentManager().findFragmentByTag("HOSTEDFRAGMENT");
+        HostedFragment currentFragment = (HostedFragment)getSupportFragmentManager().findFragmentByTag(getResources().getString(R.string.fragment_tag_hosted));
         currentFragment.robotConnectionStatusChanged(newConnectionStatus);
     };
 
