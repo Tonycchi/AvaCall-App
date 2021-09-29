@@ -17,12 +17,14 @@ public class TestRobotModel {
     private final int[] lastExpected;
     MutableLiveData<String> motorStrength;
     MutableLiveData<Boolean> stall;
+    private boolean previousStall;
 
     public TestRobotModel(MainModel mainModel) {
         motorStrength = new MutableLiveData<>();
         this.mainModel = mainModel;
         stall = new MutableLiveData<>();
         this.lastExpected = new int[2];
+        previousStall = false;
     }
 
     public MutableLiveData<String> getMotorStrength() {
@@ -80,8 +82,10 @@ public class TestRobotModel {
                     detectStall(expectedStrength2, actualStrength2);
         }
         if (stallDetected && controller.getInputFromWebClient()) {
+            previousStall = true;
             mainModel.sendStallDetected(controller.getControlElements().get(lastUsed).getType(), lastUsed);
-        } else if (!stallDetected && controller.getInputFromWebClient()) {
+        } else if (!stallDetected && controller.getInputFromWebClient() && previousStall) {
+            previousStall = false;
             mainModel.sendStallEnded(controller.getControlElements().get(lastUsed).getType(), lastUsed);
         }
         stall.postValue(stallDetected);
