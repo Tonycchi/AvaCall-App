@@ -137,10 +137,12 @@ public class EditControlsFragment extends HostedFragment {
     private void onClickButtonEditModelNext(View v) {
         // Log.d(TAG, "" + (robotModel != null) +" "+ (controlAdapter != null) +" "+ (controlAdapter.isReadyToSave()) +" "+ (editName.getText().length() > 0));
 
-        if (controlAdapter != null && controlAdapter.isReadyToSave() && editName.getText().length() > 0) {
+        if (controlAdapter != null && controlAdapter.isReadyToSave() // test that controlAdapter is in a savable state
+                && editName.getText().length() > 0) // and that the model has a name
+        {
             int id;
-            if (selectedRobotModel != null) id = selectedRobotModel.id;
-            else id = 0;
+            if (selectedRobotModel != null) id = selectedRobotModel.id; // existing model
+            else id = 0; // new model
 
             viewModel.saveModel(id, editName.getText().toString(), editDescription.getText().toString(), viewModel.getCurrentRobotType(), controlAdapter.getValues());
 

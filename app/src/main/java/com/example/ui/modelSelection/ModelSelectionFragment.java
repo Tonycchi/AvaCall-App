@@ -63,6 +63,7 @@ public class ModelSelectionFragment extends HostedFragment {
     private Button useModel, editModel;
     private Context context;
     private String currentPhotoPath;
+    private AlertDialog.Builder clickPictureDialog;
 
     public ModelSelectionFragment() {
         super(R.layout.model_selection);
@@ -103,36 +104,41 @@ public class ModelSelectionFragment extends HostedFragment {
         modelPicture = view.findViewById(R.id.model_picture);
         modelPicture.setOnClickListener(v -> loadNewImage());
 
-        setModelDescription();
+        updateModelDescription();
         updateModelPicture();
+
+        // create dialog that shows after touching a model picture
+        String takePicture = getResources().getString(R.string.take_picture);
+        String selectPicture = getResources().getString(R.string.select_picture);
+        String deletePicture = getResources().getString(R.string.delete_picture);
+        final CharSequence[] optionsMenu = {takePicture, selectPicture, deletePicture};
+        clickPictureDialog = new AlertDialog.Builder(context);
+        clickPictureDialog.setItems(optionsMenu, (dialog, which) -> {
+            if (optionsMenu[which].equals(takePicture)) {
+                takePicture();
+            } else if (optionsMenu[which].equals(selectPicture)) {
+                selectPicture();
+            } else if (optionsMenu[which].equals(deletePicture)) {
+                deletePicture();
+            } else {
+                Log.e(TAG, "This can't happen - I hope lel");
+            }
+        });
 
         getActivity().setTitle(R.string.title_model_selection);
     }
 
     private void loadNewImage() {
         if (modelsExist) {
-            String takePicture = getResources().getString(R.string.take_picture);
-            String selectPicture = getResources().getString(R.string.select_picture);
-            String deletePicture = getResources().getString(R.string.delete_picture);
-            final CharSequence[] optionsMenu = {takePicture, selectPicture, deletePicture};
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setItems(optionsMenu, (dialog, which) -> {
-                if (optionsMenu[which].equals(takePicture)) {
-                    takePicture();
-                } else if (optionsMenu[which].equals(selectPicture)) {
-                    selectPicture();
-                } else if (optionsMenu[which].equals(deletePicture)) {
-                    deletePicture();
-                } else {
-                    Log.e(TAG, "This can't happen - I hope lel");
-                }
-            });
-            builder.show();
+            clickPictureDialog.show();
         } else {
             ((HostActivity) getActivity()).showToast(getResources().getString(R.string.no_model_exists));
         }
     }
 
+    /**
+     * Take a photo.
+     */
     private void takePicture() {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -167,13 +173,20 @@ public class ModelSelectionFragment extends HostedFragment {
         }
     }
 
+    /**
+     * Select a picture from gallery
+     */
     private void selectPicture() {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(pickPhoto, SELECT_PICTURE_REQUEST_CODE);
     }
 
+    /**
+     * Delete current model picture
+     */
     private void deletePicture() {
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
+        // delete from app storage:
         File img = new File(robotModel.picture);
         if (!img.delete())
             try {
@@ -182,7 +195,7 @@ public class ModelSelectionFragment extends HostedFragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+        // and update ui state
         viewModel.setImageOfSelectedModel(null);
         updateModelPicture();
     }
@@ -269,6 +282,11 @@ public class ModelSelectionFragment extends HostedFragment {
         return Uri.fromFile(imgPath);
     }
 
+    /**
+     *
+     * @return file pathname for a new photo
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.GERMANY).format(new Date());
         String imageFileName = "ModelPicture_" + timeStamp;
@@ -279,6 +297,10 @@ public class ModelSelectionFragment extends HostedFragment {
         return imageFile;
     }
 
+    /**
+     *
+     * @return directory pathname for images
+     */
     private File getImageDir() {
         //File imageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File imageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -290,6 +312,9 @@ public class ModelSelectionFragment extends HostedFragment {
         return imageDir;
     }
 
+    /**
+     * update image in UI
+     */
     private void updateModelPicture() {
         RobotModel robotModel = viewModel.getRobotModel(modelPicker.getValue());
         if (robotModel == null || robotModel.picture == null) {
@@ -305,6 +330,10 @@ public class ModelSelectionFragment extends HostedFragment {
         inflater.inflate(R.menu.add_model, menu);
     }
 
+    /**
+     * Synchronizes number picker with app data. Supports case where no models exist and also
+     * updates {@code editModel} button text accordingly
+     */
     private void refreshNumberPicker() {
         String[] allRobotNames = viewModel.getAllRobotNames();
         int maxVal = allRobotNames.length - 1;
@@ -316,16 +345,14 @@ public class ModelSelectionFragment extends HostedFragment {
         }
         modelPicker.setMaxValue(maxVal);
         modelPicker.setMinValue(0);
-        if (modelsExist)
+        if (modelsExist) {
             modelPicker.setDisplayedValues(allRobotNames);
-        else
-            modelPicker.setDisplayedValues(new String[]{"Keine Modelle vorhanden."});
-        modelPicker.setValue(viewModel.getSelectedModelPosition());
-
-        if (modelsExist)
             editModel.setText(R.string.edit_model);
-        else
+        } else {
+            modelPicker.setDisplayedValues(new String[]{"Keine Modelle vorhanden."});
             editModel.setText(R.string.create_model);
+        }
+        modelPicker.setValue(viewModel.getSelectedModelPosition());
 
         useModel.setEnabled(modelsExist);
     }
@@ -334,6 +361,7 @@ public class ModelSelectionFragment extends HostedFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_add) {
+            // add new model
             viewModel.modelSelected(-1);
 
             FragmentManager fragmentManager = getParentFragmentManager();
@@ -344,6 +372,7 @@ public class ModelSelectionFragment extends HostedFragment {
                     .commit();
             return true;
         } else if (id == R.id.menu_delete) {
+            // delete selected model (asks for confirmation first)
             if (modelsExist) {
                 DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
                     switch (which) {
@@ -353,7 +382,7 @@ public class ModelSelectionFragment extends HostedFragment {
                             viewModel.deleteModelByPosition(v);
 
                             refreshNumberPicker();
-                            setModelDescription();
+                            updateModelDescription();
                             updateModelPicture();
                         case DialogInterface.BUTTON_NEGATIVE:
                             dialog.dismiss();
@@ -383,11 +412,15 @@ public class ModelSelectionFragment extends HostedFragment {
 
     private void onSelectedModelChanged(NumberPicker modelPicker, int oldVal, int newVal) {
         viewModel.setSelectedModelPosition(modelPicker.getValue());
-        setModelDescription();
+        updateModelDescription();
         updateModelPicture();
     }
 
-    private void setModelDescription() {
+    /**
+     * Updates {@code modelDescription} text field according to selected model.
+     * Empty if no models exist.
+     */
+    private void updateModelDescription() {
         RobotModel robotModel;
         String descriptionText;
         if (modelsExist) {

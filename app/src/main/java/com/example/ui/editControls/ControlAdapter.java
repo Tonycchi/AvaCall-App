@@ -35,9 +35,15 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
     protected final HostActivity hostActivity; // for context
     protected final List<List<Integer>> elementValues; // represents UI state
     protected final int id;
-    protected int itemCount = 1; // number of UI items, not equal to number control elements
+    /**
+     * number of UI items, not equal to number control elements
+     */
+    protected int itemCount = 1;
     protected int maxNumberElements = 4;
-    protected int fieldsFilled = 0, numberOfFields = 0; // fieldsFilled==numberOfFields ==> all required data entered
+    /**
+     * If {@code fieldsFilled == numberOfFields}, then all necessary data has been entered.
+     */
+    protected int fieldsFilled = 0, numberOfFields = 0;
 
     public ControlAdapter(HostActivity hostActivity, RobotModel model) {
         this.hostActivity = hostActivity;
@@ -52,12 +58,22 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     abstract List<List<Integer>> getValues();
 
+    /**
+     * Subtracts {@code count} from {@code fieldsFilled}. Ensures {@code fieldsFilled >= 0}.
+     * @param count Number of removed (made empty) fields (text fields etc)
+     */
     void removeFilledFields(int count) {
         fieldsFilled -= count;
         if (fieldsFilled < 0)
             fieldsFilled = 0;
     }
 
+    /**
+     * Sets a value in {@code elementValues}.
+     * @param position position in {@code elementValues}
+     * @param index position in {@code elementValues.get(position)}
+     * @param value new value of {@code elementValues.get(position).get(index)}
+     */
     void setElementValue(int position, int index, int value) {
         Log.d(TAG, "addElVal " + value);
         if (elementValues.get(position).get(index) == null) {
@@ -67,6 +83,11 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         elementValues.get(position).set(index, value);
     }
 
+    /**
+     * Sets {@code elementValues.get(position).get(index)} to {@code null}
+     * @param position position in {@code elementValues}
+     * @param index position in {@code elementValues.get(position)}
+     */
     void removeElementValue(int position, int index) {
         if (elementValues.get(position).get(index) != null) fieldsFilled--;
         elementValues.get(position).set(index, null);
@@ -81,6 +102,7 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         int viewType = viewTypeAndPosition & 0x0000ffff;
         int position = (viewTypeAndPosition & 0xffff0000) >> 16;
 
+        // viewHolders for new control elements have to be returned here
         switch (viewType) {
             case ADD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_control_button, parent, false);
@@ -219,6 +241,9 @@ public abstract class ControlAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
+    /**
+     * All {@code ViewHolder}s for control element options extend {@code DeletableHolder}
+     */
     abstract class DeletableHolder extends RecyclerView.ViewHolder {
 
         public DeletableHolder(@NonNull View itemView) {
