@@ -10,16 +10,21 @@ import java.util.Arrays;
  */
 public abstract class EV3ControlElement {
 
-    final int maxPower;
     public final int[] port;
+    final int maxPower;
 
+    /**
+     * Constructor for an EV3ControlElement
+     *
+     * @param ports    EV3 motor ports, e.g. 1, 2, 4 or 8 for port A, B, C and D respectively
+     * @param maxPower maximum motor power, capped to [0, 100]
+     */
     protected EV3ControlElement(int[] ports, int maxPower) {
-        this.maxPower = maxPower;
+        this.maxPower = Math.max(Math.min(maxPower, 100), 0); // limit between 0 and 100
         this.port = ports;
     }
 
     /**
-     *
      * @param value an int
      * @return int as byte array
      */
@@ -32,7 +37,6 @@ public abstract class EV3ControlElement {
     }
 
     /**
-     *
      * @param value param value
      * @return parameter for direct command as byte array
      */
@@ -45,7 +49,7 @@ public abstract class EV3ControlElement {
             };
         } else {
             r = new byte[]{
-                    (byte) 0x83, t[0], t[1], t[2], t[3]
+                    (byte) 0x83, t[0], t[1], t[2], t[3] // TODO DO THESE HAVE TO BE LITTLE ENDIAN OR BIG???
             };
         }
         return r;
@@ -58,18 +62,19 @@ public abstract class EV3ControlElement {
     protected abstract byte[] getMotorPower(int... input);
 
     /**
-     *
      * @param input controlling input
      * @return part of direct command
      */
     protected abstract byte[] getCommand(int... input);
 
+    /**
+     * @return type of control element, e.g. {@code "joystick"}, {@code "slider"} or {@code "button"}
+     */
     public abstract String getType();
 
     public abstract int[] getPort();
 
     /**
-     *
      * @param x value in [0,1], percentage of maxPower
      * @return scaled power
      */
@@ -80,9 +85,10 @@ public abstract class EV3ControlElement {
     protected static class Joystick extends EV3ControlElement {
 
         /**
+         * Constructor for a joystick {@code EV3ControlElement}
          *
-         * @param ports 2 ports
-         * @param maxPower
+         * @param ports    EV3 motor ports, e.g. 1, 2, 4 or 8 for port A, B, C and D respectively, two values are required
+         * @param maxPower maximum motor power, capped to [0, 100]
          */
         Joystick(int[] ports, int maxPower) {
             super(ports, maxPower);
@@ -151,7 +157,8 @@ public abstract class EV3ControlElement {
             return r;
         }
 
-        public String getType(){
+        @Override
+        public String getType() {
             return "joystick";
         }
 
@@ -165,9 +172,10 @@ public abstract class EV3ControlElement {
     protected static class Slider extends EV3ControlElement {
 
         /**
+         * Constructor for a slider {@code EV3ControlElement}
          *
-         * @param ports 1 port
-         * @param maxPower
+         * @param ports    EV3 motor ports, e.g. 1, 2, 4 or 8 for port A, B, C and D respectively, one value are required
+         * @param maxPower maximum motor power, capped to [0, 100]
          */
         Slider(int[] ports, int maxPower) {
             super(ports, maxPower);
@@ -196,7 +204,8 @@ public abstract class EV3ControlElement {
             return r;
         }
 
-        public String getType(){
+        @Override
+        public String getType() {
             return "slider";
         }
 
@@ -209,19 +218,27 @@ public abstract class EV3ControlElement {
 
     protected static class Button extends EV3ControlElement {
 
-        private long pressedT = -1;
         private final int duration;
+        /**
+         * duration parameter in direct command may be of variable length
+         * (i.e. 100ms would be 1 byte, 5000 would be 3 bytes(?))
+         */
         private final byte[] t;
+        /**
+         * Time button was last pressed
+         */
+        private long pressedT = -1;
 
         /**
+         * Constructor for a joystick {@code EV3ControlElement}
          *
-         * @param ports 1 port
-         * @param maxPower
-         * @param duration in ms
+         * @param ports    EV3 motor ports, e.g. 1, 2, 4 or 8 for port A, B, C and D respectively, one value are required
+         * @param maxPower maximum motor power, capped to [0, 100]
+         * @param duration duration of motor action, currently between 1 and 5000 ms
          */
         Button(int[] ports, int maxPower, int duration) {
             super(ports, maxPower);
-            this.duration = duration;
+            this.duration = Math.max(Math.min(duration, 5000), 1);
             t = LCX(duration - 100);
         }
 
@@ -233,21 +250,23 @@ public abstract class EV3ControlElement {
         @Override
         protected byte[] getCommand(int... input) {
             long current = System.currentTimeMillis();
-            if (input[0] == 1 && (current - pressedT >= duration)) {
+            if (input[0] == 1 && (current - pressedT >= duration))
+            // doesn't create command, if last sent less than duration ago (can't stack button commands)
+            {
                 pressedT = current;
 
                 byte[] r = new byte[9 + t.length];
 
-                r[0] = (byte) 0xAD;
+                r[0] = (byte) 0xAD; // op code for motor output for a specified duration
                 r[1] = (byte) 0x00;
                 r[2] = (byte) port[0];
                 r[3] = (byte) 0x81;
                 r[4] = (byte) maxPower;
                 r[5] = (byte) 0x81;
-                r[6] = 100;
-                System.arraycopy(t, 0, r, 7 , t.length);
+                r[6] = 100; // ramp up of 100ms
+                System.arraycopy(t, 0, r, 7, t.length); // rest of duration
                 r[7 + t.length] = 0;
-                r[8 + t.length] = 1;
+                r[8 + t.length] = 1; // 1 is BRAKE, 0 is FLOAT
 
                 return r;
             }
@@ -256,7 +275,8 @@ public abstract class EV3ControlElement {
             };
         }
 
-        public String getType(){
+        @Override
+        public String getType() {
             return "button";
         }
 

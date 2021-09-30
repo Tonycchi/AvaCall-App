@@ -22,7 +22,13 @@ public class WebClient extends WebSocketClient {
     private final Controller controller;
     private String id;
     private boolean receiveCommands;
-    private int status; //-1=error; 0=no connection; 1=connected
+    /**
+     * Connection status <br>
+     * -1: error <br>
+     * 0: no connection <br>
+     * 1: connected
+     */
+    private int status;
 
     public WebClient(URI serverURI, String videoURL, Controller controller) {
         super(serverURI);
@@ -63,17 +69,21 @@ public class WebClient extends WebSocketClient {
         if (message.startsWith("id:")) {
             id = message.split(":", 2)[1];
             status = 1;
+            // once we receive an ID we are connected
         } else {
             if (receiveCommands) {
+                // parse received string
                 List<String> t1 = Arrays.asList(message.split(";|:"));
-                int[] t2 = new int[t1.size()];
-                for (int i = 0; i < t2.length; i++)
-                    t2[i] = Integer.parseInt(t1.get(i));
-                controller.setLastUsedId(t2[0]);
+                int[] receivedVals = new int[t1.size()];
+                for (int i = 0; i < receivedVals.length; i++)
+                    receivedVals[i] = Integer.parseInt(t1.get(i));
+                // for stall detection
+                controller.setLastUsedId(receivedVals[0]);
                 controller.setInputFromWebClient(true);
+                // send to controller
                 Thread webClientInput = new Thread() {
                     public void run() {
-                        controller.sendInput(t2);
+                        controller.sendInput(receivedVals);
                     }
                 };
                 webClientInput.start();

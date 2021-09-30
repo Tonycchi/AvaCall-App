@@ -33,10 +33,21 @@ public interface Controller {
      */
     RobotModel getCurrentModel();
 
+    /**
+     * Sets ID of last control element used by the {@code Controller}
+     * @param id ID
+     */
     void setLastUsedId(int id);
 
+    /**
+     * @return id ID of last control element used by the {@code Controller}
+     */
     int getLastUsedId();
 
+    /**
+     * Specify if input comes from a web client
+     * @param input true -> from web client,<br>&emsp;&emsp; false -> from app
+     */
     void setInputFromWebClient(boolean input);
 
 }

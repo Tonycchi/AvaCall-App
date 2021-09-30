@@ -311,7 +311,8 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     * @param element string to be added to controlElementString
+     * Adds a string to {@code controlElementString} which is sent to the website
+     * @param element added string
      */
     private void addToString(String element) {
         if (!controlElementString.equals(""))
@@ -320,7 +321,6 @@ public class EV3Controller implements Controller {
     }
 
     /**
-     *
      * @param port ev3 port number
      * @return corresponding direct command port variable
      */

@@ -33,6 +33,9 @@ public class EV3 implements Robot {
 
     @Override
     public RobotModel saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
+        // values get sorted before saving:
+        // joystick first, then slider, button
+        // makes building UI on website/app easier
         Comparator<List<Integer>> c = (o1, o2) -> {
             if (o1.size() > 0 && o2.size() > 0) {
                 return Integer.compare(o1.get(0), o2.get(0));
@@ -41,32 +44,34 @@ public class EV3 implements Robot {
         };
         Collections.sort(values, c);
 
+        // create specification string
         StringBuilder specs = new StringBuilder();
         for (List<Integer> element : values) {
             switch (element.get(0)) {
                 case 1: //Joystick
                     specs.append("joystick:")
-                            .append(element.get(1))
-                            .append(";").append(indexToPort(element.get(2)))
-                            .append(",").append(indexToPort(element.get(3)))
+                            .append(element.get(1)) // max power
+                            .append(";").append(indexToPort(element.get(2))) // port right
+                            .append(",").append(indexToPort(element.get(3))) // and left
                             .append("|");
                     break;
                 case 2: //Slider
                     specs.append("slider:")
-                            .append(element.get(1))
-                            .append(";").append(indexToPort(element.get(2)))
+                            .append(element.get(1)) // max power
+                            .append(";").append(indexToPort(element.get(2))) // port
                             .append("|");
                     break;
                 case 3: //Button
                     specs.append("button:")
-                            .append(element.get(1))
-                            .append(";").append(indexToPort(element.get(2)))
-                            .append(";").append(element.get(3))
+                            .append(element.get(1)) // max power
+                            .append(";").append(indexToPort(element.get(2))) // port
+                            .append(";").append(element.get(3)) // duration
                             .append("|");
                     break;
                 default:
             }
         }
+        // and save it
         if (specs.length() > 0) {
             specs = new StringBuilder(specs.substring(0, specs.length() - 1));
             RobotModel robotModel = new RobotModel(id, name, type, specs.toString(), description.trim(), null);
