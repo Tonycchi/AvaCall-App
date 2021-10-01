@@ -31,7 +31,13 @@ public class BluetoothConnectionService implements ConnectionService {
             CONNECTED = 1,
             COULD_NOT_CONNECT = 2,
             CONNECTION_LOST = 3,
+    /**
+     * Correct device type
+     */
             CONNECTION_ACCEPTED = 4, // correct device type
+    /**
+     * Wrong device type
+     */
             CONNECTION_NOT_ACCEPTED = 5; // wrong device type
     private static final String TAG = "BluetoothConnectionServ";
     private static final String APP_NAME = "AvaCall";
@@ -39,6 +45,11 @@ public class BluetoothConnectionService implements ConnectionService {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     private final BluetoothAdapter BLUETOOTH_ADAPTER;
     //0 is not tested, 1 is connected, 2 is could not connect, 3 is connection lost, 4 connection is accepted = correct device type, 5 connection is not accepted = wrong device type
+    /**
+     * possible values:
+     * {@code NOT_TESTED}, {@code CONNECTED}, {@code COULD_NOT_CONNECT}, {@code CONNECTION_LOST},
+     * {@code CONNECTION_ACCEPTED}, {@code CONNECTION_NOT_ACCEPTED}
+     */
     private final MutableLiveData<Integer> connectionStatus;
     private final Handshake<byte[]> byteArrayHandshake;
     private final MainModel mainModel;
@@ -55,6 +66,12 @@ public class BluetoothConnectionService implements ConnectionService {
         this.mainModel = mainModel;
     }
 
+    /**
+     * for debug
+     * @param bytes array of bytes
+     * @param length length of array
+     * @return hex string representation of byte array
+     */
     private static String bytesToHex(byte[] bytes, int length) {
         char[] hexArray = new char[length * 3];
         for (int j = 0; j < length; j++) {

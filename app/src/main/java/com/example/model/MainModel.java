@@ -111,7 +111,7 @@ public class MainModel {
         return videoConnectionModel.getShareURL();
     }
 
-    public Object getOptions() {
+    public Object getVideoCallOptions() {
         return videoConnectionModel.getOptions();
     }
 
@@ -170,7 +170,7 @@ public class MainModel {
         modelSelectionModel.setSelectedModelPosition(position);
     }
 
-    public String[] getAllRobotNames() {
+    public String[] getAllModelNames() {
         return modelSelectionModel.getAllRobotNames();
     }
 

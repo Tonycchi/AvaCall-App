@@ -83,11 +83,11 @@ public class EV3 implements Robot {
     }
 
     /**
-     * array index to port number
-     * 0 -> 1
-     * 1 -> 2
-     * 2 -> 4
-     * 3 -> 8
+     * array index to port number <br>
+     * 0 -> 1 <br>
+     * 1 -> 2 <br>
+     * 2 -> 4 <br>
+     * 3 -> 8 <br>
      * @param index array index
      * @return port number
      */

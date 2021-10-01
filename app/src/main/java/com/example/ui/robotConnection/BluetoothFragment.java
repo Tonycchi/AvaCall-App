@@ -104,7 +104,7 @@ public class BluetoothFragment extends RobotConnectionFragment {
     @Override
     public void onClickDevice(Device device) {
         if (device.getParcelable() != null) {
-            viewModel.startConnection(device);
+            viewModel.startDeviceConnection(device);
 
             // in case of dummy device skip testing for connection status
             if (device.getParcelable() instanceof Annotation) {

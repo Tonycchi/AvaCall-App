@@ -102,6 +102,11 @@ public class VideoConnectionFragment extends HostedFragment {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
+    /**
+     * Updates UI after change in video connection.
+     * @param ready true -> video ready <br>
+     *              false -> no video connection
+     */
     private void videoReady(boolean ready) {
         buttonAccessVideoCall.setEnabled(ready);
         buttonCancelConnection.setEnabled(ready);
@@ -133,12 +138,14 @@ public class VideoConnectionFragment extends HostedFragment {
         if (viewModel.invitePartner()) { //successful connection to server
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
                 Log.d(TAG, "OLD Android Version!! -> no share Link pop-up shown");
+                // copy invite link to clipboard
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(getString(R.string.room_link), viewModel.getShareURL());
                 clipboard.setPrimaryClip(clip);
                 ((HostActivity) getActivity()).showToast(getString(R.string.toast_link_copied));
             } else {
                 Log.d(TAG, "New Android Version!");
+                // dedicated sharing UI exist after lollipop, allows sharing via messaging apps, email, etc
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getShareURL());
@@ -147,7 +154,7 @@ public class VideoConnectionFragment extends HostedFragment {
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
                 startActivity(shareIntent);
             }
-
+            // show ID in UI
             meetingIdTextView.setText(getString(R.string.meeting_id) + " " + viewModel.getID());
 
         } else { //failed to connect to server
@@ -156,9 +163,13 @@ public class VideoConnectionFragment extends HostedFragment {
 
     }
 
+    /**
+     * Starts Jitsi video call
+     * @param v clicked view, not used by this method
+     */
     private void onClickSwitchToVideoCall(View v) {
         if (viewModel.isConnectedToServer()) {
-            JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getOptions());
+            JitsiMeetActivity.launch(requireContext(), (JitsiMeetConferenceOptions) viewModel.getVideoCallOptions());
             viewModel.setReceiveCommands(true);
         } else {
             ((HostActivity) getActivity()).showToast(R.string.connect_to_server);

@@ -335,7 +335,7 @@ public class ModelSelectionFragment extends HostedFragment {
      * updates {@code editModel} button text accordingly
      */
     private void refreshNumberPicker() {
-        String[] allRobotNames = viewModel.getAllRobotNames();
+        String[] allRobotNames = viewModel.getAllModelNames();
         int maxVal = allRobotNames.length - 1;
         if (maxVal < 0) {
             maxVal = 0;

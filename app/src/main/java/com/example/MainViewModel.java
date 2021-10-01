@@ -27,42 +27,40 @@ public class MainViewModel extends AndroidViewModel {
         model = new MainModel(application);
     }
 
+    // BLUETOOTH
+
+    /**
+     *
+     * @return devices paired with this phone
+     */
     public MutableLiveData<ArrayList<Device>> getPairedDevices() {
         return model.getPairedDevices();
     }
 
-    public URLSettings.StringTriple getCurrentURLs() {
-        return model.getVideoConnectionModel().getCurrentURLs();
-    }
-
-    public void saveURLs(URLSettings.StringTriple urls) {
-        model.saveURLs(urls);
-    }
-
+    /**
+     * @return possible values: <br>
+     * {@code BluetoothConnectionService.NOT_TESTED}, <br>
+     * {@code BluetoothConnectionService.CONNECTED}, <br>
+     * {@code BluetoothConnectionService.COULD_NOT_CONNECT}, <br>
+     * {@code BluetoothConnectionService.CONNECTION_LOST},  <br>
+     * {@code BluetoothConnectionService.CONNECTION_ACCEPTED}, <br>
+     * {@code BluetoothConnectionService.CONNECTION_NOT_ACCEPTED}
+     */
     public MutableLiveData<Integer> getConnectionStatus() {
         return model.getConnectionStatus();
     }
 
-    public void startConnection(Device device) {
+    /**
+     * Start (bluetooth) connection w/ device
+     * @param device device to connect to
+     */
+    public void startDeviceConnection(Device device) {
         model.startConnection(device);
     }
 
-    public boolean invitePartner() {
-        return model.invitePartner();
-    }
-
-    public String getShareURL() {
-        return model.getShareURL();
-    }
-
-    public String getID() {
-        return model.getID();
-    }
-
-    public Object getOptions() {
-        return model.getOptions();
-    }
-
+    /**
+     * Cancels current (bluetooth) connection to robot
+     */
     public void cancelRobotConnection() {
         model.cancelRobotConnection();
     }
@@ -71,18 +69,95 @@ public class MainViewModel extends AndroidViewModel {
         model.deviceAccepted();
     }
 
+    // VIDEO/SERVER CONNECTION
+
+    /**
+     *
+     * @return URLs and internet port specified in URL settings
+     */
+    public URLSettings.StringTriple getCurrentURLs() {
+        return model.getVideoConnectionModel().getCurrentURLs();
+    }
+
+    /**
+     * Save specified URL settings in database.
+     *
+     * @param urls Three strings
+     */
+    public void saveURLs(URLSettings.StringTriple urls) {
+        model.saveURLs(urls);
+    }
+
+    /**
+     * start process of requesting a link from server
+     * @return {@code true} if successful
+     */
+    public boolean invitePartner() {
+        return model.invitePartner();
+    }
+
+    /**
+     * @return link to be shared with call partner
+     */
+    public String getShareURL() {
+        return model.getShareURL();
+    }
+
+    /**
+     * @return ID of video call room
+     */
+    public String getID() {
+        return model.getID();
+    }
+
+    /**
+     * @return options necessary to start video call UI instance
+     */
+    public Object getVideoCallOptions() {
+        return model.getVideoCallOptions();
+    }
+
+    /**
+     * Sets, whether WebClient can receive commands and pass them to Controller
+     * @param receiveCommands true if ready
+     */
     public void setReceiveCommands(boolean receiveCommands) {
         model.setReceiveCommands(receiveCommands);
     }
 
-    public String[] getAllRobotNames() {
-        return model.getAllRobotNames();
+    public MutableLiveData<Boolean> isVideoReady() {
+        return model.isVideoReady();
     }
 
+    public boolean isConnectedToServer() {
+        return model.isConnectedToServer();
+    }
+
+    public void cancelServerConnection() {
+        model.cancelServerConnection();
+    }
+
+    // MODEL SELECTION & EDITING
+
+    /**
+     * @return Names of saved robot models
+     */
+    public String[] getAllModelNames() {
+        return model.getAllModelNames();
+    }
+
+    /**
+     * @param modelPosition position in list (as seen in model selection screen)
+     * @return {@code RobotModel} at specified model
+     */
     public RobotModel getRobotModel(int modelPosition) {
         return model.getRobotModel(modelPosition);
     }
 
+    /**
+     * Selects model at {@code modelPosition}
+     * @param modelPosition position in list (as seen in model selection screen)
+     */
     public void modelSelected(int modelPosition) {
         model.modelSelected(modelPosition);
     }
@@ -91,11 +166,31 @@ public class MainViewModel extends AndroidViewModel {
         return model.getCurrentRobotType();
     }
 
+    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
+        model.saveModel(id, name, description, type, values);
+    }
+
+    public void deleteModelByPosition(int position) {
+        model.deleteModelByPosition(position);
+    }
+
+    public void deleteModelById(int id) {
+        model.deleteModelById(id);
+    }
+
+    public void setImageOfSelectedModel(String photoPath) {
+        model.setImageOfSelectedModel(photoPath);
+    }
+
+    // NEEDED FOR STALL DETECTION
+
     public void sendControlInput(int... input) {
         model.sendControlInputs(input);
     }
 
-    public void getControlOutput() { model.getControlOutputs(); }
+    public void getControlOutput() {
+        model.getControlOutputs();
+    }
 
     public String getSelectedModelElements() {
         return model.getSelectedModelElements();
@@ -113,41 +208,17 @@ public class MainViewModel extends AndroidViewModel {
         model.setSelectedModelPosition(position);
     }
 
-    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
-        model.saveModel(id, name, description, type, values);
+    public void setLastUsedId(int id) {
+        model.setLastUsedId(id);
     }
-
-    public MutableLiveData<Boolean> isVideoReady() {
-        return model.isVideoReady();
-    }
-
-    public boolean isConnectedToServer() {
-        return model.isConnectedToServer();
-    }
-
-    public void cancelServerConnection() {
-        model.cancelServerConnection();
-    }
-
-    public void setLastUsedId(int id){model.setLastUsedId(id);}
 
     public MutableLiveData<String> getMotorStrength() {
         return model.getMotorStrength();
     }
 
-    public void deleteModelByPosition(int position) {
-        model.deleteModelByPosition(position);
+    public MutableLiveData<Boolean> getStall() {
+        return model.getStall();
     }
-
-    public void deleteModelById(int id) {
-        model.deleteModelById(id);
-    }
-
-    public void setImageOfSelectedModel(String photoPath) {
-        model.setImageOfSelectedModel(photoPath);
-    }
-
-    public MutableLiveData<Boolean> getStall() {return model.getStall();}
 
     public void sendStallDetected(String controlElementType, int controlElementId) {
         model.sendStallDetected(controlElementType, controlElementId);
@@ -157,5 +228,7 @@ public class MainViewModel extends AndroidViewModel {
         model.sendStallEnded(controlElementType, controlElementId);
     }
 
-    public void setInputFromWebClient(boolean input) { model.setInputFromWebClient(input);}
+    public void setInputFromWebClient(boolean input) {
+        model.setInputFromWebClient(input);
+    }
 }
