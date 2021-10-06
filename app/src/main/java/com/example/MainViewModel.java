@@ -166,8 +166,8 @@ public class MainViewModel extends AndroidViewModel {
         return model.getCurrentRobotType();
     }
 
-    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
-        model.saveModel(id, name, description, type, values);
+    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values, String picture) {
+        model.saveModel(id, name, description, type, values, picture);
     }
 
     public void deleteModelByPosition(int position) {

@@ -32,7 +32,7 @@ public class EV3 implements Robot {
     }
 
     @Override
-    public RobotModel saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
+    public RobotModel saveModel(int id, String name, String description, String type, List<List<Integer>> values, String picture) {
         // values get sorted before saving:
         // joystick first, then slider, button
         // makes building UI on website/app easier
@@ -74,7 +74,7 @@ public class EV3 implements Robot {
         // and save it
         if (specs.length() > 0) {
             specs = new StringBuilder(specs.substring(0, specs.length() - 1));
-            RobotModel robotModel = new RobotModel(id, name, type, specs.toString(), description.trim(), null);
+            RobotModel robotModel = new RobotModel(id, name, type, specs.toString(), description.trim(), picture);
             db.insertAll(robotModel);
             return robotModel;
         } else {

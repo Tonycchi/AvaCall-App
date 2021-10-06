@@ -185,8 +185,8 @@ public class MainModel {
         }
     }
 
-    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values) {
-        RobotModel robotModel = robot.saveModel(id, name, description, type, values);
+    public void saveModel(int id, String name, String description, String type, List<List<Integer>> values, String picture) {
+        RobotModel robotModel = robot.saveModel(id, name, description, type, values, picture);
         //RobotModel selectedRobotModel = modelSelectionModel.getRobotModel(id);
         controller = robot.getController(robotModel, robotConnectionModel.getService()); // use model that was just saved
     }
