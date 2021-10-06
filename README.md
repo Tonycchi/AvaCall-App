@@ -15,6 +15,6 @@ Per Bluetooth lässt sich die App mit einem EV3 verbinden. Nach Erstellung oder 
  
  Download | Größe | Commit
 --- | --- | --- 
-[AvaCall_24092021.apk](https://drive.google.com/file/d/1a2OFuyWEKPfk147vtX_kwlDWRylxYIP7/view?usp=sharing) | 112,7 MB | 991072f
+[AvaCall_20211006.apk](https://drive.google.com/file/d/1mgZ7mGyXCXhHFbam6gQeWCTze71CDTTg/view?usp=sharing) | 112,7 MB | 991072f
 2. Installieren Sie die heruntergeladene APK-Datei. Eventuell warnt Sie der Paketinstaller die unbekannte APP zu installieren. Erlauben Sie dann in den Einstellungen “Unbekannte Apps“ zu installieren. Sobald dies erledigt ist, kann die App auf dem Gerät installiert werden.
 
