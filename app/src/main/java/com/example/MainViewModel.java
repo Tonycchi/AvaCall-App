@@ -55,7 +55,7 @@ public class MainViewModel extends AndroidViewModel {
      * @param device device to connect to
      */
     public void startDeviceConnection(Device device) {
-        model.startConnection(device);
+        model.startDeviceConnection(device);
     }
 
     /**
@@ -182,6 +182,21 @@ public class MainViewModel extends AndroidViewModel {
         model.setImageOfSelectedModel(photoPath);
     }
 
+    /**
+     * @return currently selected model, null if none selected
+     */
+    public RobotModel getSelectedRobotModel() {
+        return model.getSelectedRobotModel();
+    }
+
+    public int getSelectedModelPosition() {
+        return model.getSelectedModelPosition();
+    }
+
+    public void setSelectedModelPosition(int position) {
+        model.setSelectedModelPosition(position);
+    }
+
     // NEEDED FOR STALL DETECTION
 
     public void sendControlInput(int... input) {
@@ -194,18 +209,6 @@ public class MainViewModel extends AndroidViewModel {
 
     public String getSelectedModelElements() {
         return model.getSelectedModelElements();
-    }
-
-    public RobotModel getSelectedRobotModel() {
-        return model.getSelectedRobotModel();
-    }
-
-    public int getSelectedModelPosition() {
-        return model.getSelectedModelPosition();
-    }
-
-    public void setSelectedModelPosition(int position) {
-        model.setSelectedModelPosition(position);
     }
 
     public void setLastUsedId(int id) {

@@ -27,6 +27,7 @@ public class EV3 implements Robot {
         return new EV3Controller(robotModel, service);
     }
 
+    @Override
     public String getType() {
         return Constants.TYPE_EV3;
     }
