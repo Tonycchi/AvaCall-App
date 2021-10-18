@@ -60,7 +60,8 @@ public class URLSettings {
     }
 
     public String getHost_wss() {
-        return WSS + localPreferenceDAO.get(HOSTURLKEY) + ":" + localPreferenceDAO.get(HOSTPORTKEY);
+        String[] hostURL = localPreferenceDAO.get(HOSTURLKEY).split(":"); // braundv.myds.me:447
+        return WSS + hostURL[0] + ":" + localPreferenceDAO.get(HOSTPORTKEY);
     }
 
     /**
